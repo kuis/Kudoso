@@ -1,24 +1,27 @@
 source 'https://rubygems.org'
 
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+# Core
 gem 'rails', '4.1.6'
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
-# Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.3'
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier', '>= 1.3.0'
-# Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
-# Use HAML instead of ERB
-gem 'haml', :group => :development
+gem 'pg'
 
+# View and Assets
+gem 'sprockets-rails', :require => 'sprockets/railtie'
+gem 'sass-rails', '~> 4.0.3'
+gem 'uglifier', '>= 1.3.0'
+gem 'coffee-rails', '~> 4.0.0'
+gem 'haml', group: :development
+gem 'haml-rails', group: :development # Provides HAML as the default generator
+gem 'simple_form'
+gem 'jquery-rails'
+gem 'jquery-turbolinks'
+gem 'foundation-rails'
+gem 'rails_layout', group: :development
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 
-# Use jquery as the JavaScript library
-gem 'jquery-rails'
+
+
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
@@ -26,8 +29,13 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
-# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring',        group: :development
+
+# User management
+gem 'devise'
+gem 'omniauth'
+gem 'cancan'
+
+
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
@@ -41,3 +49,37 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+group :development, :test do
+  gem 'byebug'
+  gem 'rspec-rails'
+  gem 'cucumber-rails', :require => false
+  gem 'factory_girl_rails'
+  gem 'capybara-webkit', github: 'thoughtbot/capybara-webkit', branch: 'master'
+  gem 'rb-fsevent'
+  gem 'guard-rspec'
+  gem 'guard-cucumber'
+  gem 'awesome_print'
+  gem 'quiet_assets'
+  gem 'parallel_tests'
+  gem 'zeus-parallel_tests'
+end
+
+group :development do
+  gem 'guard-livereload'
+  gem 'rack-livereload'
+  gem 'better_errors'
+  gem 'terminal-notifier-guard'
+
+  # Deployment
+  gem 'capistrano'
+end
+
+group :test do
+  gem 'launchy'
+  gem 'capybara'
+  gem 'database_cleaner'
+  gem 'zeus', :require => false
+  gem 'shoulda-matchers'
+  gem 'pdf-inspector'
+  gem 'selenium-webdriver'
+end

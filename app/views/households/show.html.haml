@@ -1,0 +1,10 @@
+%p#notice= notice
+%p
+  %strong Name:
+  = @household.name
+%p
+  %strong Primary contact:
+  = @household.primary_contact_id
+= link_to 'Edit', edit_household_path(@household)
+|
+\#{link_to 'Back', households_path}
