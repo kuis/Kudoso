@@ -1,0 +1,30 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @todo.name
+%p
+  %b Description:
+  = @todo.description
+%p
+  %b Required:
+  = @todo.required
+%p
+  %b Kudos:
+  = @todo.kudos
+%p
+  %b Todo template:
+  = @todo.todo_template_id
+%p
+  %b Family:
+  = @todo.family_id
+%p
+  %b Active:
+  = @todo.active
+%p
+  %b Schedule:
+  = @todo.schedule
+
+= link_to 'Edit', edit_todo_path(@todo)
+\|
+= link_to 'Back', todos_path

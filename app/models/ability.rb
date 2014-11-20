@@ -3,19 +3,19 @@ class Ability
 
   def initialize(user)
 
-    user ||= User.new
+    user ||= Member.new
 
-    can :create, User
+    can :create, Member
 
     if user.admin?
       can :manage, :all
     else
-      if user.parent?
-        can [:read, :update], Household do |house|
-          user.try(:household) == house
+      if user.member.parent?
+        can [:read, :update], Family do |family|
+          user.try(:family) == family
         end
-        can :manage, User do |houshold_user|
-          houshold_user.try(:household) == user.household
+        can :manage, Member do |family_member|
+          family_member.try(:family) == user.family
         end
       end
     end

@@ -1,9 +1,14 @@
 Rails.application.routes.draw do
+  resources :todo_groups
+
+  resources :todo_templates
+
+  resources :todos
+
   devise_for :users
-  resources :households do
-    resources :users
+  resources :families do
+    resources :members
   end
-  resources :users
 
   root to: 'home#index'
   # The priority is based upon order of creation: first created -> highest priority.

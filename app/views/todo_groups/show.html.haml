@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @todo_group.name
+%p
+  %b Rec min age:
+  = @todo_group.rec_min_age
+%p
+  %b Rec max age:
+  = @todo_group.rec_max_age
+%p
+  %b Active:
+  = @todo_group.active
+
+= link_to 'Edit', edit_todo_group_path(@todo_group)
+\|
+= link_to 'Back', todo_groups_path

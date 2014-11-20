@@ -1,0 +1,17 @@
+%p
+  %strong Name:
+  = @family.name
+  = link_to ' (Edit)', edit_family_path(@family)
+%p
+  %strong Primary contact:
+  = @family.primary_contact_id
+
+%h2 Family Members:
+%ul
+  - @family.members.each do |member|
+    %li
+      = member.full_name
+      = member.parent? ? ' (Parent)' : ' (Child)'
+      = link_to '(Edit)', edit_family_member_path(@family,member) if can?(:update, member)
+  %li
+    = link_to 'Add new family member', new_family_member_path(@family) if can?(:create, Member)

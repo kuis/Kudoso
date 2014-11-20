@@ -1,0 +1,25 @@
+%h1 Listing todo_templates
+
+%table
+  %tr
+    %th Name
+    %th Description
+    %th Schedule
+    %th Active
+    %th
+    %th
+    %th
+
+  - @todo_templates.each do |todo_template|
+    %tr
+      %td= todo_template.name
+      %td= todo_template.description
+      %td= todo_template.schedule
+      %td= todo_template.active
+      %td= link_to 'Show', todo_template
+      %td= link_to 'Edit', edit_todo_template_path(todo_template)
+      %td= link_to 'Destroy', todo_template, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Todo template', new_todo_template_path

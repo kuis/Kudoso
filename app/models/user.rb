@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
-  belongs_to :household
+  belongs_to :family
+  belongs_to :member
 
-  before_create :build_household
+  after_create :build_family
 
 
   # Include default devise modules. Others available are:
@@ -9,6 +10,9 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable, :lockable, :timeoutable, :omniauthable
+
+
+  validates_presence_of :first_name, :last_name, :email
 
   def set_admin!
     self.update_attribute(:admin, true)
@@ -18,11 +22,17 @@ class User < ActiveRecord::Base
     self.update_attribute(:admin, false)
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   private
 
-  def build_household
-    if !self.admin? && self.parent? && self.household_id.nil?
-      self.household = Household.create(name: "#{self.last_name} Household")
+  def build_family
+    if !self.admin? && self.family_id.nil?
+      self.family = Family.create(name: "#{self.last_name} Family", primary_contact_id: self.id)
+      self.member = self.family.members.build({first_name: self.first_name, last_name: self.last_name, username: self.email, parent: true, user_id: self.id})
+      self.save!
     end
   end
 end

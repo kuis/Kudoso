@@ -1,6 +1,6 @@
 - if user_signed_in?
-  - if current_user.try(:parent?)
-    = link_to('My Household', household_path(current_user.household))
+  - if current_user.member.parent?
+    = link_to('My Family', family_path(current_user.family))
   = link_to('Logout', destroy_user_session_path, :method => :delete)
 - else
   = link_to('Sign In', new_user_session_path)

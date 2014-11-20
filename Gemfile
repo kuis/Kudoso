@@ -10,8 +10,8 @@ gem 'sprockets-rails', :require => 'sprockets/railtie'
 gem 'sass-rails', '~> 4.0.3'
 gem 'uglifier', '>= 1.3.0'
 gem 'coffee-rails', '~> 4.0.0'
-gem 'haml', group: :development
-gem 'haml-rails', group: :development # Provides HAML as the default generator
+gem 'haml'
+gem 'haml-rails' # Provides HAML as the default generator
 gem 'simple_form'
 gem 'jquery-rails'
 gem 'jquery-turbolinks'
