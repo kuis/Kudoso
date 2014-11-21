@@ -5,11 +5,13 @@ class FamiliesController < ApplicationController
   # GET /families
   # GET /families.json
   def index
+    authorize! :index, Family
   end
 
   # GET /families/1
   # GET /families/1.json
   def show
+    @todo_templates = TodoTemplate.where(active: '1')
   end
 
   # GET /families/new

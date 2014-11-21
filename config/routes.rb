@@ -1,13 +1,17 @@
 Rails.application.routes.draw do
+
   resources :todo_groups
 
   resources :todo_templates
 
-  resources :todos
+
 
   devise_for :users
   resources :families do
     resources :members
+    resources :todos do
+      resources :todo_schedules
+    end
   end
 
   root to: 'home#index'

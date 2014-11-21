@@ -10,6 +10,18 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
+ *= require recurring_select
  *= require_tree .
  *= require_self
  */
+
+
+.todo_wrap {
+  margin: 5px 5px 5px 5px;
+  padding: 5px 10px 5px 10px;
+  border: 1px solid gray;
+  border-radius: 5px;
+  .todo_name {
+    font_size: 1.3em;
+  }
+}

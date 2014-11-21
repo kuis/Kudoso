@@ -3,9 +3,9 @@ class Ability
 
   def initialize(user)
 
-    user ||= Member.new
+    user ||= User.new
 
-    can :create, Member
+    can :create, User
 
     if user.admin?
       can :manage, :all
@@ -17,7 +17,19 @@ class Ability
         can :manage, Member do |family_member|
           family_member.try(:family) == user.family
         end
+        can :manage, Todo do |todo|
+          todo.try(:family) == user.family
+        end
+        can :manage, TodoSchedule do |ts|
+          if ts.present? && ts.todo.present?
+            ts.todo.family == user.family
+          else
+            false
+          end
+        end
+        can :read, TodoTemplate
       end
+      cannot :index, Family
     end
 
 

@@ -1,0 +1,48 @@
+.todo_wrap
+  .todo_name
+    = todo.name
+  .todo_description
+    = todo.description
+  .todo_schedule
+    Default Schedule:
+    = IceCube::Rule.from_yaml(todo.schedule)
+  .todo_attributes
+    %ul.small-block-grid-3
+      %li
+        Acitve:
+        = todo.active?
+      %li
+        Required:
+        = todo.required?
+      %li
+        Kudos:
+        = todo.kudos
+  .todo_assignments
+    Assigned to:
+    %ul
+      - todo.todo_schedules.each do |ts|
+        %li=ts.member.full_name
+  .todo_assign
+    - if can?(:create, TodoSchedule)
+      %a{href: '#', data: { "reveal-id" => "assign_todo_#{todo.id}" }}
+        Assign to child
+      .reveal-modal{id: "assign_todo_#{todo.id}", data: { reveal: true} }
+        %a.close-reveal-modal
+          &#215;
+        = form_for [@family, todo, ts = TodoSchedule.new] do |f|
+          %br
+          = f.collection_select :member_id, @family.members.where(parent:false), :id, :full_name
+          .form_group
+            = f.label :start_date
+            = f.text_field :start_date
+          .form_group
+            =f.label :end_date
+            = f.text_field :end_date
+          .form_group
+            = f.label :schedule
+            = f.select_recurring :schedule
+          = f.submit
+
+  .todo_actions
+    = link_to 'Edit', edit_family_todo_path(todo.family, todo) if can?(:update, todo)
+    = link_to 'Destroy', family_todo_path(todo.family, todo), :method => :delete, :data => { :confirm => 'Are you sure?' } if can?(:delete, todo)

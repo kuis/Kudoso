@@ -1,10 +1,10 @@
 class TodoGroupsController < ApplicationController
-  before_action :set_todo_group, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
+  load_and_authorize_resource
 
   respond_to :html
 
   def index
-    @todo_groups = TodoGroup.all
     respond_with(@todo_groups)
   end
 
@@ -37,9 +37,6 @@ class TodoGroupsController < ApplicationController
   end
 
   private
-    def set_todo_group
-      @todo_group = TodoGroup.find(params[:id])
-    end
 
     def todo_group_params
       params.require(:todo_group).permit(:name, :rec_min_age, :rec_max_age, :active)

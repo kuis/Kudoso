@@ -4,7 +4,7 @@ class TodoGroupsTodoTemplates < ActiveRecord::Migration
       t.references :todo_group
       t.references :todo_template
     end
-    add_index :todo_groups_todo_templates, [:todo_group_id, :todo_template_id]
+    add_index :todo_groups_todo_templates, [:todo_group_id, :todo_template_id], name: 'todo_group_template_habtm_idx'
     add_index :todo_groups_todo_templates, :todo_template_id
   end
 

@@ -1,4 +1,7 @@
 class TodoTemplatesController < ApplicationController
+  before_action :authenticate_user!
+  load_and_authorize_resource
+
   before_action :set_todo_template, only: [:show, :edit, :update, :destroy]
 
   respond_to :html
@@ -22,13 +25,28 @@ class TodoTemplatesController < ApplicationController
 
   def create
     @todo_template = TodoTemplate.new(todo_template_params)
-    @todo_template.save
-    respond_with(@todo_template)
+
+    respond_to do |format|
+      if @todo_template.save
+        format.html { redirect_to todo_templates_path, notice: 'ToDo Template was successfully created.' }
+        format.json { render :show, status: :created, location: @todo_template }
+      else
+        format.html { render :new }
+        format.json { render json: @todo_template.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def update
-    @todo_template.update(todo_template_params)
-    respond_with(@todo_template)
+    respond_to do |format|
+      if @todo_template.update(todo_template_params)
+        format.html { redirect_to todo_templates_path, notice: 'ToDo Template was successfully updated.' }
+        format.json { render :show, status: :created, location: @todo_template }
+      else
+        format.html { render :new }
+        format.json { render json: @todo_template.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   def destroy

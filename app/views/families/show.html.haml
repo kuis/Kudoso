@@ -1,17 +1,31 @@
-%p
-  %strong Name:
-  = @family.name
-  = link_to ' (Edit)', edit_family_path(@family)
-%p
-  %strong Primary contact:
-  = @family.primary_contact_id
-
-%h2 Family Members:
-%ul
-  - @family.members.each do |member|
-    %li
-      = member.full_name
-      = member.parent? ? ' (Parent)' : ' (Child)'
-      = link_to '(Edit)', edit_family_member_path(@family,member) if can?(:update, member)
-  %li
-    = link_to 'Add new family member', new_family_member_path(@family) if can?(:create, Member)
+%h1= @family.name
+.row
+  .medium-6.columns
+    %h2 Family Members:
+    %ul
+      - @family.members.each do |member|
+        %li
+          = member.full_name
+          = member.parent? ? ' (Parent)' : ' (Child)'
+          = link_to '(Edit)', edit_family_member_path(@family,member) if can?(:update, member)
+      %li
+        = link_to 'Add new family member', new_family_member_path(@family) if can?(:create, Member)
+  .medium-6.columns
+    %h2 Family ToDo List
+    %ul#family_todo_list
+      - @family.todos.each do |todo|
+        %li
+          = render todo
+      %li
+        %a{href: '#', data: { "reveal-id" => 'todo_template_modal' }}
+          Add more ToDo's
+#todo_template_modal.reveal-modal{data: { reveal: true} }
+  %a.close-reveal-modal
+    &#215;
+  %h2 ToDo Templates
+  %ul
+    - @todo_templates.each do |todo|
+      - if @family.todos.where(todo_template_id: todo.id).count == 0
+        %li
+          = render todo
+          = link_to 'Add to Family ToDo List', family_todos_path(@family, todo_template_id: todo.id ), method: :post

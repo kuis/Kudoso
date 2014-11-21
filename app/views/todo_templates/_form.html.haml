@@ -14,9 +14,9 @@
     = f.text_field :description
   .field
     = f.label :schedule
-    = f.text_field :schedule
+    = f.select_recurring :schedule, nil, :allow_blank => true
   .field
     = f.label :active
-    = f.text_field :active
+    = f.check_box :active
   .actions
     = f.submit 'Save'

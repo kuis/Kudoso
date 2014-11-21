@@ -34,7 +34,8 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'devise'
 gem 'omniauth'
 gem 'cancan'
-
+gem 'chronic'
+gem 'recurring_select' # for schedules
 
 
 # Use ActiveModel has_secure_password

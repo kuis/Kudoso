@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141120174228) do
+ActiveRecord::Schema.define(version: 20141120233559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,57 @@ ActiveRecord::Schema.define(version: 20141120174228) do
     t.boolean  "parent"
     t.integer  "family_id"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "todo_groups", force: true do |t|
+    t.string   "name"
+    t.integer  "rec_min_age"
+    t.integer  "rec_max_age"
+    t.boolean  "active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "todo_groups_todo_templates", id: false, force: true do |t|
+    t.integer "todo_group_id"
+    t.integer "todo_template_id"
+  end
+
+  add_index "todo_groups_todo_templates", ["todo_group_id", "todo_template_id"], name: "todo_group_template_habtm_idx", using: :btree
+  add_index "todo_groups_todo_templates", ["todo_template_id"], name: "index_todo_groups_todo_templates_on_todo_template_id", using: :btree
+
+  create_table "todo_schedules", force: true do |t|
+    t.integer  "todo_id"
+    t.integer  "member_id"
+    t.date     "start_date"
+    t.date     "end_date"
+    t.boolean  "active"
+    t.text     "schedule"
+    t.text     "notes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "todo_templates", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "schedule"
+    t.string   "active"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "todos", force: true do |t|
+    t.string   "name"
+    t.string   "description"
+    t.boolean  "required"
+    t.integer  "kudos"
+    t.integer  "todo_template_id"
+    t.integer  "family_id"
+    t.boolean  "active"
+    t.text     "schedule"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

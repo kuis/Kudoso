@@ -1,4 +1,4 @@
-= form_for @todo do |f|
+= form_for [@family, @todo] do |f|
   - if @todo.errors.any?
     #error_explanation
       %h2= "#{pluralize(@todo.errors.count, "error")} prohibited this todo from being saved:"
@@ -12,23 +12,18 @@
   .field
     = f.label :description
     = f.text_field :description
-  .field
-    = f.label :required
-    = f.check_box :required
-  .field
-    = f.label :kudos
-    = f.number_field :kudos
-  .field
-    = f.label :todo_template_id
-    = f.number_field :todo_template_id
-  .field
-    = f.label :family_id
-    = f.number_field :family_id
-  .field
-    = f.label :active
-    = f.check_box :active
+  %ul.small-block-grid-3
+    %li
+      = f.label :required
+      = f.check_box :required
+    %li
+      = f.label :active
+      = f.check_box :active
+    %li
+      = f.label :kudos
+      = f.number_field :kudos
   .field
     = f.label :schedule
-    = f.text_area :schedule
+    = f.select_recurring :schedule
   .actions
     = f.submit 'Save'
