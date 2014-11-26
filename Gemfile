@@ -18,6 +18,7 @@ gem 'jquery-ui-sass-rails'
 gem 'font-awesome-rails'
 gem 'jquery-turbolinks'
 gem 'foundation-rails'
+gem 'lazy_high_charts'
 gem 'rails_layout', group: :development
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby

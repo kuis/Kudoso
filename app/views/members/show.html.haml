@@ -1,18 +1,18 @@
 %h1= @family.name
 %h2= "#{@member.full_name}'s Dashboard"
 
-%p
-  Todo Schedule (Today):
-  = render @member.todos
+.row
+  .medium-6.columns
+    Todo Schedule (Today):
+    = render @member.todos
 
-%p
-  Todo Schedule (Tomorrow):
-  = render @member.todos(Date.tomorrow)
+  .medium-6.columns
+    Todo Schedule (Tomorrow):
+    = render @member.todos(Date.tomorrow, Date.tomorrow)
 
-%p
-  Todo Schedule (Yesterday):
-  = render @member.todos(Date.yesterday)
-
+%hr
+#charts_wrap
+  = render 'charts'
 
 %p= link_to 'Edit Member Information', edit_family_member_path(@family, @member)
 %p= link_to 'Back', @member.family

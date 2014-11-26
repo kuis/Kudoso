@@ -17,6 +17,7 @@
 //= require foundation
 //= require recurring_select
 //= require foundation-datepicker
+//= require highcharts/highcharts
 //= require_tree .
 
 $(function() {

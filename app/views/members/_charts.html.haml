@@ -1,0 +1,104 @@
+:ruby
+  @todo_chart = Hash.new
+  @todos = Hash.new
+  @todos[:today] = Hash.new
+  @todos[:week] = Hash.new
+  @todos[:month] = Hash.new
+
+  t = @member.todos
+  @todos[:today][:total] = t.length
+  @todos[:today][:complete] = t.select {|todo| todo.complete == true }.count
+
+  t = @member.todos(7.days.ago.to_date)
+  @todos[:week][:total] = t.length
+  @todos[:week][:complete] = t.select {|todo| todo.complete == true }.count
+
+  t = @member.todos(1.month.ago.to_date)
+  @todos[:month][:total] = t.length
+  @todos[:month][:complete] = t.select {|todo| todo.complete == true }.count
+
+  @todo_chart[:today] = LazyHighCharts::HighChart.new('pie') do |f|
+      f.chart({:defaultSeriesType=>"pie" , :margin=> [5, 0, 5, 0]} )
+    series = {
+      :type=> 'pie',
+          :name=> "Today's Todos",
+          :data=> [
+              ['Complete', @todos[:today][:complete] ],
+              [ 'Incomplete', ( @todos[:today][:total] - @todos[:today][:complete]) ]
+          ]
+    }
+    f.series(series)
+    f.options[:title][:text] = "Today's Todos"
+    f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'})
+    f.plot_options(:pie=>{
+      :allowPointSelect=>true,
+                         :cursor=>"pointer" ,
+                         :dataLabels=>{
+                             :enabled=>true,
+                             :color=>"black",
+                             :style=>{
+                                 :font=>"13px Trebuchet MS, Verdana, sans-serif"
+                             }
+                         }
+      })
+  end
+
+  @todo_chart[:week] = LazyHighCharts::HighChart.new('pie') do |f|
+      f.chart({:defaultSeriesType=>"pie" , :margin=> [5, 0, 5, 0]} )
+    series = {
+      :type=> 'pie',
+          :name=> "Last Week's Todos",
+          :data=> [
+              ['Complete', @todos[:week][:complete] ],
+              [ 'Incomplete', ( @todos[:week][:total] - @todos[:week][:complete]) ]
+          ]
+    }
+    f.series(series)
+    f.options[:title][:text] = "Last Week's Todos"
+    f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'})
+    f.plot_options(:pie=>{
+      :allowPointSelect=>true,
+                         :cursor=>"pointer" ,
+                         :dataLabels=>{
+                             :enabled=>true,
+                             :color=>"black",
+                             :style=>{
+                                 :font=>"13px Trebuchet MS, Verdana, sans-serif"
+                             }
+                         }
+      })
+  end
+
+  @todo_chart[:month] = LazyHighCharts::HighChart.new('pie') do |f|
+      f.chart({:defaultSeriesType=>"pie" , :margin=> [5, 0, 5, 0]} )
+    series = {
+      :type=> 'pie',
+          :name=> "Last Month's Todos",
+          :data=> [
+              ['Complete', @todos[:month][:complete] ],
+              [ 'Incomplete', ( @todos[:month][:total] - @todos[:month][:complete]) ]
+          ]
+    }
+    f.series(series)
+    f.options[:title][:text] = "Last Month's Todos"
+    f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'})
+    f.plot_options(:pie=>{
+      :allowPointSelect=>true,
+                         :cursor=>"pointer" ,
+                         :dataLabels=>{
+                             :enabled=>true,
+                             :color=>"black",
+                             :style=>{
+                                 :font=>"13px Trebuchet MS, Verdana, sans-serif"
+                             }
+                         }
+      })
+  end
+  
+.row
+  .medium-4.columns
+    = high_chart("today_pie_chart", @todo_chart[:today])
+  .medium-4.columns
+    = high_chart("week_pie_chart", @todo_chart[:week])
+  .medium-4.columns
+    = high_chart("month_pie_chart", @todo_chart[:month])
