@@ -10,11 +10,15 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require recurring_select
- *= require_tree .
- *= require_self
  */
 
+@import 'jquery.ui.core';
+@import 'jquery.ui.datepicker';
+@import 'foundation';
+@import 'foundation-datepicker';
+@import 'recurring_select';
+@import 'font-awesome';
+@import 'families';
 
 .todo_wrap {
   margin: 5px 5px 5px 5px;

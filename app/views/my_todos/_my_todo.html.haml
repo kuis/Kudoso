@@ -1,0 +1,8 @@
+.todo
+  .complete{id: "complete_wrap_#{my_todo.todo_schedule_id}"}
+    = render partial: 'my_todos/complete_form', locals: {my_todo: my_todo}
+  .name
+    = my_todo.todo.name
+  .actions
+    = link_to 'Edit Schedule', edit_family_todo_todo_schedule_path(my_todo.member.family, my_todo.todo, my_todo.todo_schedule)
+

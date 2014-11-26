@@ -12,10 +12,14 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.all
 //= require turbolinks
 //= require foundation
 //= require recurring_select
+//= require foundation-datepicker
 //= require_tree .
+
 $(function() {
-  $(document).foundation();
+    $(document).foundation();
+    $('.fdatepicker').fdatepicker({format: 'yyyy-mm-dd'});
 });

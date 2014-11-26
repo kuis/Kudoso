@@ -1,0 +1,18 @@
+%h1= @family.name
+%h2= "#{@member.full_name}'s Dashboard"
+
+%p
+  Todo Schedule (Today):
+  = render @member.todos
+
+%p
+  Todo Schedule (Tomorrow):
+  = render @member.todos(Date.tomorrow)
+
+%p
+  Todo Schedule (Yesterday):
+  = render @member.todos(Date.yesterday)
+
+
+%p= link_to 'Edit Member Information', edit_family_member_path(@family, @member)
+%p= link_to 'Back', @member.family

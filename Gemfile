@@ -14,6 +14,8 @@ gem 'haml'
 gem 'haml-rails' # Provides HAML as the default generator
 gem 'simple_form'
 gem 'jquery-rails'
+gem 'jquery-ui-sass-rails'
+gem 'font-awesome-rails'
 gem 'jquery-turbolinks'
 gem 'foundation-rails'
 gem 'rails_layout', group: :development
@@ -36,7 +38,6 @@ gem 'omniauth'
 gem 'cancan'
 gem 'chronic'
 gem 'recurring_select' # for schedules
-
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141120233559) do
+ActiveRecord::Schema.define(version: 20141121201040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,19 @@ ActiveRecord::Schema.define(version: 20141120233559) do
     t.boolean  "parent"
     t.integer  "family_id"
     t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "my_todos", force: true do |t|
+    t.integer  "todo_schedule_id"
+    t.integer  "member_id"
+    t.date     "due_date"
+    t.datetime "due_time"
+    t.boolean  "complete"
+    t.boolean  "verify"
+    t.datetime "verified_at"
+    t.integer  "verified_by"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

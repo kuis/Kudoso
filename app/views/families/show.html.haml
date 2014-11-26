@@ -5,9 +5,11 @@
     %ul
       - @family.members.each do |member|
         %li
-          = member.full_name
+          = link_to member.full_name, family_member_path(@family, member)
           = member.parent? ? ' (Parent)' : ' (Child)'
-          = link_to '(Edit)', edit_family_member_path(@family,member) if can?(:update, member)
+          %br
+          Today's ToDo schedule:
+          = render member.todo_schedules
       %li
         = link_to 'Add new family member', new_family_member_path(@family) if can?(:create, Member)
   .medium-6.columns

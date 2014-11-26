@@ -1,4 +1,4 @@
-= form_for @todo_schedule do |f|
+= form_for [@family, @todo, @todo_schedule] do |f|
   - if @todo_schedule.errors.any?
     #error_explanation
       %h2= "#{pluralize(@todo_schedule.errors.count, "error")} prohibited this todo_schedule from being saved:"
@@ -7,23 +7,25 @@
           %li= msg
 
   .field
-    = f.label :todo_id
-    = f.number_field :todo_id
+    = f.label 'ToDo'
+    = f.hidden_field :todo_id
+    = f.text_field 'todo_name', value: @todo.name, readonly: true
   .field
-    = f.label :member_id
-    = f.number_field :member_id
+    = f.label 'Assigned To'
+    = f.hidden_field :member_id
+    = f.text_field 'member_name', value: @todo_schedule.member.full_name, readonly: true
   .field
     = f.label :start_date
-    = f.date_select :start_date
+    = f.text_field :start_date, class: 'fdatepicker'
   .field
     = f.label :end_date
-    = f.date_select :end_date
+    = f.text_field :end_date, class: 'fdatepicker'
   .field
     = f.label :active
     = f.check_box :active
   .field
     = f.label :schedule
-    = f.text_area :schedule
+    = f.select_recurring :schedule
   .field
     = f.label :notes
     = f.text_area :notes

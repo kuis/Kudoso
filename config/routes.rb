@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :my_todos
+
   resources :todo_groups
 
   resources :todo_templates
@@ -8,9 +10,15 @@ Rails.application.routes.draw do
 
   devise_for :users
   resources :families do
-    resources :members
+    resources :members do
+      resources :my_todos
+    end
     resources :todos do
-      resources :todo_schedules
+      resources :todo_schedules do
+        resources :members do
+          resources :my_todos
+        end
+      end
     end
   end
 

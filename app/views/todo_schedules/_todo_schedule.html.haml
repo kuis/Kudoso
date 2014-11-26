@@ -1,0 +1,7 @@
+- date ||= Date.today
+- if todo_schedule.schedule.present?
+  - schedule = IceCube::Schedule.from_yaml(todo_schedule.schedule)
+  - if schedule.occurs_on?(date)
+    %br
+    = link_to todo_schedule.todo.name, edit_family_todo_todo_schedule_path(@family, todo_schedule.todo, todo_schedule)
+
