@@ -19,7 +19,11 @@ class Member < ActiveRecord::Base
       self.todo_schedules.where('start_date <= ? AND (end_date IS NULL OR end_date <= ?)', date, date).find_each do |ts|
         todo = local_todos.find{ |td| td.todo_schedule_id == ts.id }
         if todo.nil?
-          schedule = IceCube::Schedule.from_yaml(ts.schedule)
+          schedule = IceCube::Schedule.new
+          schedule.start_time = ts.start_date
+          ts.schedule_rrules.each do |rule|
+            schedule.add_recurrence_rule(IceCube::Rule.from_yaml(rule.rrule))
+          end
           local_todos << self.my_todos.build(todo_schedule_id: ts.id, due_date: date ) if schedule.occurs_on?(date)
         end
       end

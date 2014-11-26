@@ -3,12 +3,16 @@
 
 .row
   .medium-6.columns
-    Todo Schedule (Today):
-    = render @member.todos
+    .todo_header
+      Todo Schedule (Today):
+    .todo_wrap
+      = render @member.todos
 
   .medium-6.columns
-    Todo Schedule (Tomorrow):
-    = render @member.todos(Date.tomorrow, Date.tomorrow)
+    .todo_header
+      Todo Schedule (Tomorrow):
+    .todo_wrap
+      = render @member.todos(Date.tomorrow, Date.tomorrow)
 
 %hr
 #charts_wrap

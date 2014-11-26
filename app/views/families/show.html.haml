@@ -6,10 +6,14 @@
       - @family.members.each do |member|
         %li
           = link_to member.full_name, family_member_path(@family, member)
-          = member.parent? ? ' (Parent)' : ' (Child)'
-          %br
-          Today's ToDo schedule:
-          = render member.todo_schedules
+          - if member.parent?
+            (parent)
+          -else
+            (child)
+            %br
+            ToDo schedule:
+            .todo_wrap
+              = render member.todo_schedules
       %li
         = link_to 'Add new family member', new_family_member_path(@family) if can?(:create, Member)
   .medium-6.columns

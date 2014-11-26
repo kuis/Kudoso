@@ -1,7 +1,16 @@
-- date ||= Date.today
-- if todo_schedule.schedule.present?
-  - schedule = IceCube::Schedule.from_yaml(todo_schedule.schedule)
-  - if schedule.occurs_on?(date)
-    %br
-    = link_to todo_schedule.todo.name, edit_family_todo_todo_schedule_path(@family, todo_schedule.todo, todo_schedule)
-
+.todo_schedule
+  .name
+    = todo_schedule.todo.name
+  .date
+    = "(#{todo_schedule.start_date}"
+    = todo_schedule.end_date.present? ? " - #{todo_schedule.end_date})" : ' - forever)'
+  .schedule
+    Scheduled for:
+    - todo_schedule.schedule_rrules.each do |rule|
+      - rrule = IceCube::Rule.from_yaml(rule.rrule)
+      = rrule.to_s
+  .actions
+    = link_to 'Edit schedule', edit_family_todo_todo_schedule_path(@family, todo_schedule.todo, todo_schedule)
+    - if todo_schedule.end_date.present? && todo_schedule.end_date > Date.today
+      %br
+      = link_to 'Delete schedule', family_todo_todo_schedule_path(@family, todo_schedule.todo, todo_schedule), method: :delete, confirm: "Are you sure?"

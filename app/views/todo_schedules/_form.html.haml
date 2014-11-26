@@ -16,16 +16,21 @@
     = f.text_field 'member_name', value: @todo_schedule.member.full_name, readonly: true
   .field
     = f.label :start_date
-    = f.text_field :start_date, class: 'fdatepicker'
+    = f.text_field :start_date, readonly: true
   .field
     = f.label :end_date
-    = f.text_field :end_date, class: 'fdatepicker'
+    - if @todo_schedule.end_date.blank? || @todo_schedule.end_date > Date.today
+      = f.text_field :end_date, class: 'fdatepicker'
+    - else
+      = f.text_field :end_date, readonly: true
   .field
     = f.label :active
     = f.check_box :active
   .field
-    = f.label :schedule
-    = f.select_recurring :schedule
+    = f.label 'Recurring schedule rules:'
+    = f.fields_for :schedule_rrules do |builder|
+      = render 'schedule_rrules/schedule_rrule_fields', f: builder
+    = link_to_add_association 'Add new recurring schedule', f, :schedule_rrules, partial: 'schedule_rrules/schedule_rrule_fields'
   .field
     = f.label :notes
     = f.text_area :notes

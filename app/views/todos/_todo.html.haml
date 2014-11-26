@@ -20,30 +20,33 @@
   .todo_assignments
     Assigned to:
     %ul
-      - todo.todo_schedules.each do |ts|
-        %li=ts.member.full_name
+      - todo.members.each do |member|
+        %li=member.full_name
   .todo_assign
     - if can?(:create, TodoSchedule)
-      %a{href: '#', data: { "reveal-id" => "assign_todo_#{todo.id}" }}
-        Assign to child
-      .reveal-modal{id: "assign_todo_#{todo.id}", data: { reveal: true} }
-        %a.close-reveal-modal
-          &#215;
-        = form_for [@family, todo, ts = TodoSchedule.new(schedule: todo.schedule)] do |f|
-          %br
-          .form_group
-            = f.label 'Choose a family member:'
-            = f.collection_select :member_id, @family.members.where(parent:false), :id, :full_name
-          .form_group
-            = f.label :start_date
-            = f.text_field :start_date, class: 'fdatepicker'
-          .form_group
-            =f.label 'End Date (optional)'
-            = f.text_field :end_date, class: 'fdatepicker'
-          .form_group
-            = f.label :schedule
-            = f.select_recurring :schedule
-          = f.submit
+      %dl.accordion{"data-accordion" =>"myAccordionGroup"}
+        %dd.accordion-navigation
+          %a{href: "#assign_todo_#{todo.id}"}
+            Assign to child
+          .content{id: "assign_todo_#{todo.id}"}
+            = form_for [@family, todo, ts = TodoSchedule.new] do |f|
+              %br
+              .form_group
+                = f.label 'Choose a family member:'
+                = f.collection_select :member_id, @family.members.where(parent:false), :id, :full_name
+              .form_group
+                = f.label :start_date
+                = f.text_field :start_date, class: 'fdatepicker'
+              .form_group
+                =f.label 'End Date (optional)'
+                = f.text_field :end_date, class: 'fdatepicker'
+              .form_group
+                = f.label :schedule
+                = f.fields_for :schedule_rrules, ts.schedule_rrules.build(rrule: todo.schedule) do |builder|
+                  = render 'schedule_rrules/schedule_rrule_fields', f: builder
+                .links
+                  = link_to_add_association 'Add new recurring schedule', f, :schedule_rrules,  partial: 'schedule_rrules/schedule_rrule_fields'
+              = f.submit
 
   .todo_actions
     = link_to 'Edit', edit_family_todo_path(todo.family, todo) if can?(:update, todo)

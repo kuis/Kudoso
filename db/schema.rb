@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141121201040) do
+ActiveRecord::Schema.define(version: 20141126145941) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,13 @@ ActiveRecord::Schema.define(version: 20141121201040) do
     t.boolean  "verify"
     t.datetime "verified_at"
     t.integer  "verified_by"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "schedule_rrules", force: true do |t|
+    t.integer  "todo_schedule_id"
+    t.string   "rrule"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

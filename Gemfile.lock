@@ -67,6 +67,7 @@ GEM
     childprocess (0.5.5)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
+    cocoon (1.2.6)
     coderay (1.1.0)
     coffee-rails (4.0.1)
       coffee-script (>= 2.2.0)
@@ -339,6 +340,7 @@ DEPENDENCIES
   capybara
   capybara-webkit!
   chronic
+  cocoon
   coffee-rails (~> 4.0.0)
   cucumber-rails
   database_cleaner

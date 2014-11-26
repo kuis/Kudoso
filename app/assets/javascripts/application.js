@@ -18,9 +18,18 @@
 //= require recurring_select
 //= require foundation-datepicker
 //= require highcharts/highcharts
+//= require cocoon
 //= require_tree .
+//= require turbolinks
 
-$(function() {
+
+function ready() {
     $(document).foundation();
     $('.fdatepicker').fdatepicker({format: 'yyyy-mm-dd'});
+}
+$(function() {
+
+    $(document).ready(ready);
+    $(document).on('page:load', ready);
+
 });
