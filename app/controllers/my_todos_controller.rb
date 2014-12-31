@@ -26,6 +26,7 @@ class MyTodosController < ApplicationController
 
     respond_to do |format|
       if @my_todo.save
+        @member.reload
         format.html { redirect_to family_member_path(@member.family, @member), notice: 'Personal todo was successfully created' }
         format.js { render :update }
       else
@@ -39,6 +40,7 @@ class MyTodosController < ApplicationController
   def update
     respond_to do |format|
       if @my_todo.update(my_todo_params.merge({member_id: @member.id, todo_schedule_id: @todo_schedule.id}))
+        @member.reload
         format.html { redirect_to family_member_path(@member.family, @member), notice: 'Personal todo was successfully created' }
         format.js { render :update }
       else

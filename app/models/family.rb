@@ -32,7 +32,7 @@ class Family < ActiveRecord::Base
   def assign_template(todo_template, assign_members = Array.new)
     #add to family if not already in their todo list
     unless self.todos.find {|todo| todo.todo_template_id == todo_template.id}
-      todo = self.todos.build({name: todo_template.name, description: todo_template.description, schedule: todo_template.schedule, todo_template_id: todo_template.id})
+      todo = self.todos.build({name: todo_template.name, description: todo_template.description, schedule: todo_template.schedule, todo_template_id: todo_template.id, kudos: todo_template.kudos})
       todo.active = true; #can't mass assign this
       todo.save
       # add the todo to each family member

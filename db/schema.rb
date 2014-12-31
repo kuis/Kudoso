@@ -35,7 +35,7 @@ ActiveRecord::Schema.define(version: 20141231163455) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "kudos"
+    t.integer  "kudos",      default: 0
   end
 
   create_table "my_todos", force: true do |t|
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 20141231163455) do
     t.string   "active"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "kudos"
+    t.integer  "kudos",       default: 0
   end
 
   create_table "todos", force: true do |t|

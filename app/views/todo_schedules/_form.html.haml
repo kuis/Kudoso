@@ -18,6 +18,9 @@
     = f.label :start_date
     = f.text_field :start_date, readonly: true
   .field
+    = f.label :kudos
+    = f.text_field 'todo_kudos', value: @todo.kudos, readonly: true
+  .field
     = f.label :end_date
     - if @todo_schedule.end_date.blank? || @todo_schedule.end_date > Date.today
       = f.text_field :end_date, class: 'fdatepicker'
