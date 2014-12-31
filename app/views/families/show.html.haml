@@ -25,6 +25,8 @@
       %li
         %a{href: '#', data: { "reveal-id" => 'todo_template_modal' }}
           Add more ToDo's
+      %li
+        = link_to 'Add from Todo Groups', family_todo_groups_path(@family)
 #todo_template_modal.reveal-modal{data: { reveal: true} }
   %a.close-reveal-modal
     &#215;
@@ -35,3 +37,24 @@
         %li
           = render todo
           = link_to 'Add to Family ToDo List', family_todos_path(@family, todo_template_id: todo.id ), method: :post
+    %li
+      .todo_wrap
+        Create your own ToDo:
+        = form_for [@family, Todo.new] do |f|
+          .form-group
+            = f.label :name
+            = f.text_field :name
+          .form-group
+            = f.label :description
+            = f.text_field :description
+          .form-group
+            = f.label :required
+            = f.check_box :required
+          .form-group
+            = f.label :active
+            = f.check_box :active
+          .form-group
+            =f.label :schedule
+            =f.select_recurring :schedule
+          .form-control
+            = f.submit

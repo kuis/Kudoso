@@ -11,7 +11,7 @@ class FamiliesController < ApplicationController
   # GET /families/1
   # GET /families/1.json
   def show
-    @todo_templates = TodoTemplate.where(active: '1')
+    @todo_templates = TodoTemplate.where(active: true)
   end
 
   # GET /families/new

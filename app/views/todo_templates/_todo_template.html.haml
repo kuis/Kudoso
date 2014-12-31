@@ -10,5 +10,7 @@
     Acitve:
     = todo_template.active?
   .todo_actions
-    = link_to 'Edit', edit_todo_template_path(todo_template) if can?(:update, todo_template)
-    = link_to 'Destroy', todo_template, :method => :delete, :data => { :confirm => 'Are you sure?' } if can?(:delete, todo_template)
+    - if can?(:update, todo_template)
+      = link_to 'Edit', edit_todo_template_path(todo_template)
+      |
+      = link_to 'Destroy', todo_template, :method => :delete, :data => { :confirm => 'Are you sure?' } if can?(:delete, todo_template)

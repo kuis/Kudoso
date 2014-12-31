@@ -2,6 +2,12 @@
 %h2= "#{@member.full_name}'s Dashboard"
 
 .row
+  .medium-12.columns
+    Kudos:
+    #kudos
+      #{@member.kudos}
+
+.row
   .medium-6.columns
     .todo_header
       Todo Schedule (Today):
@@ -17,6 +23,15 @@
 %hr
 #charts_wrap
   = render 'charts'
+
+%hr
+%dl.accordion{ "data-accordion" => 'TodoHistory' }
+  %dd.accordion-navigation
+    %a{ href: '#todo_history'}
+      Todo Details
+      %span.fa.accordion-icon
+    #todo_history.content
+      = render 'details'
 
 %p= link_to 'Edit Member Information', edit_family_member_path(@family, @member)
 %p= link_to 'Back', @member.family

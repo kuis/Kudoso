@@ -1,3 +1,23 @@
 // Place all the styles related to the todo_templates controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.todo_name {
+  font-weight: bold;
+}
+.todo_description {
+  font-size: .7em;
+  background-color: $light-grey;
+  padding: 5px;
+  border-radius: 5px;
+}
+.todo_schedule {
+  font-size: .7em;
+}
+.todo_active {
+  font-size: .7em;
+  color: $light-grey;
+}
+.todo_actions {
+  font-size: .7em;
+}

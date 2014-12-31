@@ -3,6 +3,7 @@ class CreateTodoTemplates < ActiveRecord::Migration
     create_table :todo_templates do |t|
       t.string :name
       t.string :description
+      t.boolean :required
       t.string :schedule
       t.string :active
 

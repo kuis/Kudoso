@@ -6,7 +6,8 @@
     = todo_schedule.end_date.present? ? " - #{todo_schedule.end_date})" : ' - forever)'
   .schedule
     Scheduled for:
-    - todo_schedule.schedule_rrules.each do |rule|
+    - todo_schedule.schedule_rrules.each_with_index do |rule, idx|
+      = " & " unless idx == 0
       - rrule = IceCube::Rule.from_yaml(rule.rrule)
       = rrule.to_s
   .actions

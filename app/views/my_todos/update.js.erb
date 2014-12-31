@@ -1,2 +1,3 @@
 $('#complete_wrap_<%= @my_todo.todo_schedule_id %>').html("<%=j render partial: 'my_todos/complete_form', locals: { my_todo: @my_todo } %>");
 $('#charts_wrap').html("<%=j render 'members/charts'%>");
+$('#todo_history').html("<%=j render 'members/details'%>");

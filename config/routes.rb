@@ -10,6 +10,11 @@ Rails.application.routes.draw do
 
   devise_for :users
   resources :families do
+    resources :todo_groups do
+      member do
+        post :assign
+      end
+    end
     resources :members do
       resources :my_todos
     end

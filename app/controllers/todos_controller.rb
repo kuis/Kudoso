@@ -22,7 +22,7 @@ class TodosController < ApplicationController
   end
 
   def create
-    @todo_template = TodoTemplate.find(params[:todo_template_id])
+    @todo_template = TodoTemplate.find(params[:todo_template_id]) if params[:todo_template_id].present?
     @family = Family.find(params[:family_id])
     if @todo_template
       @todo = @family.todos.build({name: @todo_template.name, description: @todo_template.description, schedule: @todo_template.schedule, todo_template_id: @todo_template.id})

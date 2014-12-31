@@ -11,7 +11,7 @@
  * file per style scope.
  *
  */
-
+@import 'mixins';
 @import 'jquery.ui.core';
 @import 'jquery.ui.datepicker';
 @import 'foundation';
@@ -20,6 +20,7 @@
 @import 'font-awesome';
 @import 'todos';
 @import 'todo_schedules';
+@import 'todo_templates';
 
 .todo_wrap {
   margin: 5px 5px 5px 5px;
@@ -29,4 +30,53 @@
   .todo_name {
     font_size: 1.3em;
   }
+}
+
+.rs_dialog_holder { z-index: 2000; }
+
+.centered {
+  text-align: center;
+}
+
+ul.inline {
+  overflow: auto;
+  list-style-type: none;
+}
+ul.inline > li {
+  display: inline-block;
+  vertical-align: top;
+}
+.centered > ul.inline > li {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+ul.inline.even > li {
+  width: 250px;
+}
+
+#todo_history {
+  ul { padding-left:20px; list-style:none; }
+  li { margin-bottom:10px; }
+  li.complete:before {
+    font-family: 'FontAwesome';
+    content: '\f00c';
+    margin:0 5px 0 -15px;
+    color: green;
+  }
+  li.incomplete:before {
+    font-family: 'FontAwesome';
+    content: '\f00d';
+    margin:0 5px 0 -15px;
+    color: red;
+  }
+
+}
+
+//The accordion is closed
+.accordion-icon:before {
+  content: "\f0d7";
+}
+//The accordion is open
+.active .accordion-icon:before {
+  content: "\f0d8";
 }

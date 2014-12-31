@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20141126145941) do
+ActiveRecord::Schema.define(version: 20141231163455) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20141126145941) do
     t.integer  "primary_contact_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.date     "memorialized_date"
   end
 
   create_table "members", force: true do |t|
@@ -34,6 +35,7 @@ ActiveRecord::Schema.define(version: 20141126145941) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "kudos"
   end
 
   create_table "my_todos", force: true do |t|
@@ -88,10 +90,12 @@ ActiveRecord::Schema.define(version: 20141126145941) do
   create_table "todo_templates", force: true do |t|
     t.string   "name"
     t.string   "description"
+    t.boolean  "required"
     t.string   "schedule"
     t.string   "active"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "kudos"
   end
 
   create_table "todos", force: true do |t|

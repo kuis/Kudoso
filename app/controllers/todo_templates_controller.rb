@@ -2,8 +2,6 @@ class TodoTemplatesController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
 
-  before_action :set_todo_template, only: [:show, :edit, :update, :destroy]
-
   respond_to :html
 
   def index
@@ -55,11 +53,9 @@ class TodoTemplatesController < ApplicationController
   end
 
   private
-    def set_todo_template
-      @todo_template = TodoTemplate.find(params[:id])
-    end
+
 
     def todo_template_params
-      params.require(:todo_template).permit(:name, :description, :schedule, :active)
+      params.require(:todo_template).permit(:name, :description, :rule, :active, :kudos)
     end
 end

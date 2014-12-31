@@ -1,5 +1,6 @@
 .nested-fields
   .field
+    = f.hidden_field :id
     = f.label 'Recurrence rule'
-    = f.select_recurring :rrule
-  = link_to_remove_association 'remove rule', f
+    = f.select_recurring :rule
+  = link_to_remove_association 'remove rule', f, nil, :allow_blank => true

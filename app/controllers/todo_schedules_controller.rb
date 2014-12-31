@@ -76,6 +76,6 @@ class TodoSchedulesController < ApplicationController
   private
 
     def todo_schedule_params
-      params.require(:todo_schedule).permit(:member_id, :start_date, :end_date, :active, :schedule, :notes, schedule_rrules_attributes: [ :id, :todo_schedule_id, :rrule, :_destroy ])
+      params.require(:todo_schedule).permit(:member_id, :start_date, :end_date, :active, :schedule, :notes, schedule_rrules_attributes: [ :id, :todo_schedule_id, :rule, :_destroy ])
     end
 end

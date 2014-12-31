@@ -1,4 +1,4 @@
-= form_for @todo_group do |f|
+= simple_form_for @todo_group do |f|
   - if @todo_group.errors.any?
     #error_explanation
       %h2= "#{pluralize(@todo_group.errors.count, "error")} prohibited this todo_group from being saved:"
@@ -7,16 +7,16 @@
           %li= msg
 
   .field
-    = f.label :name
-    = f.text_field :name
+    = f.input :name
   .field
-    = f.label :rec_min_age
-    = f.number_field :rec_min_age
+    = f.input :rec_min_age
   .field
-    = f.label :rec_max_age
-    = f.number_field :rec_max_age
+    = f.input :rec_max_age
   .field
-    = f.label :active
-    = f.check_box :active
+    = f.input :active
+  .field
+    = field_set_tag  do
+      = f.association :todo_templates, as: :check_boxes, label: "Todo's in this group", label_method: :label
+      = link_to_add_association 'Add new todo template', f, :todo_templates, partial: 'todo_templates/todo_template_fields'
   .actions
     = f.submit 'Save'

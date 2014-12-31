@@ -20,6 +20,7 @@ gem 'jquery-turbolinks'
 gem 'foundation-rails'
 gem 'lazy_high_charts'
 gem 'cocoon' # nested form helper
+gem 'groupdate' # adds group_by_date functions
 gem 'rails_layout', group: :development
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
@@ -66,6 +67,7 @@ group :development, :test do
   gem 'quiet_assets'
   gem 'parallel_tests'
   gem 'zeus-parallel_tests'
+  gem 'binding_of_caller'
 end
 
 group :development do

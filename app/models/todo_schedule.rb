@@ -13,6 +13,15 @@ class TodoSchedule < ActiveRecord::Base
   after_initialize :init
 
 
+  def schedule
+    sch = IceCube::Schedule.new
+    sch.start_time = self.start_date.to_time
+    sch.end_time = self.end_date.to_time if self.end_date.present?
+    self.schedule_rrules.each do |rrule|
+      sch.add_recurrence_rule(rrule.rule)
+    end
+    sch
+  end
 
   private
 
