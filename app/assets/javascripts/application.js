@@ -26,6 +26,11 @@
 function ready() {
     $(document).foundation();
     $('.fdatepicker').fdatepicker({format: 'yyyy-mm-dd'});
+    $(document).ajaxError(function (e, xhr, settings) {
+        if (xhr.status == 401) {
+            location.reload();
+        }
+    });
 }
 $(function() {
 

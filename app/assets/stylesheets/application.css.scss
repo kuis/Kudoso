@@ -27,8 +27,18 @@
   padding: 5px 10px 5px 10px;
   border: 1px solid gray;
   border-radius: 5px;
+  color: black;
   .todo_name {
     font_size: 1.3em;
+  }
+  .todo.optional.incomplete {
+    color: #41bb3c;
+  }
+  .todo.required {
+    font-weight: bold;
+  }
+  .todo.required.incomplete {
+    color: #ff4441;
   }
 }
 

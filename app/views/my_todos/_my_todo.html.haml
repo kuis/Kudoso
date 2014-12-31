@@ -1,8 +1,9 @@
-.todo
-  .complete{id: "complete_wrap_#{my_todo.todo_schedule_id}"}
+.todo{ id: "todo_wrap_#{my_todo.todo_schedule_id}", class: (my_todo.todo.required? ? 'required' : 'optional') + ' ' + (my_todo.complete? ? 'complete' : 'incomplete' ) }
+  .complete
     = render partial: 'my_todos/complete_form', locals: {my_todo: my_todo}
   .name
     = "#{my_todo.todo.name} (+#{my_todo.todo.kudos} Kudos)"
+    = 'Optional' unless  my_todo.todo.required?
   .actions
     = link_to 'Edit Schedule', edit_family_todo_todo_schedule_path(my_todo.member.family, my_todo.todo, my_todo.todo_schedule)
 
