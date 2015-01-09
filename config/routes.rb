@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
 
+  resources :activities
+
+  resources :activity_templates
+
+  resources :devices
+
+  resources :device_types
+
   resources :my_todos
 
   resources :todo_groups

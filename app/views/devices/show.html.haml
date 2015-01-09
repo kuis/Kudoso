@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @device.name
+%p
+  %b Device type:
+  = @device.device_type_id
+%p
+  %b Family:
+  = @device.family_id
+%p
+  %b Managed:
+  = @device.managed
+%p
+  %b Management:
+  = @device.management_id
+%p
+  %b Primary member:
+  = @device.primary_member_id
+
+= link_to 'Edit', edit_device_path(@device)
+\|
+= link_to 'Back', devices_path

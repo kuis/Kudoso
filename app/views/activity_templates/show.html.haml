@@ -1,0 +1,30 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @activity_template.name
+%p
+  %b Description:
+  = @activity_template.description
+%p
+  %b Rec min age:
+  = @activity_template.rec_min_age
+%p
+  %b Rec max age:
+  = @activity_template.rec_max_age
+%p
+  %b Cost:
+  = @activity_template.cost
+%p
+  %b Reward:
+  = @activity_template.reward
+%p
+  %b Time block:
+  = @activity_template.time_block
+%p
+  %b Restricted:
+  = @activity_template.restricted
+
+= link_to 'Edit', edit_activity_template_path(@activity_template)
+\|
+= link_to 'Back', activity_templates_path
