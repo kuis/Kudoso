@@ -58,3 +58,32 @@ children.each do |kid|
     kid.my_todos.where('complete IS NOT TRUE').sample.update_attribute(:complete, true)
   end
 end
+
+# generate device types
+
+device_types = DeviceType.create([
+                                     { name: 'iPod 4th Gen', description: 'Apple iPod Touch, 4th Generation', os: '', version: '' },
+                                     { name: 'iPod 5th Gen', description: 'Apple iPod Touch, 5th Generation', os: '', version: '' },
+                                     { name: 'iPhone 4', description: '', os: '', version: '' },
+                                     { name: 'iPhone 4s', description: '', os: '', version: '' },
+                                     { name: 'iPhone 5c', description: '', os: '', version: '' },
+                                     { name: 'iPhone 5s', description: '', os: '', version: '' },
+                                     { name: 'iPhone 6', description: '', os: '', version: '' },
+                                     { name: 'iPhone 6 Plus', description: '', os: '', version: '' },
+                                     { name: 'iPad 1st Gen', description: '', os: '', version: '' },
+                                     { name: 'iPad 2nd Gen', description: '', os: '', version: '' },
+                                     { name: 'iPad Retina', description: '', os: '', version: '' },
+                                     { name: 'iPad Air', description: '', os: '', version: '' },
+                                     { name: 'iPad Air 2nd Gen', description: '', os: '', version: '' },
+                                     { name: 'Playstation 2', description: '', os: '', version: '' },
+                                     { name: 'Playstation 3', description: '', os: '', version: '' },
+                                     { name: 'Playstation 4', description: '', os: '', version: '' },
+                                     { name: 'xBox 360', description: '', os: '', version: '' },
+                                     { name: 'xBox One', description: '', os: '', version: '' },
+                                     { name: 'Nintendo Wii', description: '', os: '', version: '' },
+                                     { name: 'Nintendo 3DS', description: '', os: '', version: '' },
+                                     { name: 'Kudoso Smart Plug', description: '', os: '', version: '' },
+                                     { name: 'BluRay Player', description: '', os: '', version: '' },
+                                     { name: 'HDTV', description: '', os: '', version: '' }
+
+                                 ])

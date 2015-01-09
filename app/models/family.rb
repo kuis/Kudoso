@@ -2,6 +2,7 @@ class Family < ActiveRecord::Base
   has_many :users
   has_many :members, dependent: :destroy
   has_many :todos, dependent: :destroy
+  has_many :devices
 
   def kids
     members.where('parent IS NOT true')
