@@ -42,6 +42,6 @@ class ActivitiesController < ApplicationController
     end
 
     def activity_params
-      params.require(:activity).permit(:activity_template_id, :name, :description, :rec_min_age, :rec_max_age, :cost, :reward, :time_block, :restricted)
+      params.require(:activity).permit(:member_id, :family_activity_id, :date, :duration, :device_id, :notes)
     end
 end

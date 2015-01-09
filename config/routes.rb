@@ -2,6 +2,8 @@ Rails.application.routes.draw do
 
   resources :activities
 
+  resources :family_activities
+
   resources :activity_templates
 
   resources :devices

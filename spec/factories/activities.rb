@@ -1,14 +1,11 @@
 FactoryGirl.define do
   factory :activity do
-    activity_template_id 1
-name "MyString"
-description "MyString"
-rec_min_age 1
-rec_max_age 1
-cost 1
-reward 1
-time_block 1
-restricted false
+    member_id 1
+family_activity_id 1
+date ""
+duration 1
+device_id 1
+notes "MyText"
   end
 
 end

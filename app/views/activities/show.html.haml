@@ -1,32 +1,23 @@
 %p#notice= notice
 
 %p
-  %b Activity template:
-  = @activity.activity_template_id
+  %b Member:
+  = @activity.member_id
 %p
-  %b Name:
-  = @activity.name
+  %b Family activity:
+  = @activity.family_activity_id
 %p
-  %b Description:
-  = @activity.description
+  %b Date:
+  = @activity.date
 %p
-  %b Rec min age:
-  = @activity.rec_min_age
+  %b Duration:
+  = @activity.duration
 %p
-  %b Rec max age:
-  = @activity.rec_max_age
+  %b Device:
+  = @activity.device_id
 %p
-  %b Cost:
-  = @activity.cost
-%p
-  %b Reward:
-  = @activity.reward
-%p
-  %b Time block:
-  = @activity.time_block
-%p
-  %b Restricted:
-  = @activity.restricted
+  %b Notes:
+  = @activity.notes
 
 = link_to 'Edit', edit_activity_path(@activity)
 \|

@@ -1,0 +1,40 @@
+= form_for @family_activity do |f|
+  - if @family_activity.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@family_activity.errors.count, "error")} prohibited this family_activity from being saved:"
+      %ul
+        - @family_activity.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :family_id
+    = f.number_field :family_id
+  .field
+    = f.label :activity_template_id
+    = f.number_field :activity_template_id
+  .field
+    = f.label :name
+    = f.text_field :name
+  .field
+    = f.label :description
+    = f.text_field :description
+  .field
+    = f.label :rec_min_age
+    = f.number_field :rec_min_age
+  .field
+    = f.label :rec_max_age
+    = f.number_field :rec_max_age
+  .field
+    = f.label :cost
+    = f.number_field :cost
+  .field
+    = f.label :reward
+    = f.number_field :reward
+  .field
+    = f.label :time_block
+    = f.number_field :time_block
+  .field
+    = f.label :restricted
+    = f.check_box :restricted
+  .actions
+    = f.submit 'Save'

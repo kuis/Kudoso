@@ -4,6 +4,7 @@ class Member < ActiveRecord::Base
   has_many :todo_schedules
   has_many :my_todos
   has_many :primary_devices, class_name: 'Device', foreign_key: 'primary_member_id'
+  has_many :activities
 
   scope :kids, -> { where('parent IS NULL OR parent = ?', false) }
 

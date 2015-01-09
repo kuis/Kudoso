@@ -1,0 +1,36 @@
+%p#notice= notice
+
+%p
+  %b Family:
+  = @family_activity.family_id
+%p
+  %b Activity template:
+  = @family_activity.activity_template_id
+%p
+  %b Name:
+  = @family_activity.name
+%p
+  %b Description:
+  = @family_activity.description
+%p
+  %b Rec min age:
+  = @family_activity.rec_min_age
+%p
+  %b Rec max age:
+  = @family_activity.rec_max_age
+%p
+  %b Cost:
+  = @family_activity.cost
+%p
+  %b Reward:
+  = @family_activity.reward
+%p
+  %b Time block:
+  = @family_activity.time_block
+%p
+  %b Restricted:
+  = @family_activity.restricted
+
+= link_to 'Edit', edit_family_activity_path(@family_activity)
+\|
+= link_to 'Back', family_activities_path

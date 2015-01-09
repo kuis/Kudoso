@@ -2,30 +2,24 @@
 
 %table
   %tr
-    %th Activity template
-    %th Name
-    %th Description
-    %th Rec min age
-    %th Rec max age
-    %th Cost
-    %th Reward
-    %th Time block
-    %th Restricted
+    %th Member
+    %th Family activity
+    %th Date
+    %th Duration
+    %th Device
+    %th Notes
     %th
     %th
     %th
 
   - @activities.each do |activity|
     %tr
-      %td= activity.activity_template_id
-      %td= activity.name
-      %td= activity.description
-      %td= activity.rec_min_age
-      %td= activity.rec_max_age
-      %td= activity.cost
-      %td= activity.reward
-      %td= activity.time_block
-      %td= activity.restricted
+      %td= activity.member_id
+      %td= activity.family_activity_id
+      %td= activity.date
+      %td= activity.duration
+      %td= activity.device_id
+      %td= activity.notes
       %td= link_to 'Show', activity
       %td= link_to 'Edit', edit_activity_path(activity)
       %td= link_to 'Destroy', activity, :method => :delete, :data => { :confirm => 'Are you sure?' }

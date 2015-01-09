@@ -7,31 +7,22 @@
           %li= msg
 
   .field
-    = f.label :activity_template_id
-    = f.number_field :activity_template_id
+    = f.label :member_id
+    = f.number_field :member_id
   .field
-    = f.label :name
-    = f.text_field :name
+    = f.label :family_activity_id
+    = f.number_field :family_activity_id
   .field
-    = f.label :description
-    = f.text_field :description
+    = f.label :date
+    = f.text_field :date
   .field
-    = f.label :rec_min_age
-    = f.number_field :rec_min_age
+    = f.label :duration
+    = f.number_field :duration
   .field
-    = f.label :rec_max_age
-    = f.number_field :rec_max_age
+    = f.label :device_id
+    = f.number_field :device_id
   .field
-    = f.label :cost
-    = f.number_field :cost
-  .field
-    = f.label :reward
-    = f.number_field :reward
-  .field
-    = f.label :time_block
-    = f.number_field :time_block
-  .field
-    = f.label :restricted
-    = f.check_box :restricted
+    = f.label :notes
+    = f.text_area :notes
   .actions
     = f.submit 'Save'

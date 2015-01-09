@@ -1,0 +1,2 @@
+module FamilyActivitiesHelper
+end

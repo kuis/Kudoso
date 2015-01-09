@@ -1,0 +1,37 @@
+%h1 Listing family_activities
+
+%table
+  %tr
+    %th Family
+    %th Activity template
+    %th Name
+    %th Description
+    %th Rec min age
+    %th Rec max age
+    %th Cost
+    %th Reward
+    %th Time block
+    %th Restricted
+    %th
+    %th
+    %th
+
+  - @family_activities.each do |family_activity|
+    %tr
+      %td= family_activity.family_id
+      %td= family_activity.activity_template_id
+      %td= family_activity.name
+      %td= family_activity.description
+      %td= family_activity.rec_min_age
+      %td= family_activity.rec_max_age
+      %td= family_activity.cost
+      %td= family_activity.reward
+      %td= family_activity.time_block
+      %td= family_activity.restricted
+      %td= link_to 'Show', family_activity
+      %td= link_to 'Edit', edit_family_activity_path(family_activity)
+      %td= link_to 'Destroy', family_activity, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Family activity', new_family_activity_path

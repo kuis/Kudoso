@@ -1,6 +1,7 @@
-class CreateActivities < ActiveRecord::Migration
+class CreateFamilyActivities < ActiveRecord::Migration
   def change
-    create_table :activities do |t|
+    create_table :family_activities do |t|
+      t.integer :family_id
       t.integer :activity_template_id
       t.string :name
       t.string :description
