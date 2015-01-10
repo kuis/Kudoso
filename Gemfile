@@ -75,6 +75,7 @@ group :development do
   gem 'rack-livereload'
   gem 'better_errors'
   gem 'terminal-notifier-guard'
+  gem 'habtm_generator'
 
   # Deployment
   gem 'capistrano'

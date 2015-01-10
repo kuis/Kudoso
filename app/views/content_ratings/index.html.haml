@@ -1,0 +1,25 @@
+%h1 Listing content_ratings
+
+%table
+  %tr
+    %th Type
+    %th Tag
+    %th Short
+    %th Description
+    %th
+    %th
+    %th
+
+  - @content_ratings.each do |content_rating|
+    %tr
+      %td= content_rating.type
+      %td= content_rating.tag
+      %td= content_rating.short
+      %td= content_rating.description
+      %td= link_to 'Show', content_rating
+      %td= link_to 'Edit', edit_content_rating_path(content_rating)
+      %td= link_to 'Destroy', content_rating, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Content rating', new_content_rating_path

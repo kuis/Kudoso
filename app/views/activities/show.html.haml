@@ -4,20 +4,35 @@
   %b Member:
   = @activity.member_id
 %p
+  %b Created by:
+  = @activity.created_by
+%p
   %b Family activity:
   = @activity.family_activity_id
 %p
-  %b Date:
-  = @activity.date
+  %b Start time:
+  = @activity.start_time
 %p
-  %b Duration:
-  = @activity.duration
+  %b End time:
+  = @activity.end_time
 %p
   %b Device:
   = @activity.device_id
 %p
-  %b Notes:
-  = @activity.notes
+  %b Content:
+  = @activity.content_id
+%p
+  %b Allowed time:
+  = @activity.allowed_time
+%p
+  %b Activity type:
+  = @activity.activity_type_id
+%p
+  %b Cost:
+  = @activity.cost
+%p
+  %b Reward:
+  = @activity.reward
 
 = link_to 'Edit', edit_activity_path(@activity)
 \|

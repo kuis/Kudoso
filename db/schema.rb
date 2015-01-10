@@ -11,21 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150109010246) do
+ActiveRecord::Schema.define(version: 20150109233015) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "activities", force: true do |t|
-    t.integer  "activity_template_id"
-    t.string   "name"
-    t.string   "description"
-    t.integer  "rec_min_age"
-    t.integer  "rec_max_age"
+    t.integer  "member_id"
+    t.integer  "created_by"
+    t.integer  "family_activity_id"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.integer  "device_id"
+    t.integer  "content_id"
+    t.integer  "allowed_time"
+    t.integer  "activity_type_id"
     t.integer  "cost"
     t.integer  "reward"
-    t.integer  "time_block"
-    t.boolean  "restricted"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -35,10 +37,63 @@ ActiveRecord::Schema.define(version: 20150109010246) do
     t.string   "description"
     t.integer  "rec_min_age"
     t.integer  "rec_max_age"
-    t.integer  "cost"
-    t.integer  "reward"
+    t.integer  "cost",             default: 0
+    t.integer  "reward",           default: 0
     t.integer  "time_block"
-    t.boolean  "restricted"
+    t.integer  "activity_type_id"
+    t.boolean  "restricted",       default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "activity_templates_device_types", id: false, force: true do |t|
+    t.integer "activity_template_id"
+    t.integer "device_type_id"
+  end
+
+  add_index "activity_templates_device_types", ["activity_template_id", "device_type_id"], name: "activity_templates_device_types_index", unique: true, using: :btree
+
+  create_table "activity_types", force: true do |t|
+    t.string   "name"
+    t.text     "metadata_fields"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "content_descriptors", force: true do |t|
+    t.string   "tag"
+    t.string   "short"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "content_ratings", force: true do |t|
+    t.string   "type"
+    t.string   "tag"
+    t.string   "short"
+    t.text     "description"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "content_types", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "contents", force: true do |t|
+    t.integer  "content_type_id"
+    t.string   "title"
+    t.string   "year"
+    t.integer  "content_rating_id"
+    t.date     "release_date"
+    t.integer  "language_id"
+    t.text     "description"
+    t.string   "length"
+    t.text     "metadata"
+    t.text     "references"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -52,11 +107,18 @@ ActiveRecord::Schema.define(version: 20150109010246) do
     t.datetime "updated_at"
   end
 
+  create_table "device_types_family_activities", id: false, force: true do |t|
+    t.integer "device_type_id"
+    t.integer "family_activity_id"
+  end
+
+  add_index "device_types_family_activities", ["device_type_id", "family_activity_id"], name: "device_types_family_activities_index", unique: true, using: :btree
+
   create_table "devices", force: true do |t|
     t.string   "name"
     t.integer  "device_type_id"
     t.integer  "family_id"
-    t.boolean  "managed"
+    t.boolean  "managed",           default: false
     t.integer  "management_id"
     t.integer  "primary_member_id"
     t.datetime "created_at"
@@ -70,6 +132,21 @@ ActiveRecord::Schema.define(version: 20150109010246) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "memorialized_date"
+  end
+
+  create_table "family_activities", force: true do |t|
+    t.integer  "family_id"
+    t.integer  "activity_template_id"
+    t.string   "name"
+    t.string   "description"
+    t.integer  "rec_min_age"
+    t.integer  "rec_max_age"
+    t.integer  "cost",                 default: 0
+    t.integer  "reward",               default: 0
+    t.integer  "time_block"
+    t.boolean  "restricted",           default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "members", force: true do |t|

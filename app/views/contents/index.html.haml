@@ -1,0 +1,37 @@
+%h1 Listing contents
+
+%table
+  %tr
+    %th Content type
+    %th Title
+    %th Year
+    %th Content rating
+    %th Release date
+    %th Language
+    %th Description
+    %th Length
+    %th Metadata
+    %th References
+    %th
+    %th
+    %th
+
+  - @contents.each do |content|
+    %tr
+      %td= content.content_type_id
+      %td= content.title
+      %td= content.year
+      %td= content.content_rating_id
+      %td= content.release_date
+      %td= content.language_id
+      %td= content.description
+      %td= content.length
+      %td= content.metadata
+      %td= content.references
+      %td= link_to 'Show', content
+      %td= link_to 'Edit', edit_content_path(content)
+      %td= link_to 'Destroy', content, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Content', new_content_path

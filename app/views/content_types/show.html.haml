@@ -1,0 +1,9 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @content_type.name
+
+= link_to 'Edit', edit_content_type_path(@content_type)
+\|
+= link_to 'Back', content_types_path

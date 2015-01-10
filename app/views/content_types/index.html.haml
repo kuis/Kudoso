@@ -1,0 +1,19 @@
+%h1 Listing content_types
+
+%table
+  %tr
+    %th Name
+    %th
+    %th
+    %th
+
+  - @content_types.each do |content_type|
+    %tr
+      %td= content_type.name
+      %td= link_to 'Show', content_type
+      %td= link_to 'Edit', edit_content_type_path(content_type)
+      %td= link_to 'Destroy', content_type, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Content type', new_content_type_path

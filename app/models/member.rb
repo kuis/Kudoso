@@ -1,12 +1,11 @@
 class Member < ActiveRecord::Base
   belongs_to :family
-  has_one :user
-  has_many :todo_schedules
-  has_many :my_todos
-  has_many :primary_devices, class_name: 'Device', foreign_key: 'primary_member_id'
-  has_many :activities
-
-  scope :kids, -> { where('parent IS NULL OR parent = ?', false) }
+  has_one :user, dependent: :nullify
+  has_many :todo_schedules, dependent: :destroy
+  has_many :my_todos, dependent: :destroy
+  has_many :primary_devices, class_name: 'Device', foreign_key: 'primary_member_id', dependent: :nullify
+  has_many :activities, dependent: :destroy
+  has_many :authorized_activities, class_name: 'Activity', foreign_key: :created_by, dependent: :destroy
 
   validates_presence_of :first_name, :username
 

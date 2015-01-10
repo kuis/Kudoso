@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Tag:
+  = @content_descriptor.tag
+%p
+  %b Short:
+  = @content_descriptor.short
+%p
+  %b Description:
+  = @content_descriptor.description
+
+= link_to 'Edit', edit_content_descriptor_path(@content_descriptor)
+\|
+= link_to 'Back', content_descriptors_path

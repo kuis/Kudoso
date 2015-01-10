@@ -42,6 +42,6 @@ class ActivityTemplatesController < ApplicationController
     end
 
     def activity_template_params
-      params.require(:activity_template).permit(:name, :description, :rec_min_age, :rec_max_age, :cost, :reward, :time_block, :restricted)
+      params.require(:activity_template).permit(:name, :description, :rec_min_age, :rec_max_age, :cost, :reward, :time_block, :restricted, :activity_type_id)
     end
 end

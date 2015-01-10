@@ -5,10 +5,11 @@ class CreateActivityTemplates < ActiveRecord::Migration
       t.string :description
       t.integer :rec_min_age
       t.integer :rec_max_age
-      t.integer :cost
-      t.integer :reward
+      t.integer :cost, default: 0
+      t.integer :reward, default: 0
       t.integer :time_block
-      t.boolean :restricted
+      t.integer :activity_type_id
+      t.boolean :restricted, default: false
 
       t.timestamps
     end

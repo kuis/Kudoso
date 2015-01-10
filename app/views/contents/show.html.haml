@@ -1,0 +1,36 @@
+%p#notice= notice
+
+%p
+  %b Content type:
+  = @content.content_type_id
+%p
+  %b Title:
+  = @content.title
+%p
+  %b Year:
+  = @content.year
+%p
+  %b Content rating:
+  = @content.content_rating_id
+%p
+  %b Release date:
+  = @content.release_date
+%p
+  %b Language:
+  = @content.language_id
+%p
+  %b Description:
+  = @content.description
+%p
+  %b Length:
+  = @content.length
+%p
+  %b Metadata:
+  = @content.metadata
+%p
+  %b References:
+  = @content.references
+
+= link_to 'Edit', edit_content_path(@content)
+\|
+= link_to 'Back', contents_path

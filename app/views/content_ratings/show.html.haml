@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Type:
+  = @content_rating.type
+%p
+  %b Tag:
+  = @content_rating.tag
+%p
+  %b Short:
+  = @content_rating.short
+%p
+  %b Description:
+  = @content_rating.description
+
+= link_to 'Edit', edit_content_rating_path(@content_rating)
+\|
+= link_to 'Back', content_ratings_path

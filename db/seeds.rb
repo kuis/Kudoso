@@ -59,22 +59,55 @@ children.each do |kid|
   end
 end
 
+# generate content ratings
+
+ratings = ContentRating.create([
+                                   { type: 'MPAA', tag: 'G', short: 'G : General Audiences', description: 'All ages admitted.'},
+                                   { type: 'MPAA', tag: 'PG', short: 'PG : Parental Guidance Suggested', description: 'Some material may not be suitable for children.'},
+                                   { type: 'MPAA', tag: 'PG-13', short: 'PG-13 : Parents Strongly Cautioned', description: 'Some material may be inappropriate for children under 13.'},
+                                   { type: 'MPAA', tag: 'R', short: 'R : Restricted', description: 'Under 17 requires accompanying parent or adult guardian. Contains some adult material.'},
+                                   { type: 'MPAA', tag: 'NC-17', short: 'NC-17 : Adults Only', description: 'No One 17 and Under Admitted.'},
+                                   { type: 'TV', tag: 'TV-Y', short: 'Youth', description: 'This program is designed to be appropriate for all children.'},
+                                   { type: 'TV', tag: 'TV-Y7', short: 'Youth 7+', description: 'This program is designed for children age 7 and above.'},
+                                   { type: 'TV', tag: 'TV-G', short: 'Everyone', description: 'Most parents would find this program suitable for all ages.'},
+                                   { type: 'TV', tag: 'TV-PG', short: 'Parental Guidance', description: 'This program contains material that parents may find unsuitable for younger children.'},
+                                   { type: 'TV', tag: 'TV-14', short: 'Young Adult 14+', description: 'This program contains some material that many parents would find unsuitable for children under 14 years of age.'},
+                                   { type: 'TV', tag: 'TV-MA', short: 'Adults Only', description: 'This program is specifically designed to be viewed by adults and therefore may be unsuitable for children under 17.'},
+                                   { type: 'ESRB', tag: 'RP', short: 'Rating Pending', description: 'Games that have not yet been assigned a final rating by the ESRB.'},
+                                   { type: 'ESRB', tag: 'EC', short: 'Early Childhood', description: 'Games suitable for young children ages 3 and up.'},
+                                   { type: 'ESRB', tag: 'E', short: 'Everyone', description: 'Games suitable for general audiences; they can contain infrequent use of "mild" or cartoon/fantasy violence, and mild language.'},
+                                   { type: 'ESRB', tag: 'E10+', short: 'Everyone 10+', description: 'Games suitable for general audiences aged 10 years of age and older. They can contain a larger amount of violence, mild language, crude humor, or suggestive content than the standard E rating can accommodate.'},
+                                   { type: 'ESRB', tag: 'T', short: 'Teen', description: 'Games suitable for those aged 13 years and older; they can contain moderate amounts of violence (including small amounts of blood), mild to moderate language or suggestive themes, and crude humor.'},
+                                   { type: 'ESRB', tag: 'M', short: 'Mature', description: 'Games suitable for those aged 17 years and older; they can contain more intense and/or realistic portrayals of violence than T-rated games (including blood and gore), stronger sexual themes and content, nudity, and heavier use of strong language.'},
+                                   { type: 'ESRB', tag: 'A', short: 'Adults Only', description: 'Games unsuitable for people under 18 years of age; they can contain stronger sexual themes and content, graphic nudity, or extreme levels of violence—higher than the "Mature" rating can accommodate.'}
+                               ])
+
+content_descriptors = ContentDescriptor.create([
+                                   { tag: 'AC', short: 'Adult Content', description: 'Content may contain suggestive dialogue, crude humor or in extreme cases, drug references or depiction of drug and/or alcohol use that may not be suitable for children.' },
+                                   { tag: 'AL', short: 'Adult Language', description: 'Content may contain profanity, ranging from either mild profanity to expletives, with or without a sexual meaning.' },
+                                   { tag: 'GL', short: 'Graphic Language', description: 'Content will contain a heavy amount of profanity, with relatively to very frequent usage of expletives with or without a sexual meaning.' },
+                                   { tag: 'MV', short: 'Mild Violence', description: 'Content contains a mild amount of violent content, either comedic or non-comedic in nature, that may or may not include some bloodshed.' },
+                                   { tag: 'V', short: 'Violence', description: 'Content contains a moderate to significant amount of violent content (such as a physical altercation or shooting), which may include mild to moderate amounts of bloodshed.' },
+                                   { tag: 'GV', short: 'Graphic Violence', description: 'Content may contain a heavy amount of violence, blood or gore, that is unsuitable for younger audiences or those who are squeamish to such content.' },
+                                   { tag: 'BN', short: 'Brief Nudity', description: 'Content contains a minimal amount of moderate nudity, that may either be depicted in a sexual or non-sexual nature (such as a brief glimpse of a buttocks); nudity seen in the program or film may not necessarily be full-frontal in nature.' },
+                                   { tag: 'N', short: 'Nudity', description: 'Content contains a moderate to significant amount of partial or full-frontal nudity, that may either be depicted in a sexual or non-sexual nature.' },
+                                   { tag: 'SSC', short: 'Strong Sexual Content', description: 'Content may contain graphic sexual situations, particularly scenes of simulated (or in rare cases, actual) sexual intercourse that is often of a pornographic nature, with the incorporation of moderate or full-frontal nudity.' },
+                                   { tag: 'RP', short: 'Rape', description: 'Content may contain graphic scenes of rape and/or other forms of sexual assault, depicted in a realistic and often violent, but fictional nature.' },
+                                   {tag: 'D', short: 'Suggestive Dialog', description: 'Content may contain verbal descriptions and/or suggestions of sexual interest and intimacy.'} ,
+                                   {tag: 'L', short: 'Coarse Language', description: 'Content may contain mild profanity, with or without a sexual meaning.'} ,
+                                   {tag: 'S', short: 'Sexual Content', description: 'Content may contain graphic sexual situations, including depictions of sexual intercourse.'}
+                                               ])
+
+
 # generate device types
 
 device_types = DeviceType.create([
-                                     { name: 'iPod 4th Gen', description: 'Apple iPod Touch, 4th Generation', os: '', version: '' },
-                                     { name: 'iPod 5th Gen', description: 'Apple iPod Touch, 5th Generation', os: '', version: '' },
-                                     { name: 'iPhone 4', description: '', os: '', version: '' },
-                                     { name: 'iPhone 4s', description: '', os: '', version: '' },
-                                     { name: 'iPhone 5c', description: '', os: '', version: '' },
-                                     { name: 'iPhone 5s', description: '', os: '', version: '' },
-                                     { name: 'iPhone 6', description: '', os: '', version: '' },
-                                     { name: 'iPhone 6 Plus', description: '', os: '', version: '' },
-                                     { name: 'iPad 1st Gen', description: '', os: '', version: '' },
-                                     { name: 'iPad 2nd Gen', description: '', os: '', version: '' },
-                                     { name: 'iPad Retina', description: '', os: '', version: '' },
-                                     { name: 'iPad Air', description: '', os: '', version: '' },
-                                     { name: 'iPad Air 2nd Gen', description: '', os: '', version: '' },
+                                     { name: 'iPod Touch', description: 'Apple iPod Touch', os: 'iOS', version: '' },
+                                     { name: 'iPhone', description: 'Apple iPhone', os: 'iOS', version: '' },
+                                     { name: 'iPad', description: 'Apple iPad', os: 'iOS', version: '' },
+                                     { name: 'Kindle Fire', description: 'Kindle Fire/HD/HDx', os: 'FireOS', version: '' },
+                                     { name: 'Android Phone', description: '', os: 'Android', version: '' },
+                                     { name: 'Android Tablet', description: '', os: 'Android', version: '' },
                                      { name: 'Playstation 2', description: '', os: '', version: '' },
                                      { name: 'Playstation 3', description: '', os: '', version: '' },
                                      { name: 'Playstation 4', description: '', os: '', version: '' },
@@ -82,8 +115,49 @@ device_types = DeviceType.create([
                                      { name: 'xBox One', description: '', os: '', version: '' },
                                      { name: 'Nintendo Wii', description: '', os: '', version: '' },
                                      { name: 'Nintendo 3DS', description: '', os: '', version: '' },
-                                     { name: 'Kudoso Smart Plug', description: '', os: '', version: '' },
+                                     { name: 'Kudoso Smart Plug', description: '', os: 'Kudoso', version: '' },
+                                     { name: 'Kudoso Gateway', description: '', os: 'Kudoso', version: '' },
                                      { name: 'BluRay Player', description: '', os: '', version: '' },
                                      { name: 'HDTV', description: '', os: '', version: '' }
 
                                  ])
+
+activity_types = ActivityType.create([
+                                         { name: 'Other', metadata_fields: { } },
+                                         { name: 'Play a Game', metadata_fields: { } },
+                                         { name: 'Surf the Internet', metadata_fields: { } },
+                                         { name: 'Read', metadata_fields: { } },
+                                         { name: 'Stream Media', metadata_fields: { } },
+                                         { name: 'Physical', metadata_fields: { } }
+                                     ])
+
+content_types = ContentType.create([
+                                       {name: 'Other'},
+                                       {name: 'Movie'},
+                                       {name: 'TV Series'},
+                                       {name: 'TV Episode'},
+                                       {name: 'TV Channel'},
+                                       {name: 'Music'},
+                                       {name: 'App'},
+                                       {name: 'Internet Site'},
+                                       {name: 'Book'},
+                                       {name: 'Magazine'}
+                                   ])
+
+activity_templates = ActivityTemplate.create([
+                                                 { name: 'Play a game', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Surf the internet (entertainment)', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Surf the internet (eduction)', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Read a book', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Read a magazine', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Kahn Acedemy', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Play outside', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Play with a friend', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Exercise', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Play a board game', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Watch Netflix', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Watch Amazon Prime', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Watch AppleTV', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Watch BluRay', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
+                                                 { name: 'Watch television', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 }
+                                             ])

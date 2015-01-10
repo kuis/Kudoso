@@ -1,8 +1,8 @@
 class Family < ActiveRecord::Base
-  has_many :users
+  has_many :users, dependent: :destroy
   has_many :members, dependent: :destroy
   has_many :todos, dependent: :destroy
-  has_many :devices
+  has_many :devices, dependent: :destroy
 
   def kids
     members.where('parent IS NOT true')

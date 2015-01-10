@@ -3,11 +3,16 @@
 %table
   %tr
     %th Member
+    %th Created by
     %th Family activity
-    %th Date
-    %th Duration
+    %th Start time
+    %th End time
     %th Device
-    %th Notes
+    %th Content
+    %th Allowed time
+    %th Activity type
+    %th Cost
+    %th Reward
     %th
     %th
     %th
@@ -15,11 +20,16 @@
   - @activities.each do |activity|
     %tr
       %td= activity.member_id
+      %td= activity.created_by
       %td= activity.family_activity_id
-      %td= activity.date
-      %td= activity.duration
+      %td= activity.start_time
+      %td= activity.end_time
       %td= activity.device_id
-      %td= activity.notes
+      %td= activity.content_id
+      %td= activity.allowed_time
+      %td= activity.activity_type_id
+      %td= activity.cost
+      %td= activity.reward
       %td= link_to 'Show', activity
       %td= link_to 'Edit', edit_activity_path(activity)
       %td= link_to 'Destroy', activity, :method => :delete, :data => { :confirm => 'Are you sure?' }

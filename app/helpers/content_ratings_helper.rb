@@ -1,0 +1,2 @@
+module ContentRatingsHelper
+end

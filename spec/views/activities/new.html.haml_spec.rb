@@ -4,11 +4,14 @@ RSpec.describe "activities/new", :type => :view do
   before(:each) do
     assign(:activity, Activity.new(
       :member_id => 1,
+      :created_by => 1,
       :family_activity_id => 1,
-      :date => "",
-      :duration => 1,
       :device_id => 1,
-      :notes => "MyText"
+      :content_id => 1,
+      :allowed_time => 1,
+      :activity_type_id => 1,
+      :cost => 1,
+      :reward => 1
     ))
   end
 
@@ -19,15 +22,21 @@ RSpec.describe "activities/new", :type => :view do
 
       assert_select "input#activity_member_id[name=?]", "activity[member_id]"
 
+      assert_select "input#activity_created_by[name=?]", "activity[created_by]"
+
       assert_select "input#activity_family_activity_id[name=?]", "activity[family_activity_id]"
-
-      assert_select "input#activity_date[name=?]", "activity[date]"
-
-      assert_select "input#activity_duration[name=?]", "activity[duration]"
 
       assert_select "input#activity_device_id[name=?]", "activity[device_id]"
 
-      assert_select "textarea#activity_notes[name=?]", "activity[notes]"
+      assert_select "input#activity_content_id[name=?]", "activity[content_id]"
+
+      assert_select "input#activity_allowed_time[name=?]", "activity[allowed_time]"
+
+      assert_select "input#activity_activity_type_id[name=?]", "activity[activity_type_id]"
+
+      assert_select "input#activity_cost[name=?]", "activity[cost]"
+
+      assert_select "input#activity_reward[name=?]", "activity[reward]"
     end
   end
 end

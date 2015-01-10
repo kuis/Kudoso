@@ -1,6 +1,18 @@
 Rails.application.routes.draw do
 
+  resources :activity_details
+
+  resources :activity_types
+
   resources :activities
+
+  resources :content_ratings
+
+  resources :contents
+
+  resources :content_descriptors
+
+  resources :content_types
 
   resources :family_activities
 

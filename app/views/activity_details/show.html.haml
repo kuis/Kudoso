@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Activity:
+  = @activity_detail.activity_id
+%p
+  %b Metadata:
+  = @activity_detail.metadata
+
+= link_to 'Edit', edit_activity_detail_path(@activity_detail)
+\|
+= link_to 'Back', activity_details_path

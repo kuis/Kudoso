@@ -1,0 +1,23 @@
+%h1 Listing content_descriptors
+
+%table
+  %tr
+    %th Tag
+    %th Short
+    %th Description
+    %th
+    %th
+    %th
+
+  - @content_descriptors.each do |content_descriptor|
+    %tr
+      %td= content_descriptor.tag
+      %td= content_descriptor.short
+      %td= content_descriptor.description
+      %td= link_to 'Show', content_descriptor
+      %td= link_to 'Edit', edit_content_descriptor_path(content_descriptor)
+      %td= link_to 'Destroy', content_descriptor, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Content descriptor', new_content_descriptor_path

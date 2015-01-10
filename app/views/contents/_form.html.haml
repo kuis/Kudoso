@@ -1,0 +1,40 @@
+= form_for @content do |f|
+  - if @content.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@content.errors.count, "error")} prohibited this content from being saved:"
+      %ul
+        - @content.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :content_type_id
+    = f.number_field :content_type_id
+  .field
+    = f.label :title
+    = f.text_field :title
+  .field
+    = f.label :year
+    = f.text_field :year
+  .field
+    = f.label :content_rating_id
+    = f.number_field :content_rating_id
+  .field
+    = f.label :release_date
+    = f.date_select :release_date
+  .field
+    = f.label :language_id
+    = f.number_field :language_id
+  .field
+    = f.label :description
+    = f.text_area :description
+  .field
+    = f.label :length
+    = f.text_field :length
+  .field
+    = f.label :metadata
+    = f.text_area :metadata
+  .field
+    = f.label :references
+    = f.text_area :references
+  .actions
+    = f.submit 'Save'

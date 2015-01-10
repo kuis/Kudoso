@@ -10,19 +10,34 @@
     = f.label :member_id
     = f.number_field :member_id
   .field
+    = f.label :created_by
+    = f.number_field :created_by
+  .field
     = f.label :family_activity_id
     = f.number_field :family_activity_id
   .field
-    = f.label :date
-    = f.text_field :date
+    = f.label :start_time
+    = f.datetime_select :start_time
   .field
-    = f.label :duration
-    = f.number_field :duration
+    = f.label :end_time
+    = f.datetime_select :end_time
   .field
     = f.label :device_id
     = f.number_field :device_id
   .field
-    = f.label :notes
-    = f.text_area :notes
+    = f.label :content_id
+    = f.number_field :content_id
+  .field
+    = f.label :allowed_time
+    = f.number_field :allowed_time
+  .field
+    = f.label :activity_type_id
+    = f.number_field :activity_type_id
+  .field
+    = f.label :cost
+    = f.number_field :cost
+  .field
+    = f.label :reward
+    = f.number_field :reward
   .actions
     = f.submit 'Save'

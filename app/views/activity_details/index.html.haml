@@ -1,0 +1,21 @@
+%h1 Listing activity_details
+
+%table
+  %tr
+    %th Activity
+    %th Metadata
+    %th
+    %th
+    %th
+
+  - @activity_details.each do |activity_detail|
+    %tr
+      %td= activity_detail.activity_id
+      %td= activity_detail.metadata
+      %td= link_to 'Show', activity_detail
+      %td= link_to 'Edit', edit_activity_detail_path(activity_detail)
+      %td= link_to 'Destroy', activity_detail, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Activity detail', new_activity_detail_path
