@@ -1,0 +1,2 @@
+module ScreenTimesHelper
+end

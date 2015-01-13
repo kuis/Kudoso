@@ -6,5 +6,7 @@ class CreateScheduleRrules < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :schedule_rrules, :todo_schedule_id
   end
 end

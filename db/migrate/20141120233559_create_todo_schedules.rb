@@ -6,10 +6,12 @@ class CreateTodoSchedules < ActiveRecord::Migration
       t.date :start_date
       t.date :end_date
       t.boolean :active
-      t.text :schedule
       t.text :notes
 
       t.timestamps
     end
+
+    add_index :todo_schedules, :todo_id
+    add_index :todo_schedules, :member_id
   end
 end

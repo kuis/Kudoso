@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :screen_times
+
   resources :activity_details
 
   resources :activity_types

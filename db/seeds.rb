@@ -62,24 +62,24 @@ end
 # generate content ratings
 
 ratings = ContentRating.create([
-                                   { type: 'MPAA', tag: 'G', short: 'G : General Audiences', description: 'All ages admitted.'},
-                                   { type: 'MPAA', tag: 'PG', short: 'PG : Parental Guidance Suggested', description: 'Some material may not be suitable for children.'},
-                                   { type: 'MPAA', tag: 'PG-13', short: 'PG-13 : Parents Strongly Cautioned', description: 'Some material may be inappropriate for children under 13.'},
-                                   { type: 'MPAA', tag: 'R', short: 'R : Restricted', description: 'Under 17 requires accompanying parent or adult guardian. Contains some adult material.'},
-                                   { type: 'MPAA', tag: 'NC-17', short: 'NC-17 : Adults Only', description: 'No One 17 and Under Admitted.'},
-                                   { type: 'TV', tag: 'TV-Y', short: 'Youth', description: 'This program is designed to be appropriate for all children.'},
-                                   { type: 'TV', tag: 'TV-Y7', short: 'Youth 7+', description: 'This program is designed for children age 7 and above.'},
-                                   { type: 'TV', tag: 'TV-G', short: 'Everyone', description: 'Most parents would find this program suitable for all ages.'},
-                                   { type: 'TV', tag: 'TV-PG', short: 'Parental Guidance', description: 'This program contains material that parents may find unsuitable for younger children.'},
-                                   { type: 'TV', tag: 'TV-14', short: 'Young Adult 14+', description: 'This program contains some material that many parents would find unsuitable for children under 14 years of age.'},
-                                   { type: 'TV', tag: 'TV-MA', short: 'Adults Only', description: 'This program is specifically designed to be viewed by adults and therefore may be unsuitable for children under 17.'},
-                                   { type: 'ESRB', tag: 'RP', short: 'Rating Pending', description: 'Games that have not yet been assigned a final rating by the ESRB.'},
-                                   { type: 'ESRB', tag: 'EC', short: 'Early Childhood', description: 'Games suitable for young children ages 3 and up.'},
-                                   { type: 'ESRB', tag: 'E', short: 'Everyone', description: 'Games suitable for general audiences; they can contain infrequent use of "mild" or cartoon/fantasy violence, and mild language.'},
-                                   { type: 'ESRB', tag: 'E10+', short: 'Everyone 10+', description: 'Games suitable for general audiences aged 10 years of age and older. They can contain a larger amount of violence, mild language, crude humor, or suggestive content than the standard E rating can accommodate.'},
-                                   { type: 'ESRB', tag: 'T', short: 'Teen', description: 'Games suitable for those aged 13 years and older; they can contain moderate amounts of violence (including small amounts of blood), mild to moderate language or suggestive themes, and crude humor.'},
-                                   { type: 'ESRB', tag: 'M', short: 'Mature', description: 'Games suitable for those aged 17 years and older; they can contain more intense and/or realistic portrayals of violence than T-rated games (including blood and gore), stronger sexual themes and content, nudity, and heavier use of strong language.'},
-                                   { type: 'ESRB', tag: 'A', short: 'Adults Only', description: 'Games unsuitable for people under 18 years of age; they can contain stronger sexual themes and content, graphic nudity, or extreme levels of violence—higher than the "Mature" rating can accommodate.'}
+                                   { org: 'MPAA', tag: 'G', short: 'G : General Audiences', description: 'All ages admitted.'},
+                                   { org: 'MPAA', tag: 'PG', short: 'PG : Parental Guidance Suggested', description: 'Some material may not be suitable for children.'},
+                                   { org: 'MPAA', tag: 'PG-13', short: 'PG-13 : Parents Strongly Cautioned', description: 'Some material may be inappropriate for children under 13.'},
+                                   { org: 'MPAA', tag: 'R', short: 'R : Restricted', description: 'Under 17 requires accompanying parent or adult guardian. Contains some adult material.'},
+                                   { org: 'MPAA', tag: 'NC-17', short: 'NC-17 : Adults Only', description: 'No One 17 and Under Admitted.'},
+                                   { org: 'TV', tag: 'TV-Y', short: 'Youth', description: 'This program is designed to be appropriate for all children.'},
+                                   { org: 'TV', tag: 'TV-Y7', short: 'Youth 7+', description: 'This program is designed for children age 7 and above.'},
+                                   { org: 'TV', tag: 'TV-G', short: 'Everyone', description: 'Most parents would find this program suitable for all ages.'},
+                                   { org: 'TV', tag: 'TV-PG', short: 'Parental Guidance', description: 'This program contains material that parents may find unsuitable for younger children.'},
+                                   { org: 'TV', tag: 'TV-14', short: 'Young Adult 14+', description: 'This program contains some material that many parents would find unsuitable for children under 14 years of age.'},
+                                   { org: 'TV', tag: 'TV-MA', short: 'Adults Only', description: 'This program is specifically designed to be viewed by adults and therefore may be unsuitable for children under 17.'},
+                                   { org: 'ESRB', tag: 'RP', short: 'Rating Pending', description: 'Games that have not yet been assigned a final rating by the ESRB.'},
+                                   { org: 'ESRB', tag: 'EC', short: 'Early Childhood', description: 'Games suitable for young children ages 3 and up.'},
+                                   { org: 'ESRB', tag: 'E', short: 'Everyone', description: 'Games suitable for general audiences; they can contain infrequent use of "mild" or cartoon/fantasy violence, and mild language.'},
+                                   { org: 'ESRB', tag: 'E10+', short: 'Everyone 10+', description: 'Games suitable for general audiences aged 10 years of age and older. They can contain a larger amount of violence, mild language, crude humor, or suggestive content than the standard E rating can accommodate.'},
+                                   { org: 'ESRB', tag: 'T', short: 'Teen', description: 'Games suitable for those aged 13 years and older; they can contain moderate amounts of violence (including small amounts of blood), mild to moderate language or suggestive themes, and crude humor.'},
+                                   { org: 'ESRB', tag: 'M', short: 'Mature', description: 'Games suitable for those aged 17 years and older; they can contain more intense and/or realistic portrayals of violence than T-rated games (including blood and gore), stronger sexual themes and content, nudity, and heavier use of strong language.'},
+                                   { org: 'ESRB', tag: 'A', short: 'Adults Only', description: 'Games unsuitable for people under 18 years of age; they can contain stronger sexual themes and content, graphic nudity, or extreme levels of violence—higher than the "Mature" rating can accommodate.'}
                                ])
 
 content_descriptors = ContentDescriptor.create([

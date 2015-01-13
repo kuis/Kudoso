@@ -2,7 +2,7 @@ class CreateActivities < ActiveRecord::Migration
   def change
     create_table :activities do |t|
       t.integer :member_id
-      t.integer :created_by
+      t.integer :created_by_id
       t.integer :family_activity_id
       t.datetime :start_time
       t.datetime :end_time
@@ -15,5 +15,9 @@ class CreateActivities < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :activities, :member_id
+    add_index :activities, :family_activity_id
+
   end
 end

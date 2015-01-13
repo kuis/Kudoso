@@ -6,6 +6,7 @@ class Member < ActiveRecord::Base
   has_many :primary_devices, class_name: 'Device', foreign_key: 'primary_member_id', dependent: :nullify
   has_many :activities, dependent: :destroy
   has_many :authorized_activities, class_name: 'Activity', foreign_key: :created_by, dependent: :destroy
+  has_many :screen_times
 
   validates_presence_of :first_name, :username
 

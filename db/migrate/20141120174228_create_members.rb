@@ -12,5 +12,8 @@ class CreateMembers < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :members, :family_id
+    add_index :members, :user_id
   end
 end

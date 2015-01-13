@@ -1,0 +1,25 @@
+%h1 Listing screen_times
+
+%table
+  %tr
+    %th Member
+    %th Device
+    %th Dow
+    %th Maxtime
+    %th
+    %th
+    %th
+
+  - @screen_times.each do |screen_time|
+    %tr
+      %td= screen_time.member_id
+      %td= screen_time.device_id
+      %td= screen_time.dow
+      %td= screen_time.maxtime
+      %td= link_to 'Show', screen_time
+      %td= link_to 'Edit', edit_screen_time_path(screen_time)
+      %td= link_to 'Destroy', screen_time, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Screen time', new_screen_time_path

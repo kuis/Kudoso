@@ -14,5 +14,8 @@ class CreateContents < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :contents, :content_type_id
+    add_index :contents, :content_rating_id
   end
 end

@@ -3,7 +3,9 @@ class Device < ActiveRecord::Base
   belongs_to :family
   belongs_to :primary_member, class_name: 'Member'
   has_and_belongs_to_many :activities
+  belongs_to :current_activity, class_name: 'Activity'
   belongs_to :management_device, class_name: 'Device'
+  has_many :screen_times
 
   validates_uniqueness_of :name
   validates_presence_of :device_type_id
@@ -12,4 +14,9 @@ class Device < ActiveRecord::Base
   before_create { self.uuid = SecureRandom.hex(24) }
 
   attr_readonly :uuid
+
+  def current_member
+    current_member = nil
+    current_member =  current_activity.member if current_activity.present?
+  end
 end

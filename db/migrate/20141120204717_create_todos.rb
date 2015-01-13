@@ -12,5 +12,7 @@ class CreateTodos < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :todos, :family_id
+    add_index :todos, :todo_template_id
   end
 end

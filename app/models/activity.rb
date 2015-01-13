@@ -3,7 +3,7 @@ class Activity < ActiveRecord::Base
   belongs_to :created_by, class_name: 'Member'  # Family member who CREATED the activity, required, allows tracking of anonymous access
   belongs_to :family_activity
   belongs_to :device
-  belongs_to :family, through: :created_by
+  has_one :family, through: :created_by
   belongs_to :activity_type
   has_many :details, class_name: 'ActivityDetail'
 
@@ -11,6 +11,30 @@ class Activity < ActiveRecord::Base
 
   def anonymous?
     member.blank?
+  end
+
+  def start!
+    if self.start_time.blank?
+      transaction do
+        self.update_attribute(:start_time, Time.zone.now)
+        self.device.update_attribute(:current_activity_id, self.id) if self.device.present?
+      end
+    else
+      #raise error
+      raise 'Activity was started previously, cannot start again!'
+    end
+  end
+
+  def stop!
+    if self.end_time.blank?
+      transaction do
+        self.update_attribute(:end_time, Time.zone.now)
+        self.device.update_attribute(:current_activity_id, nil) if self.device.present?
+      end
+    else
+      #raise error
+      raise 'Activity was ended previously, cannot end again!'
+    end
   end
 
 end

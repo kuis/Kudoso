@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Member:
+  = @screen_time.member_id
+%p
+  %b Device:
+  = @screen_time.device_id
+%p
+  %b Dow:
+  = @screen_time.dow
+%p
+  %b Maxtime:
+  = @screen_time.maxtime
+
+= link_to 'Edit', edit_screen_time_path(@screen_time)
+\|
+= link_to 'Back', screen_times_path

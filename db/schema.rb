@@ -11,14 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150109233015) do
+ActiveRecord::Schema.define(version: 20150113155728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "activities", force: true do |t|
     t.integer  "member_id"
-    t.integer  "created_by"
+    t.integer  "created_by_id"
     t.integer  "family_activity_id"
     t.datetime "start_time"
     t.datetime "end_time"
@@ -28,6 +28,16 @@ ActiveRecord::Schema.define(version: 20150109233015) do
     t.integer  "activity_type_id"
     t.integer  "cost"
     t.integer  "reward"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "activities", ["family_activity_id"], name: "index_activities_on_family_activity_id", using: :btree
+  add_index "activities", ["member_id"], name: "index_activities_on_member_id", using: :btree
+
+  create_table "activity_details", force: true do |t|
+    t.integer  "activity_id"
+    t.text     "metadata"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -69,7 +79,7 @@ ActiveRecord::Schema.define(version: 20150109233015) do
   end
 
   create_table "content_ratings", force: true do |t|
-    t.string   "type"
+    t.string   "org"
     t.string   "tag"
     t.string   "short"
     t.text     "description"
@@ -98,6 +108,9 @@ ActiveRecord::Schema.define(version: 20150109233015) do
     t.datetime "updated_at"
   end
 
+  add_index "contents", ["content_rating_id"], name: "index_contents_on_content_rating_id", using: :btree
+  add_index "contents", ["content_type_id"], name: "index_contents_on_content_type_id", using: :btree
+
   create_table "device_types", force: true do |t|
     t.string   "name"
     t.string   "description"
@@ -118,13 +131,17 @@ ActiveRecord::Schema.define(version: 20150109233015) do
     t.string   "name"
     t.integer  "device_type_id"
     t.integer  "family_id"
-    t.boolean  "managed",           default: false
+    t.boolean  "managed",             default: false
     t.integer  "management_id"
     t.integer  "primary_member_id"
+    t.integer  "current_activity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "uuid"
   end
+
+  add_index "devices", ["device_type_id"], name: "index_devices_on_device_type_id", using: :btree
+  add_index "devices", ["family_id"], name: "index_devices_on_family_id", using: :btree
 
   create_table "families", force: true do |t|
     t.string   "name"
@@ -149,6 +166,9 @@ ActiveRecord::Schema.define(version: 20150109233015) do
     t.datetime "updated_at"
   end
 
+  add_index "family_activities", ["activity_template_id"], name: "index_family_activities_on_activity_template_id", using: :btree
+  add_index "family_activities", ["family_id"], name: "index_family_activities_on_family_id", using: :btree
+
   create_table "members", force: true do |t|
     t.string   "first_name"
     t.string   "last_name"
@@ -163,6 +183,9 @@ ActiveRecord::Schema.define(version: 20150109233015) do
     t.integer  "kudos",      default: 0
   end
 
+  add_index "members", ["family_id"], name: "index_members_on_family_id", using: :btree
+  add_index "members", ["user_id"], name: "index_members_on_user_id", using: :btree
+
   create_table "my_todos", force: true do |t|
     t.integer  "todo_schedule_id"
     t.integer  "member_id"
@@ -176,12 +199,29 @@ ActiveRecord::Schema.define(version: 20150109233015) do
     t.datetime "updated_at"
   end
 
+  add_index "my_todos", ["member_id"], name: "index_my_todos_on_member_id", using: :btree
+  add_index "my_todos", ["todo_schedule_id"], name: "index_my_todos_on_todo_schedule_id", using: :btree
+
   create_table "schedule_rrules", force: true do |t|
     t.integer  "todo_schedule_id"
     t.string   "rrule"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "schedule_rrules", ["todo_schedule_id"], name: "index_schedule_rrules_on_todo_schedule_id", using: :btree
+
+  create_table "screen_times", force: true do |t|
+    t.integer  "member_id"
+    t.integer  "device_id"
+    t.integer  "dow"
+    t.integer  "maxtime"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "screen_times", ["device_id"], name: "index_screen_times_on_device_id", using: :btree
+  add_index "screen_times", ["member_id"], name: "index_screen_times_on_member_id", using: :btree
 
   create_table "todo_groups", force: true do |t|
     t.string   "name"
@@ -206,11 +246,13 @@ ActiveRecord::Schema.define(version: 20150109233015) do
     t.date     "start_date"
     t.date     "end_date"
     t.boolean  "active"
-    t.text     "schedule"
     t.text     "notes"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "todo_schedules", ["member_id"], name: "index_todo_schedules_on_member_id", using: :btree
+  add_index "todo_schedules", ["todo_id"], name: "index_todo_schedules_on_todo_id", using: :btree
 
   create_table "todo_templates", force: true do |t|
     t.string   "name"
@@ -235,6 +277,9 @@ ActiveRecord::Schema.define(version: 20150109233015) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "todos", ["family_id"], name: "index_todos_on_family_id", using: :btree
+  add_index "todos", ["todo_template_id"], name: "index_todos_on_todo_template_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false

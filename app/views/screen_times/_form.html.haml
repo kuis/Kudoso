@@ -1,0 +1,22 @@
+= form_for @screen_time do |f|
+  - if @screen_time.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@screen_time.errors.count, "error")} prohibited this screen_time from being saved:"
+      %ul
+        - @screen_time.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :member_id
+    = f.number_field :member_id
+  .field
+    = f.label :device_id
+    = f.number_field :device_id
+  .field
+    = f.label :dow
+    = f.number_field :dow
+  .field
+    = f.label :maxtime
+    = f.number_field :maxtime
+  .actions
+    = f.submit 'Save'

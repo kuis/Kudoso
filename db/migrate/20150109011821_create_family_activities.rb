@@ -14,5 +14,8 @@ class CreateFamilyActivities < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :family_activities, :family_id
+    add_index :family_activities, :activity_template_id
   end
 end

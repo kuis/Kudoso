@@ -12,5 +12,8 @@ class CreateMyTodos < ActiveRecord::Migration
 
       t.timestamps
     end
+
+    add_index :my_todos, :member_id
+    add_index :my_todos, :todo_schedule_id
   end
 end
