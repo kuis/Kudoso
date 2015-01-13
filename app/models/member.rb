@@ -40,4 +40,17 @@ class Member < ActiveRecord::Base
     end
     todos
   end
+
+
+  def used_screen_time(date=Time.now, device_id = nil)
+    if device_id.present?
+      activities.where('device_id = ? AND end_time BETWEEN ? AND ?', device_id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)')
+    else
+      activities.where('end_time BETWEEN ? AND ?', date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)')
+    end
+  end
+
+  def max_screen_time(date=Time.now, device_id = nil)
+    screen_times.where(device_id: device_id, dow: date.wday).last.maxtime
+  end
 end
