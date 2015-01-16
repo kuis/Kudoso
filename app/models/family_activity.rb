@@ -5,11 +5,14 @@ class FamilyActivity < ActiveRecord::Base
   has_many :activities, dependent: :restrict_with_error
   has_many :members, through: :activities
 
+  serialize :device_chains, Array
+
   validates_presence_of :family_id, :name, :time_block
 
   validates :time_block, numericality: { greater_than: 0 }
 
-  def devices
-    family.devices.where(:device_types.in => self.device_types)
+  def available_devices
+    family.devices.where(:device_type_id => self.activity_template.device_types.map(&:id))
   end
+
 end

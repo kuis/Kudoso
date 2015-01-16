@@ -131,10 +131,11 @@ ActiveRecord::Schema.define(version: 20150113155728) do
     t.string   "name"
     t.integer  "device_type_id"
     t.integer  "family_id"
-    t.boolean  "managed",             default: false
+    t.boolean  "managed",               default: false
     t.integer  "management_id"
     t.integer  "primary_member_id"
     t.integer  "current_activity_id"
+    t.integer  "managed_devices_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "uuid"
@@ -156,12 +157,11 @@ ActiveRecord::Schema.define(version: 20150113155728) do
     t.integer  "activity_template_id"
     t.string   "name"
     t.string   "description"
-    t.integer  "rec_min_age"
-    t.integer  "rec_max_age"
     t.integer  "cost",                 default: 0
     t.integer  "reward",               default: 0
     t.integer  "time_block"
     t.boolean  "restricted",           default: false
+    t.text     "device_chains"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

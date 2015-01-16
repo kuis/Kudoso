@@ -33,7 +33,7 @@
               %br
               .form_group
                 = f.label 'Choose a family member:'
-                = f.collection_select :member_id, @family.members.kids, :id, :full_name
+                = f.collection_select :member_id, @family.kids, :id, :full_name
               .form_group
                 = f.label :start_date
                 = f.text_field :start_date, class: 'fdatepicker'

@@ -3,6 +3,7 @@ class Family < ActiveRecord::Base
   has_many :members, dependent: :destroy
   has_many :todos, dependent: :destroy
   has_many :devices, dependent: :destroy
+  has_many :family_activities, dependent: :destroy
 
   def kids
     members.where('parent IS NOT true')
@@ -31,6 +32,7 @@ class Family < ActiveRecord::Base
   end
 
   def assign_template(todo_template, assign_members = Array.new)
+    return false if todo_template.nil?
     #add to family if not already in their todo list
     unless self.todos.find {|todo| todo.todo_template_id == todo_template.id}
       todo = self.todos.build({name: todo_template.name, description: todo_template.description, schedule: todo_template.schedule, todo_template_id: todo_template.id, kudos: todo_template.kudos})
@@ -49,10 +51,38 @@ class Family < ActiveRecord::Base
             todo_schedule.schedule_rrules.create(rrule: todo.schedule)
           end
         end
-
       end
-
     end
+    todo
+  end
+
+  def assign_activity(activity_template)
+    return nil if activity_template.nil?
+
+    family_activities.create({name: activity_template.name,
+                              description: activity_template.description,
+                              activity_template_id: activity_template.id,
+                              restricted: activity_template.restricted,
+                              cost: activity_template.cost,
+                              reward: activity_template.reward,
+                              time_block: activity_template.time_block
+                             })
+
+  end
+
+  def managed_device_count
+    devices.select{|d| (d.managed_devices_count == 0 && d.managed) || (!d.managed && d.management_id.present?)}.count
+  end
+
+  # returns an array of recommended activities based on devices in the family
+  def recommended_activities
+    rec = Set.new
+
+    devices.each do |device|
+      device.device_type.activity_templates.each { |activity_template| rec << activity_template }
+    end
+
+    rec.to_a
   end
 
 end

@@ -18,7 +18,9 @@ class Activity < ActiveRecord::Base
   def start!
     if self.start_time.blank?
       transaction do
-        self.update_attribute(:start_time, Time.zone.now)
+        self.start_time = Time.zone.now
+        self.allowed_time = self.member.available_screen_time(self.start_time, self.device.try(:id) )
+        self.save
         self.device.update_attribute(:current_activity_id, self.id) if self.device.present?
       end
     else
@@ -32,6 +34,7 @@ class Activity < ActiveRecord::Base
       transaction do
         self.update_attribute(:end_time, Time.zone.now)
         self.device.update_attribute(:current_activity_id, nil) if self.device.present?
+        # TODO: calc cost/reward and assign
       end
     else
       #raise error

@@ -1,65 +1,9 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
-
+# Setup system background information
+######################################
 
 admin = User.create({email: 'kaz@kudoso.com', first_name: 'Mike', last_name: 'Kazmier', password: 'password', password_confirmation: 'password', admin: true, confirmed_at: Time.now})
-parent = User.create({email: 'parent@kudoso.com', first_name: 'Parent', last_name: 'Test', password: 'password', password_confirmation: 'password', confirmed_at: Time.now})
-children = Member.create([{username: 'johnny', first_name: 'Johnny', last_name: 'Test', password: '1234', family_id: parent.family_id},
-                          {username: 'suzy', first_name: 'Suzy', last_name: 'Test', password: '4321', family_id: parent.family_id}])
 
-daily = IceCube::Rule.daily
-weekdays = IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday)
-saturdays = IceCube::Rule.weekly.day(:saturday)
-todo_templates = TodoTemplate.create([
-    { name: 'Brush teeth', description: 'To prevent cavities bush your teeth for at least 60 seconds.', required: true, schedule: "#{daily.to_yaml}", active: true, kudos: 20 },
-    { name: 'Brush hair', description: 'Look your best and get rid of that bed hed!', required: true, schedule: "#{daily.to_yaml}", active: true, kudos: 20 },
-    { name: 'Make bed', description: 'Your room is a reflection of you. Your neat! So your bed should be made neatly too.', required: true, schedule: "#{daily.to_yaml}", active: true, kudos: 20 },
-    { name: 'Read a book', description: 'Reading is fun, red for at least 30 minute!', required: true, schedule: "#{weekdays.to_yaml}", active: true, kudos: 20 },
-    { name: 'Pick up room', description: 'Its easier to pickup every week than to let the mess build!', required: true, schedule: "#{saturdays.to_yaml}", active: true, kudos: 20 },
-    { name: 'Finish homework', description: 'Work hard, play hard! Its important to finish your work before playing.', required: true, schedule: "#{weekdays.to_yaml}", active: true, kudos: 20 },
-    { name: 'Mow lawn', description: 'Maintaining our home requires everyone to help.', required: true, schedule: "#{saturdays.to_yaml}", active: true, kudos: 20 }
-                                     ])
-
-group_one = TodoGroup.create({ name: 'Group One', rec_min_age: 2, rec_max_age: 12, active: true })
-
-group_one.todo_templates << todo_templates[0]
-group_one.todo_templates << todo_templates[1]
-group_one.todo_templates << todo_templates[2]
-
-parent.family.assign_group(group_one, [children[0].id, children[1].id ])
-
-group_two = TodoGroup.create({ name: 'Group Two', rec_min_age: 6, rec_max_age: 12, active: true })
-
-group_two.todo_templates << todo_templates[3]
-group_two.todo_templates << todo_templates[4]
-
-group_three = TodoGroup.create({ name: 'Group Two', rec_min_age: 9, rec_max_age: 12, active: true })
-
-group_three.todo_templates << todo_templates[5]
-group_three.todo_templates << todo_templates[5]
-
-# reset todo_schedules to the past
-TodoSchedule.find_each do |ts|
-  ts.start_date = 45.days.ago.to_date
-  ts.save!(validate: false)
-end
-
-# create historical my_todos for each child
-(45.days.ago.to_date .. 1.days.ago.to_date).each { |d| Family.memorialize_todos(d) }
-
-# randomly mark some todos as complete
-children.each do |kid|
-  (kid.my_todos.count / 3).floor.times do
-    kid.my_todos.where('complete IS NOT TRUE').sample.update_attribute(:complete, true)
-  end
-end
-
-# generate content ratings
+# generate content ratings and descriptors
 
 ratings = ContentRating.create([
                                    { org: 'MPAA', tag: 'G', short: 'G : General Audiences', description: 'All ages admitted.'},
@@ -98,39 +42,6 @@ content_descriptors = ContentDescriptor.create([
                                    {tag: 'S', short: 'Sexual Content', description: 'Content may contain graphic sexual situations, including depictions of sexual intercourse.'}
                                                ])
 
-
-# generate device types
-
-device_types = DeviceType.create([
-                                     { name: 'iPod Touch', description: 'Apple iPod Touch', os: 'iOS', version: '' },
-                                     { name: 'iPhone', description: 'Apple iPhone', os: 'iOS', version: '' },
-                                     { name: 'iPad', description: 'Apple iPad', os: 'iOS', version: '' },
-                                     { name: 'Kindle Fire', description: 'Kindle Fire/HD/HDx', os: 'FireOS', version: '' },
-                                     { name: 'Android Phone', description: '', os: 'Android', version: '' },
-                                     { name: 'Android Tablet', description: '', os: 'Android', version: '' },
-                                     { name: 'Playstation 2', description: '', os: '', version: '' },
-                                     { name: 'Playstation 3', description: '', os: '', version: '' },
-                                     { name: 'Playstation 4', description: '', os: '', version: '' },
-                                     { name: 'xBox 360', description: '', os: '', version: '' },
-                                     { name: 'xBox One', description: '', os: '', version: '' },
-                                     { name: 'Nintendo Wii', description: '', os: '', version: '' },
-                                     { name: 'Nintendo 3DS', description: '', os: '', version: '' },
-                                     { name: 'Kudoso Smart Plug', description: '', os: 'Kudoso', version: '' },
-                                     { name: 'Kudoso Gateway', description: '', os: 'Kudoso', version: '' },
-                                     { name: 'BluRay Player', description: '', os: '', version: '' },
-                                     { name: 'HDTV', description: '', os: '', version: '' }
-
-                                 ])
-
-activity_types = ActivityType.create([
-                                         { name: 'Other', metadata_fields: { } },
-                                         { name: 'Play a Game', metadata_fields: { } },
-                                         { name: 'Surf the Internet', metadata_fields: { } },
-                                         { name: 'Read', metadata_fields: { } },
-                                         { name: 'Stream Media', metadata_fields: { } },
-                                         { name: 'Physical', metadata_fields: { } }
-                                     ])
-
 content_types = ContentType.create([
                                        {name: 'Other'},
                                        {name: 'Movie'},
@@ -144,20 +55,170 @@ content_types = ContentType.create([
                                        {name: 'Magazine'}
                                    ])
 
-activity_templates = ActivityTemplate.create([
-                                                 { name: 'Play a game', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Surf the internet (entertainment)', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Surf the internet (eduction)', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Read a book', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Read a magazine', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Kahn Acedemy', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Play outside', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Play with a friend', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Exercise', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Play a board game', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Watch Netflix', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Watch Amazon Prime', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Watch AppleTV', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Watch BluRay', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 },
-                                                 { name: 'Watch television', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 }
-                                             ])
+# generate device types
+
+activity_types = ActivityType.create([
+                                         { name: 'Other', metadata_fields: { } },
+                                         { name: 'Play a Game', metadata_fields: { } },
+                                         { name: 'Surf the Internet', metadata_fields: { } },
+                                         { name: 'Read', metadata_fields: { } },
+                                         { name: 'Stream Media', metadata_fields: { } },
+                                         { name: 'Physical', metadata_fields: { } }
+                                     ])
+
+ipod = DeviceType.create({ name: 'iPod Touch', description: 'Apple iPod Touch', os: 'iOS', version: '' })
+iphone = DeviceType.create({ name: 'iPhone', description: 'Apple iPhone', os: 'iOS', version: '' })
+ipad = DeviceType.create({ name: 'iPad', description: 'Apple iPad', os: 'iOS', version: '' })
+android_tablet = DeviceType.create({ name: 'Android Phone', description: '', os: 'Android', version: '' })
+android_phone = DeviceType.create({ name: 'Android Tablet', description: '', os: 'Android', version: '' })
+fire_phone = DeviceType.create({ name: 'Amazon Fire Phone', description: '', os: '', version: '' })
+kindle = DeviceType.create({ name: 'Amazon Fire Tablet', description: 'Kindle Fire/HD/HDx', os: 'FireOS', version: '' })
+ps2 = DeviceType.create({ name: 'Playstation 2', description: '', os: '', version: '' })
+ps3 = DeviceType.create({ name: 'Playstation 3', description: '', os: '', version: '' })
+ps4 = DeviceType.create({ name: 'Playstation 4', description: '', os: '', version: '' })
+xbox360 = DeviceType.create({ name: 'xBox 360', description: '', os: '', version: '' })
+xbox1 = DeviceType.create({ name: 'xBox One', description: '', os: '', version: '' })
+wii = DeviceType.create({ name: 'Nintendo Wii', description: '', os: '', version: '' })
+n3ds = DeviceType.create({ name: 'Nintendo 3DS', description: '', os: '', version: '' })
+kudososp = DeviceType.create({ name: 'Kudoso SmartPlug', description: '', os: 'Kudoso', version: '' })
+kudoso = DeviceType.create({ name: 'Kudoso Gateway', description: '', os: 'Kudoso', version: '' })
+bluray = DeviceType.create({ name: 'BluRay Player', description: '', os: '', version: '' })
+hdtv = DeviceType.create({ name: 'HDTV', description: 'Not Connected', os: '', version: '' })
+smartv = DeviceType.create({ name: 'Smart-TV HDTV', description: 'Smart-TV Connected TV', os: '', version: '' })
+appletv = DeviceType.create({ name: 'AppleTV', description: '', os: '', version: '' })
+roku = DeviceType.create({ name: 'Roku', description: '', os: '', version: '' })
+firetv = DeviceType.create({ name: 'Amazon FireTV', description: '', os: '', version: '' })
+pc = DeviceType.create({ name: 'Windows Personal Computer', description: '', os: '', version: '' })
+mac = DeviceType.create({ name: 'Apple Macintosh Personal Computer', description: '', os: '', version: '' })
+
+
+activity_template = ActivityTemplate.create({ name: 'Play a game', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, n3ds, pc, mac].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Surf the internet (entertainment)', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, n3ds, pc, mac, smartv, roku, appletv, firetv].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Surf the internet (education)', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 })
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, n3ds, pc, mac, smartv, roku, appletv, firetv].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Read a book', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 })
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, pc, mac].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Read a magazine', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, pc, mac].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Kahn Academy', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 })
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, pc, mac].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Play outside', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Play with a friend', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Exercise', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Play a board game', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Watch Netflix', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps3, ps4, xbox360, xbox1, wii, pc, mac, appletv, firetv, roku, smartv, bluray].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Watch Amazon Prime', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps3, ps4, xbox360, xbox1, wii, pc, mac, appletv, firetv, roku, smartv, bluray].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Watch BluRay', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[smartv, hdtv, bluray ].each { |device_type| activity_template.device_types << device_type }
+
+activity_template = ActivityTemplate.create({ name: 'Watch television', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+[hdtv, smartv, bluray, appletv, firetv, roku].each { |device_type| activity_template.device_types << device_type }
+
+
+
+# Populate our ToDo templates and groups:
+daily = IceCube::Rule.daily
+weekdays = IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday)
+saturdays = IceCube::Rule.weekly.day(:saturday)
+todo_templates = TodoTemplate.create([
+                                         { name: 'Brush teeth', description: 'To prevent cavities bush your teeth for at least 60 seconds.', required: true, schedule: "#{daily.to_yaml}", active: true, kudos: 20 },
+                                         { name: 'Brush hair', description: 'Look your best and get rid of that bed hed!', required: true, schedule: "#{daily.to_yaml}", active: true, kudos: 20 },
+                                         { name: 'Make bed', description: 'Your room is a reflection of you. Your neat! So your bed should be made neatly too.', required: true, schedule: "#{daily.to_yaml}", active: true, kudos: 20 },
+                                         { name: 'Read a book', description: 'Reading is fun, red for at least 30 minute!', required: true, schedule: "#{weekdays.to_yaml}", active: true, kudos: 20 },
+                                         { name: 'Pick up room', description: 'Its easier to pickup every week than to let the mess build!', required: true, schedule: "#{saturdays.to_yaml}", active: true, kudos: 20 },
+                                         { name: 'Finish homework', description: 'Work hard, play hard! Its important to finish your work before playing.', required: true, schedule: "#{weekdays.to_yaml}", active: true, kudos: 20 },
+                                         { name: 'Mow lawn', description: 'Maintaining our home requires everyone to help.', required: true, schedule: "#{saturdays.to_yaml}", active: true, kudos: 20 }
+                                     ])
+
+group_one = TodoGroup.create({ name: 'Group One', rec_min_age: 2, rec_max_age: 12, active: true })
+
+group_one.todo_templates << todo_templates[0]
+group_one.todo_templates << todo_templates[1]
+group_one.todo_templates << todo_templates[2]
+
+
+
+group_two = TodoGroup.create({ name: 'Group Two', rec_min_age: 6, rec_max_age: 12, active: true })
+
+group_two.todo_templates << todo_templates[3]
+group_two.todo_templates << todo_templates[4]
+
+group_three = TodoGroup.create({ name: 'Group Three', rec_min_age: 9, rec_max_age: 12, active: true })
+
+group_three.todo_templates << todo_templates[5]
+group_three.todo_templates << todo_templates[5]
+
+
+
+# Setup our first users and family
+################################
+#
+# 1. Create family
+# 2. Add Todos by assigning groups to the family
+# 3. Add Devices to family
+# 4. Add Activities to family
+# 5. Setup family member screentime restrictions
+#
+
+
+
+# 1. Create family
+  parent = User.create({email: 'parent@kudoso.com', first_name: 'Parent', last_name: 'Test', password: 'password', password_confirmation: 'password', confirmed_at: Time.now})
+  johnny = Member.create({username: 'johnny', first_name: 'Johnny', last_name: 'Test', password: '1234', family_id: parent.family_id})
+  suzy = Member.create({username: 'suzy', first_name: 'Suzy', last_name: 'Test', password: '4321', family_id: parent.family_id})
+
+# 2. Add Todos by assigning groups to the family
+  parent.family.assign_group(group_one, [johnny.id, suzy.id ])
+
+  # reset todo_schedules to the past
+  TodoSchedule.find_each do |ts|
+    ts.start_date = 45.days.ago.to_date
+    ts.save!(validate: false)
+  end
+
+  # create historical my_todos for each child
+  (45.days.ago.to_date .. 1.days.ago.to_date).each { |d| Family.memorialize_todos(d) }
+
+  # randomly mark some todos as complete
+  [johnny, suzy].each do |kid|
+    (kid.my_todos.count / 3).floor.times do
+      kid.my_todos.where('complete IS NOT TRUE').sample.update_attribute(:complete, true)
+    end
+  end
+
+# 3. Add Devices to family
+  kudoso_smartplug_1 = parent.family.devices.create({name: 'Living Room SmartPlug', device_type_id: DeviceType.find_by_name('Kudoso SmartPlug').id, managed: true})
+  kudoso_smartplug_2 = parent.family.devices.create({name: 'Play Room SmartPlug', device_type_id: DeviceType.find_by_name('Kudoso SmartPlug').id, managed: true})
+  devices = parent.family.devices.create([
+                                      {name: 'Family iPad', device_type_id: DeviceType.find_by_name('iPad').id, managed: true},
+                                      {name: 'Living Room HDTV', device_type_id: DeviceType.find_by_name('HDTV').id, managed: false},
+                                      {name: 'Living Room BluRay', device_type_id: DeviceType.find_by_name('BluRay Player').id, managed: true, management_id: kudoso_smartplug_1.id},
+                                      {name: 'Playstation 3', device_type_id: DeviceType.find_by_name('Playstation 3').id, managed: true, management_id: kudoso_smartplug_2.id},
+                                      {name: "Suzy's iPhone", device_type_id: DeviceType.find_by_name('iPhone').id, managed: true, primary_member_id: suzy.id}
+                                  ])
+
+# 4. Add activities to family
+  parent.family.recommended_activities.each { |activity_template| parent.family.assign_activity(activity_template) }
+
+# 5. Setup family member screentime restrictions
+

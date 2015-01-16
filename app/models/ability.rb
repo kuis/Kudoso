@@ -10,7 +10,7 @@ class Ability
     if user.admin?
       can :manage, :all
     else
-      if user.member && user.member.parent?
+      if user.member.present? && user.member.parent?
         can [:read, :update], Family do |family|
           user.try(:family) == family
         end

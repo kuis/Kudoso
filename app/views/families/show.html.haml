@@ -16,6 +16,12 @@
               = render member.todo_schedules
       %li
         = link_to 'Add new family member', new_family_member_path(@family) if can?(:create, Member)
+    %hr
+    %h2 Family Devices:
+    = "#{pluralize(@family.managed_device_count, 'device')} being managed:"
+    %ul
+      - @family.devices.each do |device|
+        = render device
   .medium-6.columns
     %h2 Family ToDo List
     %ul#family_todo_list

@@ -8,6 +8,8 @@ class Member < ActiveRecord::Base
   has_many :authorized_activities, class_name: 'Activity', foreign_key: :created_by, dependent: :destroy
   has_many :screen_times
 
+
+
   validates_presence_of :first_name, :username
 
   validates :username, uniqueness: { scope: :family_id }
@@ -42,7 +44,7 @@ class Member < ActiveRecord::Base
   end
 
 
-  def used_screen_time(date=Time.now, device_id = nil)
+  def get_used_screen_time(date = Time.now, device_id = nil)
     if device_id.present?
       activities.where('device_id = ? AND end_time BETWEEN ? AND ?', device_id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)')
     else
@@ -50,7 +52,39 @@ class Member < ActiveRecord::Base
     end
   end
 
-  def max_screen_time(date=Time.now, device_id = nil)
-    screen_times.where(device_id: device_id, dow: date.wday).last.maxtime
+  def get_max_screen_time(date = Time.now, device_id = nil)
+    rec = screen_times.where(device_id: device_id, dow: date.wday).last
+    if rec
+      rec.maxtime
+    else
+      if device_id
+        # if device_id was set but we didn't find a specific max for it, use the global
+        rec = screen_times.where(device_id: nil, dow: date.wday).last
+        if rec
+          rec.maxtime
+        else
+          60*60*24 # Return unlimited if not set
+        end
+      else
+        60*60*24 # Return unlimited if not set
+      end
+    end
+  end
+
+  def available_screen_time(date = Time.now, device_id = nil)
+    (get_max_screen_time(date, device_id) - get_used_screen_time(date, device_id)).to_i
+  end
+
+
+  def set_screen_time!(dow, maxtime, device_id = nil)
+    raise 'Must set a valid Day of Week (0=Sunday .. 6=Staturday)' if dow.nil? || !(0..6).include?(dow)
+    my_time = screen_times.find_or_initialize_by(device_id: device_id, dow: dow)
+    my_time.maxtime = maxtime
+    my_time.save
+  end
+
+  def new_activity(family_activity, device)
+    # TODO: Check cost of activity before creating
+    act = self.activities.create(family_activity_id: family_activity.id, device_id: device.id, created_by_id: self.id)
   end
 end

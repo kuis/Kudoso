@@ -8,6 +8,7 @@ class CreateDevices < ActiveRecord::Migration
       t.integer :management_id
       t.integer :primary_member_id
       t.integer :current_activity_id
+      t.integer :managed_devices_count, :default => 0
 
       t.timestamps
     end

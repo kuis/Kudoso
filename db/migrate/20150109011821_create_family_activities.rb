@@ -5,12 +5,11 @@ class CreateFamilyActivities < ActiveRecord::Migration
       t.integer :activity_template_id
       t.string :name
       t.string :description
-      t.integer :rec_min_age
-      t.integer :rec_max_age
       t.integer :cost, default: 0
       t.integer :reward, default: 0
       t.integer :time_block
       t.boolean :restricted, default: false
+      t.text :device_chains
 
       t.timestamps
     end

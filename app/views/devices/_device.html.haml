@@ -1,0 +1,14 @@
+.device
+  .deivce_name
+    = device.name
+  .device_type
+    = device.device_type.name
+  .device_primary_member
+    = device.primary_member.full_name if device.primary_member.present?
+  .device_management
+    Managed:
+    = device.managed
+    - if device.management_device.present?
+      %br
+      Managed by:
+      = device.management_device.name
