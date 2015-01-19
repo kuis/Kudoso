@@ -1,8 +1,8 @@
 require 'faker'
 
 FactoryGirl.define do
-  factory :content_type do
+  factory :family do
     name { Faker::Lorem.word }
+    primary_contact_id nil
   end
-
 end

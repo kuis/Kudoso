@@ -1,13 +1,15 @@
+require 'faker'
+
 FactoryGirl.define do
   factory :todo do
-    name "MyString"
-description "MyString"
-required false
-kudos 1
-todo_template_id 1
-family_id 1
-active false
-schedule "MyText"
+    name { Faker::Lorem.sentence }
+    description { Faker::Lorem.paragraph }
+    required false
+    kudos 10
+    todo_template_id { FactoryGirl.create(:todo_template).id }
+    family_id { FactoryGirl.create(:family).id }
+    active true
+    schedule { "#{IceCube::Rule.daily.to_yaml}" }
   end
 
 end

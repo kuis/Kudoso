@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :activity_detail do
-    activity_id 1
-metadata "MyText"
+    activity_id { FactoryGirl.create(:activity).id }
+    metadata "MyText"
   end
 
 end

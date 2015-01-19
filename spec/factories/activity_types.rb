@@ -1,6 +1,8 @@
+require 'faker'
+
 FactoryGirl.define do
   factory :activity_type do
-    name "MyString"
+    name { Faker::Lorem.sentence }
   end
 
 end

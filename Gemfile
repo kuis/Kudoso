@@ -89,4 +89,6 @@ group :test do
   gem 'shoulda-matchers'
   gem 'pdf-inspector'
   gem 'selenium-webdriver'
+  gem 'faker'
+  gem 'simplecov'
 end

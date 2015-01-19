@@ -5,7 +5,7 @@ class CreateTodoTemplates < ActiveRecord::Migration
       t.string :description
       t.boolean :required
       t.string :schedule
-      t.string :active
+      t.boolean :active
 
       t.timestamps
     end

@@ -6,7 +6,7 @@ class CreateContents < ActiveRecord::Migration
       t.string :year
       t.integer :content_rating_id
       t.date :release_date
-      t.integer :language_id
+      t.string :language
       t.text :description
       t.string :length
       t.text :metadata

@@ -1,8 +1,7 @@
 require 'faker'
 
 FactoryGirl.define do
-  factory :content_type do
+  factory :language do
     name { Faker::Lorem.word }
   end
-
 end

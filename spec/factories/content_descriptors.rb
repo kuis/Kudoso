@@ -1,8 +1,10 @@
+require 'faker'
+
 FactoryGirl.define do
   factory :content_descriptor do
-    tag "MyString"
-short "MyString"
-description "MyText"
+    tag { Faker::Lorem.word }
+    short { Faker::Lorem.sentence }
+    description { Faker::Lorem.paragraph }
   end
 
 end

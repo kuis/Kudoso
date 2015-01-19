@@ -1,9 +1,13 @@
+require 'faker'
+
 FactoryGirl.define do
   factory :todo_group do
-    name "MyString"
-rec_min_age 1
-rec_max_age 1
-active false
+    name { Faker::Lorem.sentence(4)}
+    rec_min_age 1
+    rec_max_age 19
+    active true
+
+    after(:create) { |tg| 3.times { tg.todo_templates << FactoryGirl.create(:todo_template) } }
   end
 
 end

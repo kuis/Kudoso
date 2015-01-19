@@ -7,7 +7,7 @@ class Activity < ActiveRecord::Base
   belongs_to :activity_type
   has_many :details, class_name: 'ActivityDetail'
 
-  validates_presence_of :created_by, :family_activity_id
+  validates_presence_of :created_by
 
   validate :check_screen_time, on: :create
 
@@ -19,7 +19,7 @@ class Activity < ActiveRecord::Base
     if self.start_time.blank?
       transaction do
         self.start_time = Time.zone.now
-        self.allowed_time = self.member.available_screen_time(self.start_time, self.device.try(:id) )
+        self.allowed_time = self.member.get_available_screen_time(self.start_time, self.device.try(:id) )
         self.save
         self.device.update_attribute(:current_activity_id, self.id) if self.device.present?
       end
@@ -44,22 +44,22 @@ class Activity < ActiveRecord::Base
 
   def duration
     endtime = self.end_time || Time.zone.now
-    endtime - self.start_time
+    (endtime - self.start_time).ceil
   end
 
   private
 
   def check_screen_time
-    max_time = member.max_screen_time
+    max_time = member.get_max_screen_time
     if self.device.present?
-      device_max_time = member.max_screen_time(Time.now, self.device_id)
-      device_used_time = member.used_screen_time(Time.now, self.device_id)
+      device_max_time = member.get_max_screen_time(Time.now, self.device_id)
+      device_used_time = member.get_used_screen_time(Time.now, self.device_id)
       if device_used_time >= device_max_time
         errors.add(:device, 'max screen time for today exceeded.')
       end
     end
 
-    used_time = member.used_screen_time
+    used_time = member.get_used_screen_time
     if used_time >= max_time
       errors.add(:member, 'max screen time for today exceeded.')
     end

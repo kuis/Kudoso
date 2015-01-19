@@ -6,4 +6,4 @@ Feature: Manage Families
     Given I am not authenticated
     When I signup with my name "John Doe"
     Then I should be created as a parent
-    And I should have a family named "Doe Household"
+    And I should have a family named "Doe Family"

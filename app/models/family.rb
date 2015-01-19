@@ -70,8 +70,9 @@ class Family < ActiveRecord::Base
 
   end
 
+  # returns integer of managed devices for license purposes
   def managed_device_count
-    devices.select{|d| (d.managed_devices_count == 0 && d.managed) || (!d.managed && d.management_id.present?)}.count
+    devices.select{|d| (d.managed_devices_count == 0 && d.managed)}.count
   end
 
   # returns an array of recommended activities based on devices in the family

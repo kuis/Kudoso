@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   def build_family
     if !self.admin? && self.family_id.nil?
       self.family = Family.create(name: "#{self.last_name} Family", primary_contact_id: self.id)
-      self.member = self.family.members.build({first_name: self.first_name, last_name: self.last_name, username: self.email, parent: true, user_id: self.id})
+      self.member = self.family.members.build({first_name: self.first_name, last_name: self.last_name, username: self.email, parent: true })
       self.save!
     end
   end

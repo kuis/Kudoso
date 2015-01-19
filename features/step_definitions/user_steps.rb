@@ -16,6 +16,6 @@ When(/^I signup with my name "(.*?)"$/) do |myName|
 end
 
 Then(/^I should be created as a parent$/) do
-  click_link 'My Household'
+  click_link 'My Family'
 
 end

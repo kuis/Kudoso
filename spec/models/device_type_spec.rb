@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe DeviceType, :type => :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'has a valid factory' do
+    device_t = FactoryGirl.create(:device_type)
+    expect(device_t.valid?).to be_truthy
+  end
 end

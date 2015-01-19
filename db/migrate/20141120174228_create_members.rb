@@ -8,12 +8,10 @@ class CreateMembers < ActiveRecord::Migration
       t.date :birth_date
       t.boolean :parent
       t.integer :family_id
-      t.integer :user_id
 
       t.timestamps
     end
 
     add_index :members, :family_id
-    add_index :members, :user_id
   end
 end

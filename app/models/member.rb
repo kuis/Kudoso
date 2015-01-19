@@ -46,9 +46,9 @@ class Member < ActiveRecord::Base
 
   def get_used_screen_time(date = Time.now, device_id = nil)
     if device_id.present?
-      activities.where('device_id = ? AND end_time BETWEEN ? AND ?', device_id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)')
+      activities.where('device_id = ? AND end_time BETWEEN ? AND ?', device_id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)').ceil
     else
-      activities.where('end_time BETWEEN ? AND ?', date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)')
+      activities.where('end_time BETWEEN ? AND ?', date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)').ceil
     end
   end
 
@@ -71,7 +71,7 @@ class Member < ActiveRecord::Base
     end
   end
 
-  def available_screen_time(date = Time.now, device_id = nil)
+  def get_available_screen_time(date = Time.now, device_id = nil)
     (get_max_screen_time(date, device_id) - get_used_screen_time(date, device_id)).to_i
   end
 

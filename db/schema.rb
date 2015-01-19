@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 20150113155728) do
     t.string   "year"
     t.integer  "content_rating_id"
     t.date     "release_date"
-    t.integer  "language_id"
+    t.string   "language"
     t.text     "description"
     t.string   "length"
     t.text     "metadata"
@@ -177,14 +177,12 @@ ActiveRecord::Schema.define(version: 20150113155728) do
     t.date     "birth_date"
     t.boolean  "parent"
     t.integer  "family_id"
-    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "kudos",      default: 0
   end
 
   add_index "members", ["family_id"], name: "index_members_on_family_id", using: :btree
-  add_index "members", ["user_id"], name: "index_members_on_user_id", using: :btree
 
   create_table "my_todos", force: true do |t|
     t.integer  "todo_schedule_id"
@@ -259,7 +257,7 @@ ActiveRecord::Schema.define(version: 20150113155728) do
     t.string   "description"
     t.boolean  "required"
     t.string   "schedule"
-    t.string   "active"
+    t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "kudos",       default: 0
