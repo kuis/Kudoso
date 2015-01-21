@@ -5,7 +5,16 @@
 .device {
   margin: 5px 5px 5px 5px;
   padding: 5px 10px 5px 10px;
-  border: 1px solid gray;
   border-radius: 5px;
   color: black;
+}
+
+.device.managed {
+  border: 1px solid $green-border;
+  background-color: $green-bg;
+}
+
+.device.unmanaged {
+  border: 1px solid $red-border;
+  background-color: $red-bg;
 }

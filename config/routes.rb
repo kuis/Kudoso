@@ -1,12 +1,7 @@
 Rails.application.routes.draw do
 
-  resources :screen_times
-
-  resources :activity_details
 
   resources :activity_types
-
-  resources :activities
 
   resources :content_ratings
 
@@ -16,15 +11,9 @@ Rails.application.routes.draw do
 
   resources :content_types
 
-  resources :family_activities
-
   resources :activity_templates
 
-  resources :devices
-
   resources :device_types
-
-  resources :my_todos
 
   resources :todo_groups
 
@@ -34,18 +23,28 @@ Rails.application.routes.draw do
 
   devise_for :users
   resources :families do
+    resources :devices
+    resources :family_activities
+    resources :members do
+      resources :activities do
+        resources :activity_details
+      end
+      resources :my_todos
+      resources :screen_times
+    end
     resources :todo_groups do
       member do
         post :assign
       end
     end
-    resources :members do
-      resources :my_todos
-    end
     resources :todos do
       resources :todo_schedules do
         resources :members do
+          resources :activities do
+            resources :activity_details
+          end
           resources :my_todos
+          resources :screen_times
         end
       end
     end

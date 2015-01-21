@@ -14,6 +14,12 @@ class Ability
         can [:read, :update], Family do |family|
           user.try(:family) == family
         end
+        can :manage, Device do |device|
+          device.try(:family) == user.family
+        end
+        can :manage, FamilyActivity do |famact|
+          famact.try(:family) == user.family
+        end
         can :manage, Member do |family_member|
           family_member.try(:family) == user.family
         end

@@ -7,7 +7,7 @@ class FamilyActivity < ActiveRecord::Base
 
   serialize :device_chains, Array
 
-  validates_presence_of :family_id, :name, :time_block
+  validates_presence_of :family_id, :family, :name, :time_block
 
   validates :time_block, numericality: { greater_than: 0 }
 

@@ -1,24 +1,7 @@
 %p#notice= notice
 
-%p
-  %b Name:
-  = @device.name
-%p
-  %b Device type:
-  = @device.device_type_id
-%p
-  %b Family:
-  = @device.family_id
-%p
-  %b Managed:
-  = @device.managed
-%p
-  %b Management:
-  = @device.management_id
-%p
-  %b Primary member:
-  = @device.primary_member_id
+= render @device
 
-= link_to 'Edit', edit_device_path(@device)
+= link_to 'Edit', edit_family_device_path(@family,@device)
 \|
-= link_to 'Back', devices_path
+= link_to 'Back', family_devices_path(@family)

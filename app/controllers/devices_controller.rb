@@ -1,5 +1,7 @@
 class DevicesController < ApplicationController
-  before_action :set_device, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
+  load_and_authorize_resource :family
+  load_and_authorize_resource :device, through: :family
 
   respond_to :html
 
@@ -21,25 +23,25 @@ class DevicesController < ApplicationController
   end
 
   def create
+    params[:device][:family_id] = @family.id
     @device = Device.new(device_params)
     @device.save
-    respond_with(@device)
+    respond_with(@family,@device)
   end
 
   def update
+    params[:device][:family_id] = @family.id
     @device.update(device_params)
-    respond_with(@device)
+    respond_with(@family,@device)
   end
 
   def destroy
     @device.destroy
-    respond_with(@device)
+    respond_with(@family,@device)
   end
 
   private
-    def set_device
-      @device = Device.find(params[:id])
-    end
+
 
     def device_params
       params.require(:device).permit(:name, :device_type_id, :family_id, :managed, :management_id, :primary_member_id)

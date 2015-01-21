@@ -1,7 +1,7 @@
-%h1 Editing family_activity
+%h1 Editing and Approved Family Activity
 
 = render 'form'
 
-= link_to 'Show', @family_activity
+= link_to 'Show', [@family,@family_activity]
 \|
-= link_to 'Back', family_activities_path
+= link_to 'Back', family_family_activities_path(@family)

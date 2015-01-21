@@ -1,7 +1,7 @@
 class MembersController < ApplicationController
-  before_action :set_member, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
-  load_and_authorize_resource
+  load_and_authorize_resource :family
+  load_and_authorize_resource :member, through: :family
 
   # GET /members
   # GET /members.json
@@ -66,11 +66,7 @@ class MembersController < ApplicationController
   end
 
   private
-  # Use callbacks to share common setup or constraints between actions.
-  def set_member
-    @member = Member.includes(:family).find(params[:id])
-    @family = @member.family
-  end
+
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def member_params

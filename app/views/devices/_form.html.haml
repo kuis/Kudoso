@@ -1,4 +1,4 @@
-= form_for @device do |f|
+= simple_form_for [@family,@device] do |f|
   - if @device.errors.any?
     #error_explanation
       %h2= "#{pluralize(@device.errors.count, "error")} prohibited this device from being saved:"
@@ -7,22 +7,16 @@
           %li= msg
 
   .field
-    = f.label :name
-    = f.text_field :name
+    = f.input :name
   .field
-    = f.label :device_type_id
-    = f.number_field :device_type_id
+    = f.association :device_type
   .field
-    = f.label :family_id
-    = f.number_field :family_id
+    = f.association :family, value: @family.name, disabled: true
   .field
-    = f.label :managed
-    = f.check_box :managed
+    = f.input :managed
   .field
-    = f.label :management_id
-    = f.number_field :management_id
+    = f.input :management_id, collection: @family.devices.where(managed: true).order(:name), label: 'Select the device that manages this device (if applicable):'
   .field
-    = f.label :primary_member_id
-    = f.number_field :primary_member_id
+    = f.input :primary_member_id, collection: @family.members.order(:first_name), label_method: :full_name, value_method: :id, label: 'Default (Primary) User of this Device:'
   .actions
-    = f.submit 'Save'
+    = f.button :submit

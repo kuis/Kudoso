@@ -16,12 +16,6 @@
               = render member.todo_schedules
       %li
         = link_to 'Add new family member', new_family_member_path(@family) if can?(:create, Member)
-    %hr
-    %h2 Family Devices:
-    = "#{pluralize(@family.managed_device_count, 'device')} being managed:"
-    %ul
-      - @family.devices.each do |device|
-        = render device
   .medium-6.columns
     %h2 Family ToDo List
     %ul#family_todo_list
@@ -33,6 +27,27 @@
           Add more ToDo's
       %li
         = link_to 'Add from Todo Groups', family_todo_groups_path(@family)
+
+%hr
+.row
+  .medium-6.columns
+    %h2 Family Devices:
+    = "#{pluralize(@family.managed_device_count, 'device')} being managed:"
+    %ul
+      - @family.devices.each do |device|
+        - if device.managed_devices_count == 0
+          %li
+            = render device
+      %li
+        = link_to 'Add new device', new_family_device_path(@family)
+        %br
+        = link_to 'View all devices', family_devices_path(@family)
+  .medium-6.columns
+    %h2 Family Activities
+    %ul
+      - @family.family_activities.each do |fam_act|
+        %li
+          =render fam_act
 #todo_template_modal.reveal-modal{data: { reveal: true} }
   %a.close-reveal-modal
     &#215;

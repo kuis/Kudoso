@@ -1,4 +1,4 @@
-= form_for @family_activity do |f|
+= simple_form_for [@family,@family_activity] do |f|
   - if @family_activity.errors.any?
     #error_explanation
       %h2= "#{pluralize(@family_activity.errors.count, "error")} prohibited this family_activity from being saved:"
@@ -7,34 +7,16 @@
           %li= msg
 
   .field
-    = f.label :family_id
-    = f.number_field :family_id
+    = f.input :name
   .field
-    = f.label :activity_template_id
-    = f.number_field :activity_template_id
+    = f.input :description
   .field
-    = f.label :name
-    = f.text_field :name
+    = f.input :cost
   .field
-    = f.label :description
-    = f.text_field :description
+    = f.input :reward
   .field
-    = f.label :rec_min_age
-    = f.number_field :rec_min_age
+    = f.input :time_block, label: 'Time block (minutes)'
   .field
-    = f.label :rec_max_age
-    = f.number_field :rec_max_age
-  .field
-    = f.label :cost
-    = f.number_field :cost
-  .field
-    = f.label :reward
-    = f.number_field :reward
-  .field
-    = f.label :time_block
-    = f.number_field :time_block
-  .field
-    = f.label :restricted
-    = f.check_box :restricted
+    = f.input :restricted
   .actions
-    = f.submit 'Save'
+    = f.button :submit
