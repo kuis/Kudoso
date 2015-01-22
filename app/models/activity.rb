@@ -1,6 +1,6 @@
 class Activity < ActiveRecord::Base
   belongs_to :member                            # Family member who PERFORMED the activity, may be nil
-  belongs_to :created_by, class_name: 'Member'  # Family member who CREATED the activity, required, allows tracking of anonymous access
+  belongs_to :created_by, class_name: 'Member', foreign_key: 'created_by_id'  # Family member who CREATED the activity, required, allows tracking of anonymous access
   belongs_to :family_activity
   belongs_to :device
   has_one :family, through: :created_by
@@ -46,6 +46,7 @@ class Activity < ActiveRecord::Base
     endtime = self.end_time || Time.zone.now
     (endtime - self.start_time).ceil
   end
+
 
   private
 

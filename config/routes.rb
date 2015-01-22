@@ -25,6 +25,9 @@ Rails.application.routes.draw do
   resources :families do
     resources :devices
     resources :family_activities
+    member do
+      devise_for :members, class: 'Member'
+    end
     resources :members do
       resources :activities do
         resources :activity_details
@@ -32,6 +35,9 @@ Rails.application.routes.draw do
       resources :my_todos
       resources :screen_times
     end
+
+
+
     resources :todo_groups do
       member do
         post :assign

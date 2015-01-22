@@ -1,5 +1,5 @@
 .authform
-  = form_for([@family,@member]) do |f|
+  = simple_form_for([@family,@member]) do |f|
     - if @member.errors.any?
       #error_explanation
         %h2
@@ -8,31 +8,19 @@
         %ul
           - @member.errors.full_messages.each do |message|
             %li= message
-    .form-group
-      = f.label :first_name
-      %br/
-      = f.text_field :first_name
-    .form-group
-      = f.label :last_name
-      %br/
-      = f.text_field :last_name
-    .form-group
-      = f.label :username
-      %br/
-      = f.text_field :username
-    .form-group
-      = f.label :birth_date
-      %br/
-      = f.text_field :birth_date, class: 'fdatepicker'
-    .form-group
-      = f.label :password
-      %br/
-      = f.password_field :password
+
+    .field
+      = f.input :first_name
+    .field
+      = f.input :last_name
+    .field
+      = f.input :username
+    .field
+      = f.input :birth_date
+    .field
+      = f.input :password
     - if current_user.member.parent?
-      .form-group
-      = f.label :parent
-      %br/
-      = f.check_box :parent
-    = f.hidden_field :family_id, value: @member.family_id
-    .actions
-      = f.submit :class => 'button right'
+      .field
+        = f.input :parent
+    .field
+      = f.button :submit,  :class => 'button right'

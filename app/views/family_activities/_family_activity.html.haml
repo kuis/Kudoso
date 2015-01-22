@@ -1,4 +1,6 @@
-.family_activity{ class: family_activity.restricted? ? 'restricted' : 'unrestricted'}
+- available =  (@member && @member.can_do_activity?(family_activity))
+
+.family_activity{ class: available ? 'unrestricted' : 'restricted'}
   .name
     = family_activity.name
   .kudos
@@ -14,4 +16,7 @@
     .family_activity_admin
       = link_to 'Edit', edit_family_family_activity_path(family_activity.family, family_activity)
       = link_to 'Delete', [family_activity.family, family_activity], method: :delete, data: { confirm: 'Are you sure you want to delete this family activity?  This cannot be undone!' }
+  -if available
+    = link_to "Start #{family_activity.name}", new_family_member_activity_path(@family, @member, family_activity_id: family_activity.id, start: true)
+
 

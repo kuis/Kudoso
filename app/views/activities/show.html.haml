@@ -34,6 +34,6 @@
   %b Reward:
   = @activity.reward
 
-= link_to 'Edit', edit_activity_path(@activity)
+= link_to 'Edit', edit_family_member_activity_path(@family, @member, @activity)
 \|
-= link_to 'Back', activities_path
+= link_to 'Back', family_member_activities_path(@family, @member)

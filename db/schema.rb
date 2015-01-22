@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150121141348) do
+ActiveRecord::Schema.define(version: 20150122155122) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,16 +173,24 @@ ActiveRecord::Schema.define(version: 20150121141348) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "username"
-    t.string   "password"
     t.date     "birth_date"
     t.boolean  "parent"
     t.integer  "family_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "kudos",      default: 0
+    t.integer  "kudos",                            default: 0
+    t.string   "encrypted_password",   limit: 128, default: "", null: false
+    t.datetime "remember_created_at"
+    t.integer  "sign_in_count",                    default: 0
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "authentication_token"
   end
 
   add_index "members", ["family_id"], name: "index_members_on_family_id", using: :btree
+  add_index "members", ["username", "family_id"], name: "index_members_on_username_and_family_id", unique: true, using: :btree
 
   create_table "my_todos", force: true do |t|
     t.integer  "todo_schedule_id"

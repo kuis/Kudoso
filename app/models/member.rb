@@ -4,16 +4,24 @@ class Member < ActiveRecord::Base
   has_many :todo_schedules, dependent: :destroy
   has_many :my_todos, dependent: :destroy
   has_many :primary_devices, class_name: 'Device', foreign_key: 'primary_member_id', dependent: :nullify
-  has_many :activities, dependent: :destroy
-  has_many :authorized_activities, class_name: 'Activity', foreign_key: :created_by, dependent: :destroy
+  has_many :activities, dependent: :destroy, inverse_of: :member
+  has_many :authorized_activities, class_name: 'Activity', foreign_key: :created_by_id, dependent: :nullify, inverse_of: :created_by
   has_many :screen_times
 
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable, :omniauthable
+  # :registerable, :recoverable, :validatable, :confirmable, :lockable,
+  devise :database_authenticatable, :authentication_keys => [:username, :family_id]
+  devise :rememberable, :trackable, :timeoutable
 
-
-  validates_presence_of :first_name, :username
+  validates_presence_of :first_name, :username, :family
 
   validates :username, uniqueness: { scope: :family_id }
 
+  # override to scope username into family_id
+  def self.find_for_authentication(warden_conditions)
+    where(:username => warden_conditions[:username], :family_id => warden_conditions[:family_id]).first
+  end
 
   def full_name
     "#{first_name} #{last_name}"
@@ -42,6 +50,17 @@ class Member < ActiveRecord::Base
     end
     todos
   end
+
+  def todos_complete?(start_date = Date.today, end_date = Date.today)
+    ret = true
+    todos.each do |todo|
+      ret = false unless todo.required? && todo.complete?
+    end
+    ret
+  end
+
+
+
 
 
   def get_used_screen_time(date = Time.now, device_id = nil)
@@ -85,6 +104,20 @@ class Member < ActiveRecord::Base
 
   def new_activity(family_activity, device)
     # TODO: Check cost of activity before creating
-    act = self.activities.create(family_activity_id: family_activity.id, device_id: device.id, created_by_id: self.id)
+    act = self.activities.create(family_activity_id: family_activity.id, device_id: device.try(:id), created_by_id: self.id)
+  end
+
+  def current_activity
+    activities.where(end_time: nil).last
+  end
+
+  def can_do_activity?(family_activity, device = nil)
+    ret = false
+    if family_activity.restricted?
+      ret = !!get_available_screen_time if todos_complete?
+    else
+      ret = !!get_available_screen_time
+    end
+    ret
   end
 end

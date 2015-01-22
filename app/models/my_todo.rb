@@ -3,8 +3,12 @@ class MyTodo < ActiveRecord::Base
   belongs_to :todo_schedule
   has_one :todo, through: :todo_schedule
 
+  validates_presence_of :todo_schedule
   before_save :apply_kudos
 
+  def required?
+    todo.required
+  end
   private
 
   def apply_kudos

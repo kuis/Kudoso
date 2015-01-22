@@ -3,9 +3,13 @@ class MembersController < ApplicationController
   load_and_authorize_resource :family
   load_and_authorize_resource :member, through: :family
 
+  respond_to :html
+
   # GET /members
   # GET /members.json
   def index
+    @members = @family.members.all
+    respond_with(@members)
   end
 
   # GET /members/1
@@ -44,6 +48,7 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
+    params[:member][:birth_date] = Chronic.parse(params[:member][:birth_date]) if params[:member][:birth_date]
     respond_to do |format|
       if @member.update(member_params)
         format.html { redirect_to [@family, @member], notice: 'Family member was successfully updated.' }
@@ -60,7 +65,7 @@ class MembersController < ApplicationController
   def destroy
     @member.destroy
     respond_to do |format|
-      format.html { redirect_to household_url(@member.household), notice: 'Family member was successfully removed.' }
+      format.html { redirect_to @family, notice: 'Family member was successfully removed.' }
       format.json { head :no_content }
     end
   end
@@ -70,6 +75,6 @@ class MembersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def member_params
-    params.require(:member).permit(:first_name, :last_name, :username, :parent)
+    params.require(:member).permit(:first_name, :last_name, :username, :parent, :password, :password_confirmation, :birth_date)
   end
 end

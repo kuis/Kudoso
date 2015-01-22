@@ -1,4 +1,14 @@
-%h1 Listing activities
+- if @member.current_activity
+  In activity #{@member.current_activity.family_activity.name}
+  = link_to "Stop #{@member.current_activity.family_activity.name}", family_member_activity_path(@family, @member, @member.current_activity, stop: true), method: :put
+
+
+- else
+  %h1 Approved Family Activities
+  - @family.family_activities.each do |famact|
+    = render famact
+
+%h1 Completed activities
 
 %table
   %tr
@@ -8,32 +18,28 @@
     %th Start time
     %th End time
     %th Device
-    %th Content
     %th Allowed time
     %th Activity type
-    %th Cost
-    %th Reward
+    %th Cost/Reward
+    %th Duration
     %th
     %th
     %th
 
   - @activities.each do |activity|
     %tr
-      %td= activity.member_id
-      %td= activity.created_by
-      %td= activity.family_activity_id
+      %td= activity.member.full_name
+      %td= activity.created_by.full_name
+      %td= activity.family_activity.name
       %td= activity.start_time
       %td= activity.end_time
-      %td= activity.device_id
-      %td= activity.content_id
-      %td= activity.allowed_time
+      %td= activity.device.try(:name) if activity.device.present?
+      %td= format_counter(activity.allowed_time)
       %td= activity.activity_type_id
-      %td= activity.cost
-      %td= activity.reward
-      %td= link_to 'Show', activity
-      %td= link_to 'Edit', edit_activity_path(activity)
-      %td= link_to 'Destroy', activity, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %td= activity.cost ? activity.cost : activity.reward
+      %td= format_counter(activity.duration)
+      %td= link_to 'Show', [@family,@member,activity]
+      %td= link_to 'Edit', edit_family_member_activity_path(@family,@member,activity) if can?(:edit, activity)
+      %td= link_to 'Destroy', [@family,@member,activity], :method => :delete, :data => { :confirm => 'Are you sure?' } if can?(:delete, activity)
 
-%br
 
-= link_to 'New Activity', new_activity_path

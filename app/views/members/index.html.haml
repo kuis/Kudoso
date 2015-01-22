@@ -1,0 +1,29 @@
+%h1 Listing Family Members
+
+%table
+  %tr
+    %th First Name
+    %th Last Name
+    %th Username
+    %th Birth Date
+    %th Parent
+    %th
+    %th
+    %th
+
+  - @members.each do |member|
+    %tr
+      %td= member.first_name
+      %td= member.last_name
+      %td= member.username
+      %td= member.birth_date
+      %td= member.parent?
+      %td= link_to 'Show', [@family,member]
+      %td= link_to 'Edit', edit_family_member_path(@family, member) if can?(:edit, member)
+      %td= link_to 'Destroy', [@family,member], :method => :delete, :data => { :confirm => 'Are you sure?' }  if can?(:delete, member)
+
+%br
+
+= link_to 'New Family Member', new_family_member_path(@family)
+%br
+= link_to 'Family Dashboard', @family

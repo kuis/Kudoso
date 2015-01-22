@@ -6,7 +6,7 @@ class FamilyActivitiesController < ApplicationController
   respond_to :html
 
   def index
-    @family_activities = FamilyActivity.all
+    @family_activities = @family.family_activities.all
     respond_with(@family_activities)
   end
 

@@ -6,7 +6,7 @@ class DevicesController < ApplicationController
   respond_to :html
 
   def index
-    @devices = Device.all
+    @devices = @family.devices.all
     respond_with(@devices)
   end
 

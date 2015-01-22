@@ -185,19 +185,4 @@ RSpec.describe FamilyActivitiesController, :type => :controller do
 
   end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 end

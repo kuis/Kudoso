@@ -14,6 +14,9 @@ class Ability
         can [:read, :update], Family do |family|
           user.try(:family) == family
         end
+        can :manage, Activity do |activity|
+          activity.try(:member).try(:family) == user.family
+        end
         can :manage, Device do |device|
           device.try(:family) == user.family
         end
@@ -43,6 +46,8 @@ class Ability
       can :manage, MyTodo do |todo|
         todo.try(:member) == user
       end
+      can :create, Activity
+      can :read, Activity, :member_id => user.try(:id)
       cannot :index, Family
     end
 
