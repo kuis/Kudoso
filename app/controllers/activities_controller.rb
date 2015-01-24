@@ -1,5 +1,4 @@
 class ActivitiesController < ApplicationController
-  before_action :authenticate_user!
   load_and_authorize_resource :family
   load_and_authorize_resource :member, through: :family
   load_and_authorize_resource :activity, through: :member

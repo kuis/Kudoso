@@ -54,7 +54,7 @@ class Member < ActiveRecord::Base
   def todos_complete?(start_date = Date.today, end_date = Date.today)
     ret = true
     todos.each do |todo|
-      ret = false unless todo.required? && todo.complete?
+      ret = false if todo.required? && !todo.complete?
     end
     ret
   end

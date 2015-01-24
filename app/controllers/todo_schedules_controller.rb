@@ -1,5 +1,4 @@
 class TodoSchedulesController < ApplicationController
-  before_action :authenticate_user!
   load_and_authorize_resource :family
   load_and_authorize_resource :todo, through: :family
   load_and_authorize_resource :todo_schedule, through: :todo

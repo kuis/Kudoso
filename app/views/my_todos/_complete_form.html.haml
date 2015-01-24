@@ -1,5 +1,5 @@
 - if my_todo.complete?
-  - if my_todo.due_date == Date.today || ( (current_user.try(:admin) || current_user.member.parent? ) && my_todo.due_date <= Date.today )
+  - if my_todo.due_date == Date.today || ( (current_user.try(:admin) || current_member.parent? ) && my_todo.due_date <= Date.today )
     = form_for [my_todo.member.family, my_todo.todo, my_todo.todo_schedule, my_todo.member, my_todo], remote: true, html: { id: "complete_todo_#{my_todo.todo_schedule.id}" } do |f|
       = f.hidden_field :due_date
       = f.hidden_field :complete, value: false
@@ -7,7 +7,7 @@
   - else
     = raw('<i class="fa fa-check-square-o"></i>')
 - else
-  - if my_todo.due_date == Date.today || ( (current_user.try(:admin) || current_user.member.parent? ) && my_todo.due_date <= Date.today )
+  - if my_todo.due_date == Date.today || ( (current_user.try(:admin) || current_member.try(:parent?) || current_user.try(:member).try(:parent?) ) && my_todo.due_date <= Date.today )
     = form_for [my_todo.member.family, my_todo.todo, my_todo.todo_schedule, my_todo.member, my_todo], remote: true, html: { id: "complete_todo_#{my_todo.todo_schedule.id}" } do |f|
       = f.hidden_field :due_date
       = f.hidden_field :complete, value: true

@@ -2,3 +2,4 @@ $('#todo_wrap_<%= @my_todo.todo_schedule_id %>').html("<%=j render partial: 'my_
 $('#kudos').html("<%= @member.kudos %>");
 $('#charts_wrap').html("<%=j render 'members/charts'%>");
 $('#todo_history').html("<%=j render 'members/details'%>");
+$('#family_activities_list').html("<%=j render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @member.family.family_activities }%>");

@@ -1,6 +1,6 @@
 class MyTodosController < ApplicationController
   before_action :load_helpers
-  before_action :authenticate_user!
+  before_action :authenticate_member! unless @current_user.present?
   load_and_authorize_resource
 
   respond_to :html, :js

@@ -25,10 +25,18 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_ability
+    if member_signed_in?
+      @current_ability ||= Ability.new(current_member)
+    else
+      @current_ability ||= Ability.new(current_user)
+    end
+  end
+
   protected
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :password, :password_confirmation, :first_name, :last_name, :parent, :family_id) }
+    devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :username, :password, :password_confirmation, :first_name, :last_name, :parent, :family_id) }
   end
 
 

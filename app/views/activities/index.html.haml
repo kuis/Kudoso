@@ -5,8 +5,7 @@
 
 - else
   %h1 Approved Family Activities
-  - @family.family_activities.each do |famact|
-    = render famact
+  = render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @family.family_activities }
 
 %h1 Completed activities
 

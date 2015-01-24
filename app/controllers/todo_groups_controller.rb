@@ -1,5 +1,5 @@
 class TodoGroupsController < ApplicationController
-  before_action :authenticate_user!
+  before_action :authenticate_member! unless @current_user.present?
   load_and_authorize_resource except: :assign
 
   respond_to :html

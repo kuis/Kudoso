@@ -3,10 +3,18 @@ class Ability
 
   def initialize(user)
 
-    user ||= User.new
+    if user.is_a?(Member)
+      tmp = User.new
+      tmp.member = user
+      user = tmp
+    else
+      user ||= User.new
+    end
+
 
     can :create, User
     can :create, MyTodo
+
     if user.admin?
       can :manage, :all
     else
@@ -26,6 +34,7 @@ class Ability
         can :manage, Member do |family_member|
           family_member.try(:family) == user.family
         end
+        can :manage, MyTodo, :family_id => user.try(:member).try(:family_id)
         can :manage, Todo,  :family_id => user.try(:family_id)
         can :manage, TodoSchedule do |ts|
           if ts.present? && ts.todo.present?
@@ -42,10 +51,16 @@ class Ability
         can :assign, TodoGroup
       else
         # Child permissions
+        can :update, Activity do |activity|
+          activity.member_id == user.try(:member_id) || activity.created_by_id == user.try(:member_id)
+        end
+        can :read, Family, :id => user.try(:member).try(:family_id)
+        can :read, Member, :id => user.try(:member_id)
+        can :read, TodoSchedule, :member_id => user.try(:member_id)
+        can :read, Todo, :family_id => user.try(:member).try(:family_id)
+        can :manage, MyTodo, :member_id => user.try(:member_id)
       end
-      can :manage, MyTodo do |todo|
-        todo.try(:member) == user
-      end
+
       can :create, Activity
       can :read, Activity, :member_id => user.try(:id)
       cannot :index, Family

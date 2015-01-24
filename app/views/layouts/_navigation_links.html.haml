@@ -1,16 +1,24 @@
-- if user_signed_in?
-  - if current_user.member.present? && current_user.member.parent?
-    %li= link_to('My Family', family_path(current_user.family))
-  - if current_user.admin?
-    %li.has-dropdown
-      %a{ href: '#'} Admin
-      %ul.dropdown
-        %li= link_to('All Families', families_path)
-        %li= link_to('ToDo Templates', todo_templates_path)
-        %li= link_to('ToDo Groups', todo_groups_path)
-        %li= link_to('Device Types', device_types_path)
-        %li= link_to('Activity Templates', activity_templates_path)
-  %li= link_to("Logout (#{current_user.email})", destroy_user_session_path, :method => :delete)
+- if member_signed_in? || user_signed_in?
+
+  - if user_signed_in?
+    - if current_user.admin?
+      %li.has-dropdown
+        %a{ href: '#'} Admin
+        %ul.dropdown
+          %li= link_to('All Families', families_path)
+          %li= link_to('ToDo Templates', todo_templates_path)
+          %li= link_to('ToDo Groups', todo_groups_path)
+          %li= link_to('Device Types', device_types_path)
+          %li= link_to('Activity Templates', activity_templates_path)
+
+    %li= link_to('My Family', family_path(current_user.family)) if current_user.member.try(:parent?)
+
+    %li= link_to("Logout (#{current_user.member.first_name})", destroy_user_session_path, :method => :delete)
+  - else
+    %li= link_to 'My Dashboard', [current_member.family, current_member]
+    %li= link_to("Logout (#{current_member.first_name})", destroy_member_session_path(id: current_member.family_id), :method => :delete)
+
+
 - else
   %li= link_to('Sign In', new_user_session_path)
   %li= link_to('Sign Up', new_user_registration_path)

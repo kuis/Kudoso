@@ -2,17 +2,27 @@
 %h2= "#{@member.full_name}'s Dashboard"
 
 .row
-  .medium-12.columns
+  .medium-4.columns
     Kudos:
     #kudos
       #{@member.kudos}
-
+  .medium-4.columns
+    Max Screen Time:
+    .screen_time
+      #{format_counter @member.get_max_screen_time}
+  .medium-4.columns
+    Available Screen Time:
+    .screen_time
+      #{format_counter @member.get_available_screen_time}
+%hr
 .row
   .medium-6.columns
     .todo_header
       Todo Schedule (Today):
     .todo_wrap
-      = render @member.todos
+      - @member.todos.each do |my_todo|
+        %div{ id: "todo_wrap_#{my_todo.todo_schedule_id}" }
+          = render my_todo
 
   .medium-6.columns
     .todo_header
@@ -32,6 +42,11 @@
       %span.fa.accordion-icon
     #todo_history.content
       = render 'details'
+
+%hr
+%h2 Activities
+%ul#family_activities_list
+  = render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @family.family_activities }
 
 %p= link_to 'Edit Member Information', edit_family_member_path(@family, @member)
 %p= link_to 'Back', @member.family
