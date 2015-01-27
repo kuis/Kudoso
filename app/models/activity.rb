@@ -53,9 +53,9 @@ class Activity < ActiveRecord::Base
   def check_screen_time
     max_time = member.get_max_screen_time
     if self.device.present?
-      device_max_time = member.get_max_screen_time(Time.now, self.device_id)
+      device_time = member.get_screen_time(Time.now, self.device_id)
       device_used_time = member.get_used_screen_time(Time.now, self.device_id)
-      if device_used_time >= device_max_time
+      if device_used_time >= device_time
         errors.add(:device, 'max screen time for today exceeded.')
       end
     end

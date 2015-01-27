@@ -1,10 +1,10 @@
-<h2>Family Member Log in</h2>
+<h2>Family Member Sign In</h2>
 <% @family = Family.find(params[:id]) %>
 <% if @family %>
     <h3><%= @family.name %></h3>
     <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="form-inputs">
-        <%= f.input :username, required: false, autofocus: true %>
+        <%= f.input :username, required: false, autofocus: true, label: 'Username (usually your first name)' %>
         <%= f.input :family_id, :as => :hidden, :input_html => { :value => @family.id  }%>
         <%= f.input :password, required: false %>
         <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>

@@ -21,12 +21,12 @@ Rails.application.routes.draw do
 
 
 
-  devise_for :users
+  devise_for :users, :controllers => { :sessions => "users/sessions" }
   resources :families do
     resources :devices
     resources :family_activities
     member do
-      devise_for :members, class: 'Member'
+      devise_for :members, class: 'Member', :controllers => { :sessions => "members/sessions" }
     end
     resources :members do
       resources :activities do

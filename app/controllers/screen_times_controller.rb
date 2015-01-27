@@ -1,5 +1,7 @@
 class ScreenTimesController < ApplicationController
-  before_action :set_screen_time, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource :family
+  load_and_authorize_resource :member, through: :family
+  load_and_authorize_resource :screen_time, through: :member
 
   respond_to :html
 
@@ -37,11 +39,8 @@ class ScreenTimesController < ApplicationController
   end
 
   private
-    def set_screen_time
-      @screen_time = ScreenTime.find(params[:id])
-    end
 
     def screen_time_params
-      params.require(:screen_time).permit(:member_id, :device_id, :dow, :maxtime)
+      params.require(:screen_time).permit(:member_id, :dow, :max_time, :default_time, :restrictions)
     end
 end

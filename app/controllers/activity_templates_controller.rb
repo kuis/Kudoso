@@ -1,5 +1,5 @@
 class ActivityTemplatesController < ApplicationController
-  before_action :set_activity_template, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   respond_to :html
 
@@ -37,9 +37,7 @@ class ActivityTemplatesController < ApplicationController
   end
 
   private
-    def set_activity_template
-      @activity_template = ActivityTemplate.find(params[:id])
-    end
+
 
     def activity_template_params
       params.require(:activity_template).permit(:name, :description, :rec_min_age, :rec_max_age, :cost, :reward, :time_block, :restricted, :activity_type_id)

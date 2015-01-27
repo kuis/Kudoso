@@ -20,5 +20,9 @@
 
 
 - else
-  %li= link_to('Sign In', new_user_session_path)
-  %li= link_to('Sign Up', new_user_registration_path)
+  - if cookies[:family_id].present?
+    %li= link_to('Child Sign In', new_member_session_path(id: cookies[:family_id]))
+    %li= link_to('Parent Sign In', new_user_session_path)
+  - else
+    %li= link_to('Parent Sign In', new_user_session_path)
+    %li= link_to('Sign Up', new_user_registration_path)

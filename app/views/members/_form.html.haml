@@ -19,6 +19,8 @@
       = f.input :birth_date
     .field
       = f.input :password
+    .field
+      = f.input :password_confirmation
     - if current_user.member.parent?
       .field
         = f.input :parent

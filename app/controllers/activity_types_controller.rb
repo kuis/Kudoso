@@ -1,6 +1,6 @@
 class ActivityTypesController < ApplicationController
-  before_action :set_activity_type, only: [:show, :edit, :update, :destroy]
 
+  load_and_authorize_resource
   respond_to :html
 
   def index
@@ -37,11 +37,10 @@ class ActivityTypesController < ApplicationController
   end
 
   private
-    def set_activity_type
-      @activity_type = ActivityType.find(params[:id])
-    end
 
     def activity_type_params
-      params.require(:activity_type).permit(:name)
+      params.require(:activity_type).permit(:name).tap do |whitelisted|
+        whitelisted[:metadata_fields] = params[:activity_type][:metadata_fields]
+      end
     end
 end

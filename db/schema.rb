@@ -219,16 +219,15 @@ ActiveRecord::Schema.define(version: 20150122155122) do
 
   create_table "screen_times", force: true do |t|
     t.integer  "member_id"
-    t.integer  "device_id"
     t.integer  "dow"
-    t.integer  "maxtime"
+    t.integer  "default_time"
+    t.integer  "max_time"
+    t.text     "restrictions"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "family_activity_id"
-    t.integer  "default_time"
   end
 
-  add_index "screen_times", ["device_id"], name: "index_screen_times_on_device_id", using: :btree
+  add_index "screen_times", ["member_id", "dow"], name: "index_screen_times_on_member_id_and_dow", using: :btree
   add_index "screen_times", ["member_id"], name: "index_screen_times_on_member_id", using: :btree
 
   create_table "todo_groups", force: true do |t|

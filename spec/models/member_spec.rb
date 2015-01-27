@@ -19,11 +19,11 @@ RSpec.describe Member, :type => :model do
   it 'should return available screen time' do
     expect(@member.get_available_screen_time).to eq(60*60*24) # 24 hours in seconds
 
-    @member.set_screen_time!(Date.today.wday, 3600)
+    @member.set_screen_time!(Date.today.wday, 3600, 4800)
     expect(@member.get_available_screen_time).to eq(3600)
 
     device = FactoryGirl.create(:device, family_id: @member.family.id )
-    @member.set_screen_time!(Date.today.wday, 1800, device.id)
+    @member.set_screen_time!(Date.today.wday, 1800, 3600, device.id)
     expect(@member.get_available_screen_time).to eq(3600)
     expect(@member.get_available_screen_time(Date.today, device.id)).to eq(1800)
   end

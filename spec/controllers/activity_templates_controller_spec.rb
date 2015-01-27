@@ -24,11 +24,24 @@ RSpec.describe ActivityTemplatesController, :type => :controller do
   # ActivityTemplate. As you add validations to ActivityTemplate, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+        name: 'Activity Template',
+        description: 'The description',
+        rec_min_age: 2,
+        rec_max_age: 20,
+        cost: 20,
+        reward: 0,
+        time_block: 30,
+        restricted: true
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        name: nil,
+        rec_min_age: -2,
+        cost: -20
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -36,123 +49,212 @@ RSpec.describe ActivityTemplatesController, :type => :controller do
   # ActivityTemplatesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET index" do
-    it "assigns all activity_templates as @activity_templates" do
-      activity_template = ActivityTemplate.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:activity_templates)).to eq([activity_template])
+  context "As an adminstrator" do
+    before(:each) do
+      @user = FactoryGirl.create(:user, admin: true)
+      sign_in(@user)
     end
-  end
 
-  describe "GET show" do
-    it "assigns the requested activity_template as @activity_template" do
-      activity_template = ActivityTemplate.create! valid_attributes
-      get :show, {:id => activity_template.to_param}, valid_session
-      expect(assigns(:activity_template)).to eq(activity_template)
-    end
-  end
-
-  describe "GET new" do
-    it "assigns a new activity_template as @activity_template" do
-      get :new, {}, valid_session
-      expect(assigns(:activity_template)).to be_a_new(ActivityTemplate)
-    end
-  end
-
-  describe "GET edit" do
-    it "assigns the requested activity_template as @activity_template" do
-      activity_template = ActivityTemplate.create! valid_attributes
-      get :edit, {:id => activity_template.to_param}, valid_session
-      expect(assigns(:activity_template)).to eq(activity_template)
-    end
-  end
-
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new ActivityTemplate" do
-        expect {
-          post :create, {:activity_template => valid_attributes}, valid_session
-        }.to change(ActivityTemplate, :count).by(1)
-      end
-
-      it "assigns a newly created activity_template as @activity_template" do
-        post :create, {:activity_template => valid_attributes}, valid_session
-        expect(assigns(:activity_template)).to be_a(ActivityTemplate)
-        expect(assigns(:activity_template)).to be_persisted
-      end
-
-      it "redirects to the created activity_template" do
-        post :create, {:activity_template => valid_attributes}, valid_session
-        expect(response).to redirect_to(ActivityTemplate.last)
+    describe "GET index" do
+      it "assigns all activity_templates as @activity_templates" do
+        activity_template = FactoryGirl.create(:activity_template)
+        get :index, {}, valid_session
+        expect(assigns(:activity_templates)).to match_array([activity_template])
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved activity_template as @activity_template" do
-        post :create, {:activity_template => invalid_attributes}, valid_session
-        expect(assigns(:activity_template)).to be_a_new(ActivityTemplate)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {:activity_template => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
-    end
-  end
-
-  describe "PUT update" do
-    describe "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested activity_template" do
-        activity_template = ActivityTemplate.create! valid_attributes
-        put :update, {:id => activity_template.to_param, :activity_template => new_attributes}, valid_session
-        activity_template.reload
-        skip("Add assertions for updated state")
-      end
-
+    describe "GET show" do
       it "assigns the requested activity_template as @activity_template" do
         activity_template = ActivityTemplate.create! valid_attributes
-        put :update, {:id => activity_template.to_param, :activity_template => valid_attributes}, valid_session
+        get :show, {:id => activity_template.to_param}, valid_session
         expect(assigns(:activity_template)).to eq(activity_template)
-      end
-
-      it "redirects to the activity_template" do
-        activity_template = ActivityTemplate.create! valid_attributes
-        put :update, {:id => activity_template.to_param, :activity_template => valid_attributes}, valid_session
-        expect(response).to redirect_to(activity_template)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the activity_template as @activity_template" do
-        activity_template = ActivityTemplate.create! valid_attributes
-        put :update, {:id => activity_template.to_param, :activity_template => invalid_attributes}, valid_session
-        expect(assigns(:activity_template)).to eq(activity_template)
-      end
-
-      it "re-renders the 'edit' template" do
-        activity_template = ActivityTemplate.create! valid_attributes
-        put :update, {:id => activity_template.to_param, :activity_template => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+    describe "GET new" do
+      it "assigns a new activity_template as @activity_template" do
+        get :new, {}, valid_session
+        expect(assigns(:activity_template)).to be_a_new(ActivityTemplate)
       end
     end
+
+    describe "GET edit" do
+      it "assigns the requested activity_template as @activity_template" do
+        activity_template = ActivityTemplate.create! valid_attributes
+        get :edit, {:id => activity_template.to_param}, valid_session
+        expect(assigns(:activity_template)).to eq(activity_template)
+      end
+    end
+
+    describe "POST create" do
+      describe "with valid params" do
+        it "creates a new ActivityTemplate" do
+          expect {
+            post :create, {:activity_template => valid_attributes}, valid_session
+          }.to change(ActivityTemplate, :count).by(1)
+        end
+
+        it "assigns a newly created activity_template as @activity_template" do
+          post :create, {:activity_template => valid_attributes}, valid_session
+          expect(assigns(:activity_template)).to be_a(ActivityTemplate)
+          expect(assigns(:activity_template)).to be_persisted
+        end
+
+        it "redirects to the created activity_template" do
+          post :create, {:activity_template => valid_attributes}, valid_session
+          expect(response).to redirect_to(ActivityTemplate.last)
+        end
+      end
+
+      describe "with invalid params" do
+        it "assigns a newly created but unsaved activity_template as @activity_template" do
+          post :create, {:activity_template => invalid_attributes}, valid_session
+          expect(assigns(:activity_template)).to be_a_new(ActivityTemplate)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {:activity_template => invalid_attributes}, valid_session
+          expect(response).to render_template("new")
+        end
+      end
+    end
+
+    describe "PUT update" do
+      describe "with valid params" do
+        let(:new_attributes) {
+          {
+              name: 'New Name',
+              description: 'Another description',
+              rec_min_age: 5,
+              rec_max_age: 12,
+              cost: 60,
+              reward: 0,
+              time_block: 60,
+              restricted: false
+          }
+        }
+
+        it "updates the requested activity_template" do
+          activity_template = ActivityTemplate.create! valid_attributes
+          put :update, {:id => activity_template.to_param, :activity_template => new_attributes}, valid_session
+          activity_template.reload
+          expect(activity_template.name).to eq("New Name")
+          expect(activity_template.description).to eq("Another description")
+          expect(activity_template.rec_min_age).to eq(5)
+          expect(activity_template.rec_max_age).to eq(12)
+          expect(activity_template.cost).to eq(60)
+          expect(activity_template.time_block).to eq(60)
+          expect(activity_template.restricted).to eq(false)
+        end
+
+        it "assigns the requested activity_template as @activity_template" do
+          activity_template = ActivityTemplate.create! valid_attributes
+          put :update, {:id => activity_template.to_param, :activity_template => valid_attributes}, valid_session
+          expect(assigns(:activity_template)).to eq(activity_template)
+        end
+
+        it "redirects to the activity_template" do
+          activity_template = ActivityTemplate.create! valid_attributes
+          put :update, {:id => activity_template.to_param, :activity_template => valid_attributes}, valid_session
+          expect(response).to redirect_to(activity_template)
+        end
+      end
+
+      describe "with invalid params" do
+        it "assigns the activity_template as @activity_template" do
+          activity_template = ActivityTemplate.create! valid_attributes
+          put :update, {:id => activity_template.to_param, :activity_template => invalid_attributes}, valid_session
+          expect(assigns(:activity_template)).to eq(activity_template)
+        end
+
+        it "re-renders the 'edit' template" do
+          activity_template = ActivityTemplate.create! valid_attributes
+          put :update, {:id => activity_template.to_param, :activity_template => invalid_attributes}, valid_session
+          expect(response).to render_template("edit")
+        end
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "destroys the requested activity_template" do
+        activity_template = ActivityTemplate.create! valid_attributes
+        expect {
+          delete :destroy, {:id => activity_template.to_param}, valid_session
+        }.to change(ActivityTemplate, :count).by(-1)
+      end
+
+      it "redirects to the activity_templates list" do
+        activity_template = ActivityTemplate.create! valid_attributes
+        delete :destroy, {:id => activity_template.to_param}, valid_session
+        expect(response).to redirect_to(activity_templates_url)
+      end
+    end
+
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested activity_template" do
-      activity_template = ActivityTemplate.create! valid_attributes
-      expect {
-        delete :destroy, {:id => activity_template.to_param}, valid_session
-      }.to change(ActivityTemplate, :count).by(-1)
+  context "As a user or member" do
+    before(:each) do
+      @user = FactoryGirl.create(:user, admin: false)
+      sign_in(@user)
     end
 
-    it "redirects to the activity_templates list" do
-      activity_template = ActivityTemplate.create! valid_attributes
-      delete :destroy, {:id => activity_template.to_param}, valid_session
-      expect(response).to redirect_to(activity_templates_url)
+    describe "GET index" do
+      it "assigns all activity_templates as @activity_templates" do
+        activity_template = FactoryGirl.create(:activity_template)
+        get :index, {}, valid_session
+        expect(assigns(:activity_templates)).to match_array([activity_template])
+      end
+    end
+
+    describe "GET show" do
+      it "assigns the requested activity_template as @activity_template" do
+        activity_template = ActivityTemplate.create! valid_attributes
+        get :show, {:id => activity_template.to_param}, valid_session
+        expect(assigns(:activity_template)).to eq(activity_template)
+      end
+    end
+
+    describe "GET new" do
+      it "does not allow new" do
+        get :new, {}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "GET edit" do
+      it "does not allow edit" do
+        activity_template = ActivityTemplate.create! valid_attributes
+        get :edit, {:id => activity_template.to_param}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "POST create" do
+      it "does not allow create" do
+        post :create, {:activity_template => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "PUT update" do
+      it "does not allow update" do
+        activity_template = ActivityTemplate.create! valid_attributes
+        put :update, {:id => activity_template.to_param, :activity_template => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "does not allow delete" do
+        activity_template = ActivityTemplate.create! valid_attributes
+        delete :destroy, {:id => activity_template.to_param, :activity_template => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
     end
   end
 

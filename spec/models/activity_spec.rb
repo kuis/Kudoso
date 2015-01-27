@@ -16,13 +16,13 @@ RSpec.describe Activity, :type => :model do
     expect(act.valid?).to be_falsey
     expect(act.errors[:device].any?).to be_truthy
 
-    @member.set_screen_time!(Date.today.wday, 3600, device.id)
-    @member.set_screen_time!(Date.today.wday, 0, nil)
+    @member.set_screen_time!(Date.today.wday, 3600, 4800, device.id)
+    @member.set_screen_time!(Date.today.wday, 0, 3600, nil)
 
     act = @member.new_activity(family_activity, device)
     expect(act.valid?).to be_falsey
-    expect(act.errors[:device].any?).to be_falsey
-    expect(act.errors[:member].any?).to be_truthy
+    expect(act.errors[:member].any?).to be_falsey
+    expect(act.errors[:device].any?).to be_truthy
 
 
   end

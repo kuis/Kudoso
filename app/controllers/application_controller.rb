@@ -25,6 +25,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Authentication
+  rescue_from CanCan::AccessDenied do |exception|
+    if member_signed_in?
+      Rails.logger.info "Access denied for member: #{current_member.id}"
+    else
+      Rails.logger.info "Access denied for anonymous member"
+    end
+    message = member_signed_in? ? 'You are not authorized to do that!' : 'You must be logged in to do that.'
+
+    flash[:error] = message
+    redirect_to (member_signed_in? ? [current_member.family, current_member] : new_user_session_path) #and return
+
+  end
+
   def current_ability
     if member_signed_in?
       @current_ability ||= Ability.new(current_member)

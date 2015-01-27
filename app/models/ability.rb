@@ -19,23 +19,24 @@ class Ability
       can :manage, :all
     else
       if user.member.present? && user.member.parent?
+        Rails.logger.info "Parent logged in, Member: #{user.member.id} #{user.member.family.name}"
         can [:read, :update], Family do |family|
-          user.try(:family) == family
+          user.try(:member).try(:family) == family
         end
         can :manage, Activity do |activity|
-          activity.try(:member).try(:family) == user.family
+          activity.try(:member).try(:family) == user.try(:member).try(:family)
         end
         can :manage, Device do |device|
-          device.try(:family) == user.family
+          device.try(:family) == user.try(:member).try(:family)
         end
         can :manage, FamilyActivity do |famact|
-          famact.try(:family) == user.family
+          famact.try(:family) == user.try(:member).try(:family)
         end
         can :manage, Member do |family_member|
-          family_member.try(:family) == user.family
+          family_member.try(:family) == user.try(:member).try(:family)
         end
         can :manage, MyTodo, :family_id => user.try(:member).try(:family_id)
-        can :manage, Todo,  :family_id => user.try(:family_id)
+        can :manage, Todo,  :family_id => user.try(:member).try(:family_id)
         can :manage, TodoSchedule do |ts|
           if ts.present? && ts.todo.present?
             ts.todo.family == user.family
@@ -44,14 +45,16 @@ class Ability
           end
         end
         can :manage, MyTodo do |todo|
-            todo.member && user.family && todo.member.family == user.family
+            todo.member && user.family && todo.member.family == user.try(:member).try(:family)
         end
         can :read, TodoTemplate, :active => true
         can :read, TodoGroup, :active => true
         can :assign, TodoGroup
       else
+        Rails.logger.info "Child logged in, Member: #{user.member.id}"
+
         # Child permissions
-        can :update, Activity do |activity|
+        can [:read, :update], Activity do |activity|
           activity.member_id == user.try(:member_id) || activity.created_by_id == user.try(:member_id)
         end
         can :read, Family, :id => user.try(:member).try(:family_id)
@@ -61,8 +64,12 @@ class Ability
         can :manage, MyTodo, :member_id => user.try(:member_id)
       end
 
+      # Both children and parents
+
       can :create, Activity
       can :read, Activity, :member_id => user.try(:id)
+      can :read, ActivityTemplate
+      can :read, ActivityType
       cannot :index, Family
     end
 
