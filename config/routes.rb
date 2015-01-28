@@ -27,6 +27,11 @@ Rails.application.routes.draw do
     resources :family_activities
     member do
       devise_for :members, class: 'Member', :controllers => { :sessions => "members/sessions" }
+      resources :todo_groups do
+        member do
+          post :assign
+        end
+      end
     end
     resources :members do
       resources :activities do
@@ -38,11 +43,7 @@ Rails.application.routes.draw do
 
 
 
-    resources :todo_groups do
-      member do
-        post :assign
-      end
-    end
+    resources :todo_groups
     resources :todos do
       resources :todo_schedules do
         resources :members do

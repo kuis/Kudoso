@@ -6,6 +6,9 @@ class Todo < ActiveRecord::Base
 
   after_initialize :init
 
+  validates_presence_of :name, :family_id, :family
+  validates_uniqueness_of :name
+
   private
 
   def init

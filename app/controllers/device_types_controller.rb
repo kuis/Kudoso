@@ -1,5 +1,5 @@
 class DeviceTypesController < ApplicationController
-  before_action :set_device_type, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   respond_to :html
 
@@ -37,9 +37,6 @@ class DeviceTypesController < ApplicationController
   end
 
   private
-    def set_device_type
-      @device_type = DeviceType.find(params[:id])
-    end
 
     def device_type_params
       params.require(:device_type).permit(:name, :description, :os, :version)

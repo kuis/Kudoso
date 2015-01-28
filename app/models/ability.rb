@@ -48,8 +48,7 @@ class Ability
             todo.member && user.family && todo.member.family == user.try(:member).try(:family)
         end
         can :read, TodoTemplate, :active => true
-        can :read, TodoGroup, :active => true
-        can :assign, TodoGroup
+        can [:read, :assign], TodoGroup, :active => true
       else
         Rails.logger.info "Child logged in, Member: #{user.member.id}"
 
@@ -70,6 +69,7 @@ class Ability
       can :read, Activity, :member_id => user.try(:id)
       can :read, ActivityTemplate
       can :read, ActivityType
+      can :read, DeviceType
       cannot :index, Family
     end
 

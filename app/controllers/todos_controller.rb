@@ -47,7 +47,7 @@ class TodosController < ApplicationController
         format.html { redirect_to family_path(@family), notice: 'ToDo was successfully updated.' }
         format.json { render :show, status: :created, location: @todo }
       else
-        format.html { render :new }
+        format.html { render :edit }
         format.json { render json: @todo.errors, status: :unprocessable_entity }
       end
     end

@@ -43,12 +43,13 @@ class Family < ActiveRecord::Base
       assign_members.each do |i|
         unless i.blank?
           member = Member.find(i)
-
           if member.family_id == self.id
             todo_schedule = member.todo_schedules.build(start_date: Date.today, todo_id: todo.id )
             todo_schedule.active = true
             todo_schedule.save
             todo_schedule.schedule_rrules.create(rrule: todo.schedule)
+          else
+            logger.warn "Attempted to assigning todo_template #{todo_template.id} to member #{member.id} who is not part of family #{self.id}"
           end
         end
       end

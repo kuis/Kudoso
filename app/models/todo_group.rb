@@ -7,4 +7,9 @@ class TodoGroup < ActiveRecord::Base
 
   scope :active, -> { where(active: true).order(:rec_min_age) }
 
+  validates_presence_of :name
+  validates_uniqueness_of :name
+
+  validates :rec_min_age, :rec_max_age, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 100, only_integer: true  }, allow_blank: true
+
 end

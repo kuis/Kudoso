@@ -1,6 +1,6 @@
 class TodoGroupsController < ApplicationController
   before_action :authenticate_member! unless @current_user.present?
-  load_and_authorize_resource except: :assign
+  load_and_authorize_resource
 
   respond_to :html
 
@@ -39,10 +39,15 @@ class TodoGroupsController < ApplicationController
 
   def assign
     @family = Family.includes(:todos).find(params[:family_id])
-    @members = ( params[:todo_group].nil? || params[:todo_group][:member_ids].nil? ) ? Array.new : params[:todo_group][:member_ids]
-    @todo_group = TodoGroup.find(params[:id])
+    if @family.present? && ( current_user.present? && (current_user.admin? || current_user.member.family_id == @family.try(:id) ) ) || ( current_member.present? && current_member.family_id == @family.try(:id))
+      @members = ( params[:todo_group].nil? || params[:todo_group][:member_ids].nil? ) ? Array.new : params[:todo_group][:member_ids]
+      @todo_group = TodoGroup.find(params[:id])
 
-    @family.assign_group(@todo_group, @members)
+      @family.assign_group(@todo_group, @members)
+    else
+      logger.warn "#{current_user.present? ? "User #{current_user.id}" : "Member #{current_member.id}"} attempted to assign todo_group #{params[:id]} to family #{params[:family_id]} (#{current_user.present? ? "#{current_user.member.family_id}" : "#{current_member.family_id}"}) but failed."
+      flash[:error] = 'Sorry, an error occurred trying to assign this todo group, please try again.'
+    end
 
 
     redirect_to @family

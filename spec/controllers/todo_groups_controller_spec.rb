@@ -24,11 +24,19 @@ RSpec.describe TodoGroupsController, :type => :controller do
   # TodoGroup. As you add validations to TodoGroup, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+        name: 'Todo Group',
+        rec_min_age: 2,
+        rec_max_age: 12
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        name: nil,
+        rec_min_age: 1.2,
+        rec_max_age: -4
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -36,123 +44,356 @@ RSpec.describe TodoGroupsController, :type => :controller do
   # TodoGroupsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET index" do
-    it "assigns all todo_groups as @todo_groups" do
-      todo_group = TodoGroup.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:todo_groups)).to eq([todo_group])
+  context "As an adminstrator" do
+    before(:each) do
+      @user = FactoryGirl.create(:user, admin: true)
+      sign_in(@user)
     end
-  end
 
-  describe "GET show" do
-    it "assigns the requested todo_group as @todo_group" do
-      todo_group = TodoGroup.create! valid_attributes
-      get :show, {:id => todo_group.to_param}, valid_session
-      expect(assigns(:todo_group)).to eq(todo_group)
-    end
-  end
-
-  describe "GET new" do
-    it "assigns a new todo_group as @todo_group" do
-      get :new, {}, valid_session
-      expect(assigns(:todo_group)).to be_a_new(TodoGroup)
-    end
-  end
-
-  describe "GET edit" do
-    it "assigns the requested todo_group as @todo_group" do
-      todo_group = TodoGroup.create! valid_attributes
-      get :edit, {:id => todo_group.to_param}, valid_session
-      expect(assigns(:todo_group)).to eq(todo_group)
-    end
-  end
-
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new TodoGroup" do
-        expect {
-          post :create, {:todo_group => valid_attributes}, valid_session
-        }.to change(TodoGroup, :count).by(1)
-      end
-
-      it "assigns a newly created todo_group as @todo_group" do
-        post :create, {:todo_group => valid_attributes}, valid_session
-        expect(assigns(:todo_group)).to be_a(TodoGroup)
-        expect(assigns(:todo_group)).to be_persisted
-      end
-
-      it "redirects to the created todo_group" do
-        post :create, {:todo_group => valid_attributes}, valid_session
-        expect(response).to redirect_to(TodoGroup.last)
+    describe "GET index" do
+      it "assigns all todo_groups as @todo_groups" do
+        todo_group = FactoryGirl.create(:todo_group)
+        get :index, {}, valid_session
+        expect(assigns(:todo_groups)).to match_array([todo_group])
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved todo_group as @todo_group" do
-        post :create, {:todo_group => invalid_attributes}, valid_session
-        expect(assigns(:todo_group)).to be_a_new(TodoGroup)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {:todo_group => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
-    end
-  end
-
-  describe "PUT update" do
-    describe "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested todo_group" do
-        todo_group = TodoGroup.create! valid_attributes
-        put :update, {:id => todo_group.to_param, :todo_group => new_attributes}, valid_session
-        todo_group.reload
-        skip("Add assertions for updated state")
-      end
-
+    describe "GET show" do
       it "assigns the requested todo_group as @todo_group" do
         todo_group = TodoGroup.create! valid_attributes
-        put :update, {:id => todo_group.to_param, :todo_group => valid_attributes}, valid_session
+        get :show, {:id => todo_group.to_param}, valid_session
         expect(assigns(:todo_group)).to eq(todo_group)
-      end
-
-      it "redirects to the todo_group" do
-        todo_group = TodoGroup.create! valid_attributes
-        put :update, {:id => todo_group.to_param, :todo_group => valid_attributes}, valid_session
-        expect(response).to redirect_to(todo_group)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the todo_group as @todo_group" do
+    describe "GET new" do
+      it "assigns a new todo_group as @todo_group" do
+        get :new, {}, valid_session
+        expect(assigns(:todo_group)).to be_a_new(TodoGroup)
+      end
+    end
+
+    describe "GET edit" do
+      it "assigns the requested todo_group as @todo_group" do
         todo_group = TodoGroup.create! valid_attributes
-        put :update, {:id => todo_group.to_param, :todo_group => invalid_attributes}, valid_session
+        get :edit, {:id => todo_group.to_param}, valid_session
         expect(assigns(:todo_group)).to eq(todo_group)
       end
+    end
 
-      it "re-renders the 'edit' template" do
+    describe "POST create" do
+      describe "with valid params" do
+        it "creates a new TodoGroup" do
+          expect {
+            post :create, {:todo_group => valid_attributes}, valid_session
+          }.to change(TodoGroup, :count).by(1)
+        end
+
+        it "assigns a newly created todo_group as @todo_group" do
+          post :create, {:todo_group => valid_attributes}, valid_session
+          expect(assigns(:todo_group)).to be_a(TodoGroup)
+          expect(assigns(:todo_group)).to be_persisted
+        end
+
+        it "redirects to the created todo_group" do
+          post :create, {:todo_group => valid_attributes}, valid_session
+          expect(response).to redirect_to(TodoGroup.last)
+        end
+      end
+
+      describe "with invalid params" do
+        it "assigns a newly created but unsaved todo_group as @todo_group" do
+          post :create, {:todo_group => invalid_attributes}, valid_session
+          expect(assigns(:todo_group)).to be_a_new(TodoGroup)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {:todo_group => invalid_attributes}, valid_session
+          expect(response).to render_template("new")
+        end
+      end
+    end
+
+    describe "POST assign" do
+      describe "with valid params" do
+        it "assigns the todo_group to a family" do
+          todo_group = FactoryGirl.create(:todo_group)
+          kids = FactoryGirl.create_list(:member, 4, family_id: @user.member.family_id)
+          assign_to = kids.sample(2)
+          post :assign, {family_id: @user.member.family_id, id: todo_group.to_param, todo_group: { member_ids: assign_to.map(&:id)} }, valid_session
+          kids.each do |kid|
+            kid.reload
+            if assign_to.include?(kid)
+              expect(kid.todo_schedules.count).to eq(todo_group.todo_templates.count)
+            else
+              expect(kid.todo_schedules.count).to eq(0)
+            end
+          end
+        end
+
+        it "does not assign to a child from a different family" do
+          todo_group = FactoryGirl.create(:todo_group)
+          temp_family = FactoryGirl.create(:family)
+          kids = FactoryGirl.create_list(:member, 4, family_id: temp_family.id )
+          assign_to = kids.sample(2)
+          post :assign, {family_id: @user.member.family_id, id: todo_group.to_param, todo_group: { member_ids: assign_to.map(&:id)} }, valid_session
+          kids.each do |kid|
+            kid.reload
+            expect(kid.todo_schedules.count).to eq(0)
+          end
+        end
+      end
+    end
+
+    describe "PUT update" do
+      describe "with valid params" do
+        let(:new_attributes) {
+          {
+              name: 'New Name',
+              rec_min_age: 6,
+              rec_max_age: 18
+          }
+        }
+
+        it "updates the requested todo_group" do
+          todo_group = TodoGroup.create! valid_attributes
+          put :update, {:id => todo_group.to_param, :todo_group => new_attributes}, valid_session
+          todo_group.reload
+          expect(todo_group.name).to eq("New Name")
+          expect(todo_group.rec_min_age).to eq(6)
+          expect(todo_group.rec_max_age).to eq(18)
+        end
+
+        it "assigns the requested todo_group as @todo_group" do
+          todo_group = TodoGroup.create! valid_attributes
+          put :update, {:id => todo_group.to_param, :todo_group => valid_attributes}, valid_session
+          expect(assigns(:todo_group)).to eq(todo_group)
+        end
+
+        it "redirects to the todo_group" do
+          todo_group = TodoGroup.create! valid_attributes
+          put :update, {:id => todo_group.to_param, :todo_group => valid_attributes}, valid_session
+          expect(response).to redirect_to(todo_group)
+        end
+      end
+
+      describe "with invalid params" do
+        it "assigns the todo_group as @todo_group" do
+          todo_group = TodoGroup.create! valid_attributes
+          put :update, {:id => todo_group.to_param, :todo_group => invalid_attributes}, valid_session
+          expect(assigns(:todo_group)).to eq(todo_group)
+        end
+
+        it "re-renders the 'edit' template" do
+          todo_group = TodoGroup.create! valid_attributes
+          put :update, {:id => todo_group.to_param, :todo_group => invalid_attributes}, valid_session
+          expect(response).to render_template("edit")
+        end
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "destroys the requested todo_group" do
         todo_group = TodoGroup.create! valid_attributes
-        put :update, {:id => todo_group.to_param, :todo_group => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+        expect {
+          delete :destroy, {:id => todo_group.to_param}, valid_session
+        }.to change(TodoGroup, :count).by(-1)
+      end
+
+      it "redirects to the todo_groups list" do
+        todo_group = TodoGroup.create! valid_attributes
+        delete :destroy, {:id => todo_group.to_param}, valid_session
+        expect(response).to redirect_to(todo_groups_url)
+      end
+    end
+
+  end
+
+  context "As a child" do
+    before(:each) do
+      @member = FactoryGirl.create(:member, parent: false)
+      sign_in_member(@member)
+    end
+
+    describe "GET index" do
+      it "assigns all todo_groups as @todo_groups" do
+        todo_group = FactoryGirl.create(:todo_group)
+        get :index, {}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "GET show" do
+      it "assigns the requested todo_group as @todo_group" do
+        todo_group = TodoGroup.create! valid_attributes
+        get :show, {:id => todo_group.to_param}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "GET new" do
+      it "does not allow new" do
+        get :new, {}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "GET edit" do
+      it "does not allow edit" do
+        todo_group = TodoGroup.create! valid_attributes
+        get :edit, {:id => todo_group.to_param}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "POST create" do
+      it "does not allow create" do
+        post :create, {:todo_group => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "POST assign" do
+      describe "with valid params" do
+        it "does not allow assign" do
+          todo_group = FactoryGirl.create(:todo_group)
+          kids = FactoryGirl.create_list(:member, 4, family_id: @member.family_id)
+          assign_to = kids.sample(2)
+          post :assign, {id: todo_group.to_param, family_id: @member.family_id, todo_group: { member_ids: assign_to.map(&:id)} }, valid_session
+          expect(response.status).to eq(302)
+          expect(flash[:error]).to be_present
+        end
+      end
+    end
+
+    describe "PUT update" do
+      it "does not allow update" do
+        todo_group = TodoGroup.create! valid_attributes
+        put :update, {:id => todo_group.to_param, :todo_group => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "does not allow delete" do
+        todo_group = TodoGroup.create! valid_attributes
+        delete :destroy, {:id => todo_group.to_param, :todo_group => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
       end
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested todo_group" do
-      todo_group = TodoGroup.create! valid_attributes
-      expect {
-        delete :destroy, {:id => todo_group.to_param}, valid_session
-      }.to change(TodoGroup, :count).by(-1)
+  context "As a parent" do
+    before(:each) do
+      @user = FactoryGirl.create(:user, admin: false)
+      sign_in(@user)
     end
 
-    it "redirects to the todo_groups list" do
-      todo_group = TodoGroup.create! valid_attributes
-      delete :destroy, {:id => todo_group.to_param}, valid_session
-      expect(response).to redirect_to(todo_groups_url)
+    describe "GET index" do
+      it "assigns all todo_groups as @todo_groups" do
+        todo_group = FactoryGirl.create(:todo_group)
+        get :index, {}, valid_session
+        expect(assigns(:todo_groups)).to match_array([todo_group])
+      end
+    end
+
+    describe "GET show" do
+      it "assigns the requested todo_group as @todo_group" do
+        todo_group = TodoGroup.create! valid_attributes
+        get :show, {:id => todo_group.to_param}, valid_session
+        expect(assigns(:todo_group)).to eq(todo_group)
+      end
+    end
+
+    describe "GET new" do
+      it "does not allow new" do
+        get :new, {}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "GET edit" do
+      it "does not allow edit" do
+        todo_group = TodoGroup.create! valid_attributes
+        get :edit, {:id => todo_group.to_param}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "POST create" do
+      it "does not allow create" do
+        post :create, {:todo_group => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "POST assign" do
+      describe "with valid params" do
+        it "assigns the todo_group to my family" do
+          todo_group = FactoryGirl.create(:todo_group)
+          kids = FactoryGirl.create_list(:member, 4, family_id: @user.member.family_id)
+          assign_to = kids.sample(2)
+          post :assign, {id: todo_group.to_param, family_id: @user.member.family_id, todo_group: { member_ids: assign_to.map(&:id)} }, valid_session
+          kids.each do |kid|
+            kid.reload
+            if assign_to.include?(kid)
+              expect(kid.todo_schedules.count).to eq(todo_group.todo_templates.count)
+            else
+              expect(kid.todo_schedules.count).to eq(0)
+            end
+          end
+        end
+
+        it "does not assign to a child from a different family" do
+          todo_group = FactoryGirl.create(:todo_group)
+          temp_family = FactoryGirl.create(:family)
+          kids = FactoryGirl.create_list(:member, 4, family_id: temp_family.id )
+          assign_to = kids.sample(2)
+          post :assign, {id: todo_group.to_param, family_id: @user.member.family_id, todo_group: { member_ids: assign_to.map(&:id)} }, valid_session
+          kids.each do |kid|
+            kid.reload
+            expect(kid.todo_schedules.count).to eq(0)
+          end
+        end
+
+        it "does not assign to a different family" do
+          todo_group = FactoryGirl.create(:todo_group)
+          temp_family = FactoryGirl.create(:family)
+          kids = FactoryGirl.create_list(:member, 4, family_id: temp_family.id )
+          assign_to = kids.sample(2)
+          post :assign, {id: todo_group.to_param, family_id: temp_family.id, todo_group: { member_ids: kids.map(&:id)} }, valid_session
+          expect(response.status).to eq(302)
+          expect(flash[:error]).to be_present
+        end
+      end
+    end
+
+    describe "PUT update" do
+      it "does not allow update" do
+        todo_group = TodoGroup.create! valid_attributes
+        put :update, {:id => todo_group.to_param, :todo_group => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "does not allow delete" do
+        todo_group = TodoGroup.create! valid_attributes
+        delete :destroy, {:id => todo_group.to_param, :todo_group => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
     end
   end
 
