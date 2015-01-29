@@ -90,7 +90,7 @@ RSpec.describe ActivitiesController, :type => :controller do
       it "creates and starts a new Activity" do
         family_activity = FactoryGirl.create(:family_activity, family_id: @family.id)
         get :new, {family_id: @family.id, member_id: @member.id, family_activity_id: family_activity.id, start: true}
-        expect(assigns(:activity).start_time).to be_between(1.minute.ago, Time.now)
+        expect(assigns(:activity).start_time).to be_between(Time.now.localtime - 1.minute, Time.now.localtime)
       end
     end
 

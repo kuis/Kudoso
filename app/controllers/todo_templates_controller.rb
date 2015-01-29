@@ -40,7 +40,7 @@ class TodoTemplatesController < ApplicationController
         format.html { redirect_to todo_templates_path, notice: 'ToDo Template was successfully updated.' }
         format.json { render :show, status: :created, location: @todo_template }
       else
-        format.html { render :new }
+        format.html { render :edit }
         format.json { render json: @todo_template.errors, status: :unprocessable_entity }
       end
     end
@@ -55,6 +55,6 @@ class TodoTemplatesController < ApplicationController
 
 
     def todo_template_params
-      params.require(:todo_template).permit(:name, :description, :rule, :active, :kudos)
+      params.require(:todo_template).permit(:name, :description, :rule, :active, :kudos, :required)
     end
 end

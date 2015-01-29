@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150122155122) do
+ActiveRecord::Schema.define(version: 20150129030100) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -150,6 +150,7 @@ ActiveRecord::Schema.define(version: 20150122155122) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "memorialized_date"
+    t.string   "timezone"
   end
 
   create_table "family_activities", force: true do |t|
@@ -195,7 +196,7 @@ ActiveRecord::Schema.define(version: 20150122155122) do
   create_table "my_todos", force: true do |t|
     t.integer  "todo_schedule_id"
     t.integer  "member_id"
-    t.date     "due_date"
+    t.datetime "due_date"
     t.datetime "due_time"
     t.boolean  "complete"
     t.boolean  "verify"
@@ -250,8 +251,8 @@ ActiveRecord::Schema.define(version: 20150122155122) do
   create_table "todo_schedules", force: true do |t|
     t.integer  "todo_id"
     t.integer  "member_id"
-    t.date     "start_date"
-    t.date     "end_date"
+    t.datetime "start_date"
+    t.datetime "end_date"
     t.boolean  "active"
     t.text     "notes"
     t.datetime "created_at"

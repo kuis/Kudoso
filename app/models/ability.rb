@@ -35,11 +35,14 @@ class Ability
         can :manage, Member do |family_member|
           family_member.try(:family) == user.try(:member).try(:family)
         end
-        can :manage, MyTodo, :family_id => user.try(:member).try(:family_id)
+        can :manage, ScreenTime do |screen_time|
+          screen_time.try(:member).try(:family) == user.try(:member).try(:family)
+        end
+        can :manage, MyTodo, :family => user.try(:member).try(:family)
         can :manage, Todo,  :family_id => user.try(:member).try(:family_id)
         can :manage, TodoSchedule do |ts|
           if ts.present? && ts.todo.present?
-            ts.todo.family == user.family
+            ts.todo.family == user.try(:member).try(:family)
           else
             false
           end
@@ -58,6 +61,7 @@ class Ability
         end
         can :read, Family, :id => user.try(:member).try(:family_id)
         can :read, Member, :id => user.try(:member_id)
+        can :read, ScreenTime, member_id: user.try(:member_id)
         can :read, TodoSchedule, :member_id => user.try(:member_id)
         can :read, Todo, :family_id => user.try(:member).try(:family_id)
         can :manage, MyTodo, :member_id => user.try(:member_id)

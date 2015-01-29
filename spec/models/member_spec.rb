@@ -47,6 +47,7 @@ RSpec.describe Member, :type => :model do
     before(:each) do
       @member = FactoryGirl.create(:member)
       template = FactoryGirl.create(:todo_template)
+      template.rule = IceCube::Rule.daily.to_yaml
       @member.family.assign_template(template, [@member.id])
 
 
@@ -56,7 +57,7 @@ RSpec.describe Member, :type => :model do
         ts.save!(validate: false)
       end
 
-      (31.days.ago.to_date .. 1.days.ago.to_date).each { |d| Family.memorialize_todos(d) }
+      ( (Date.today - 1.month) .. (Date.yesterday) ).each { |d| Family.memorialize_todos(d) }
       expect(@member.my_todos.count).to eq(31)
     end
 
@@ -66,10 +67,11 @@ RSpec.describe Member, :type => :model do
     end
 
     it 'should return todos for today or a date range' do
+      @member.reload
       todos = @member.todos #for today
       expect(todos.count).to eq(1)
 
-      todos = @member.todos(Date.today, 3.days.from_now) #for today
+      todos = @member.todos(Date.today, Date.today + 3.days) #for today
       expect(todos.count).to eq(4)
     end
 

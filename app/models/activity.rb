@@ -18,7 +18,7 @@ class Activity < ActiveRecord::Base
   def start!
     if self.start_time.blank?
       transaction do
-        self.start_time = Time.zone.now
+        self.start_time = Time.now.localtime
         self.allowed_time = self.member.get_available_screen_time(self.start_time, self.device.try(:id) )
         self.save
         self.device.update_attribute(:current_activity_id, self.id) if self.device.present?
@@ -32,7 +32,7 @@ class Activity < ActiveRecord::Base
   def stop!
     if self.end_time.blank?
       transaction do
-        self.update_attribute(:end_time, Time.zone.now)
+        self.update_attribute(:end_time, Time.now.localtime)
         self.device.update_attribute(:current_activity_id, nil) if self.device.present?
         # TODO: calc cost/reward and assign
       end
@@ -43,7 +43,7 @@ class Activity < ActiveRecord::Base
   end
 
   def duration
-    endtime = self.end_time || Time.zone.now
+    endtime = self.end_time || Time.now.localtime
     (endtime - self.start_time).ceil
   end
 
@@ -53,8 +53,8 @@ class Activity < ActiveRecord::Base
   def check_screen_time
     max_time = member.get_max_screen_time
     if self.device.present?
-      device_time = member.get_screen_time(Time.now, self.device_id)
-      device_used_time = member.get_used_screen_time(Time.now, self.device_id)
+      device_time = member.get_screen_time(Time.now.localtime, self.device_id)
+      device_used_time = member.get_used_screen_time(Time.now.localtime, self.device_id)
       if device_used_time >= device_time
         errors.add(:device, 'max screen time for today exceeded.')
       end

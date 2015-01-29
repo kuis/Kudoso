@@ -5,13 +5,19 @@ class ScheduleRrule < ActiveRecord::Base
     if self.rrule.present?
       IceCube::Rule.from_yaml(self.rrule)
     else
-      nil
+      IceCube::Rule.new
     end
 
   end
 
   def rule=(rule)
-    self.update_attribute(:rrule, IceCube::Rule.from_yaml(rule).to_yaml)
+    begin
+      new_rule =  IceCube::Rule.from_yaml(rule)
+      self.update_attribute(:rrule,new_rule.to_yaml)
+    rescue Exception => e
+      self.errors.add(:rule, "was invalid, error: #{e.message}")
+      new_rule = nil
+    end
   end
 
 end

@@ -24,136 +24,170 @@ RSpec.describe MyTodosController, :type => :controller do
   # MyTodo. As you add validations to MyTodo, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+        member_id: @member.id,
+        due_date: Time.now.localtime.to_date,
+        due_time: Time.now.localtime + 1.hour,
+        complete: false,
+        verify: false
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        due_date: Date.tomorrow,
+        due_time: 1.hour.ago
+    }
   }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
-  # MyTodosController. Be sure to keep this updated too.
+  # ActivitiesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET index" do
-    it "assigns all my_todos as @my_todos" do
-      my_todo = MyTodo.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:my_todos)).to eq([my_todo])
+
+  context 'as a parent' do
+    before(:each) do
+      @member = FactoryGirl.create(:member, parent: true)
+      @family = @member.family
+      sign_in_member(@member)
     end
-  end
 
-  describe "GET show" do
-    it "assigns the requested my_todo as @my_todo" do
-      my_todo = MyTodo.create! valid_attributes
-      get :show, {:id => my_todo.to_param}, valid_session
-      expect(assigns(:my_todo)).to eq(my_todo)
-    end
-  end
-
-  describe "GET new" do
-    it "assigns a new my_todo as @my_todo" do
-      get :new, {}, valid_session
-      expect(assigns(:my_todo)).to be_a_new(MyTodo)
-    end
-  end
-
-  describe "GET edit" do
-    it "assigns the requested my_todo as @my_todo" do
-      my_todo = MyTodo.create! valid_attributes
-      get :edit, {:id => my_todo.to_param}, valid_session
-      expect(assigns(:my_todo)).to eq(my_todo)
-    end
-  end
-
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new MyTodo" do
-        expect {
-          post :create, {:my_todo => valid_attributes}, valid_session
-        }.to change(MyTodo, :count).by(1)
-      end
-
-      it "assigns a newly created my_todo as @my_todo" do
-        post :create, {:my_todo => valid_attributes}, valid_session
-        expect(assigns(:my_todo)).to be_a(MyTodo)
-        expect(assigns(:my_todo)).to be_persisted
-      end
-
-      it "redirects to the created my_todo" do
-        post :create, {:my_todo => valid_attributes}, valid_session
-        expect(response).to redirect_to(MyTodo.last)
+    describe "GET index" do
+      it "assigns all my_todos as @my_todos" do
+        my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+        get :index, {family_id: @family.id, member_id: @member.id}, valid_session
+        expect(assigns(:my_todos)).to match_array([my_todo])
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved my_todo as @my_todo" do
-        post :create, {:my_todo => invalid_attributes}, valid_session
+    describe "GET show" do
+      it "assigns the requested my_todo as @my_todo" do
+        my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+        get :show, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param}, valid_session
+        expect(assigns(:my_todo)).to eq(my_todo)
+      end
+    end
+
+    describe "GET new" do
+      it "assigns a new my_todo as @my_todo" do
+        todo_schedule = FactoryGirl.create(:todo_schedule, member_id: @member.id)
+        get :new, {family_id: @family.id, member_id: @member.id, todo_schedule_id: todo_schedule.id}, valid_session
         expect(assigns(:my_todo)).to be_a_new(MyTodo)
       end
-
-      it "re-renders the 'new' template" do
-        post :create, {:my_todo => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
     end
-  end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested my_todo" do
-        my_todo = MyTodo.create! valid_attributes
-        put :update, {:id => my_todo.to_param, :my_todo => new_attributes}, valid_session
-        my_todo.reload
-        skip("Add assertions for updated state")
-      end
-
+    describe "GET edit" do
       it "assigns the requested my_todo as @my_todo" do
-        my_todo = MyTodo.create! valid_attributes
-        put :update, {:id => my_todo.to_param, :my_todo => valid_attributes}, valid_session
+        my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+        get :edit, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param}, valid_session
         expect(assigns(:my_todo)).to eq(my_todo)
       end
+    end
 
-      it "redirects to the my_todo" do
-        my_todo = MyTodo.create! valid_attributes
-        put :update, {:id => my_todo.to_param, :my_todo => valid_attributes}, valid_session
-        expect(response).to redirect_to(my_todo)
+    describe "DELETE destroy" do
+      it "does not destroys the requested my_todo" do
+        my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+        expect {
+          delete :destroy, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param}, valid_session
+        }.to change(MyTodo, :count).by(-1)
+      end
+
+      it "redirects to the current member dashboard" do
+        my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+        delete :destroy, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param}, valid_session
+        expect(flash[:error]).to be_falsey
+        expect(response).to redirect_to(family_member_path(@family, @member))
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the my_todo as @my_todo" do
-        my_todo = MyTodo.create! valid_attributes
-        put :update, {:id => my_todo.to_param, :my_todo => invalid_attributes}, valid_session
-        expect(assigns(:my_todo)).to eq(my_todo)
+    describe "POST create" do
+      describe "with valid params" do
+        it "creates a new MyTodo" do
+          expect {
+            post :create, {family_id: @family.id, member_id: @member.id, :my_todo => valid_attributes, todo_schedule_id: FactoryGirl.create(:todo_schedule, member_id: @member.id).id}, valid_session
+          }.to change(MyTodo, :count).by(1)
+        end
+
+        it "assigns a newly created my_todo as @my_todo" do
+          post :create, {family_id: @family.id, member_id: @member.id, :my_todo => valid_attributes, todo_schedule_id: FactoryGirl.create(:todo_schedule, member_id: @member.id).id}, valid_session
+          expect(assigns(:my_todo)).to be_a(MyTodo)
+          expect(assigns(:my_todo)).to be_persisted
+        end
+
+        it "redirects to the created my_todo" do
+          post :create, {family_id: @family.id, member_id: @member.id, :my_todo => valid_attributes, todo_schedule_id: FactoryGirl.create(:todo_schedule, member_id: @member.id).id}, valid_session
+          expect(response).to redirect_to([@family, @member])
+        end
       end
 
-      it "re-renders the 'edit' template" do
-        my_todo = MyTodo.create! valid_attributes
-        put :update, {:id => my_todo.to_param, :my_todo => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+      describe "with invalid params" do
+        it "assigns a newly created but unsaved my_todo as @my_todo when missing todo_schedule" do
+          post :create, {family_id: @family.id, member_id: @member.id, :my_todo => valid_attributes, todo_schedule_id: 'ertoeirtori'}, valid_session
+          expect(assigns(:my_todo)).to be_a_new(MyTodo)
+        end
+
+        it "assigns a newly created but unsaved my_todo as @my_todo when missing todo_schedule" do
+          post :create, {family_id: @family.id, member_id: @member.id, :my_todo => invalid_attributes, todo_schedule_id: FactoryGirl.create(:todo_schedule, member_id: @member.id).id}, valid_session
+          expect(assigns(:my_todo)).to be_a_new(MyTodo)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {family_id: @family.id, member_id: @member.id, :my_todo => invalid_attributes, todo_schedule_id: FactoryGirl.create(:todo_schedule, member_id: @member.id).id}, valid_session
+          expect(response).to render_template("new")
+        end
       end
     end
-  end
 
-  describe "DELETE destroy" do
-    it "destroys the requested my_todo" do
-      my_todo = MyTodo.create! valid_attributes
-      expect {
-        delete :destroy, {:id => my_todo.to_param}, valid_session
-      }.to change(MyTodo, :count).by(-1)
+    describe "PUT update" do
+      describe "with valid params" do
+        let(:new_attributes) {
+          {
+              complete: true,
+              verify: true,
+              verified_at: 1.minute.ago
+          }
+        }
+
+        it "updates the requested my_todo" do
+          my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+          put :update, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param, :my_todo => new_attributes}, valid_session
+          my_todo.reload
+          expect(my_todo.complete).to be_truthy
+          expect(my_todo.verify).to be_truthy
+          expect(my_todo.verified_at).to be_between(Time.now.localtime - 2.minutes, Time.now.localtime)
+        end
+
+        it "assigns the requested my_todo as @my_todo" do
+          my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+          put :update, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param, :my_todo => valid_attributes}, valid_session
+          expect(assigns(:my_todo)).to eq(my_todo)
+        end
+
+        it "redirects to the my_todo" do
+          my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+          put :update, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param, :my_todo => valid_attributes}, valid_session
+          expect(response).to redirect_to([@family, @member])
+        end
+      end
+
+      describe "with invalid params" do
+        it "assigns the my_todo as @my_todo" do
+          my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+          put :update, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param, :my_todo => invalid_attributes}, valid_session
+          expect(assigns(:my_todo)).to eq(my_todo)
+        end
+
+        it "re-renders the 'edit' template" do
+          my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+          put :update, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param, :my_todo => invalid_attributes}, valid_session
+          expect(response).to render_template("edit")
+        end
+      end
     end
 
-    it "redirects to the my_todos list" do
-      my_todo = MyTodo.create! valid_attributes
-      delete :destroy, {:id => my_todo.to_param}, valid_session
-      expect(response).to redirect_to(my_todos_url)
-    end
+
+
   end
 
 end

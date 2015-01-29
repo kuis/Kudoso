@@ -34,8 +34,10 @@ class Member < ActiveRecord::Base
   def todos(start_date = Date.today, end_date = Date.today)
     todos = []
     (start_date .. end_date).each do |date|
-      local_todos = self.my_todos.where('due_date = ?', date).map.to_a
-      self.todo_schedules.where('start_date <= ? AND (end_date IS NULL OR end_date <= ?)', date, date).find_each do |ts|
+      date = date.end_of_day
+      local_todos = self.my_todos.where("due_date = ?", date).map.to_a
+      logger.info "Local todos count: #{local_todos.count}"
+      self.todo_schedules.where('start_date <= ? AND (end_date IS NULL OR end_date >= ?)', date, date).find_each do |ts|
         todo = local_todos.find{ |td| td.todo_schedule_id == ts.id }
         if todo.nil?
           schedule = IceCube::Schedule.new

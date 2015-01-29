@@ -6,7 +6,7 @@ class ScreenTimesController < ApplicationController
   respond_to :html
 
   def index
-    @screen_times = ScreenTime.all
+    @screen_times = @member.screen_times.all
     respond_with(@screen_times)
   end
 
@@ -23,19 +23,27 @@ class ScreenTimesController < ApplicationController
   end
 
   def create
-    @screen_time = ScreenTime.new(screen_time_params)
-    @screen_time.save
-    respond_with(@screen_time)
+    @screen_time = ScreenTime.new(screen_time_params.merge({ member_id: @member.id}))
+    if @screen_time.save
+      redirect_to [@family, @member]
+    else
+      render :new
+    end
+
   end
 
   def update
-    @screen_time.update(screen_time_params)
-    respond_with(@screen_time)
+    if @screen_time.update(screen_time_params.merge({ member_id: @member.id}))
+      redirect_to [@family, @member]
+    else
+      render :edit
+    end
+
   end
 
   def destroy
     @screen_time.destroy
-    respond_with(@screen_time)
+    redirect_to [@family, @member]
   end
 
   private

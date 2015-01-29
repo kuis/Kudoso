@@ -23,6 +23,7 @@ module Kudoso
 
     # For Foundation 5
     config.assets.precompile += %w( vendor/modernizr )
+    config.time_zone = "Mountain Time (US & Canada)"
 
   end
 end

@@ -100,6 +100,14 @@ RSpec.describe TodosController, :type => :controller do
           post :create, {family_id: @family.id, :todo => valid_attributes}, valid_session
           expect(response).to redirect_to(@family)
         end
+
+
+        it "acceptes a todo_template and creates the todo" do
+          todo_template = FactoryGirl.create(:todo_template)
+          expect {
+            post :create, {family_id: @family.id, :todo_template_id => todo_template.id}, valid_session
+          }.to change(Todo, :count).by(1)
+        end
       end
 
       describe "with invalid params" do

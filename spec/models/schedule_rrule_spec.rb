@@ -17,4 +17,13 @@ RSpec.describe ScheduleRrule, :type => :model do
 
 
   end
+
+  it 'should not save an invalid rule' do
+    rrule = FactoryGirl.create(:schedule_rrule)
+    rule = rrule.rule
+    rrule.rule = 'wdfwdfwfd'
+    rrule.reload
+    expect(rrule.rule).to eq(rule)
+    expect(rrule.errors.any?).to be_truthy
+  end
 end

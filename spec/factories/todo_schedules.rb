@@ -7,7 +7,7 @@ FactoryGirl.define do
     start_date { Date.today }
     end_date nil
     active true
-    notes { Faker::Lorem.paragraph }
+    notes { Faker::Lorem.sentence }
 
     after(:create) {|ts| ts.schedule_rrules << FactoryGirl.create(:schedule_rrule, todo_schedule: ts) }
   end

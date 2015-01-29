@@ -24,135 +24,250 @@ RSpec.describe ScreenTimesController, :type => :controller do
   # ScreenTime. As you add validations to ScreenTime, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+        dow: Date.today.wday,
+        default_time: 60*60,
+        max_time: 120*60
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        dow: 8,
+        default_time: -200,
+        max_time: 24*60*60+1
+    }
   }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
-  # ScreenTimesController. Be sure to keep this updated too.
+  # ActivitiesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET index" do
-    it "assigns all screen_times as @screen_times" do
-      screen_time = ScreenTime.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:screen_times)).to eq([screen_time])
+
+  context 'as a parent' do
+    before(:each) do
+      @member = FactoryGirl.create(:member, parent: true)
+      @family = @member.family
+      @kid = FactoryGirl.create(:member, parent: false, family_id: @family.id)
+      sign_in_member(@member)
     end
-  end
 
-  describe "GET show" do
-    it "assigns the requested screen_time as @screen_time" do
-      screen_time = ScreenTime.create! valid_attributes
-      get :show, {:id => screen_time.to_param}, valid_session
-      expect(assigns(:screen_time)).to eq(screen_time)
-    end
-  end
-
-  describe "GET new" do
-    it "assigns a new screen_time as @screen_time" do
-      get :new, {}, valid_session
-      expect(assigns(:screen_time)).to be_a_new(ScreenTime)
-    end
-  end
-
-  describe "GET edit" do
-    it "assigns the requested screen_time as @screen_time" do
-      screen_time = ScreenTime.create! valid_attributes
-      get :edit, {:id => screen_time.to_param}, valid_session
-      expect(assigns(:screen_time)).to eq(screen_time)
-    end
-  end
-
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new ScreenTime" do
-        expect {
-          post :create, {:screen_time => valid_attributes}, valid_session
-        }.to change(ScreenTime, :count).by(1)
-      end
-
-      it "assigns a newly created screen_time as @screen_time" do
-        post :create, {:screen_time => valid_attributes}, valid_session
-        expect(assigns(:screen_time)).to be_a(ScreenTime)
-        expect(assigns(:screen_time)).to be_persisted
-      end
-
-      it "redirects to the created screen_time" do
-        post :create, {:screen_time => valid_attributes}, valid_session
-        expect(response).to redirect_to(ScreenTime.last)
+    describe "GET index" do
+      it "assigns all screen_times as @screen_times" do
+        screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+        get :index, {family_id: @family.id, member_id: @kid.id}, valid_session
+        expect(assigns(:screen_times)).to match_array([screen_time])
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved screen_time as @screen_time" do
-        post :create, {:screen_time => invalid_attributes}, valid_session
+    describe "GET show" do
+      it "assigns the requested screen_time as @screen_time" do
+        screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+        get :show, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param}, valid_session
+        expect(assigns(:screen_time)).to eq(screen_time)
+      end
+    end
+
+    describe "GET new" do
+      it "assigns a new screen_time as @screen_time" do
+        todo_schedule = FactoryGirl.create(:todo_schedule, member_id: @kid.id)
+        get :new, {family_id: @family.id, member_id: @kid.id, todo_schedule_id: todo_schedule.id}, valid_session
         expect(assigns(:screen_time)).to be_a_new(ScreenTime)
       end
-
-      it "re-renders the 'new' template" do
-        post :create, {:screen_time => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
     end
-  end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested screen_time" do
-        screen_time = ScreenTime.create! valid_attributes
-        put :update, {:id => screen_time.to_param, :screen_time => new_attributes}, valid_session
-        screen_time.reload
-        skip("Add assertions for updated state")
-      end
-
+    describe "GET edit" do
       it "assigns the requested screen_time as @screen_time" do
-        screen_time = ScreenTime.create! valid_attributes
-        put :update, {:id => screen_time.to_param, :screen_time => valid_attributes}, valid_session
+        screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+        get :edit, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param}, valid_session
         expect(assigns(:screen_time)).to eq(screen_time)
-      end
-
-      it "redirects to the screen_time" do
-        screen_time = ScreenTime.create! valid_attributes
-        put :update, {:id => screen_time.to_param, :screen_time => valid_attributes}, valid_session
-        expect(response).to redirect_to(screen_time)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the screen_time as @screen_time" do
-        screen_time = ScreenTime.create! valid_attributes
-        put :update, {:id => screen_time.to_param, :screen_time => invalid_attributes}, valid_session
-        expect(assigns(:screen_time)).to eq(screen_time)
+    describe "DELETE destroy" do
+      it "destroys the requested screen_time" do
+        screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+        expect {
+          delete :destroy, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param}, valid_session
+        }.to change(ScreenTime, :count).by(-1)
       end
 
-      it "re-renders the 'edit' template" do
-        screen_time = ScreenTime.create! valid_attributes
-        put :update, {:id => screen_time.to_param, :screen_time => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+      it "redirects to the current member dashboard" do
+        screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+        delete :destroy, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param}, valid_session
+        expect(flash[:error]).to be_falsey
+        expect(response).to redirect_to(family_member_path(@family, @kid))
       end
     end
+
+    describe "POST create" do
+      describe "with valid params" do
+        it "creates a new ScreenTime" do
+          expect {
+            post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => valid_attributes}, valid_session
+          }.to change(ScreenTime, :count).by(1)
+        end
+
+        it "assigns a newly created screen_time as @screen_time" do
+          post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => valid_attributes}, valid_session
+          expect(assigns(:screen_time)).to be_a(ScreenTime)
+          expect(assigns(:screen_time)).to be_persisted
+        end
+
+        it "redirects to the created screen_time" do
+          post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => valid_attributes}, valid_session
+          expect(response).to redirect_to([@family, @kid])
+        end
+      end
+
+      describe "with invalid params" do
+
+        it "assigns a newly created but unsaved screen_time as @screen_time when missing todo_schedule" do
+          post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => invalid_attributes}, valid_session
+          expect(assigns(:screen_time)).to be_a_new(ScreenTime)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => invalid_attributes}, valid_session
+          expect(response).to render_template("new")
+        end
+      end
+    end
+
+    describe "PUT update" do
+      describe "with valid params" do
+        let(:new_attributes) {
+          {
+              dow: 2,
+              default_time: 4*60*60,
+              max_time: 5*60*60
+          }
+        }
+
+        it "updates the requested screen_time" do
+          screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+          put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => new_attributes}, valid_session
+          screen_time.reload
+          expect(screen_time.dow).to eq(2)
+          expect(screen_time.default_time).to eq(4*60*60)
+          expect(screen_time.max_time).to eq(5*60*60)
+        end
+
+        it "assigns the requested screen_time as @screen_time" do
+          screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+          put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => valid_attributes}, valid_session
+          expect(assigns(:screen_time)).to eq(screen_time)
+        end
+
+        it "redirects to the screen_time" do
+          screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+          put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => valid_attributes}, valid_session
+          expect(response).to redirect_to([@family, @kid])
+        end
+      end
+
+      describe "with invalid params" do
+        it "assigns the screen_time as @screen_time" do
+          screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+          put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => invalid_attributes}, valid_session
+          expect(assigns(:screen_time)).to eq(screen_time)
+        end
+
+        it "re-renders the 'edit' template" do
+          screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+          put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => invalid_attributes}, valid_session
+          expect(response).to render_template("edit")
+        end
+      end
+    end
+
+
+
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested screen_time" do
-      screen_time = ScreenTime.create! valid_attributes
-      expect {
-        delete :destroy, {:id => screen_time.to_param}, valid_session
-      }.to change(ScreenTime, :count).by(-1)
+  context 'as a kid' do
+    before(:each) do
+      @kid = FactoryGirl.create(:member, parent: false)
+      @family = @kid.family
+
+      sign_in_member(@kid)
     end
 
-    it "redirects to the screen_times list" do
-      screen_time = ScreenTime.create! valid_attributes
-      delete :destroy, {:id => screen_time.to_param}, valid_session
-      expect(response).to redirect_to(screen_times_url)
+    describe "GET index" do
+      it "assigns all screen_times as @screen_times" do
+        screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+        get :index, {family_id: @family.id, member_id: @kid.id}, valid_session
+        expect(assigns(:screen_times)).to match_array([screen_time])
+      end
+    end
+
+    describe "GET show" do
+      it "assigns the requested screen_time as @screen_time" do
+        screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+        get :show, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param}, valid_session
+        expect(assigns(:screen_time)).to eq(screen_time)
+      end
+    end
+
+    describe "GET new" do
+      it "does not allow new" do
+        todo_schedule = FactoryGirl.create(:todo_schedule, member_id: @kid.id)
+        get :new, {family_id: @family.id, member_id: @kid.id, todo_schedule_id: todo_schedule.id}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "GET edit" do
+      it "does not allow edit" do
+        screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+        get :edit, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "does not destroys the requested screen_time" do
+        screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+        expect {
+          delete :destroy, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param}, valid_session
+        }.to change(ScreenTime, :count).by(0)
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "POST create" do
+      describe "with valid params" do
+        it "does not create a new ScreenTime" do
+          expect {
+            post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => valid_attributes}, valid_session
+          }.to change(ScreenTime, :count).by(0)
+          expect(response.status).to eq(302)
+          expect(flash[:error]).to be_present
+        end
+      end
+    end
+
+    describe "PUT update" do
+      describe "with valid params" do
+        let(:new_attributes) {
+          {
+              dow: 2,
+              default_time: 4*60*60,
+              max_time: 5*60*60
+          }
+        }
+
+        it "does not update the requested screen_time" do
+          screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+          put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => new_attributes}, valid_session
+          expect(response.status).to eq(302)
+          expect(flash[:error]).to be_present
+        end
+      end
     end
   end
 

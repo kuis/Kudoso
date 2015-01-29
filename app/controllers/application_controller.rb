@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
     params[resource] &&= send(method) if respond_to?(method, true)
   end
 
+  before_filter :set_time_zone
+
   helper_method :format_counter
 
   def format_counter(seconds)
@@ -51,6 +53,15 @@ class ApplicationController < ActionController::Base
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:email, :username, :password, :password_confirmation, :first_name, :last_name, :parent, :family_id) }
+  end
+
+  private
+
+  def set_time_zone
+    if current_member && current_member.family && current_member.family.timezone
+      Time.zone = ActiveSupport::TimeZone[current_member.family.timezone]
+      logger.info "Set timezone to #{Time.zone}"
+    end
   end
 
 

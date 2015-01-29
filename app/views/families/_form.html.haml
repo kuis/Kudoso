@@ -1,4 +1,4 @@
-= form_for(@family) do |f|
+= simple_form_for(@family) do |f|
   - if @family.errors.any?
     #error_explanation
       %h2
@@ -8,12 +8,10 @@
         - @family.errors.full_messages.each do |message|
           %li= message
   .field
-    = f.label :name
-    %br/
-    = f.text_field :name
+    = f.input :name
   .field
-    = f.label :primary_contact_id
-    %br/
-    = f.number_field :primary_contact_id
+    = f.input :primary_contact_id, collection: @family.members.where(parent: true), label_method: :full_name, value_method: :id
+  .field
+    = f.input :timezone, as: :time_zone, priority: /US/
   .actions
     = f.submit

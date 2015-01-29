@@ -10,6 +10,7 @@ class Family < ActiveRecord::Base
   end
 
   def self.memorialize_todos(for_date = Date.yesterday)
+    for_date = for_date.end_of_day
     @families = self.includes(:members => {:todo_schedules => [:my_todos, :schedule_rrules]})
     @families.find_each do |family|
       family.kids.each do |kid|
@@ -44,7 +45,7 @@ class Family < ActiveRecord::Base
         unless i.blank?
           member = Member.find(i)
           if member.family_id == self.id
-            todo_schedule = member.todo_schedules.build(start_date: Date.today, todo_id: todo.id )
+            todo_schedule = member.todo_schedules.build(start_date: Date.today.beginning_of_day, todo_id: todo.id )
             todo_schedule.active = true
             todo_schedule.save
             todo_schedule.schedule_rrules.create(rrule: todo.schedule)

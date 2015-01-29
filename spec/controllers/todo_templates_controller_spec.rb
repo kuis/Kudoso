@@ -24,11 +24,19 @@ RSpec.describe TodoTemplatesController, :type => :controller do
   # TodoTemplate. As you add validations to TodoTemplate, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+        name: 'Todo template',
+        description: 'template description',
+        required: true,
+        schedule: "#{IceCube::Rule.daily.to_yaml}",
+        active: true
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        name: nil
+    }
   }
 
   # This should return the minimal set of values that should be in the session
@@ -36,123 +44,272 @@ RSpec.describe TodoTemplatesController, :type => :controller do
   # TodoTemplatesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET index" do
-    it "assigns all todo_templates as @todo_templates" do
-      todo_template = TodoTemplate.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:todo_templates)).to eq([todo_template])
+  context "As an adminstrator" do
+    before(:each) do
+      @user = FactoryGirl.create(:user, admin: true)
+      sign_in(@user)
     end
-  end
 
-  describe "GET show" do
-    it "assigns the requested todo_template as @todo_template" do
-      todo_template = TodoTemplate.create! valid_attributes
-      get :show, {:id => todo_template.to_param}, valid_session
-      expect(assigns(:todo_template)).to eq(todo_template)
-    end
-  end
-
-  describe "GET new" do
-    it "assigns a new todo_template as @todo_template" do
-      get :new, {}, valid_session
-      expect(assigns(:todo_template)).to be_a_new(TodoTemplate)
-    end
-  end
-
-  describe "GET edit" do
-    it "assigns the requested todo_template as @todo_template" do
-      todo_template = TodoTemplate.create! valid_attributes
-      get :edit, {:id => todo_template.to_param}, valid_session
-      expect(assigns(:todo_template)).to eq(todo_template)
-    end
-  end
-
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new TodoTemplate" do
-        expect {
-          post :create, {:todo_template => valid_attributes}, valid_session
-        }.to change(TodoTemplate, :count).by(1)
-      end
-
-      it "assigns a newly created todo_template as @todo_template" do
-        post :create, {:todo_template => valid_attributes}, valid_session
-        expect(assigns(:todo_template)).to be_a(TodoTemplate)
-        expect(assigns(:todo_template)).to be_persisted
-      end
-
-      it "redirects to the created todo_template" do
-        post :create, {:todo_template => valid_attributes}, valid_session
-        expect(response).to redirect_to(TodoTemplate.last)
+    describe "GET index" do
+      it "assigns all todo_templates as @todo_templates" do
+        todo_template = FactoryGirl.create(:todo_template)
+        get :index, {}, valid_session
+        expect(assigns(:todo_templates)).to match_array([todo_template])
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved todo_template as @todo_template" do
-        post :create, {:todo_template => invalid_attributes}, valid_session
-        expect(assigns(:todo_template)).to be_a_new(TodoTemplate)
-      end
-
-      it "re-renders the 'new' template" do
-        post :create, {:todo_template => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
-    end
-  end
-
-  describe "PUT update" do
-    describe "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested todo_template" do
-        todo_template = TodoTemplate.create! valid_attributes
-        put :update, {:id => todo_template.to_param, :todo_template => new_attributes}, valid_session
-        todo_template.reload
-        skip("Add assertions for updated state")
-      end
-
+    describe "GET show" do
       it "assigns the requested todo_template as @todo_template" do
         todo_template = TodoTemplate.create! valid_attributes
-        put :update, {:id => todo_template.to_param, :todo_template => valid_attributes}, valid_session
+        get :show, {:id => todo_template.to_param}, valid_session
         expect(assigns(:todo_template)).to eq(todo_template)
-      end
-
-      it "redirects to the todo_template" do
-        todo_template = TodoTemplate.create! valid_attributes
-        put :update, {:id => todo_template.to_param, :todo_template => valid_attributes}, valid_session
-        expect(response).to redirect_to(todo_template)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the todo_template as @todo_template" do
+    describe "GET new" do
+      it "assigns a new todo_template as @todo_template" do
+        get :new, {}, valid_session
+        expect(assigns(:todo_template)).to be_a_new(TodoTemplate)
+      end
+    end
+
+    describe "GET edit" do
+      it "assigns the requested todo_template as @todo_template" do
         todo_template = TodoTemplate.create! valid_attributes
-        put :update, {:id => todo_template.to_param, :todo_template => invalid_attributes}, valid_session
+        get :edit, {:id => todo_template.to_param}, valid_session
         expect(assigns(:todo_template)).to eq(todo_template)
       end
+    end
 
-      it "re-renders the 'edit' template" do
+    describe "POST create" do
+      describe "with valid params" do
+        it "creates a new TodoTemplate" do
+          expect {
+            post :create, {:todo_template => valid_attributes}, valid_session
+          }.to change(TodoTemplate, :count).by(1)
+        end
+
+        it "assigns a newly created todo_template as @todo_template" do
+          post :create, {:todo_template => valid_attributes}, valid_session
+          expect(assigns(:todo_template)).to be_a(TodoTemplate)
+          expect(assigns(:todo_template)).to be_persisted
+        end
+
+        it "redirects to the index" do
+          post :create, {:todo_template => valid_attributes}, valid_session
+          expect(response).to redirect_to(todo_templates_path)
+        end
+      end
+
+      describe "with invalid params" do
+        it "assigns a newly created but unsaved todo_template as @todo_template" do
+          post :create, {:todo_template => invalid_attributes}, valid_session
+          expect(assigns(:todo_template)).to be_a_new(TodoTemplate)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {:todo_template => invalid_attributes}, valid_session
+          expect(response).to render_template("new")
+        end
+      end
+    end
+
+    describe "PUT update" do
+      describe "with valid params" do
+        let(:new_attributes) {
+          {
+              name: 'New Name',
+              description: 'Another description',
+              required: false
+          }
+        }
+
+        it "updates the requested todo_template" do
+          todo_template = TodoTemplate.create! valid_attributes
+          put :update, {:id => todo_template.to_param, :todo_template => new_attributes}, valid_session
+          todo_template.reload
+          expect(todo_template.name).to eq("New Name")
+          expect(todo_template.description).to eq("Another description")
+          expect(todo_template.required).to be_falsey
+
+        end
+
+        it "assigns the requested todo_template as @todo_template" do
+          todo_template = TodoTemplate.create! valid_attributes
+          put :update, {:id => todo_template.to_param, :todo_template => valid_attributes}, valid_session
+          expect(assigns(:todo_template)).to eq(todo_template)
+        end
+
+        it "redirects to the todo_template index" do
+          todo_template = TodoTemplate.create! valid_attributes
+          put :update, {:id => todo_template.to_param, :todo_template => valid_attributes}, valid_session
+          expect(response).to redirect_to(todo_templates_path)
+        end
+      end
+
+      describe "with invalid params" do
+        it "assigns the todo_template as @todo_template" do
+          todo_template = TodoTemplate.create! valid_attributes
+          put :update, {:id => todo_template.to_param, :todo_template => invalid_attributes}, valid_session
+          expect(assigns(:todo_template)).to eq(todo_template)
+        end
+
+        it "re-renders the 'edit' template" do
+          todo_template = TodoTemplate.create! valid_attributes
+          put :update, {:id => todo_template.to_param, :todo_template => invalid_attributes}, valid_session
+          expect(response).to render_template("edit")
+        end
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "destroys the requested todo_template" do
         todo_template = TodoTemplate.create! valid_attributes
-        put :update, {:id => todo_template.to_param, :todo_template => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+        expect {
+          delete :destroy, {:id => todo_template.to_param}, valid_session
+        }.to change(TodoTemplate, :count).by(-1)
+      end
+
+      it "redirects to the todo_templates list" do
+        todo_template = TodoTemplate.create! valid_attributes
+        delete :destroy, {:id => todo_template.to_param}, valid_session
+        expect(response).to redirect_to(todo_templates_url)
+      end
+    end
+
+  end
+
+  context "As a child" do
+    before(:each) do
+      @member = FactoryGirl.create(:member, parent: false)
+      sign_in_member(@member)
+    end
+
+    describe "GET index" do
+      it "assigns all todo_templates as @todo_templates" do
+        todo_template = FactoryGirl.create(:todo_template)
+        get :index, {}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "GET show" do
+      it "assigns the requested todo_template as @todo_template" do
+        todo_template = TodoTemplate.create! valid_attributes
+        get :show, {:id => todo_template.to_param}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "GET new" do
+      it "does not allow new" do
+        get :new, {}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "GET edit" do
+      it "does not allow edit" do
+        todo_template = TodoTemplate.create! valid_attributes
+        get :edit, {:id => todo_template.to_param}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "POST create" do
+      it "does not allow create" do
+        post :create, {:todo_template => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "PUT update" do
+      it "does not allow update" do
+        todo_template = TodoTemplate.create! valid_attributes
+        put :update, {:id => todo_template.to_param, :todo_template => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "does not allow delete" do
+        todo_template = TodoTemplate.create! valid_attributes
+        delete :destroy, {:id => todo_template.to_param, :todo_template => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
       end
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested todo_template" do
-      todo_template = TodoTemplate.create! valid_attributes
-      expect {
-        delete :destroy, {:id => todo_template.to_param}, valid_session
-      }.to change(TodoTemplate, :count).by(-1)
+  context "As a parent" do
+    before(:each) do
+      @user = FactoryGirl.create(:user, admin: false)
+      sign_in(@user)
     end
 
-    it "redirects to the todo_templates list" do
-      todo_template = TodoTemplate.create! valid_attributes
-      delete :destroy, {:id => todo_template.to_param}, valid_session
-      expect(response).to redirect_to(todo_templates_url)
+    describe "GET index" do
+      it "assigns all todo_templates as @todo_templates" do
+        todo_template = FactoryGirl.create(:todo_template)
+        get :index, {}, valid_session
+        expect(assigns(:todo_templates)).to match_array([todo_template])
+      end
+    end
+
+    describe "GET show" do
+      it "assigns the requested todo_template as @todo_template" do
+        todo_template = TodoTemplate.create! valid_attributes
+        get :show, {:id => todo_template.to_param}, valid_session
+        expect(assigns(:todo_template)).to eq(todo_template)
+      end
+    end
+
+    describe "GET new" do
+      it "does not allow new" do
+        get :new, {}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "GET edit" do
+      it "does not allow edit" do
+        todo_template = TodoTemplate.create! valid_attributes
+        get :edit, {:id => todo_template.to_param}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "POST create" do
+      it "does not allow create" do
+        post :create, {:todo_template => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "PUT update" do
+      it "does not allow update" do
+        todo_template = TodoTemplate.create! valid_attributes
+        put :update, {:id => todo_template.to_param, :todo_template => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
+    end
+
+    describe "DELETE destroy" do
+      it "does not allow delete" do
+        todo_template = TodoTemplate.create! valid_attributes
+        delete :destroy, {:id => todo_template.to_param, :todo_template => valid_attributes}, valid_session
+        expect(response.status).to eq(302)
+        expect(flash[:error]).to be_present
+      end
     end
   end
 

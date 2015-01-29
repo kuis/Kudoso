@@ -2,8 +2,8 @@
   .name
     = todo_schedule.todo.name
   .date
-    = "(#{todo_schedule.start_date}"
-    = todo_schedule.end_date.present? ? " - #{todo_schedule.end_date})" : ' - forever)'
+    = "(#{todo_schedule.start_date.to_formatted_s(:pretty_date)}"
+    = todo_schedule.end_date.present? ? " - #{todo_schedule.end_date.to_formatted_s(:pretty_date)})" : ' - forever)'
   .schedule
     Scheduled for:
     - todo_schedule.schedule_rrules.each_with_index do |rule, idx|
@@ -12,6 +12,6 @@
       = rrule.to_s
   .actions
     = link_to 'Edit schedule', edit_family_todo_todo_schedule_path(@family, todo_schedule.todo, todo_schedule)
-    - if todo_schedule.end_date.present? && todo_schedule.end_date > Date.today
+    - if todo_schedule.end_date.present? && todo_schedule.end_date > Time.now
       %br
       = link_to 'Delete schedule', family_todo_todo_schedule_path(@family, todo_schedule.todo, todo_schedule), method: :delete, confirm: "Are you sure?"
