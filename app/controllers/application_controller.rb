@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_time_zone
 
   helper_method :format_counter
+  helper_method :format_counter_min
 
   def format_counter(seconds)
     sec = seconds % 60
@@ -24,6 +25,17 @@ class ApplicationController < ActionController::Base
       "#{hours}:#{sprintf('%02d', min)}:#{sprintf('%02d', sec)}"
     else
       "#{min}:#{sprintf('%02d', sec)}"
+    end
+  end
+  def format_counter_min(seconds)
+    sec = seconds % 60
+    min = (seconds/60).ceil
+    hours = (min/60).floor
+    if hours > 0
+      min = min - (hours * 60)
+      "#{hours}:#{sprintf('%02d', min)}"
+    else
+      "00:#{min}"
     end
   end
 

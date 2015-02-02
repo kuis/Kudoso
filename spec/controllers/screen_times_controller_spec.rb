@@ -93,11 +93,11 @@ RSpec.describe ScreenTimesController, :type => :controller do
         }.to change(ScreenTime, :count).by(-1)
       end
 
-      it "redirects to the current member dashboard" do
+      it "redirects to the current member screen time index" do
         screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
         delete :destroy, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param}, valid_session
         expect(flash[:error]).to be_falsey
-        expect(response).to redirect_to(family_member_path(@family, @kid))
+        expect(response).to redirect_to(family_member_screen_times_path(@family, @kid))
       end
     end
 
@@ -115,10 +115,35 @@ RSpec.describe ScreenTimesController, :type => :controller do
           expect(assigns(:screen_time)).to be_persisted
         end
 
-        it "redirects to the created screen_time" do
+        it "redirects to the current member screen_times path" do
           post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => valid_attributes}, valid_session
-          expect(response).to redirect_to([@family, @kid])
+          expect(response).to redirect_to(family_member_screen_times_path(@family, @kid))
         end
+
+        it "resets activities restrictions when requested" do
+          sc = @kid.screen_times.create(dow: Date.today.wday, default_time: 7200, max_time: 12000)
+          fam_act = FactoryGirl.create(:family_activity, family_id: @kid.family_id)
+          sc.restrictions[:activities][fam_act.id] = { default_time: 3000, max_time: 5000 }
+          sc.save
+          @kid.reload
+          expect(@kid.screen_times.last.restrictions[:activities].count).to eq(1)
+          post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => valid_attributes, :clear_activities => true}, valid_session
+          @kid.reload
+          expect(@kid.screen_times.last.restrictions[:activities].count).to eq(0)
+        end
+
+        it "resets devices restrictions when requested" do
+          sc = @kid.screen_times.create(dow: Date.today.wday, default_time: 7200, max_time: 12000)
+          device = FactoryGirl.create(:device, family_id: @kid.family_id)
+          sc.restrictions[:devices][device.id] = { default_time: 3000, max_time: 5000 }
+          sc.save
+          @kid.reload
+          expect(@kid.screen_times.last.restrictions[:devices].count).to eq(1)
+          post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => valid_attributes, :clear_devices => true}, valid_session
+          @kid.reload
+          expect(@kid.screen_times.last.restrictions[:devices].count).to eq(0)
+        end
+
       end
 
       describe "with invalid params" do
@@ -128,9 +153,10 @@ RSpec.describe ScreenTimesController, :type => :controller do
           expect(assigns(:screen_time)).to be_a_new(ScreenTime)
         end
 
-        it "re-renders the 'new' template" do
+        it "reports the error" do
           post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => invalid_attributes}, valid_session
-          expect(response).to render_template("new")
+          expect(response).to redirect_to(family_member_screen_times_path(@family, @kid))
+          expect(flash[:alert]).to be_present
         end
       end
     end
@@ -163,7 +189,7 @@ RSpec.describe ScreenTimesController, :type => :controller do
         it "redirects to the screen_time" do
           screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
           put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => valid_attributes}, valid_session
-          expect(response).to redirect_to([@family, @kid])
+          expect(response).to redirect_to(family_member_screen_times_path(@family, @kid))
         end
       end
 
@@ -174,10 +200,55 @@ RSpec.describe ScreenTimesController, :type => :controller do
           expect(assigns(:screen_time)).to eq(screen_time)
         end
 
-        it "re-renders the 'edit' template" do
+        it "reports the error" do
           screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
           put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => invalid_attributes}, valid_session
-          expect(response).to render_template("edit")
+          expect(response).to redirect_to(family_member_screen_times_path(@family, @kid))
+          expect(flash[:alert]).to be_present
+        end
+      end
+
+      describe "with restrict params" do
+        it "updates the default screen_time for an activity" do
+          screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+          fam_act = FactoryGirl.create(:family_activity, family_id: @kid.family_id)
+          new_attributes = {
+              restrict: "{ \"activities\" : { \"#{fam_act.id}\" : { \"default_time\" : 7200 } } }"
+          }
+          put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => new_attributes}, valid_session
+          screen_time.reload
+          expect(screen_time.restrictions[:activities][fam_act.id][:default_time]).to eq(7200)
+        end
+        it "updates the max screen_time for an activity" do
+          screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+          fam_act = FactoryGirl.create(:family_activity, family_id: @kid.family_id)
+          new_attributes = {
+              restrict: "{ \"activities\" : { \"#{fam_act.id}\" : { \"max_time\" : 17200 } } }"
+          }
+          put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => new_attributes}, valid_session
+          screen_time.reload
+          expect(screen_time.restrictions[:activities][fam_act.id][:max_time]).to eq(17200)
+        end
+
+        it "updates the default screen_time for a device" do
+          screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+          device = FactoryGirl.create(:device, family_id: @kid.family_id)
+          new_attributes = {
+              restrict: "{ \"devices\" : { \"#{device.id}\" : { \"default_time\" : 7200 } } }"
+          }
+          put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => new_attributes}, valid_session
+          screen_time.reload
+          expect(screen_time.restrictions[:devices][device.id][:default_time]).to eq(7200)
+        end
+        it "updates the max screen_time for a device" do
+          screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
+          device = FactoryGirl.create(:device, family_id: @kid.family_id)
+          new_attributes = {
+              restrict: "{ \"devices\" : { \"#{device.id}\" : { \"max_time\" : 17200 } } }"
+          }
+          put :update, {family_id: @family.id, member_id: @kid.id, :id => screen_time.to_param, :screen_time => new_attributes}, valid_session
+          screen_time.reload
+          expect(screen_time.restrictions[:devices][device.id][:max_time]).to eq(17200)
         end
       end
     end

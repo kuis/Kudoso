@@ -1,6 +1,7 @@
 %h1= @family.name
-%h2= "#{@member.full_name}'s Dashboard"
-
+%h2
+  = best_in_place [@family, @member], :first_name
+  = best_in_place [@family, @member], :last_name
 .row
   .medium-4.columns
     Kudos:

@@ -52,7 +52,7 @@ class Ability
         end
         can :read, TodoTemplate, :active => true
         can [:read, :assign], TodoGroup, :active => true
-      else
+      elsif user.member.present?
         Rails.logger.info "Child logged in, Member: #{user.member.id}"
 
         # Child permissions

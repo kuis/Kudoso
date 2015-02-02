@@ -2,7 +2,7 @@ class MembersController < ApplicationController
   load_and_authorize_resource :family
   load_and_authorize_resource :member, through: :family
 
-  respond_to :html
+  respond_to :html, :json
 
   # GET /members
   # GET /members.json
@@ -31,42 +31,38 @@ class MembersController < ApplicationController
   # POST /members
   # POST /members.json
   def create
-    @family = Family.find(params[:family_id])
     @member = Member.new(params[:member].merge({family_id:@family.id}))
-    respond_to do |format|
-      if @member.save
-        format.html { redirect_to @family, notice: 'Family member was successfully created.' }
-        format.json { render :show, status: :created, location: @member }
-      else
-        format.html { render :new }
-        format.json { render json: @member.errors, status: :unprocessable_entity }
-      end
+    if @member.save
+      flash[:notice] = 'Family member was successfully created.'
+      respond_with([@family,@member])
+    else
+      render :new
     end
+
   end
 
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
     params[:member][:birth_date] = Chronic.parse(params[:member][:birth_date]) if params[:member][:birth_date]
-    respond_to do |format|
-      if @member.update(member_params)
-        format.html { redirect_to [@family, @member], notice: 'Family member was successfully updated.' }
-        format.json { render :show, status: :ok, location: @member }
-      else
-        format.html { render :edit }
-        format.json { render json: @member.errors, status: :unprocessable_entity }
-      end
+    if @member.update(member_params)
+      flash[:notice] = 'Family member was successfully updated.'
+      respond_with([@family,@member])
+    else
+      render :edit
     end
+
   end
 
   # DELETE /members/1
   # DELETE /members/1.json
   def destroy
-    @member.destroy
-    respond_to do |format|
-      format.html { redirect_to @family, notice: 'Family member was successfully removed.' }
-      format.json { head :no_content }
+    if @member.destroy
+      flash[:notice] = 'Family member was successfully deleted.'
+    else
+      flash[:error] = "Family member was not deleted. #{@member.errors.full_messages[0]}"
     end
+    redirect_to family_members_path(@family)
   end
 
   private

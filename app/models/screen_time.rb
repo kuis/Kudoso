@@ -7,8 +7,10 @@ class ScreenTime < ActiveRecord::Base
   validates :max_time, :default_time, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 86400 } # 86400 = 24 Hours * 60 min * 60 sec
   validates :dow, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 6, only_integer: true }, allow_blank: true
 
+  attr_accessor :restrict
 
-  before_save :check_time
+
+  validate :check_time
   before_save :check_restrictions
 
   after_initialize do

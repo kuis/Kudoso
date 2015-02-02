@@ -13,6 +13,9 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery.ui.all
+//= require best_in_place
+//= require jquery.purr
+//= require best_in_place.purr
 //= require turbolinks
 //= require foundation
 //= require recurring_select
@@ -20,7 +23,6 @@
 //= require highcharts/highcharts
 //= require cocoon
 //= require_tree .
-//= require turbolinks
 
 
 function ready() {
@@ -36,5 +38,6 @@ $(function() {
 
     $(document).ready(ready);
     $(document).on('page:load', ready);
+    jQuery(".best_in_place").best_in_place();
 
 });

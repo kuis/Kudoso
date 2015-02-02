@@ -102,7 +102,7 @@ RSpec.describe MembersController, :type => :controller do
 
         it "redirects to the created member" do
           post :create, {family_id: @family.id, :member => valid_attributes}, valid_session
-          expect(response).to redirect_to(@family)
+          expect(response.status).to eq(302)
         end
       end
 
@@ -174,7 +174,7 @@ RSpec.describe MembersController, :type => :controller do
       it "redirects to the members list" do
         member = FactoryGirl.create(:member, family_id: @family.id)
         delete :destroy, {family_id: @family.id,:id => member.to_param}, valid_session
-        expect(response).to redirect_to(@family)
+        expect(response).to redirect_to(family_members_path(@family))
       end
     end
 

@@ -1,25 +1,237 @@
-%h1 Listing screen_times
+%h1 Screen Time Limits for #{@member.full_name}
+- unlimited = 24*60*60
 
-%table
-  %tr
-    %th Member
-    %th Device
-    %th Dow
-    %th Maxtime
-    %th
-    %th
-    %th
+Enter screen times as DEFAULT / MAX.  Default is the available screen time once all required ToDos have been compeleted.
+Max is the most screen time that a child can have using Kudos.
 
-  - @screen_times.each do |screen_time|
+.panel
+  %h2 Global
+  %table
     %tr
-      %td= screen_time.member_id
-      %td= screen_time.device_id
-      %td= screen_time.dow
-      %td= screen_time.maxtime
-      %td= link_to 'Show', screen_time
-      %td= link_to 'Edit', edit_screen_time_path(screen_time)
-      %td= link_to 'Destroy', screen_time, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %th
+      %th Sunday
+      %th Monday
+      %th Tuesday
+      %th Wednesday
+      %th Thursday
+      %th Friday
+      %th Saturday
+    %tr
+      %td Default
+      -( 0 .. 6 ).each do |dow|
+        - sc = @screen_times.find{|s| s.dow == dow}
+        %td
+          %span.balloon
+            = format_counter_min(sc.try(:[], :default_time) || unlimited)
+            .update_time
+              =image_tag('arrow.gif', class: 'arrow')
+              %strong
+                Change DEFAULT time to:
+              %ul
+                %li.choice{ onclick: "$('#default_time_dow_#{dow}').val(30*60); $('#screen_time_dow_#{dow}').submit();"}
+                  0:30
+                %li.choice{ onclick: "$('#default_time_dow_#{dow}').val(45*60); $('#screen_time_dow_#{dow}').submit();"}
+                  0:45
+                %li.choice{ onclick: "$('#default_time_dow_#{dow}').val(60*60); $('#screen_time_dow_#{dow}').submit();"}
+                  1:00
+                %li.choice{ onclick: "$('#default_time_dow_#{dow}').val(90*60); $('#screen_time_dow_#{dow}').submit();"}
+                  1:30
+                %li.choice{ onclick: "$('#default_time_dow_#{dow}').val(120*60); $('#screen_time_dow_#{dow}').submit();"}
+                  2:00
+                %li.choice
+                  Custom( HH:MM )
+                  %input{id: "custom_dow_#{dow}"}
+                  %button{onclick: "var tmp = $('#custom_dow_#{dow}').val().split(':'); var time = tmp[1] ? ( parseInt(tmp[0])*60*60 + parseInt(tmp[1])*60 ) : ( parseInt(tmp)*60 ); if (isNaN(time)) { alert('Please enter a valid time as HH:MM (ex: 1:35) or MM (ex: 35)') } else { $('#default_time_dow_#{dow}').val(time); $('#screen_time_dow_#{dow}').submit(); } "}
+                    Submit
+          - if sc
+            = simple_form_for [@family, @member, sc], html: {id: "screen_time_dow_#{dow}"} do |f|
+              = f.input :default_time, as: :hidden, input_html: {id: "default_time_dow_#{dow}"}
+              = f.input :max_time, as: :hidden, input_html: {id: "max_time_dow_#{dow}"}
+              = f.input :restrict, as: :hidden, input_html: {id: "restrict_dow_#{dow}"}
 
-%br
+          - else
+            = simple_form_for [@family, @member, ScreenTime.new], html: {id: "screen_time_dow_#{dow}"} do |f|
+              = f.input :default_time, as: :hidden, input_html: { id: "default_time_dow_#{dow}" }
+              = f.input :max_time, as: :hidden, input_html: { id: "max_time_dow_#{dow}" }
+              = f.input :dow, as: :hidden, input_html: { value: dow }
+              = f.input :restrict, as: :hidden, input_html: {id: "restrict_dow_#{dow}"}
+    %tr
+      %td Max
+      -( 0 .. 6 ).each do |dow|
+        - sc = @screen_times.find{|s| s.dow == dow}
+        %td
+          %span.balloon
+            = format_counter_min(sc.try(:[], :max_time) || unlimited)
+            .update_time
+              =image_tag('arrow.gif', class: 'arrow')
+              %strong
+                Change MAX time to:
+              %ul
+                %li.choice{ onclick: "$('#max_time_dow_#{dow}').val(30*60); $('#screen_time_dow_#{dow}').submit();"}
+                  0:30
+                %li.choice{ onclick: "$('#max_time_dow_#{dow}').val(45*60); $('#screen_time_dow_#{dow}').submit();"}
+                  0:45
+                %li.choice{ onclick: "$('#max_time_dow_#{dow}').val(60*60); $('#screen_time_dow_#{dow}').submit();"}
+                  1:00
+                %li.choice{ onclick: "$('#max_time_dow_#{dow}').val(90*60); $('#screen_time_dow_#{dow}').submit();"}
+                  1:30
+                %li.choice{ onclick: "$('#max_time_dow_#{dow}').val(120*60); $('#screen_time_dow_#{dow}').submit();"}
+                  2:00
+                %li.choice
+                  Custom( HH:MM )
+                  %input{id: "max_custom_dow_#{dow}"}
+                  %button{onclick: "var tmp = $('#max_custom_dow_#{dow}').val().split(':'); var time = tmp[1] ? ( parseInt(tmp[0])*60*60 + parseInt(tmp[1])*60 ) : ( parseInt(tmp)*60 ); if (isNaN(time)) { alert('Please enter a valid time as HH:MM (ex: 1:35) or MM (ex: 35)') } else { $('#max_time_dow_#{dow}').val(time); $('#screen_time_dow_#{dow}').submit(); } "}
+                    Submit
 
-= link_to 'New Screen time', new_screen_time_path
+.panel
+  %h2 Activities
+  .pull_right
+    = link_to 'Reset Activity Limits', family_member_screen_times_path(@family, @member, clear_activities: true), method: :post
+  %table
+    %tr
+      %th
+      %th Sunday
+      %th Monday
+      %th Tuesday
+      %th Wednesday
+      %th Thursday
+      %th Friday
+      %th Saturday
+    -@family.family_activities.each do |fam_act|
+      %tr
+        %td{colspan: 8}
+          = fam_act.name
+      %tr
+        %td Default
+        -( 0 .. 6 ).each do |dow|
+          %td
+            %span.balloon
+              = format_counter_min(@screen_times.find{|s| s.dow == dow}.try(:restrictions).try(:[], :activities).try(:[], fam_act.id).try(:[], :default_time) || @screen_times.find{|s| s.dow == dow}.try(:[], :default_time) || unlimited)
+              .update_time
+                =image_tag('arrow.gif', class: 'arrow')
+                %strong
+                  Change DEFAULT time for #{fam_act.name} to:
+                %ul
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"default_time\" : #{30*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    0:30
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"default_time\" : #{45*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    0:45
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"default_time\" : #{60*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    1:00
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"default_time\" : #{90*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    1:30
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"default_time\" : #{120*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    2:00
+                  %li.choice
+                    Custom( HH:MM )
+                    %input{id: "default_custom_act_#{fam_act.id}_dow_#{dow}"}
+                    %button{onclick: "var tmp = $('#default_custom_act_#{fam_act.id}_dow_#{dow}').val().split(':'); var time = tmp[1] ? ( parseInt(tmp[0])*60*60 + parseInt(tmp[1])*60 ) : ( parseInt(tmp)*60 ); if (isNaN(time)) { alert('Please enter a valid time as HH:MM (ex: 1:35) or MM (ex: 35)') } else { $('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"default_time\" : ' + time + ' } } }'); $('#screen_time_dow_#{dow}').submit(); } "}
+                      Submit
+      %tr
+        %td Max
+        -( 0 .. 6 ).each do |dow|
+          %td
+            %span.balloon
+              = format_counter_min(@screen_times.find{|s| s.dow == dow}.try(:restrictions).try(:[], :activities).try(:[], fam_act.id).try(:[], :max_time) || @screen_times.find{|s| s.dow == dow}.try(:[], :max_time) || unlimited)
+              .update_time
+                =image_tag('arrow.gif', class: 'arrow')
+                %strong
+                  Change MAX time for #{fam_act.name} to:
+                %ul
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"max_time\" : #{30*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    0:30
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"max_time\" : #{45*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    0:45
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"max_time\" : #{60*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    1:00
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"max_time\" : #{90*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    1:30
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"max_time\" : #{120*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    2:00
+                  %li.choice
+                    Custom( HH:MM )
+                    %input{id: "max_custom_act_#{fam_act.id}_dow_#{dow}"}
+                    %button{onclick: "var tmp = $('#max_custom_act_#{fam_act.id}_dow_#{dow}').val().split(':'); var time = tmp[1] ? ( parseInt(tmp[0])*60*60 + parseInt(tmp[1])*60 ) : ( parseInt(tmp)*60 ); if (isNaN(time)) { alert('Please enter a valid time as HH:MM (ex: 1:35) or MM (ex: 35)') } else { $('#restrict_dow_#{dow}').val('{ \"activities\" : { \"#{fam_act.id}\" : { \"max_time\" : ' + time + ' } } }'); $('#screen_time_dow_#{dow}').submit(); } "}
+                      Submit
+      %tr
+        %td{colspan: 8}
+
+.panel
+  %h2 Devices
+  .pull_right
+    = link_to 'Reset Device Limits', family_member_screen_times_path(@family, @member, clear_devices: true), method: :post
+  %table
+    %tr
+      %th
+      %th Sunday
+      %th Monday
+      %th Tuesday
+      %th Wednesday
+      %th Thursday
+      %th Friday
+      %th Saturday
+    -@family.devices.each do |device|
+      %tr
+        %td{colspan: 8}
+          #{device.name} (#{device.device_type.name})
+      %tr
+        %td Default
+        -( 0 .. 6 ).each do |dow|
+          %td
+            %span.balloon
+              = format_counter_min(@screen_times.find{|s| s.dow == dow}.try(:restrictions).try(:[], :devices).try(:[], device.id).try(:[], :default_time) || @screen_times.find{|s| s.dow == dow}.try(:[], :default_time) || unlimited)
+              .update_time
+                =image_tag('arrow.gif', class: 'arrow')
+                %strong
+                  Change DEFAULT time for #{device.name} to:
+                %ul
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"default_time\" : #{30*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    0:30
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"default_time\" : #{45*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    0:45
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"default_time\" : #{60*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    1:00
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"default_time\" : #{90*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    1:30
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"default_time\" : #{120*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    2:00
+                  %li.choice
+                    Custom( HH:MM )
+                    %input{id: "default_custom_dev_#{device.id}_dow_#{dow}"}
+                    %button{onclick: "var tmp = $('#default_custom_dev_#{device.id}_dow_#{dow}').val().split(':'); var time = tmp[1] ? ( parseInt(tmp[0])*60*60 + parseInt(tmp[1])*60 ) : ( parseInt(tmp)*60 ); if (isNaN(time)) { alert('Please enter a valid time as HH:MM (ex: 1:35) or MM (ex: 35)') } else { $('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"default_time\" : ' + time + ' } } }'); $('#screen_time_dow_#{dow}').submit(); } "}
+                      Submit
+      %tr
+        %td Max
+        -( 0 .. 6 ).each do |dow|
+          %td
+            %span.balloon
+              = format_counter_min(@screen_times.find{|s| s.dow == dow}.try(:restrictions).try(:[], :devices).try(:[], device.id).try(:[], :max_time) || @screen_times.find{|s| s.dow == dow}.try(:[], :max_time) || unlimited)
+              .update_time
+                =image_tag('arrow.gif', class: 'arrow')
+                %strong
+                  Change DEFAULT time for #{device.name} to:
+                %ul
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"max_time\" : #{30*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    0:30
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"max_time\" : #{45*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    0:45
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"max_time\" : #{60*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    1:00
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"max_time\" : #{90*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    1:30
+                  %li.choice{ onclick: "$('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"max_time\" : #{120*60} } } }'); $('#screen_time_dow_#{dow}').submit();"}
+                    2:00
+                  %li.choice
+                    Custom( HH:MM )
+                    %input{id: "max_custom_dev_#{device.id}_dow_#{dow}"}
+                    %button{onclick: "var tmp = $('#max_custom_dev_#{device.id}_dow_#{dow}').val().split(':'); var time = tmp[1] ? ( parseInt(tmp[0])*60*60 + parseInt(tmp[1])*60 ) : ( parseInt(tmp)*60 ); if (isNaN(time)) { alert('Please enter a valid time as HH:MM (ex: 1:35) or MM (ex: 35)') } else { $('#restrict_dow_#{dow}').val('{ \"devices\" : { \"#{device.id}\" : { \"max_time\" : ' + time + ' } } }'); $('#screen_time_dow_#{dow}').submit(); } "}
+                      Submit
+      %tr
+        %td{colspan: 8}
+
+#update_modal.reveal-modal{data: {reveal: true} }
+  %h2 Update Screen Time
+  %a.close-reveal-modal
+    %i.fa.fa-times
+  #update_form
+    %i.fa.fa-spinner
