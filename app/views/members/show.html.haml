@@ -46,8 +46,14 @@
 
 %hr
 %h2 Activities
-%ul#family_activities_list
-  = render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @family.family_activities }
+- if @member.current_activity
+  In activity #{@member.current_activity.family_activity.name}
+  = link_to "Stop #{@member.current_activity.family_activity.name}", family_member_activity_path(@family, @member, @member.current_activity, stop: true), method: :put
+
+
+- else
+  %ul#family_activities_list
+    = render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @family.family_activities }
 
 %p= link_to 'Edit Member Information', edit_family_member_path(@family, @member)
 %p= link_to 'Back', @member.family

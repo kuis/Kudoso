@@ -13,7 +13,7 @@ FactoryGirl.define do
 
     after(:build) {  |act|
       act.member_id = act.created_by_id
-      act.family_activity_id = FactoryGirl.create(:family_activity, family_id: act.member.family_id)
+      act.family_activity_id = FactoryGirl.create(:family_activity, family_id: act.created_by.family_id).id
     }
 
   end

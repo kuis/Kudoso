@@ -7,7 +7,7 @@ class Activity < ActiveRecord::Base
   belongs_to :activity_type
   has_many :details, class_name: 'ActivityDetail'
 
-  validates_presence_of :created_by
+  validates_presence_of :created_by, :family_activity
 
   validate :check_screen_time, on: :create
 

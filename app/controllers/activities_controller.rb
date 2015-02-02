@@ -17,11 +17,17 @@ class ActivitiesController < ApplicationController
   def new
     if params[:family_activity_id]
       famact = FamilyActivity.find(params[:family_activity_id])
-      @activity = @member.new_activity(famact, nil)
-      if params[:start]
-        @activity.start!
+      if !famact.restricted? || (famact.restricted? && @member.todos_complete?)
+        @activity = @member.new_activity(famact, nil)
+        if params[:start]
+          @activity.start!
+          flash[:notice] = "You have started #{famact.name}, enjoy!"
+        end
+        redirect_to [@family, @member]
+      else
+        flash[:alert] = 'Sorry, you must complete your required ToDos before starting a restricted activity.'
+        redirect_to [@family, @member]
       end
-      redirect_to family_member_activities_path(@family, @member)
     else
       @activity = @member.activities.build
       respond_with(@activity)
@@ -41,7 +47,8 @@ class ActivitiesController < ApplicationController
   def update
     if params[:stop]
       @activity.stop!
-      redirect_to family_member_activities_path(@family, @member)
+      flash[:notice] = "You have stoped #{@activity.family_activity.name}."
+      redirect_to [@family, @member]
     else
       params[:activity][:member_id] = @member.id
       @activity.update(activity_params)
