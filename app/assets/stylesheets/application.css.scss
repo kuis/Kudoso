@@ -161,3 +161,11 @@ span.balloon:hover li{
   left: -12px;
   background-color: transparent;
 }
+
+.selected {
+  background-color: $green-bg;
+}
+
+.timesel {
+  cursor: pointer;
+}

@@ -3,18 +3,29 @@
   = best_in_place [@family, @member], :first_name
   = best_in_place [@family, @member], :last_name
 .row
-  .medium-4.columns
+  .medium-3.columns
     Kudos:
     #kudos
       #{@member.kudos}
-  .medium-4.columns
+  .medium-3.columns
     Max Screen Time:
     .screen_time
       #{format_counter @member.get_max_screen_time}
-  .medium-4.columns
+  .medium-3.columns
     Available Screen Time:
     .screen_time
       #{format_counter @member.get_available_screen_time}
+  .medium-3.columns
+    Screen Time Overrides:
+    %ul
+      - @member.st_overrides.today.each do |sto|
+        %li
+          + #{format_counter_min(sto.time)}
+          = "(#{sto.comment})" unless sto.comment.blank?
+      -if  @member.st_overrides.today.count == 0
+        %li No overrides today
+      - if can?(:create, StOverride)
+        %li= link_to 'Add Screen Time Override', new_family_member_st_override_path(@family, @member)
 %hr
 .row
   .medium-6.columns

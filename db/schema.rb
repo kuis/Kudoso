@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150129030100) do
+ActiveRecord::Schema.define(version: 20150203134206) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -230,6 +230,16 @@ ActiveRecord::Schema.define(version: 20150129030100) do
 
   add_index "screen_times", ["member_id", "dow"], name: "index_screen_times_on_member_id_and_dow", using: :btree
   add_index "screen_times", ["member_id"], name: "index_screen_times_on_member_id", using: :btree
+
+  create_table "st_overrides", force: true do |t|
+    t.integer  "member_id"
+    t.integer  "created_by_id"
+    t.integer  "time"
+    t.datetime "date"
+    t.string   "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "todo_groups", force: true do |t|
     t.string   "name"

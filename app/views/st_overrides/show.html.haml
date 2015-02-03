@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Member:
+  = @st_override.member_id
+%p
+  %b Created by:
+  = @st_override.created_by_id
+%p
+  %b Time:
+  = @st_override.time
+%p
+  %b Date:
+  = @st_override.date
+%p
+  %b Comment:
+  = @st_override.comment
+
+= link_to 'Edit', edit_st_override_path(@st_override)
+\|
+= link_to 'Back', st_overrides_path

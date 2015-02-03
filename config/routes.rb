@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
 
+
   resources :activity_types
 
   resources :content_ratings
@@ -39,6 +40,7 @@ Rails.application.routes.draw do
       end
       resources :my_todos
       resources :screen_times
+      resources :st_overrides
     end
 
 

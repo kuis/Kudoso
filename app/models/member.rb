@@ -7,6 +7,7 @@ class Member < ActiveRecord::Base
   has_many :activities, dependent: :destroy, inverse_of: :member
   has_many :authorized_activities, class_name: 'Activity', foreign_key: :created_by_id, dependent: :nullify, inverse_of: :created_by
   has_many :screen_times
+  has_many :st_overrides
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :omniauthable
@@ -61,10 +62,13 @@ class Member < ActiveRecord::Base
   end
 
 
+  def get_screen_time_overrides(date = Date.today)
+    st_overrides.where(date: date.beginning_of_day..date.end_of_day).sum(:time)
+  end
 
 
 
-  def get_used_screen_time(date = Time.now, device_id = nil, activity_id=nil)
+  def get_used_screen_time(date = Date.today, device_id = nil, activity_id=nil)
     if device_id.present?
       activities.where('device_id = ? AND end_time BETWEEN ? AND ?', device_id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)').ceil
     elsif activity_id.present?
@@ -74,7 +78,7 @@ class Member < ActiveRecord::Base
     end
   end
 
-  def get_screen_time(date = Time.now, device_id = nil, activity_id = nil)
+  def get_screen_time(date = Date.today, device_id = nil, activity_id = nil)
     rec = screen_times.where(dow: date.wday).last
 
     if device_id.nil? && activity_id.nil?
@@ -90,11 +94,14 @@ class Member < ActiveRecord::Base
       end
 
     end
+    result += get_screen_time_overrides
+
+    result = 60*60*24 if result > 60*60*24
 
     result
   end
 
-  def get_max_screen_time(date = Time.now, device_id = nil, activity_id = nil)
+  def get_max_screen_time(date = Date.today, device_id = nil, activity_id = nil)
     rec = screen_times.where(dow: date.wday).last
 
     if device_id.nil? && activity_id.nil?
@@ -114,7 +121,7 @@ class Member < ActiveRecord::Base
     result
   end
 
-  def get_available_screen_time(date = Time.now, device_id = nil, activity_id = nil)
+  def get_available_screen_time(date = Date.today, device_id = nil, activity_id = nil)
     (get_screen_time(date, device_id, activity_id) - get_used_screen_time(date, device_id, activity_id)).to_i
   end
 

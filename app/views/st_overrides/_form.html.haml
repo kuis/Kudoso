@@ -1,0 +1,31 @@
+%h2 Select the time to add:
+.row
+  #time30.timesel.small-3.columns{onclick: "$('#st_override_time').val(30*60); $('.timesel').removeClass('selected'); $(this).addClass('selected');"}
+    30 Minutes
+  #time60.timesel.small-3.columns{onclick: "$('#st_override_time').val(60*60); $('.timesel').removeClass('selected'); $(this).addClass('selected');"}
+    60 Minutes
+  #time90.timesel.small-3.columns{onclick: "$('#st_override_time').val(90*60); $('.timesel').removeClass('selected'); $(this).addClass('selected');"}
+    90 Minutes
+  #mtime.timesel.small-3.columns
+    Manual Time
+    %br
+    %small
+      (Minutes or HH:MM)
+    %br
+    %input{id: 'manual_time', onclick: "$('.timesel').removeClass('selected'); $('#mtime').addClass('selected'); $('#st_override_time').val(0);", onchange: "var tmp = $('#manual_time').val().split(':'); var time = tmp[1] ? ( parseInt(tmp[0])*60*60 + parseInt(tmp[1])*60 ) : ( parseInt(tmp)*60 ); if (isNaN(time)) { alert('Please enter a valid time as HH:MM (ex: 1:35) or MM (ex: 35)') } else { $('#st_override_time').val(time); } "}
+= simple_form_for [@family,@member,@st_override] do |f|
+  - if @st_override.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@st_override.errors.count, "error")} prohibited this st_override from being saved:"
+      %ul
+        - @st_override.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.input :time, as: :hidden
+  .field
+    = f.input :date
+  .field
+    = f.input :comment
+  .actions
+    = f.button :submit, class: 'btn btn-primary'

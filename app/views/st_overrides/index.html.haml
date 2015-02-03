@@ -1,0 +1,23 @@
+%h1 Listing st_overrides
+
+%table
+  %tr
+    %th Member
+    %th Created by
+    %th Time
+    %th Date
+    %th Comment
+    %th
+
+  - @st_overrides.each do |st_override|
+    %tr
+      %td= st_override.member_id
+      %td= st_override.created_by_id
+      %td= st_override.time
+      %td= st_override.date
+      %td= st_override.comment
+      %td= link_to 'Destroy', [@family, @member, st_override], :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New St override', new_family_member_st_override_path(@family, @member)
