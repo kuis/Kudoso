@@ -4,6 +4,7 @@ class Family < ActiveRecord::Base
   has_many :todos, dependent: :destroy
   has_many :devices, dependent: :destroy
   has_many :family_activities, dependent: :destroy
+  belongs_to :primary_contact, class_name: 'User'
 
   def kids
     members.where('parent IS NOT true')

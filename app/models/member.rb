@@ -1,6 +1,8 @@
 class Member < ActiveRecord::Base
   belongs_to :family
   has_one :user, dependent: :nullify
+  belongs_to :contact
+  has_many :emails, through: :contact
   has_many :todo_schedules, dependent: :destroy
   has_many :my_todos, dependent: :destroy
   has_many :primary_devices, class_name: 'Device', foreign_key: 'primary_member_id', dependent: :nullify
@@ -9,19 +11,30 @@ class Member < ActiveRecord::Base
   has_many :screen_times
   has_many :st_overrides
 
+  accepts_nested_attributes_for :contact
+
+
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :omniauthable
   # :registerable, :recoverable, :validatable, :confirmable, :lockable,
   devise :database_authenticatable, :authentication_keys => [:username, :family_id]
   devise :rememberable, :trackable, :timeoutable
 
-  validates_presence_of :first_name, :username, :family
+  validates_presence_of :username, :family
 
   validates :username, uniqueness: { scope: :family_id }
 
   # override to scope username into family_id
   def self.find_for_authentication(warden_conditions)
     where(:username => warden_conditions[:username], :family_id => warden_conditions[:family_id]).first
+  end
+
+  def first_name
+    contact.try(:first_name) || ''
+  end
+
+  def last_name
+    contact.try(:last_name) || ''
   end
 
   def full_name

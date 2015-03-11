@@ -20,8 +20,9 @@ class MembersController < ApplicationController
   # GET /members/new
   def new
     @family = Family.find(params[:family_id])
-    parent = @family.members.where(parent: true).limit(1).first
-    @member = Member.new(family_id: @family.id, last_name: parent.try(:last_name))
+    @parent = @family.members.where(parent: true).limit(1).first
+    @member = Member.new(family_id: @family.id)
+    @member.contact = Contact.new(last_name: @parent.last_name)
   end
 
   # GET /members/1/edit
@@ -70,6 +71,6 @@ class MembersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def member_params
-    params.require(:member).permit(:first_name, :last_name, :username, :parent, :password, :password_confirmation, :birth_date)
+    params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :contact_attributes => [:first_name, :last_name, :id])
   end
 end

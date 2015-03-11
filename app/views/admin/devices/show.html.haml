@@ -1,0 +1,7 @@
+%p#notice= notice
+
+= render @device
+
+= link_to 'Edit', edit_family_device_path(@family,@device)
+\|
+= link_to 'Back', family_devices_path(@family)

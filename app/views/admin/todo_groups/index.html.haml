@@ -1,0 +1,33 @@
+%h1 Kudoso ToDo Groups
+
+
+- @todo_groups.each do |todo_group|
+  .panel
+    %h2=todo_group.name
+    %h3
+      For ages #{todo_group.rec_min_age} to #{todo_group.rec_max_age}
+    -if current_user.admin?
+      %p
+        = todo_group.active
+    %p
+      Todo's in group:
+      %ul.inline.even
+        - todo_group.todo_templates.each do |todo_t|
+          %li
+            = render todo_t
+    %p
+      - if current_user.admin?
+        Actions:
+        %br
+        = link_to 'Show', todo_group
+        |
+        = link_to 'Edit', edit_todo_group_path(todo_group)
+        |
+        = link_to 'Destroy', todo_group, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      - if @family.present? && can?(:create, Todo)
+        = simple_form_for( todo_group, url: assign_family_todo_group_path(@family, todo_group), method: :post) do |f|
+          = f.input :member_ids, as: :check_boxes, collection: @family.members.kids, value_method: :id, label_method: :full_name, label: 'Auto assign to these family members:'
+          = f.submit 'Assign to family'
+%br
+
+= link_to 'New Todo group', new_todo_group_path

@@ -2,6 +2,12 @@ Rails.application.routes.draw do
 
 
 
+  resources :contacts
+
+  resources :tickets
+
+  resources :notes
+
   resources :activity_types
 
   resources :content_ratings
@@ -57,6 +63,18 @@ Rails.application.routes.draw do
         end
       end
     end
+  end
+
+  namespace :admin do
+    resources :contacts
+    resources :families
+    resources :todo_templates
+    resources :devices
+    resources :device_types
+    resources :todo_groups
+    resources :todo_templates
+    resources :activity_templates
+    resources :tickets
   end
 
   root to: 'home#index'

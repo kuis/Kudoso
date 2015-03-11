@@ -1,0 +1,33 @@
+%h1 Listing activity_templates
+
+%table
+  %tr
+    %th Name
+    %th Description
+    %th Rec min age
+    %th Rec max age
+    %th Cost
+    %th Reward
+    %th Time block
+    %th Restricted
+    %th
+    %th
+    %th
+
+  - @activity_templates.each do |activity_template|
+    %tr
+      %td= activity_template.name
+      %td= activity_template.description
+      %td= activity_template.rec_min_age
+      %td= activity_template.rec_max_age
+      %td= activity_template.cost
+      %td= activity_template.reward
+      %td= activity_template.time_block
+      %td= activity_template.restricted
+      %td= link_to 'Show', activity_template
+      %td= link_to 'Edit', edit_activity_template_path(activity_template)
+      %td= link_to 'Destroy', activity_template, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Activity template', new_activity_template_path

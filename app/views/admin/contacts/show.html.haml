@@ -1,0 +1,54 @@
+%p#notice= notice
+
+%p
+  %b First name:
+  = @contact.first_name
+%p
+  %b Last name:
+  = @contact.last_name
+%p
+  %b Company:
+  = @contact.company
+%p
+  %b Primary email:
+  = @contact.primary_email_id
+%p
+  %b Address1:
+  = @contact.address1
+%p
+  %b Address2:
+  = @contact.address2
+%p
+  %b City:
+  = @contact.city
+%p
+  %b State:
+  = @contact.state
+%p
+  %b Zip:
+  = @contact.zip
+%p
+  %b Address type:
+  = @contact.address_type_id
+%p
+  %b Phone:
+  = @contact.phone
+%p
+  %b Phone type:
+  = @contact.phone_type_id
+%p
+  %b Last contact:
+  = @contact.last_contact
+%p
+  %b Do not call:
+  = @contact.do_not_call
+%p
+  %b Do not email:
+  = @contact.do_not_email
+%p
+  %b Contact type:
+  = @contact.contact_type_id
+
+= link_to 'Edit', edit_admin_contact_path(@contact)
+\|
+= link_to 'Back', admin_contacts_path

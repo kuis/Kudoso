@@ -1,0 +1,31 @@
+%h1 Listing Approved Family Activities
+
+%table
+  %tr
+    %th Name
+    %th Description
+    %th Cost
+    %th Reward
+    %th Time block (minutes)
+    %th Restricted
+    %th
+    %th
+    %th
+
+  - @family_activities.each do |family_activity|
+    %tr
+      %td= family_activity.name
+      %td= family_activity.description
+      %td= family_activity.cost
+      %td= family_activity.reward
+      %td= family_activity.time_block
+      %td= family_activity.restricted
+      %td= link_to 'Show', [@family,family_activity]
+      %td= link_to 'Edit', edit_family_family_activity_path(@family, family_activity)
+      %td= link_to 'Destroy', [@family,family_activity], :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Family Activity', new_family_family_activity_path(@family)
+%br
+= link_to 'Family Dashboard', @family

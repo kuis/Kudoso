@@ -1,0 +1,28 @@
+%h1 Listing todo_schedules
+
+%table
+  %tr
+    %th Todo
+    %th Member
+    %th Start date
+    %th End date
+    %th Active
+    %th Schedule
+    %th Notes
+    %th
+    %th
+
+  - @todo_schedules.each do |todo_schedule|
+    %tr
+      %td= todo_schedule.todo_id
+      %td= todo_schedule.member_id
+      %td= todo_schedule.start_date
+      %td= todo_schedule.end_date
+      %td= todo_schedule.active
+      %td= todo_schedule.schedule
+      %td= todo_schedule.notes
+      %td= link_to 'Edit', edit_family_todo_todo_schedule_path(@family, todo_schedule.todo, todo_schedule)
+      %td= link_to 'Destroy', family_todo_todo_schedule(@family, todo_schedule.todo), :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+

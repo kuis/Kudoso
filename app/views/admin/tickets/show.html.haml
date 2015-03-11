@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Assigned to:
+  = @ticket.assigned_to_id
+%p
+  %b User:
+  = @ticket.user_id
+%p
+  %b Contact:
+  = @ticket.contact_id
+%p
+  %b Ticket type:
+  = @ticket.ticket_type_id
+%p
+  %b Date openned:
+  = @ticket.date_openned
+%p
+  %b Date closed:
+  = @ticket.date_closed
+%p
+  %b Status:
+  = @ticket.status
+
+= link_to 'Edit', edit_admin_ticket_path(@ticket)
+\|
+= link_to 'Back', admin_tickets_path

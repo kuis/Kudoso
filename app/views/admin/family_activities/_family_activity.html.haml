@@ -1,0 +1,22 @@
+- available ||= false
+
+.family_activity{ class: available ? 'unrestricted' : 'restricted'}
+  .name
+    = family_activity.name
+  .kudos
+    - if family_activity.cost > 0
+      Cost: #{family_activity.cost}
+    - else
+      Reward: #{family_activity.reward}
+  .time
+    Time block: #{pluralize(family_activity.time_block,'minute')}
+  .restrictions
+    Restricted: #{family_activity.restricted?}
+  - if can?(:manage, family_activity)
+    .family_activity_admin
+      = link_to 'Edit', edit_family_family_activity_path(family_activity.family, family_activity)
+      = link_to 'Delete', [family_activity.family, family_activity], method: :delete, data: { confirm: 'Are you sure you want to delete this family activity?  This cannot be undone!' }
+  -if available
+    = link_to "Start #{family_activity.name}", new_family_member_activity_path(family_activity.family, member, family_activity_id: family_activity.id, start: true)
+
+

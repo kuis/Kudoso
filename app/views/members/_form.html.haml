@@ -8,17 +8,18 @@
         %ul
           - @member.errors.full_messages.each do |message|
             %li= message
+    = f.simple_fields_for :contact do |c|
 
+      .field
+        = c.input :first_name
+      .field
+        = c.input :last_name
     .field
-      = f.input :first_name
-    .field
-      = f.input :last_name
-    .field
-      = f.input :username
+      = f.input :username, placeholder: 'Enter a username unique to your family, usually the first name'
     .field
       = f.input :birth_date
     .field
-      = f.input :password
+      = f.input :password, placeholder: 'For younger kids, choose a simple word or 4 digit pin number as a password'
     .field
       = f.input :password_confirmation
     - if current_user.member.parent?

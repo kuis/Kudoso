@@ -1,0 +1,28 @@
+%h1 Listing families
+%table
+  %thead
+    %tr
+      %th Name
+      %th Primary contact
+      %th Members
+      %th Total Devices
+      %th Managed Devices
+      %th{:colspan => "3"}
+  %tbody
+    - @families.each do |family|
+      %tr
+        %td= family.name
+        %td= family.primary_contact.full_name
+        %td
+          - family.members.each_with_index do |member, idx|
+            - if idx > 0
+              %br
+            = member.full_name
+            = " *" if member.parent
+        %td= family.devices.count
+        %td= family.managed_device_count
+        %td= link_to 'Show', admin_family_path(family)
+        %td= link_to 'Edit', edit_admin_family_path(family)
+        %td= link_to 'Destroy', admin_family_path(family), method: :delete, data: { confirm: 'Are you sure?' }
+%br/
+= link_to 'New Family', new_admin_family_path

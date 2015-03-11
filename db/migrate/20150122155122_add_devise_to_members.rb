@@ -1,7 +1,7 @@
 class AddDeviseToMembers < ActiveRecord::Migration
   def change
     add_column :members, :encrypted_password, :string, :null => false, :default => '', :limit => 128
-    remove_column :members, :password
+    remove_column :members, :password, :string
     change_table :members do |t|
       ## Rememberable
       t.datetime :remember_created_at

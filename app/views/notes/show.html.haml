@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Ticket:
+  = @note.ticket_id
+%p
+  %b Note type:
+  = @note.note_type_id
+%p
+  %b Title:
+  = @note.title
+%p
+  %b Body:
+  = @note.body
+
+= link_to 'Edit', edit_note_path(@note)
+\|
+= link_to 'Back', notes_path

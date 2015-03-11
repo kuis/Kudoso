@@ -42,6 +42,9 @@ class Ability
           sto.try(:member).try(:family) == user.try(:member).try(:family)
         end
         can :manage, MyTodo, :family => user.try(:member).try(:family)
+        # can :manage, MyTodo do |todo|
+        #   todo.member && user.family && todo.member.family == user.try(:member).try(:family)
+        # end
         can :manage, Todo,  :family_id => user.try(:member).try(:family_id)
         can :manage, TodoSchedule do |ts|
           if ts.present? && ts.todo.present?
@@ -50,11 +53,18 @@ class Ability
             false
           end
         end
-        can :manage, MyTodo do |todo|
-            todo.member && user.family && todo.member.family == user.try(:member).try(:family)
-        end
         can :read, TodoTemplate, :active => true
         can [:read, :assign], TodoGroup, :active => true
+
+        # CRM Functions
+        can [:read, :create], Ticket, :user_id => user.try(:id)
+        can [:read, :create], Note do |note|
+          note.try(:ticket).try(:user_id) == user.try(:id)
+        end
+        can [:read, :create], NoteAttachment do |attachment|
+          attachment.try(:note).try(:ticket).try(:user_id) == user.try(:id)
+        end
+
       elsif user.member.present?
         Rails.logger.info "Child logged in, Member: #{user.member.id}"
 

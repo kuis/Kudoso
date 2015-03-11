@@ -3,6 +3,47 @@
 
 admin = User.create({email: 'kaz@kudoso.com', first_name: 'Mike', last_name: 'Kazmier', password: 'password', password_confirmation: 'password', admin: true, confirmed_at: Time.now})
 
+# Populate helpdesk fields
+
+address_types = AddressType.create([
+                                    { name: 'Home' },
+                                    { name: 'Work' },
+                                    { name: 'Other' }
+                                   ])
+
+phone_types = PhoneType.create([
+                                       { name: 'Home' },
+                                       { name: 'Work' },
+                                       { name: 'Mobile' },
+                                       { name: 'Skype' },
+                                       { name: 'Other' }
+                                   ])
+contact_types = ContactType.create([
+                                       { name: 'Customer' },
+                                       { name: 'Prospect' },
+                                       { name: 'Vendor' },
+                                       { name: 'Partner' },
+                                       { name: 'Media' },
+                                       { name: 'Other' }
+                                   ])
+
+note_types = NoteType.create([
+                                 { name: 'Email' },
+                                 { name: 'Phone Call' },
+                                 { name: 'Meeting' },
+                                 { name: 'Letter' },
+                                 { name: 'Other' }
+                             ])
+
+ticket_types = TicketType.create([
+                                     { name: 'Support' },
+                                     { name: 'Sales' },
+                                     { name: 'Media' },
+                                     { name: 'Finance' },
+                                     { name: 'Partner / Business Development' },
+                                     { name: 'Other' }
+                                 ])
+
 # generate content ratings and descriptors
 
 ratings = ContentRating.create([
@@ -184,11 +225,16 @@ group_three.todo_templates << todo_templates[5]
 
 # 1. Create family
   parent = User.create({email: 'parent@kudoso.com', first_name: 'Parent', last_name: 'Test', password: 'password', password_confirmation: 'password', confirmed_at: Time.now})
-  johnny = Member.create({username: 'johnny', first_name: 'Johnny', last_name: 'Test', password: '1234', family_id: parent.family_id})
-  suzy = Member.create({username: 'suzy', first_name: 'Suzy', last_name: 'Test', password: '4321', family_id: parent.family_id})
+  parent.member.contact.emails.create({ address: 'parent@kudoso.com'})
+
+  johnny = Member.create({username: 'johnny', password: '1234', family_id: parent.member.family_id})
+  johnny.contact = Contact.create({first_name: 'Johnny', last_name: 'Test'})
+
+  suzy = Member.create({username: 'suzy', password: '4321', family_id: parent.member.family_id})
+  suzy.contact = Contact.create({first_name: 'Suzy', last_name: 'Test'})
 
 # 2. Add Todos by assigning groups to the family
-  parent.family.assign_group(group_one, [johnny.id, suzy.id ])
+  parent.member.family.assign_group(group_one, [johnny.id, suzy.id ])
 
   # reset todo_schedules to the past
   TodoSchedule.find_each do |ts|
@@ -207,9 +253,9 @@ group_three.todo_templates << todo_templates[5]
   end
 
 # 3. Add Devices to family
-  kudoso_smartplug_1 = parent.family.devices.create({name: 'Living Room SmartPlug', device_type_id: DeviceType.find_by_name('Kudoso SmartPlug').id, managed: true})
-  kudoso_smartplug_2 = parent.family.devices.create({name: 'Play Room SmartPlug', device_type_id: DeviceType.find_by_name('Kudoso SmartPlug').id, managed: true})
-  devices = parent.family.devices.create([
+  kudoso_smartplug_1 = parent.member.family.devices.create({name: 'Living Room SmartPlug', device_type_id: DeviceType.find_by_name('Kudoso SmartPlug').id, managed: true})
+  kudoso_smartplug_2 = parent.member.family.devices.create({name: 'Play Room SmartPlug', device_type_id: DeviceType.find_by_name('Kudoso SmartPlug').id, managed: true})
+  devices = parent.member.family.devices.create([
                                       {name: 'Family iPad', device_type_id: DeviceType.find_by_name('iPad').id, managed: true},
                                       {name: 'Living Room HDTV', device_type_id: DeviceType.find_by_name('HDTV').id, managed: false},
                                       {name: 'Living Room BluRay', device_type_id: DeviceType.find_by_name('BluRay Player').id, managed: true, management_id: kudoso_smartplug_1.id},
@@ -218,7 +264,7 @@ group_three.todo_templates << todo_templates[5]
                                   ])
 
 # 4. Add activities to family
-  parent.family.recommended_activities.each { |activity_template| parent.family.assign_activity(activity_template) }
+  parent.member.family.recommended_activities.each { |activity_template| parent.family.assign_activity(activity_template) }
 
 # 5. Setup family member screentime restrictions
 

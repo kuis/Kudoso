@@ -1,0 +1,22 @@
+= simple_form_for [@family,@device] do |f|
+  - if @device.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@device.errors.count, "error")} prohibited this device from being saved:"
+      %ul
+        - @device.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.input :name
+  .field
+    = f.association :device_type
+  .field
+    = f.association :family, value: @family.name, disabled: true
+  .field
+    = f.input :managed
+  .field
+    = f.input :management_id, collection: @family.devices.where(managed: true).order(:name), label: 'Select the device that manages this device (if applicable):'
+  .field
+    = f.input :primary_member_id, collection: @family.members.order(:first_name), label_method: :full_name, value_method: :id, label: 'Default (Primary) User of this Device:'
+  .actions
+    = f.button :submit

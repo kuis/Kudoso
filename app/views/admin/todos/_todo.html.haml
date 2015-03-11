@@ -1,0 +1,53 @@
+.todo_wrap
+  .todo_name
+    = todo.name
+  .todo_description
+    = todo.description
+  .todo_schedule
+    Default Schedule:
+    = IceCube::Rule.from_yaml(todo.schedule)
+  .todo_attributes
+    %ul.small-block-grid-3
+      %li
+        Acitve:
+        = todo.active?
+      %li
+        Required:
+        = todo.required?
+      %li
+        Kudos:
+        = todo.kudos
+  .todo_assignments
+    Assigned to:
+    %ul
+      - todo.members.each do |member|
+        %li=member.full_name
+  .todo_assign
+    - if can?(:create, TodoSchedule)
+      %dl.accordion{"data-accordion" =>"myAccordionGroup"}
+        %dd.accordion-navigation
+          %a{href: "#assign_todo_#{todo.id}"}
+            Assign to child
+          .content{id: "assign_todo_#{todo.id}"}
+            = form_for [@family, todo, ts = TodoSchedule.new] do |f|
+              %br
+              .form_group
+                = f.label 'Choose a family member:'
+                = f.collection_select :member_id, @family.kids, :id, :full_name
+              .form_group
+                = f.label :start_date
+                = f.text_field :start_date, class: 'fdatepicker'
+              .form_group
+                =f.label 'End Date (optional)'
+                = f.text_field :end_date, class: 'fdatepicker'
+              .form_group
+                = f.label :schedule
+                = f.fields_for :schedule_rrules, ts.schedule_rrules.build(rrule: todo.schedule) do |builder|
+                  = render 'schedule_rrules/schedule_rrule_fields', f: builder
+                .links
+                  =# link_to_add_association 'Add new recurring schedule', f, :schedule_rrules,  partial: 'schedule_rrules/schedule_rrule_fields'
+              = f.submit
+
+  .todo_actions
+    = link_to 'Edit', edit_family_todo_path(todo.family, todo) if can?(:update, todo)
+    = link_to 'Destroy', family_todo_path(todo.family, todo), :method => :delete, :data => { :confirm => 'Are you sure?' } if can?(:delete, todo)

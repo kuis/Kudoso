@@ -1,0 +1,81 @@
+%h1= @family.name
+.row
+  .medium-6.columns
+    %h2 Family Members:
+    %ul
+      - @family.members.each do |member|
+        %li
+          = link_to member.full_name, family_member_path(@family, member)
+          - if member.parent?
+            (parent)
+          -else
+            (child)
+            %br
+            ToDo schedule:
+            .todo_wrap
+              = render member.todo_schedules
+      %li
+        = link_to 'Add new family member', new_family_member_path(@family) if can?(:create, Member)
+  .medium-6.columns
+    %h2 Family ToDo List
+    %ul#family_todo_list
+      - @family.todos.each do |todo|
+        %li
+          = render todo
+      %li
+        %a{href: '#', data: { "reveal-id" => 'todo_template_modal' }}
+          Add more ToDo's
+      %li
+        = link_to 'Add from Todo Groups', family_todo_groups_path(@family)
+
+%hr
+.row
+  .medium-6.columns
+    %h2 Family Devices:
+    = "#{pluralize(@family.managed_device_count, 'device')} being managed:"
+    %ul
+      - @family.devices.each do |device|
+        - if device.managed_devices_count == 0
+          %li
+            = render device
+      %li
+        = link_to 'Add new device', new_family_device_path(@family)
+        %br
+        = link_to 'View all devices', family_devices_path(@family)
+  .medium-6.columns
+    %h2 Family Activities
+    %ul
+      - @family.family_activities.each do |fam_act|
+        %li
+          =render fam_act
+#todo_template_modal.reveal-modal{data: { reveal: true} }
+  %a.close-reveal-modal
+    &#215;
+  %h2 ToDo Templates
+  %ul
+    - @todo_templates.each do |todo|
+      - if @family.todos.where(todo_template_id: todo.id).count == 0
+        %li
+          = render todo
+          = link_to 'Add to Family ToDo List', family_todos_path(@family, todo_template_id: todo.id ), method: :post
+    %li
+      .todo_wrap
+        Create your own ToDo:
+        = form_for [@family, Todo.new] do |f|
+          .form-group
+            = f.label :name
+            = f.text_field :name
+          .form-group
+            = f.label :description
+            = f.text_field :description
+          .form-group
+            = f.label :required
+            = f.check_box :required
+          .form-group
+            = f.label :active
+            = f.check_box :active
+          .form-group
+            =f.label :schedule
+            =f.select_recurring :schedule
+          .form-control
+            = f.submit

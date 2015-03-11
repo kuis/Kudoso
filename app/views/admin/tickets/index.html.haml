@@ -1,0 +1,31 @@
+%h1 Listing tickets
+
+%table
+  %tr
+    %th Assigned to
+    %th User
+    %th Contact
+    %th Ticket type
+    %th Date openned
+    %th Date closed
+    %th Status
+    %th
+    %th
+    %th
+
+  - @tickets.each do |ticket|
+    %tr
+      %td= ticket.assigned_to_id
+      %td= ticket.user_id
+      %td= ticket.contact_id
+      %td= ticket.ticket_type_id
+      %td= ticket.date_openned
+      %td= ticket.date_closed
+      %td= ticket.status
+      %td= link_to 'Show', [:admin, ticket]
+      %td= link_to 'Edit', edit_admin_ticket_path(ticket)
+      %td= link_to 'Destroy', [:admin, ticket], :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Ticket', new_admin_ticket_path

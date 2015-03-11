@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150203134206) do
+ActiveRecord::Schema.define(version: 20150206193021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,39 @@ ActiveRecord::Schema.define(version: 20150203134206) do
   create_table "activity_types", force: true do |t|
     t.string   "name"
     t.text     "metadata_fields"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "address_types", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "contact_types", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "contacts", force: true do |t|
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "company"
+    t.integer  "primary_email_id"
+    t.string   "address1"
+    t.string   "address2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
+    t.integer  "address_type_id"
+    t.string   "phone"
+    t.integer  "phone_type_id"
+    t.datetime "last_contact"
+    t.boolean  "do_not_call"
+    t.boolean  "do_not_email"
+    t.integer  "contact_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -144,6 +177,15 @@ ActiveRecord::Schema.define(version: 20150203134206) do
   add_index "devices", ["device_type_id"], name: "index_devices_on_device_type_id", using: :btree
   add_index "devices", ["family_id"], name: "index_devices_on_family_id", using: :btree
 
+  create_table "emails", force: true do |t|
+    t.integer  "contact_id"
+    t.string   "address"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "emails", ["contact_id"], name: "index_emails_on_contact_id", using: :btree
+
   create_table "families", force: true do |t|
     t.string   "name"
     t.integer  "primary_contact_id"
@@ -171,12 +213,11 @@ ActiveRecord::Schema.define(version: 20150203134206) do
   add_index "family_activities", ["family_id"], name: "index_family_activities_on_family_id", using: :btree
 
   create_table "members", force: true do |t|
-    t.string   "first_name"
-    t.string   "last_name"
     t.string   "username"
     t.date     "birth_date"
     t.boolean  "parent"
     t.integer  "family_id"
+    t.integer  "contact_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "kudos",                            default: 0
@@ -209,6 +250,34 @@ ActiveRecord::Schema.define(version: 20150203134206) do
   add_index "my_todos", ["member_id"], name: "index_my_todos_on_member_id", using: :btree
   add_index "my_todos", ["todo_schedule_id"], name: "index_my_todos_on_todo_schedule_id", using: :btree
 
+  create_table "note_attachments", force: true do |t|
+    t.integer  "note_id"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "note_types", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "notes", force: true do |t|
+    t.integer  "ticket_id"
+    t.integer  "note_type_id"
+    t.string   "title"
+    t.text     "body"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "phone_types", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "schedule_rrules", force: true do |t|
     t.integer  "todo_schedule_id"
     t.string   "rrule"
@@ -237,6 +306,27 @@ ActiveRecord::Schema.define(version: 20150203134206) do
     t.integer  "time"
     t.datetime "date"
     t.string   "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "st_overrides", ["member_id", "date"], name: "index_st_overrides_on_member_id_and_date", using: :btree
+  add_index "st_overrides", ["member_id"], name: "index_st_overrides_on_member_id", using: :btree
+
+  create_table "ticket_types", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tickets", force: true do |t|
+    t.integer  "assigned_to_id"
+    t.integer  "user_id"
+    t.integer  "contact_id"
+    t.integer  "ticket_type_id"
+    t.datetime "date_openned"
+    t.datetime "date_closed"
+    t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

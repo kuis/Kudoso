@@ -1,28 +1,90 @@
-== README
+== KUDOSO
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Kudoso's mission is to help parents manage the INFLUENCE of technology on their children through the POSITIVE REINFORCEMENT
+of family values and life skills.  The Kusoso service does this through a cloud-based service that monitors and controls
+screen time on virtually every electronic device in the household.  When possible, we provide the abilty to filter content
+to ensure that it is appropriate for children ages 2-12.  We instill family values and life skills by restricting access
+to devices until required work is completed.  Additionaly, kids are encouraged to do optional but beneficial tasks to earn
+more "kudos".  Kudos represent a virtual currency within Kudoso that kids can use to unlock additional screen time, or in
+the future to access partner content or even purchase real merchandise.  Ultimately we see Kudoso as the tool parents will
+use to curate thier complete digital experience for their families.
 
-Things you may want to cover:
+Development requirements: the user experience MUST BE QUICK and EASY.  While the underlying system must support complex
+logic, the presentation and use of the information must be quick and easy for a typical user.  We want users to get up
+and running with Kudoso in under 10 minutes, and all their interactions should be positive ones.  We don't want to
+strip functionality, but we MUST present it in a way that is easy to use while being powerful.
 
-* Ruby version
+=== Theory of Operation
 
-* System dependencies
+    There are 2 classes of "users" in Kudoso:
+        * User
+        * Member (as in Family Member)
 
-* Configuration
+    USERS are the secure accounts that are associated with a kudoso recurring payment plan.  Other than utilizing a secure
+    password and having unqiue email addressees user accounts are not used for anything else in Kudoso.
 
-* Database creation
+    Families are the "organizational unit" in Kudoso.
 
-* Database initialization
+    Family -> Name (Display friendly name for the family)
+           -> Devices (All devices associated with the family)
+           -> Family Activities (approved family activities and their costs/rewards)
+           -> Todos
+                -> Todo Schedules (assign todos to members on a specific schedule)
+           -> Members
+                -> Username (for kid-friendly login)
+                -> Passowrd (for kid-friendly login)
+                -> Contact
+                   -> First/Last Name/Email/etc
+                -> My_todos (the record of completed/incomplete todos)
+                -> Screen_times (restrictions for screen time: global, per activity, per device)
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+    To support kid-friendly logins, the member passwords are not required to be complex and member usernames are only
+    uniwue within a family.  As such, a parent (user) must FIRST authenticate on the household devices BEFORE a child
+    (member) account can authenticate.  The user authentication places a secure cookie in on the device which is used
+    in conjunction with the member's credentials to provide a little more security without making the process overly
+    complex for younger users.
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+==== KudosoCRM
+
+    The CRM is designed to handle the daily support and sales inquries for Kudoso and to generally ensure that our daily
+    operations are handled without issues.  This all done through Tickets.  When a new email comes into info@kudoso.com or
+    to support@kudoso.com the MailMan gem downloads this, and creates a new ticket.  Likewise, a customer can create thier
+    own support ticket within the application.
+
+    Tickets -> Assigned_to(User)
+            -> user_id or contact_id
+            -> Status (New, Assigned, Waiting on Customer, Closed)
+            -> Ticket_type (Support, Sales, Media, Finance, Partner/BizDev, Other)
+            -> Date openned / closed
+            -> UUID
+            -> Notes
+                -> Note Type (Email, Phone, Metting, Letter, Other)
+                -> Title
+                -> Body
+                -> note_attachments
+                    -> Name
+                    -> File
+
+
+==== KudosoGateway
+
+    The Kudoso Gateway is an OpenWRT based gateway / router that performs several key functions:
+        * Tracks and registers devices in the household
+        * Tracks and restricts internet usage based on device / user restrictions like activity, available screen time,
+          etc (including a default policy for guests / unknown devices)
+        * Filters web content (proxy) for supported devices
+        * Records activity results (internet access including application layer whenever possible) with Kudoso Cloud Servers
+        * Communicates and controls Kudoso Lockable SmartPlugs in the home
+
+    The Kudoso Gateway operates at 2 layers of the OSI stack:
+        * At the network layer, the gateway performs NAT on all traffic and restricts (blocks) IP communication over the
+          Internet when needed.
+        * At the application layer, for known applications, the gateway will filter/inspect content
+
+    The Kudoso Gateway communicates with Kudoso Cloud Services via its ruby processes.  The Cloud Services provide
+    authenication and authorization for specific network requests based on the requesting device/user.  Additionally
+    the Cloud Services can provide more robust application layer services like inspecting web pages for questionable content
+    and/or keywords.
+
+    The Gateway / Proxy workflow can be seen here: https://www.lucidchart.com/documents/edit/e1ab8429-ac64-44b1-ac71-933c014fc28b?

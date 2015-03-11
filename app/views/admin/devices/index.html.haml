@@ -1,0 +1,35 @@
+%h1 Listing devices
+
+%table
+  %tr
+    %th Name
+    %th Device type
+    %th Managed
+    %th Management
+    %th Default / Primary user
+    %th Manages
+    %th
+    %th
+    %th
+
+  - @devices.each do |device|
+    %tr
+      %td= device.name
+      %td= "#{device.device_type_id} #{device.device_type.name}"
+      %td= device.managed
+      %td= device.management_id ? "#{device.management_device.name}" : 'None'
+      %td= device.primary_member_id ? device.primary_member.full_name : 'None'
+      %td
+        - device.managed_devices.each_with_index do |dev, idx|
+          - if idx > 1
+            %br
+          = dev.name
+      %td= link_to 'Show', [@family, device]
+      %td= link_to 'Edit', edit_family_device_path(@family, device)
+      %td= link_to 'Destroy', [@family,device], :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Device', new_family_device_path(@family)
+%br
+= link_to 'Family Dashboard', @family

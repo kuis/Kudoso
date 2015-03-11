@@ -1,0 +1,4 @@
+- member ||= nil
+- family_activities.each do |fam_act|
+  %li
+    =render partial: 'family_activities/family_activity', locals: { member: member, available: (member.present? && member.can_do_activity?(fam_act)), family_activity: fam_act}
