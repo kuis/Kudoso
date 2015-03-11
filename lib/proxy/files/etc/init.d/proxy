@@ -1,0 +1,19 @@
+#!/bin/sh /etc/rc.common
+# Init Script
+
+START=80
+STOP=15
+
+start() {
+  ulimit -n 64000 ; chmod 0 /root/em/monitrc ; chmod u+rw /root/em/monitrc ; monit -c /root/em/monitrc ; monit -c /root/em/monitrc start proxy
+  # commands to launch application
+}
+
+stop() {
+  monit -c /root/em/monitrc stop proxy
+  # commands to kill application
+}
+
+restart() {
+  ulimit -n 64000 ; chmod 0 /root/em/monitrc ; chmod u+rw /root/em/monitrc ; monit -c /root/em/monitrc ; monit -c /root/em/monitrc restart proxy
+}

@@ -1,0 +1,14 @@
+
+config wifi-device 'wl0'
+	option type 'broadcom'
+	option channel '11'
+	option disabled '0'
+
+config wifi-iface
+	option device 'wl0'
+	option network 'lan'
+	option mode 'ap'
+	option ssid 'Kudoso'
+	option 'encryption' 'psk2'
+	option 'key'        'kudo5o13'
+

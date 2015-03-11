@@ -1,0 +1,2 @@
+POST plan/:plan_id/user_devices/create_or_update
+then pass params ip, mac_address and name

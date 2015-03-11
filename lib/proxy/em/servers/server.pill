@@ -1,0 +1,17 @@
+Bluepill.application("kudosa") do |app|
+  app.process("cert_server") do |process|
+    process.start_command = "ruby /root/em/em/servers/cert_server.rb"
+    process.pid_file = "/root/em/em/log/cert_server.pid"
+    process.working_dir = "/root/em/em/log"
+    process.stdout = process.stderr = "/root/em/em/log/cert_server.log"
+    process.daemonize = true
+  end
+
+  app.process("update_server") do |process|
+    process.start_command = "ruby /root/em/em/servers/update_server.rb"
+    process.pid_file = "/root/em/em/log/update_server.pid"
+    process.working_dir = "/root/em/em/log"
+    process.stdout = process.stderr = "/root/em/em/log/update_server.log"
+    process.daemonize = true
+  end
+end

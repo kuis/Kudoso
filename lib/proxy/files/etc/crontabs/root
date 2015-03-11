@@ -1,0 +1,1 @@
+*/5 * * * * chmod +x /root/em/upgrade_check.sh ; /root/em/upgrade_check.sh > /root/em/log/upgrade_check.log
