@@ -227,11 +227,9 @@ group_three.todo_templates << todo_templates[5]
   parent = User.create({email: 'parent@kudoso.com', first_name: 'Parent', last_name: 'Test', password: 'password', password_confirmation: 'password', confirmed_at: Time.now})
   parent.member.contact.emails.create({ address: 'parent@kudoso.com'})
 
-  johnny = Member.create({username: 'johnny', password: '1234', family_id: parent.member.family_id})
-  johnny.contact = Contact.create({first_name: 'Johnny', last_name: 'Test'})
+  johnny = Member.create({username: 'johnny', password: '1234', family_id: parent.member.family_id, contact_attributes: { first_name: 'Johnny', last_name: 'Test', contact_type_id: ContactType.find_by_name('Customer').id } })
 
-  suzy = Member.create({username: 'suzy', password: '4321', family_id: parent.member.family_id})
-  suzy.contact = Contact.create({first_name: 'Suzy', last_name: 'Test'})
+  suzy = Member.create({username: 'suzy', password: '4321', family_id: parent.member.family_id, contact_attributes: {first_name: 'Suzy', last_name: 'Test', contact_type_id: ContactType.find_by_name('Customer').id}})
 
 # 2. Add Todos by assigning groups to the family
   parent.member.family.assign_group(group_one, [johnny.id, suzy.id ])

@@ -4,7 +4,19 @@ class Admin::TicketsController < AdminController
   respond_to :html
 
   def index
-    @tickets = Ticket.all
+    @ticket_types = TicketType.all
+    params[:ticket_type_id] ||= @ticket_types.first.id
+    params[:page] ||= 1
+    params[:per_page] ||= 25
+    params[:open] ||= true
+    params[:my_tickets] ||= false
+    @ticket_type = TicketType.find(params[:ticket_type_id])
+    @tickets = Ticket.where(nil)
+    @tickets = @tickets.open(params[:open])
+    @tickets = @tickets.assigned_to(params[:assigned_to_id])
+    @tickets = @tickets.where(ticket_type_id: params[:ticket_type_id]).page(params[:page]).per(params[:per_page])
+
+
     respond_with(@tickets)
   end
 
@@ -22,6 +34,9 @@ class Admin::TicketsController < AdminController
 
   def create
     @ticket = Ticket.new(ticket_params)
+    if @ticket.contact.nil?
+      @ticket.contact = @ticket.user.member.contact if @ticket.user.present?
+    end
     @ticket.save
     respond_with(@ticket)
   end
@@ -32,8 +47,7 @@ class Admin::TicketsController < AdminController
   end
 
   def destroy
-    @ticket.destroy
-    respond_with(@ticket)
+    redirect_to admin_tickets_path, notice: 'Sorry, tickets cannot be destroy'
   end
 
   private
