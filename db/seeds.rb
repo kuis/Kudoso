@@ -225,7 +225,6 @@ group_three.todo_templates << todo_templates[5]
 
 # 1. Create family
   parent = User.create({email: 'parent@kudoso.com', first_name: 'Parent', last_name: 'Test', password: 'password', password_confirmation: 'password', confirmed_at: Time.now})
-  parent.member.contact.emails.create({ address: 'parent@kudoso.com'})
 
   johnny = Member.create({username: 'johnny', password: '1234', family_id: parent.member.family_id, contact_attributes: { first_name: 'Johnny', last_name: 'Test', contact_type_id: ContactType.find_by_name('Customer').id } })
 

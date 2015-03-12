@@ -11,7 +11,7 @@ class Admin::TicketsController < AdminController
     params[:open] ||= true
     params[:my_tickets] ||= false
     @ticket_type = TicketType.find(params[:ticket_type_id])
-    @tickets = Ticket.where(nil)
+    @tickets = Ticket.where(nil).order(:date_openned)
     @tickets = @tickets.open(params[:open])
     @tickets = @tickets.assigned_to(params[:assigned_to_id])
     @tickets = @tickets.where(ticket_type_id: params[:ticket_type_id]).page(params[:page]).per(params[:per_page])
@@ -42,8 +42,11 @@ class Admin::TicketsController < AdminController
   end
 
   def update
+    if params[:ticket_close]
+      params[:ticket][:date_closed] = Time.now
+    end
     @ticket.update(ticket_params)
-    respond_with(@ticket)
+    respond_with([:admin, @ticket])
   end
 
   def destroy

@@ -6,6 +6,9 @@ class User < ActiveRecord::Base
   has_many :tickets, dependent: :destroy
   has_many :assigned_tickets, class: Ticket, foreign_key: 'assigned_to_id', dependent: :nullify
 
+  scope :admins, -> { where(admin: true) }
+  scope :accounts, -> { where(admin: false) }
+
   attr_accessor :first_name, :last_name
 
   after_create :build_family
@@ -40,7 +43,9 @@ class User < ActiveRecord::Base
       self.create_family(name: "#{self.last_name} Family", primary_contact_id: self.id)
       self.member = self.family.members.create({username: self.email, parent: true })
       self.member.create_contact({first_name: self.first_name, last_name: self.last_name, contact_type_id: ContactType.find_by_name('Customer').id})
-      self.member.contact.emails.create({address: self.email})
+      self.member.contact.emails.create({address: self.email, is_primary: true})
+      self.save
+      self.member.save
     end
   end
 end

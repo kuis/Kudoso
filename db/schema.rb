@@ -86,7 +86,6 @@ ActiveRecord::Schema.define(version: 20150206193021) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "company"
-    t.integer  "primary_email_id"
     t.string   "address1"
     t.string   "address2"
     t.string   "city"
@@ -180,6 +179,7 @@ ActiveRecord::Schema.define(version: 20150206193021) do
   create_table "emails", force: true do |t|
     t.integer  "contact_id"
     t.string   "address"
+    t.boolean  "is_primary", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

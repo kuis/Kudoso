@@ -1,27 +1,41 @@
 %p#notice= notice
 
 %p
-  %b Assigned to:
-  = @ticket.assigned_to_id
-%p
-  %b User:
-  = @ticket.user_id
-%p
-  %b Contact:
-  = @ticket.contact_id
-%p
-  %b Ticket type:
-  = @ticket.ticket_type_id
-%p
   %b Date openned:
   = @ticket.date_openned
-%p
-  %b Date closed:
-  = @ticket.date_closed
-%p
-  %b Status:
-  = @ticket.status
 
-= link_to 'Edit', edit_admin_ticket_path(@ticket)
-\|
+
+- if @ticket.date_closed.blank?
+  = simple_form_for [:admin, @ticket] do |f|
+    %p
+      = f.input :ticket_type_id, collection: TicketType.all, label_method: :name, value_method: :id
+    %p
+      = f.input :user_id, collection: User.accounts, label_method: :email, value_method: :id
+    %p
+      = f.input :contact_id, collection: Contact.all.order(:last_name), label_method: :label, value_method: :id
+    %p
+      = f.input :assigned_to_id, collection: User.admins, label_method: :full_name, value_method: :id
+    %p
+      = f.input :status, collection: @ticket.default_statuses
+    %p
+      Close ticket:
+      = check_box_tag 'ticket_close'
+    %p
+      = f.button :submit
+-else
+  %p
+    %b Ticket type:
+    = @ticket.ticket_type.name
+  %p
+    %b User / Contact:
+    (#{@ticket.user_id}) #{@ticket.user.try(:email)} /
+    = @ticket.contact.try(:full_name)
+  %p
+    %b Assigned to: #{@ticket.assigned_to.try(:full_name)}
+  %p
+    %b Status: #{@ticket.status}
+  %p
+    %b Date closed:
+    = @ticket.date_closed
+
 = link_to 'Back', admin_tickets_path

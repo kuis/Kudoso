@@ -3,6 +3,7 @@ class CreateEmails < ActiveRecord::Migration
     create_table :emails do |t|
       t.integer :contact_id
       t.string :address
+      t.boolean :is_primary, default: false
 
       t.timestamps
     end

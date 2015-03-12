@@ -4,7 +4,6 @@ class CreateContacts < ActiveRecord::Migration
       t.string :first_name
       t.string :last_name
       t.string :company
-      t.integer :primary_email_id
       t.string :address1
       t.string :address2
       t.string :city
