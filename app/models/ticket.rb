@@ -11,7 +11,8 @@ class Ticket < ActiveRecord::Base
 
   has_many :notes, dependent: :destroy
 
-  accepts_nested_attributes_for :notes
+  accepts_nested_attributes_for :notes, :reject_if => :all_blank, :allow_destroy => true
+
 
   before_create { self.date_openned ||= Time.now }
 

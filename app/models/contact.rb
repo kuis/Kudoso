@@ -3,13 +3,14 @@ class Contact < ActiveRecord::Base
   has_many :emails, dependent: :destroy
 
   def primary_email
-    "#{emails.primary.try(:address)}"
+    "#{emails.primary.first.try(:address)}"
   end
+
   def full_name
     "#{self.first_name} #{self.last_name}"
   end
 
   def label
-    "#{self.last_name}, #{self.first_name} #{ self.primary_email.blank? ? '' : "<#{self.primary_email}>" }"
+    "#{self.last_name}, #{self.first_name} <#{ self.primary_email }>"
   end
 end

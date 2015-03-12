@@ -5,14 +5,18 @@
       %ul
         - @ticket.errors.full_messages.each do |msg|
           %li= msg
-
-  .field
-    = f.association :assigned_to, collection: User.where(admin: true), label_method: :full_name
-  .field
-    = f.association :user, collection: User.where.not(admin: true)
-  .field
-    = f.association :contact, collection: Contact.all, label_method: ->(obj){ "#{obj.full_name}#{ obj.member.present? ? " (#{obj.member.family.name})" : '' }" }, allow_blank: false
   .field
     = f.association :ticket_type
+  .field
+    = f.association :contact, collection: Contact.all, label_method: :label, allow_blank: false
+  .field
+    = f.association :assigned_to, collection: User.admins, label_method: :email, value_method: :id
+  .field
+    = f.association :user, collection: User.accounts, label_method: :email , value_method: :id
+  .FIELD
+    = f.input :status, collection: @ticket.default_statuses
+  .links
+    = link_to_add_association 'add note', f, :notes
+
   .actions
     = f.submit 'Save'

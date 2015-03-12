@@ -26,7 +26,7 @@ class Admin::TicketsController < AdminController
 
   def new
     @ticket = Ticket.new
-    respond_with(@ticket)
+    respond_with([:admin, @ticket])
   end
 
   def edit
@@ -38,7 +38,7 @@ class Admin::TicketsController < AdminController
       @ticket.contact = @ticket.user.member.contact if @ticket.user.present?
     end
     @ticket.save
-    respond_with(@ticket)
+    respond_with([:admin, @ticket])
   end
 
   def update
@@ -57,6 +57,6 @@ class Admin::TicketsController < AdminController
 
 
     def ticket_params
-      params.require(:ticket).permit(:assigned_to_id, :user_id, :contact_id, :ticket_type_id, :date_openned, :date_closed, :status)
+      params.require(:ticket).permit(:assigned_to_id, :user_id, :contact_id, :ticket_type_id, :date_openned, :date_closed, :status, notes_attributes: [:ticket_id, :note_type_id, :title, :body])
     end
 end

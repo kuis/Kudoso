@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   has_many :assigned_tickets, class: Ticket, foreign_key: 'assigned_to_id', dependent: :nullify
 
   scope :admins, -> { where(admin: true) }
-  scope :accounts, -> { where(admin: false) }
+  scope :accounts, -> { where.not(admin: true) }
 
   attr_accessor :first_name, :last_name
 

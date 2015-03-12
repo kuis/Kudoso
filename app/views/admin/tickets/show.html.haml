@@ -7,21 +7,44 @@
 
 - if @ticket.date_closed.blank?
   = simple_form_for [:admin, @ticket] do |f|
-    %p
-      = f.input :ticket_type_id, collection: TicketType.all, label_method: :name, value_method: :id
-    %p
-      = f.input :user_id, collection: User.accounts, label_method: :email, value_method: :id
-    %p
-      = f.input :contact_id, collection: Contact.all.order(:last_name), label_method: :label, value_method: :id
-    %p
-      = f.input :assigned_to_id, collection: User.admins, label_method: :full_name, value_method: :id
-    %p
-      = f.input :status, collection: @ticket.default_statuses
-    %p
-      Close ticket:
-      = check_box_tag 'ticket_close'
-    %p
-      = f.button :submit
+    .panel
+      %p
+        = f.input :ticket_type_id, collection: TicketType.all, label_method: :name, value_method: :id
+      %p
+        = f.input :user_id, collection: User.accounts, label_method: :email, value_method: :id
+      %p
+        = f.input :contact_id, collection: Contact.all.order(:last_name), label_method: :label, value_method: :id
+      %p
+        = f.input :assigned_to_id, collection: User.admins, label_method: :full_name, value_method: :id
+      %p
+        = f.input :status, collection: @ticket.default_statuses
+      %p
+        Close ticket:
+        = check_box_tag 'ticket_close'
+      .links
+        = link_to_add_association 'add note', f, :notes
+      %p
+        = f.button :submit
+    .panel
+      %h2 Ticket Notes
+      -#= f.simple_fields_for :notes do |note|
+      -#  = render 'note_fields', :f => note
+      %hr
+
+      - @ticket.notes.reverse.each do |note|
+        .note
+          .pull-right
+            #{note.created_at}
+          .panel
+            %p
+              %b Note Type:
+              =note.note_type.try(:name)
+            %p
+              %b
+                Title:
+              #{note.title}
+            %p
+              #{note.body}
 -else
   %p
     %b Ticket type:

@@ -1,0 +1,4 @@
+.nested_fields
+  = f.input :note_type_id, collection: NoteType.all, label_method: :name, value_method: :id
+  = f.input :title
+  = f.input :body
