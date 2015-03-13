@@ -44,6 +44,7 @@ class Admin::TicketsController < AdminController
   def update
     if params[:ticket_close]
       params[:ticket][:date_closed] = Time.now
+      params[:ticket][:assigned_to_id] = current_user.id if @ticket.assigned_to_id.blank?
     end
     @ticket.update(ticket_params)
     respond_with([:admin, @ticket])

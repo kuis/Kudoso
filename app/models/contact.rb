@@ -1,6 +1,11 @@
 class Contact < ActiveRecord::Base
   has_one :member, dependent: :nullify
   has_many :emails, dependent: :destroy
+  belongs_to :contact_type
+  belongs_to :address_type
+  belongs_to :phone_type
+
+  accepts_nested_attributes_for :emails, :reject_if => :all_blank, :allow_destroy => true
 
   def primary_email
     "#{emails.primary.first.try(:address)}"

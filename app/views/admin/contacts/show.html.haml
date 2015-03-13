@@ -11,7 +11,7 @@
   = @contact.company
 %p
   %b Primary email:
-  = @contact.primary_email_id
+  = @contact.primary_email
 %p
   %b Address1:
   = @contact.address1
@@ -36,6 +36,13 @@
 %p
   %b Phone type:
   = @contact.phone_type_id
+.panel
+  %b Emails
+  - @contact.emails.each do |email|
+    %br
+    = email.address
+    = email.is_primary ? 'Primary' : ''
+
 %p
   %b Last contact:
   = @contact.last_contact
@@ -47,7 +54,7 @@
   = @contact.do_not_email
 %p
   %b Contact type:
-  = @contact.contact_type_id
+  = @contact.contact_type.try(:name)
 
 = link_to 'Edit', edit_admin_contact_path(@contact)
 \|

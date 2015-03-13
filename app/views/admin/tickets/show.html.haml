@@ -37,14 +37,12 @@
             #{note.created_at}
           .panel
             %p
-              %b Note Type:
-              =note.note_type.try(:name)
-            %p
               %b
-                Title:
-              #{note.title}
+                #{note.title}
+              %small
+                (#{note.note_type.try(:name)})
             %p
-              #{note.body}
+              #{raw(note.body)}
 -else
   %p
     %b Ticket type:

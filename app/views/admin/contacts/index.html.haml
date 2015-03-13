@@ -27,7 +27,7 @@
       %td= contact.first_name
       %td= contact.last_name
       %td= contact.company
-      %td= contact.primary_email_id
+      %td= contact.primary_email
       %td= contact.address1
       %td= contact.address2
       %td= contact.city
@@ -39,7 +39,7 @@
       %td= contact.last_contact
       %td= contact.do_not_call
       %td= contact.do_not_email
-      %td= contact.contact_type_id
+      %td= contact.contact_type.try(:name)
       %td= link_to 'Show', [:admin, contact]
       %td= link_to 'Edit', edit_admin_contact_path(contact)
       %td= link_to 'Destroy', [:admin, contact], :method => :delete, :data => { :confirm => 'Are you sure?' }

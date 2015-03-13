@@ -32,6 +32,7 @@ note_types = NoteType.create([
                                  { name: 'Phone Call' },
                                  { name: 'Meeting' },
                                  { name: 'Letter' },
+                                 { name: 'Ticket Update'},
                                  { name: 'Other' }
                              ])
 
