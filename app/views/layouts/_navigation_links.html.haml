@@ -21,9 +21,3 @@
     %li= link_to("Logout (#{current_member.first_name})", destroy_member_session_path(id: current_member.family_id), :method => :delete)
 
 
-- else
-  %li= link_to('Parent Sign In', new_user_session_path)
-  - if cookies.signed[:kudoso_family].present?
-    %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]))
-  - else
-    %li= link_to('Sign Up', new_user_registration_path)

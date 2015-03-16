@@ -14,7 +14,7 @@
 @import 'mixins';
 @import 'jquery.ui.core';
 @import 'jquery.ui.datepicker';
-@import 'foundation';
+@import 'foundation_and_overrides';
 @import 'foundation-datepicker';
 @import 'recurring_select';
 @import 'font-awesome';
@@ -23,6 +23,123 @@
 @import 'todo_templates';
 @import 'devices';
 @import 'family_activities';
+
+body {
+  width: 100%;
+  height: 100%;
+  background: image-url('landing-bg.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.blur {
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, .85);
+}
+nav.offset-top {
+  padding-top: 80px;
+  #homenav {
+    background-color: rgba(158, 158, 158, 0.80);
+    height: 65px;
+    .sub-nav {
+      float: right;
+      overflow: visible;
+      dd > a {
+        font-size: 1.5rem;
+        color: #fff;
+      }
+      dd.active > a {
+        padding-bottom: 30px;
+      }
+    }
+  }
+
+}
+nav.top-bar {
+  padding-right: 40px;
+  padding-left: 40px;
+  .title-area {
+    padding-top: 7px;
+  }
+  .top-bar-section {
+    ul {
+      li.active {
+        a {
+          padding-bottom: 20px !important;
+        }
+
+      }
+    }
+  }
+}
+main {
+  height: 100%;
+  width: 100%;
+}
+
+#home {
+  height: 100%;
+  width: 100%;
+  .top {
+    padding-top: 60px;
+    height: 33%;
+    width: 100%;
+    text-align: center;
+  }
+  .mid {
+    height: 33%;
+    width: 100%;
+    text-align: center;
+    h1 {
+      color: white;
+      font-size: 3rem;
+      text-shadow: 2px 2px #4f4f4f;
+    }
+  }
+  .bottom {
+    height: 33%;
+    width: 100%;
+    text-align: center;
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+      text-align: center;
+      li {
+        display: inline;
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+    }
+
+  }
+}
+#features {
+  height: 100%;
+  width: 100%;
+  background-color: green;
+}
+#how {
+  height: 100%;
+  width: 100%;
+  background-color: red;
+}
+#pricing {
+  height: 100%;
+  width: 100%;
+  background-color: orange;
+}
+#about {
+  height: 100%;
+  width: 100%;
+  background-color: silver;
+}
+
+
 
 .todo_wrap {
   margin: 5px 5px 5px 5px;

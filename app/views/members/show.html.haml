@@ -11,6 +11,8 @@
     Max Screen Time:
     .screen_time
       #{format_counter @member.get_max_screen_time}
+    %div
+      = link_to 'Adjust Screen Time', family_member_screen_times_path(@family,@member) if can?(:edit, ScreenTime)
   .medium-3.columns
     Available Screen Time:
     .screen_time

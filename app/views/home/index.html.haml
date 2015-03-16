@@ -1,2 +1,33 @@
-%h1
-  Welcome to Kudoso
+%nav.offset-top
+  #homenav{"data-magellan-expedition" => "fixed"}
+    %dl.sub-nav
+      %dd{"data-magellan-arrival" => "home"}
+        %a{href: '#home'} home
+      %dd{"data-magellan-arrival" => "features"}
+        %a{href: '#features'} features
+      %dd{"data-magellan-arrival" => "how"}
+        %a{href: '#how'} how it works
+      %dd{"data-magellan-arrival" => "pricing"}
+        %a{href: '#pricing'} pricing
+      %dd{"data-magellan-arrival" => "about"}
+        %a{href: '#about'} about us
+    %dl
+      %dd
+        =image_tag 'kudoso_logo_52.png'
+%section#home{"data-magellan-destination" => 'home'}
+  .top
+    =image_tag 'kudoso_logo_52@3x.png'
+  .mid
+    %h1
+      Changing the way families manage technology
+  .bottom
+    - unless user_signed_in?
+      %ul
+        %li= link_to('Sign Up', new_user_registration_path, class: 'button large radius')
+        %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')
+        - if cookies.signed[:kudoso_family].present?
+          %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius secondary')
+%section#features{"data-magellan-destination" => 'features'}
+%section#how{"data-magellan-destination" => 'how'}
+%section#pricing{"data-magellan-destination" => 'pricing'}
+%section#about{"data-magellan-destination" => 'about'}
