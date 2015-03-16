@@ -21,7 +21,10 @@
     %h1
       Changing the way families manage technology
   .bottom
-    - unless user_signed_in?
+    - if user_signed_in?
+      %ul
+        %li= link_to('Family Dashboard', family_path(current_user.family), class: 'button large radius')
+    -else
       %ul
         %li= link_to('Sign Up', new_user_registration_path, class: 'button large radius')
         %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')

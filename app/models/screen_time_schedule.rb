@@ -7,8 +7,8 @@ class ScreenTimeSchedule < ActiveRecord::Base
   accepts_nested_attributes_for :screen_time_schedule_rrules, :reject_if => :all_blank, :allow_destroy => true
 
   validate :assignments
-  validates :start_time, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 86400}, :presence => true
-  validates :end_time, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 86400}, :presence => true
+  validates :start_seconds, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 86400}, :presence => true
+  validates :end_seconds, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 86400}, :presence => true
   validate :increasing_time
 
   def start_time
@@ -49,7 +49,7 @@ class ScreenTimeSchedule < ActiveRecord::Base
     if family_id.present? && member_id.present?
       errors.add(:member_id, 'cannot be set when assigned to a family')
     end
-    if family_id.blank? && member_id.blank
+    if family_id.blank? && member_id.blank?
       errors.add(:base, 'must be assigned to a family or a member')
     end
   end

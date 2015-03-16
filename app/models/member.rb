@@ -10,6 +10,7 @@ class Member < ActiveRecord::Base
   has_many :authorized_activities, class_name: 'Activity', foreign_key: :created_by_id, dependent: :nullify, inverse_of: :created_by
   has_many :screen_times
   has_many :st_overrides
+  has_many :screen_time_schedules
 
   accepts_nested_attributes_for :contact
 
@@ -168,11 +169,27 @@ class Member < ActiveRecord::Base
   def can_do_activity?(family_activity, device = nil)
     #TODO: Implement device logic
     ret = false
+
+    # Check if activity is restricted
     if family_activity.restricted?
       ret = !!get_available_screen_time if todos_complete?
     else
       ret = !!get_available_screen_time
     end
+
+    if ret
+      # Member has enough screen time, but does the schedule restrict it?
+
+      # Check family wide restrictions
+      self.family.screen_time_schedules.each do |st_sched|
+        ret = false if st_sched.schedule.occurring_at?(Time.now)
+      end
+      # Check member specific restrictions
+      self.screen_time_schedules.each do |st_sched|
+        ret = false if st_sched.schedule.occurring_at?(Time.now)
+      end
+    end
+
     ret
   end
 end
