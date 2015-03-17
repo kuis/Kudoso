@@ -1,0 +1,23 @@
+%h1 Listing api_devices
+
+%table
+  %tr
+    %th Device token
+    %th Name
+    %th Expires at
+    %th
+    %th
+    %th
+
+  - @api_devices.each do |api_device|
+    %tr
+      %td= api_device.device_token
+      %td= api_device.name
+      %td= api_device.expires_at
+      %td= link_to 'Show', [:admin, api_device]
+      %td= link_to 'Edit', edit_admin_api_device_path(api_device)
+      %td= link_to 'Destroy', [:admin, api_device], :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Api device', new_admin_api_device_path

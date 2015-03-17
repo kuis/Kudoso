@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Device token:
+  = @api_device.device_token
+%p
+  %b Name:
+  = @api_device.name
+%p
+  %b Expires at:
+  = @api_device.expires_at
+
+= link_to 'Edit', edit_admin_api_device_path(@api_device)
+\|
+= link_to 'Back', admin_api_devices_path

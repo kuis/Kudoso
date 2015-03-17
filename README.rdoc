@@ -37,6 +37,7 @@ strip functionality, but we MUST present it in a way that is easy to use while b
                    -> First/Last Name/Email/etc
                 -> My_todos (the record of completed/incomplete todos)
                 -> Screen_times (restrictions for screen time: global, per activity, per device)
+                -> Screen_time_schedules (calendar / TOD restrictions for when screen time can be used)
 
     To support kid-friendly logins, the member passwords are not required to be complex and member usernames are only
     uniwue within a family.  As such, a parent (user) must FIRST authenticate on the household devices BEFORE a child
@@ -44,6 +45,16 @@ strip functionality, but we MUST present it in a way that is easy to use while b
     in conjunction with the member's credentials to provide a little more security without making the process overly
     complex for younger users.
 
+    == Understanding Screen Time
+        When a child (a family "member") wants to perform an activity, the system must check if its allowed.
+        When is screen time allowed? (See member.can_do_activity?)  The system first checks to see if the activity
+        is restricted and if it is, ensures that all required todos are complete.  Once the activity/todo restriction
+        is satisfied, the member's available screen time is queried.  This looks explicitly at the "global" screen time
+        settings for the member, and then the specific screen time restrictions for the device (if applicable) and the
+        activity (ex: a parent can say: "My child can have 3 hours of screen time per day, with no more that 2 hours on
+        the iPad and no more than 1 hour watching Netflix.").  Lastly, the screen_time_schedule restrictions are evaluated
+        to see if screen time is explictly restricted at this time (ex: a parent can say "Do not allow screeen time during
+        school hours (9am-3pm) Monday through Friday").
 
 ==== KudosoCRM
 
@@ -88,3 +99,8 @@ strip functionality, but we MUST present it in a way that is easy to use while b
     and/or keywords.
 
     The Gateway / Proxy workflow can be seen here: https://www.lucidchart.com/documents/edit/e1ab8429-ac64-44b1-ac71-933c014fc28b?
+
+
+==== Kudoso API
+
+    http://api.kudoso.com/v1/

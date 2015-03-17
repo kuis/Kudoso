@@ -11,6 +11,7 @@ class Member < ActiveRecord::Base
   has_many :screen_times
   has_many :st_overrides
   has_many :screen_time_schedules
+  has_many :api_keys
 
   accepts_nested_attributes_for :contact
 
@@ -191,5 +192,15 @@ class Member < ActiveRecord::Base
     end
 
     ret
+  end
+
+  def get_api_key
+    key = self.api_keys.last
+    if key.nil? or key.expires_at < DateTime.now()
+      key = self.api_keys.create
+    else
+      key.update_expiration!
+    end
+    key
   end
 end

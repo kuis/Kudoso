@@ -1,7 +1,5 @@
 Rails.application.routes.draw do
 
-
-
   resources :contacts
 
   resources :tickets
@@ -66,6 +64,7 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    resources :api_devices
     resources :contacts
     resources :families
     resources :todo_templates
@@ -75,6 +74,14 @@ Rails.application.routes.draw do
     resources :todo_templates
     resources :activity_templates
     resources :tickets
+  end
+
+  constraints subdomain: 'api' do
+    namespace :api, path: nil, defaults: { format: 'json' } do
+      namespace :v1 do
+        resources :sessions
+      end
+    end
   end
 
   root to: 'home#index'

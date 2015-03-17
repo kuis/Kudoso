@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
 
   has_many :tickets, dependent: :destroy
   has_many :assigned_tickets, class: Ticket, foreign_key: 'assigned_to_id', dependent: :nullify
+  has_many :api_keys
 
   scope :admins, -> { where(admin: true) }
   scope :accounts, -> { where.not(admin: true) }
@@ -34,6 +35,16 @@ class User < ActiveRecord::Base
 
   def full_name
     member.try(:full_name) || email
+  end
+
+  def get_api_key
+    key = self.api_keys.last
+    if key.nil? or key.expires_at < DateTime.now()
+      key = self.api_keys.create
+    else
+      key.update_expiration!
+    end
+    key
   end
 
   private
