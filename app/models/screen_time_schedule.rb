@@ -2,61 +2,44 @@ class ScreenTimeSchedule < ActiveRecord::Base
 
   belongs_to :family # if family set, schedule applies to all family members
   belongs_to :member # if member set, schedule applies to only this member
-  has_many :screen_time_schedule_rrules
 
-  accepts_nested_attributes_for :screen_time_schedule_rrules, :reject_if => :all_blank, :allow_destroy => true
+  serialize :restrictions, Hash
 
-  validate :assignments
-  validates :start_seconds, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 86400}, :presence => true
-  validates :end_seconds, numericality: {greater_than_or_equal_to: 0, less_than_or_equal_to: 86400}, :presence => true
-  validate :increasing_time
+  after_initialize :init_restrictions
 
-  def start_time
-    Time.now.beginning_of_day + start_seconds
-  end
+  validate :check_restrictions
 
-  def end_time
-    Time.now.beginning_of_day + end_seconds
-  end
 
-  def start_time=(stime)  # ex: start_time = '8:00am'
-    parsed_time = Chronic.parse(stime)
-    if parsed_time
-      self.start_seconds = parsed_time.seconds_since_midnight
+  def occurring_at?(time = Time.now)
+    secs = time.seconds_since_midnight.to_i
+    self.restrictions["#{time.wday}"].each do |restriction|
+      return true if restriction[0] <= secs && secs <= restriction[1]
     end
-  end
-
-  def end_time=(etime)  # ex: end_time = '8:00am'
-    parsed_time = Chronic.parse(etime)
-    if parsed_time
-      self.end_seconds = parsed_time.seconds_since_midnight
-    end
-  end
-
-  def schedule
-    sch = IceCube::Schedule.new
-    sch.start_time = self.start_time
-    sch.end_time = self.end_time
-    self.screen_time_schedule_rrules.each do |rrule|
-      sch.add_recurrence_rule(rrule.rule)
-    end
-    sch
+    false
   end
 
   private
 
-  def assignments
-    if family_id.present? && member_id.present?
-      errors.add(:member_id, 'cannot be set when assigned to a family')
-    end
-    if family_id.blank? && member_id.blank?
-      errors.add(:base, 'must be assigned to a family or a member')
+  def init_restrictions
+    self.restrictions ||= Hash.new
+    (0..6).each do |dow|
+      self.restrictions["#{dow}"] ||= Array.new
     end
   end
 
-  def increasing_time
-    if start_time >= end_time
-      errors.add(:end_time, 'must be greater than start time')
+  def check_restrictions
+    self.restrictions.each do |key, values|
+      self.errors.add(:restrictions, "invalid day of week specified") unless (0..6).map(&:to_s).include?(key)
+      self.errors.add(:restrictions, "restriction not valid") unless values.nil? || values.is_a?(Array)
+      if values.is_a?(Array)
+
+        values.each do |value|
+          self.errors.add(:restrictions, "restriction time not valid") unless value.is_a?(Array) && value.length == 2
+          self.errors.add(:restrictions, "restriction time for dow(#{key}) not valid, start time(#{value[0]}) must be >= 0, end time(#{value[1]}) must by > start time and  <= 86400") unless value[0].to_i >= 0  && value[1] > value[0] && value[1].to_i <= 86400
+        end
+      end
     end
   end
+
+
 end

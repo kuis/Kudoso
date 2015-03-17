@@ -183,11 +183,11 @@ class Member < ActiveRecord::Base
 
       # Check family wide restrictions
       self.family.screen_time_schedules.each do |st_sched|
-        ret = false if st_sched.schedule.occurring_at?(Time.now)
+        ret = false if st_sched.occurring_at?(Time.now)
       end
       # Check member specific restrictions
       self.screen_time_schedules.each do |st_sched|
-        ret = false if st_sched.schedule.occurring_at?(Time.now)
+        ret = false if st_sched.occurring_at?(Time.now)
       end
     end
 

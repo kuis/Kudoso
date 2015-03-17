@@ -304,20 +304,10 @@ ActiveRecord::Schema.define(version: 20150316181250) do
 
   add_index "schedule_rrules", ["todo_schedule_id"], name: "index_schedule_rrules_on_todo_schedule_id", using: :btree
 
-  create_table "screen_time_schedule_rrules", force: true do |t|
-    t.integer  "screen_time_schedule_id"
-    t.string   "rrule"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "screen_time_schedule_rrules", ["screen_time_schedule_id"], name: "index_screen_time_schedule_rrules_on_screen_time_schedule_id", using: :btree
-
   create_table "screen_time_schedules", force: true do |t|
     t.integer  "family_id"
     t.integer  "member_id"
-    t.integer  "start_seconds"
-    t.integer  "end_seconds"
+    t.text     "restrictions"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
