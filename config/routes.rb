@@ -82,9 +82,13 @@ Rails.application.routes.draw do
         resources :sessions
       end
     end
+
   end
 
   root to: 'home#index'
+
+  match "*path", to: "errors#catch_404", via: :all
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

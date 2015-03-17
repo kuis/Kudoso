@@ -5,6 +5,9 @@ class ApplicationController < ActionController::Base
 
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  rescue_from ActionController::RoutingError, :with =>  :error_render_method
+
+
   before_filter do
     resource = controller_name.singularize.to_sym
     method = "#{resource}_params"
@@ -59,6 +62,26 @@ class ApplicationController < ActionController::Base
     else
       @current_ability ||= Ability.new(current_user)
     end
+  end
+
+  def init_messages
+    messages = Hash.new
+    messages[:info] = Array.new
+    messages[:warning] = Array.new
+    messages[:error] = Array.new
+    return messages
+  end
+
+  def error_render_method(error = 'The path you requested was not found')
+
+    messages = init_messages
+    messages[:error] << error
+    respond_to do |format|
+      format.json { render :json => { messages: messages }, :status => :not_found }
+      format.html { render file: 'public/404.html' }
+    end
+
+    true
   end
 
   protected
