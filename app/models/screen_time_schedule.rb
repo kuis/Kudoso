@@ -3,12 +3,16 @@ class ScreenTimeSchedule < ActiveRecord::Base
   belongs_to :family # if family set, schedule applies to all family members
   belongs_to :member # if member set, schedule applies to only this member
 
+
+
   serialize :restrictions, Hash
 
   after_initialize :init_restrictions
 
   validate :check_restrictions
-
+  validate :check_assignment
+  validates_uniqueness_of :family_id, allow_blank: true
+  validates_uniqueness_of :member_id, allow_blank: true
 
   def occurring_at?(time = Time.now)
     secs = time.seconds_since_midnight.to_i
@@ -39,6 +43,12 @@ class ScreenTimeSchedule < ActiveRecord::Base
         end
       end
     end
+  end
+
+  def check_assignment
+    self.errors.add(:base, 'can only assign to a user a family OR a member, not both') if self.family.present? && self.member.present?
+    self.errors.add(:base, 'must assign to a user a family OR a member') if self.family.nil? && self.member.nil?
+
   end
 
 

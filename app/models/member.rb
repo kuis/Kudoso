@@ -10,7 +10,7 @@ class Member < ActiveRecord::Base
   has_many :authorized_activities, class_name: 'Activity', foreign_key: :created_by_id, dependent: :nullify, inverse_of: :created_by
   has_many :screen_times
   has_many :st_overrides
-  has_many :screen_time_schedules
+  has_one :screen_time_schedule
   has_many :api_keys
 
   accepts_nested_attributes_for :contact
@@ -182,13 +182,11 @@ class Member < ActiveRecord::Base
       # Member has enough screen time, but does the schedule restrict it?
 
       # Check family wide restrictions
-      self.family.screen_time_schedules.each do |st_sched|
-        ret = false if st_sched.occurring_at?(Time.now)
-      end
+
+      ret = false if self.family.screen_time_schedule.try(:occurring_at?, Time.now)
+
       # Check member specific restrictions
-      self.screen_time_schedules.each do |st_sched|
-        ret = false if st_sched.occurring_at?(Time.now)
-      end
+      ret = false if self.screen_time_schedule.try(:occurring_at?, Time.now)
     end
 
     ret
