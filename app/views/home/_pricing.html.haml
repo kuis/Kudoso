@@ -1,0 +1,198 @@
+.cd-pricing-container.cd-has-margins
+  .cd-pricing-switcher
+    %p.fieldset
+      %input#yearly-2{:checked => "checked", :name => "duration-2", :type => "radio", :value => "yearly"}/
+      %label{:for => "yearly-2"} Yearly
+      %input#monthly-2{:name => "duration-2", :type => "radio", :value => "monthly"}/
+      %label{:for => "monthly-2"} Monthly
+      %span.cd-switch
+  %ul.cd-pricing-list.cd-bounce-invert
+    %li
+      %ul.cd-pricing-wrapper
+        %li.is-hidden.is-ended{"data-type" => "monthly"}
+          %header.cd-pricing-header
+            %h2 Aspen
+            .cd-price
+              %span.cd-currency $
+              %span.cd-value 10
+              %span.cd-duration mo
+          .cd-pricing-body
+            %ul.cd-pricing-features
+              %li
+                %em 1
+                Child
+              %li
+                %em 1
+                Device Managed
+              %li
+                %em 1 SmartPlug
+                Control Extra
+              %li
+                %em Gateway
+                Internet Control Extra
+              %li
+                %em Mobile Devices
+                Not Included
+              %li
+                %em Content Filtering
+                Not included
+          %footer.cd-pricing-footer
+            = link_to 'Select', new_user_registration_path(plan: 'Aspen', annual: false), class: 'cd-select'
+        %li.is-visible.is-ended{"data-type" => "yearly"}
+          %header.cd-pricing-header
+            %h2 Aspen
+            .cd-price
+              %span.cd-currency $
+              %span.cd-value 110
+              %span.cd-duration yr
+          .cd-pricing-body
+            %ul.cd-pricing-features
+              %li
+                %em 1 Month
+                Free
+              %li
+                %em 1
+                Child
+              %li
+                %em 1
+                Device Managed
+              %li
+                %em 1 SmartPlug
+                Control Included
+              %li
+                %em Gateway
+                Internet Control Extra
+              %li
+                %em Mobile Devices
+                Not Included
+              %li
+                %em Content Filtering
+                Not Included
+          %footer.cd-pricing-footer
+            = link_to 'Select', new_user_registration_path(plan: 'Aspen', annual: true), class: 'cd-select'
+    %li.cd-popular
+      %ul.cd-pricing-wrapper
+        %li.is-hidden.is-ended{"data-type" => "monthly"}
+          %header.cd-pricing-header
+            %h2 Tamarack
+            .cd-price
+              %span.cd-currency $
+              %span.cd-value 20
+              %span.cd-duration mo
+          .cd-pricing-body
+            %ul.cd-pricing-features
+              %li
+                %em Unlimited
+                Children
+              %li
+                %em 5
+                Devices Managed
+              %li
+                %em 1 SmartPlug
+                Control Extra
+              %li
+                %em Gateway
+                Internet Control Extra
+              %li
+                %em Mobile Devices
+                Included
+              %li
+                %em Content Filtering
+                Included
+          %footer.cd-pricing-footer
+            = link_to 'Select', new_user_registration_path(plan: 'Tamarack', annual: false), class: 'cd-select'
+        %li.is-visible.is-ended{"data-type" => "yearly"}
+          %header.cd-pricing-header
+            %h2 Tamarack
+            .cd-price
+              %span.cd-currency $
+              %span.cd-value 220
+              %span.cd-duration yr
+          .cd-pricing-body
+            %ul.cd-pricing-features
+              %li
+                %em 1 Month
+                Free
+              %li
+                %em Unlimited
+                Children
+              %li
+                %em 5
+                Devices Managed
+              %li
+                %em 1 SmartPlug
+                Control Included
+              %li
+                %em Kudoso Gateway
+                Included
+              %li
+                %em Mobile Devices
+                Included
+              %li
+                %em Content Filtering
+                Included
+          %footer.cd-pricing-footer
+            = link_to 'Select', new_user_registration_path(plan: 'Tamarack', annual: true), class: 'cd-select'
+    %li
+      %ul.cd-pricing-wrapper
+        %li.is-hidden.is-ended{"data-type" => "monthly"}
+          %header.cd-pricing-header
+            %h2 Cedar
+            .cd-price
+              %span.cd-currency $
+              %span.cd-value 30
+              %span.cd-duration mo
+          .cd-pricing-body
+            %ul.cd-pricing-features
+              %li
+                %em Unlimited
+                Children
+              %li
+                %em Unlimited
+                Devices Managed
+              %li
+                %em 1 SmartPlug
+                Control Included
+              %li
+                %em Kudoso Gateway
+                Included
+              %li
+                %em Mobile Devices
+                Included
+              %li
+                %em Content Filtering
+                Included
+          %footer.cd-pricing-footer
+            = link_to 'Select', new_user_registration_path(plan: 'Cedar', annual: false), class: 'cd-select'
+        %li.is-visible.is-ended{"data-type" => "yearly"}
+          %header.cd-pricing-header
+            %h2 Cedar
+            .cd-price
+              %span.cd-currency $
+              %span.cd-value 300
+              %span.cd-duration yr
+          .cd-pricing-body
+            %ul.cd-pricing-features
+              %li
+                %em 2
+                Months Free
+              %li
+                %em Unlimited
+                Children
+              %li
+                %em Unlimited
+                Devices Managed
+              %li
+                %em 1 SmartPlug
+                Control Included
+              %li
+                %em Kudoso Gateway
+                Included
+              %li
+                %em Mobile Devices
+                Included
+              %li
+                %em Content Filtering
+                Included
+          %footer.cd-pricing-footer
+            = link_to 'Select', new_user_registration_path(plan: 'Cedar', annual: true), class: 'cd-select'

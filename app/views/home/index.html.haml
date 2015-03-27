@@ -1,22 +1,24 @@
-%nav.offset-top
-  #homenav{"data-magellan-expedition" => "fixed"}
-    %dl.sub-nav
-      %dd{"data-magellan-arrival" => "home"}
+.filler
+#header.header
+  .logo
+    =image_tag 'kudoso_logo_52.png'
+  %nav#nav
+    %ul.nav.navbar-nav
+      %li
         %a{href: '#home'} home
-      %dd{"data-magellan-arrival" => "features"}
+      %li
         %a{href: '#features'} features
-      %dd{"data-magellan-arrival" => "how"}
+      %li
         %a{href: '#how'} how it works
-      %dd{"data-magellan-arrival" => "pricing"}
+      %li
         %a{href: '#pricing'} pricing
-      %dd{"data-magellan-arrival" => "about"}
+      %li
         %a{href: '#about'} about us
-    %dl
-      %dd
-        =image_tag 'kudoso_logo_52.png'
-%section#home{"data-magellan-destination" => 'home'}
+
+#home.scrollto
   .top
-    =image_tag 'kudoso_logo_52@3x.png'
+    .logo
+      =image_tag 'kudoso_logo_52@3x.png'
   .mid
     %h1
       Changing the way families manage technology
@@ -29,8 +31,161 @@
         %li= link_to('Sign Up', new_user_registration_path, class: 'button large radius')
         %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')
         - if cookies.signed[:kudoso_family].present?
-          %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius secondary')
-%section#features{"data-magellan-destination" => 'features'}
-%section#how{"data-magellan-destination" => 'how'}
-%section#pricing{"data-magellan-destination" => 'pricing'}
-%section#about{"data-magellan-destination" => 'about'}
+          %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius primary')
+#features.scrollto
+  .kudoso-block
+    .header-right
+      Set screen time limits
+    .content-right.green
+      %ul
+        %li set daily screen time limits
+        %li require work (chores, homework, etc) to be complete before unlocking devices
+        %li remotely control child's electronics
+        %li devices automatically shut down with limit is reached
+        %li add/remove time at the push of a button
+        %li
+          kids can use
+          = render partial: 'home/kudos'
+          to "buy" more screen time
+    .image-left
+      = image_tag 'landing-bg.jpg'
+  .kudoso-block
+    .header-left
+      Monitor and manage content
+    .content-left.gray
+      %ul
+        %li track how long your children are on electronics
+        %li track which apps and websites your children are using
+        %li restrict apps and websites using simple age-appropriate filters
+        %li create your own content filters and share reviews with other parents
+    .image-right
+      = image_tag 'Camera-Technology.png'
+  .kudoso-block
+    .header-right
+      Control ALL technology
+    .content-right.blue
+      %ul
+        %li
+          ability to control
+          %span.balloon
+            ALL
+            %div
+              =image_tag('arrow.gif', class: 'arrow')
+              %strong
+                Kudoso Manages Nearly Every Device
+              %p
+                Televisions, game consoles (including PlayStation, XBox and Nintendo),
+                BluRay/DVD players, PC & Mac computers, smart phones, tablets, streaming media
+                boxes, and more!
+          electronics in your home
+        %li screen time limits are managed across ALL devices, not just one
+        %li parents can see what electronics are being used in real time
+    .image-left
+      = image_tag 'landing-bg.jpg'
+  .kudoso-block
+    .header-left
+      Teach children responsibility
+    .content-left.green
+      %ul
+        %li easily create chore charts for each child
+        %li children can earn screen time by completing their chores, work comes first!
+        %li
+          parents can allow kids to earn
+          = render partial: 'home/kudos'
+          through Khan Acedemy or other integrated Kudoso partners
+    .image-right
+      = image_tag 'Khan-Academy-Logo.png'
+#how.scrollto
+  #slides
+    %ul.slides-container
+      %li
+        =image_tag 'video_game_control.jpg'
+        .slide-details
+          %h1 Kudoso: Control the Technology
+          .contrast
+          .contrast
+            Kudoso was developed to help parents manage the influence of technology
+            on their children through the positive reinforcement of family values and
+            life skills.
+            .slide-video
+              %iframe{width: "600", height: "380", src: "//www.youtube.com/embed/rYe58hqwaug", frameborder: "0", allowfullscreen: ""}
+      %li
+        =image_tag 'woman_ipad.jpg'
+        .slide-details
+          %h1 Kudoso Cloud Management
+          .contrast
+            Parents use a simple but powerful application from the web or the Kudoso
+            Mobile App to create screen time restrictions, chore charts, content filters
+            and approved activities for their children.
+      %li
+        =image_tag 'lockable_plugs.jpg'
+        .slide-details
+          %h1 Kudoso Lockable SmartPlug and Gateway
+          .contrast
+            %p
+              Kudoso's proprietary Lockable SmartPlug allows parents to control devices
+              that have never been controllable before.  Parents can now manage screen time
+              on game consoles, bluray/dvd players, televisions and streaming media devices -
+              anything that has a power plug!
+            %p
+              The Kudoso Gateway ensures that all devices in the home are accessing
+              appropriate content, even those that friends bring over.  All devices
+              accessing the internet are filtered through the gateway.  The gateway is also
+              Kudoso's control center for the SmartPlugs.
+      %li
+        =image_tag 'kids-outside.jpg'
+        .slide-details
+          %h1 Kudos for Good Behavior
+          .contrast
+            When kids do good things like finish their chores, learn something new,
+            or even go play outside, they can earn Kudos - the Kudoso Virtual Currency.
+            Just like money, kids can save and spend Kudos on rewards like more screen
+            time, access to new games or apps, and just about anything you as a parent
+            can dream up as you make your own rewards!
+      %li
+        =image_tag 'kid_ipad.jpg'
+        .slide-details
+          %h1 Mobile Devices Management
+          .contrast
+            Kudoso includes the ability to control Android and iOS devices in addition
+            to household electronics.  When a child is out of screen time, they can
+            still use the device to access the Kudodo app and view their chores and
+            when they are allowed, the device is unlocked and they can use their approved apps.
+            Mobile Device Management is only available in the Tamarack and Cedar plans.
+      %li
+        =image_tag '3_bodyguards.jpg'
+        .slide-details
+          %h1 Content Filtering
+          .contrast
+            Parents want to know their children are safe and Kudoso includes the tools
+            to easily filter internet content via the Kudoso Safe Browser which is available
+            for iOS, Android, Mac and Windows PCs.  Filters are easy to setup and include four
+            default levels: Strict, Moderate, Mature, and Monitor.  Content Filtering is only
+            available in the Tamarack and Cedar plans.
+    %nav.slides-navigation
+      %a.next{href: "#"}
+        %i.fa.fa-arrow-circle-right
+      %a.prev{href: "#"}
+        %i.fa.fa-arrow-circle-left
+#pricing.scrollto
+  =render partial: 'home/pricing'
+#about.scrollto
+  .kudoso-block
+    .behind-header.blue.block-shadow
+      About Kudoso
+    .padded-block.block-shadow
+      %p
+        Thank you for your interest in Kudoso! Kudoso was founded a year ago to help parents manage the influence of technology on their children. The feedback has been very positive and we have recently revamped and expanded our scope to include ALL the technology our kids are influenced by. Kudoso is based in Montana and run by Michael and Charlene Kazmier. We are excited to present parents with a solution that reflects our family values and that can have a positive effect on all families!
+      %p
+        Being parents ourselves, we have seen how technology has become the main focus of our children. We knew we needed a solution to not only limit how much screen time our boys were getting, but also a way to control and guide the content they were viewing. We live in a world driven by technology which is rapidly growing and evolving, making it hard for parents to set boundaries. Most parents worry about the technology their kids are using, but aren’t sure how to regain control.  We can’t disconnect our children from our technology driven world, but we can set limits and guide them with Kudoso. The American Academy of Pediatrics recommends that children limit screen time to no more than 2 hours per day and children under the age of 2 should have no exposure.
+      %p
+        Are your kids spending too much time in front of screens? Are they viewing content that is age appropriate? Are they learning life skills and responsibilities? Kudoso is the solution for you!
+      .action-buttons
+        %ul
+          %li= link_to('Sign Up', new_user_registration_path, class: 'button large radius')
+          %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')
+          - if cookies.signed[:kudoso_family].present?
+            %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius primary')
+
+= javascript_include_tag 'jquery.superslides'
+= javascript_include_tag 'home'

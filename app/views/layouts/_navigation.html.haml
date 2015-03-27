@@ -1,11 +1,7 @@
-.fixed
-  %nav.top-bar{"data-topbar" => ""}
-    %ul.title-area
-      %li.title
-        = link_to root_path do
-          = image_tag 'kudoso_logo_52.png'
-      %li.toggle-topbar.menu-icon
-        %a{:href => "#"} Menu
-    .top-bar-section
-      %ul.right
-        = render 'layouts/navigation_links'
+#header.header
+  .logo
+    = link_to root_path do
+      =image_tag 'kudoso_logo_52.png'
+  %nav#nav
+    %ul.nav.navbar-nav
+      = render 'layouts/navigation_links'

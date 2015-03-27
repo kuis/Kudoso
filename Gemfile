@@ -17,12 +17,13 @@ gem 'jquery-rails'
 gem 'jquery-ui-sass-rails'
 gem 'font-awesome-rails'
 gem 'jquery-turbolinks'
-gem 'foundation-rails'
 gem 'lazy_high_charts'
+gem 'bourbon'
 gem 'cocoon' # nested form helper
 gem 'groupdate' # adds group_by_date functions
 gem 'best_in_place' #adds in place editing features
 gem 'kaminari'
+gem 'modernizr-rails'
 gem 'rails_layout', group: :development
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
