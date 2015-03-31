@@ -12,7 +12,7 @@ end
 
 # Use a simple directory tree copy here to make demo easier.
 # You probably want to use your own repository for a real app
-set :scm, :none
+set :scm, :git
 set :repository, "."
 set :deploy_via, :copy
 

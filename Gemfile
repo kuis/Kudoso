@@ -101,3 +101,4 @@ end
 
 gem 'rubber', git: 'https://github.com/rubber/rubber.git'
 gem 'open4'
+gem 'therubyracer', :platform => :ruby
