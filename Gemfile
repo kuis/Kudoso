@@ -81,7 +81,7 @@ group :development do
   gem 'habtm_generator'
 
   # Deployment
-  gem 'capistrano'
+  gem 'capistrano',  "~> 2.15.0"
 end
 
 group :test do
@@ -95,6 +95,8 @@ group :test do
   gem 'faker'
   gem 'simplecov'
 end
+
+# Deployment
 
 gem 'rubber'
 gem 'open4'

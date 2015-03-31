@@ -88,7 +88,7 @@ cloud_providers:
     # m1.small or m1.large or m1.xlarge
     image_type: t2.small
     #image_id: ami-92f569fa
-    image_id: ami-8f6d9d8f
+    image_id: ami-dc5e75b4
 
     # OPTIONAL: Provide fog-specific options directly.  This should only be used if you need a special setting that
     # Rubber does not directly expose.  Since these settings will be passed directly through to fog, we can't make any

@@ -22,8 +22,8 @@
     .logo
       =image_tag 'kudoso_logo_52@3x.png'
   .mid
-    %h1
-      Changing the way families manage technology
+    %h1.rotate
+      Changing the way families manage technology, Manage screen time across ALL your devices, Develop strong family values and life skills, Motivate your children with positive reinforcement
   .bottom
     - if user_signed_in?
       %ul
@@ -199,4 +199,6 @@
             %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius primary')
 
 = javascript_include_tag 'jquery.superslides'
+= javascript_include_tag 'jquery.simple-text-rotator'
+= stylesheet_link_tag 'simpletextrotator'
 = javascript_include_tag 'home'

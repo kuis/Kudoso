@@ -78,4 +78,11 @@ $(document).ready ($) ->
   bouncy_filter $('.cd-pricing-container')
 
   $('#slides').superslides()
+
+  $(".rotate").textrotator({
+    animation: "dissolve",
+    separator: ",",
+    speed: 4000
+  });
+
   return
