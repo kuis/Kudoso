@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require jquery.stickyNavbar
@@ -21,8 +22,9 @@
 //= require recurring_select
 //= require highcharts/highcharts
 //= require cocoon
-
 //= require_tree .
+
+
 
 
 function ready() {

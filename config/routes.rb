@@ -86,6 +86,11 @@ Rails.application.routes.draw do
   end
   get 'pre_signup', to: 'home#pre_signup'
   get 'pre_signup_thank_you', to: 'home#pre_signup_thank_you'
+  get 'tos', to: 'home#tos'
+  get 'privacy', to: 'home#privacy'
+  get 'contact', to: 'home#contact'
+  get 'support', to: 'home#support'
+  get 'newsletter', to: 'home#newsletter'
 
   root to: 'home#index'
 

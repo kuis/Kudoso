@@ -7,6 +7,18 @@ GIT
       capybara (>= 2.3.0, < 2.5.0)
       json
 
+GIT
+  remote: https://github.com/rubber/rubber.git
+  revision: 8e0753e8b87b8bca8e8ebe9fa704c196e6885641
+  specs:
+    rubber (2.16.0)
+      capistrano (~> 2.12)
+      clamp
+      fog (~> 1.6)
+      json
+      net-ssh (~> 2.6)
+      thor
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -393,14 +405,6 @@ GEM
       rspec-mocks (~> 3.2.0)
       rspec-support (~> 3.2.0)
     rspec-support (3.2.2)
-    rubber (2.16.0)
-      capistrano (~> 2.12)
-      clamp
-      fog (~> 1.6)
-      json
-      net-ssh (~> 2.6)
-      open4
-      thor
     ruby-rc4 (0.1.5)
     ruby_parser (3.6.5)
       sexp_processor (~> 4.1)
@@ -516,7 +520,7 @@ DEPENDENCIES
   rb-fsevent
   recurring_select
   rspec-rails
-  rubber
+  rubber!
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
   selenium-webdriver

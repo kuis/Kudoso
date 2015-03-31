@@ -197,8 +197,3 @@
           %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')
           - if cookies.signed[:kudoso_family].present?
             %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius primary')
-
-= javascript_include_tag 'jquery.superslides'
-= javascript_include_tag 'jquery.simple-text-rotator'
-= stylesheet_link_tag 'simpletextrotator'
-= javascript_include_tag 'home'

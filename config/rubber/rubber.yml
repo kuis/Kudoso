@@ -86,7 +86,7 @@ cloud_providers:
     # Ubuntu 14.04.1 Trusty instance-store 64-bit: ami-92f569fa
     #
     # m1.small or m1.large or m1.xlarge
-    image_type: t2.small
+    image_type: t2.micro
     #image_id: ami-92f569fa
     image_id: ami-dc5e75b4
 
