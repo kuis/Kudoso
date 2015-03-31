@@ -14,6 +14,8 @@
         %a{href: '#pricing'} pricing
       %li
         %a{href: '#about'} about us
+      %li
+        %a{href: '/pre_signup'} sign up
 
 #home.scrollto
   .top
@@ -28,7 +30,7 @@
         %li= link_to('Family Dashboard', family_path(current_user.family), class: 'button large radius')
     -else
       %ul
-        %li= link_to('Sign Up', new_user_registration_path, class: 'button large radius')
+        %li= link_to('Sign Up', pre_signup_path, class: 'button large radius')
         %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')
         - if cookies.signed[:kudoso_family].present?
           %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius primary')
@@ -103,7 +105,6 @@
         .slide-details
           %h1 Kudoso: Control the Technology
           .contrast
-          .contrast
             Kudoso was developed to help parents manage the influence of technology
             on their children through the positive reinforcement of family values and
             life skills.
@@ -117,6 +118,8 @@
             Parents use a simple but powerful application from the web or the Kudoso
             Mobile App to create screen time restrictions, chore charts, content filters
             and approved activities for their children.
+            .action-buttons
+              = link_to('Sign Up', pre_signup_path, class: 'button large radius')
       %li
         =image_tag 'lockable_plugs.jpg'
         .slide-details
@@ -127,6 +130,8 @@
               that have never been controllable before.  Parents can now manage screen time
               on game consoles, bluray/dvd players, televisions and streaming media devices -
               anything that has a power plug!
+            .action-buttons
+              = link_to('Sign Up', pre_signup_path, class: 'button large radius')
             %p
               The Kudoso Gateway ensures that all devices in the home are accessing
               appropriate content, even those that friends bring over.  All devices
@@ -142,16 +147,20 @@
             Just like money, kids can save and spend Kudos on rewards like more screen
             time, access to new games or apps, and just about anything you as a parent
             can dream up as you make your own rewards!
+            .action-buttons
+              = link_to('Sign Up', pre_signup_path, class: 'button large radius')
       %li
         =image_tag 'kid_ipad.jpg'
         .slide-details
-          %h1 Mobile Devices Management
+          %h1 Mobile Device Management
           .contrast
             Kudoso includes the ability to control Android and iOS devices in addition
             to household electronics.  When a child is out of screen time, they can
             still use the device to access the Kudodo app and view their chores and
             when they are allowed, the device is unlocked and they can use their approved apps.
             Mobile Device Management is only available in the Tamarack and Cedar plans.
+            .action-buttons
+              = link_to('Sign Up', pre_signup_path, class: 'button large radius')
       %li
         =image_tag '3_bodyguards.jpg'
         .slide-details
@@ -162,6 +171,8 @@
             for iOS, Android, Mac and Windows PCs.  Filters are easy to setup and include four
             default levels: Strict, Moderate, Mature, and Monitor.  Content Filtering is only
             available in the Tamarack and Cedar plans.
+            .action-buttons
+              = link_to('Sign Up', pre_signup_path, class: 'button large radius')
     %nav.slides-navigation
       %a.next{href: "#"}
         %i.fa.fa-arrow-circle-right
@@ -182,7 +193,7 @@
         Are your kids spending too much time in front of screens? Are they viewing content that is age appropriate? Are they learning life skills and responsibilities? Kudoso is the solution for you!
       .action-buttons
         %ul
-          %li= link_to('Sign Up', new_user_registration_path, class: 'button large radius')
+          %li= link_to('Sign Up', pre_signup_path, class: 'button large radius')
           %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')
           - if cookies.signed[:kudoso_family].present?
             %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius primary')

@@ -56,5 +56,8 @@ $(function() {
     $(document).ready(ready);
     $(document).on('page:load', ready);
     jQuery(".best_in_place").best_in_place();
+    $('a.close').click(function(){
+       $(this.parentNode).hide(500);
+    });
 
 });

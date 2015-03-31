@@ -8,6 +8,7 @@
 .bundle
 .idea
 .zeus.sock
+.ec2
 GIT_VERSION
 db/*.sqlite3
 db/.DS_Store

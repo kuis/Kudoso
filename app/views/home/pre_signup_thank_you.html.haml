@@ -1,0 +1,31 @@
+.filler
+#header.header
+  .logo
+    =image_tag 'kudoso_logo_52.png'
+  %nav#nav
+    %ul.nav.navbar-nav
+      %li
+        %a{href: '/#home'} home
+      %li
+        %a{href: '/#features'} features
+      %li
+        %a{href: '/#how'} how it works
+      %li
+        %a{href: '/#pricing'} pricing
+      %li
+        %a{href: '/#about'} about us
+.sharp-contrast.full-screen
+  %p
+    %h1 You're a Kudoso Beta Applicant!
+  .padded-block
+    %p
+      Thank you for your interest in Kudoso! You have been added to our system as a
+      Beta Applicant.  As we get closer to launch, we will select a group of our beta
+      applicants to participate in the beta launch of Kudoso.
+    %p
+      Beta participants will be selected based on nunmerous criteria including when
+      they applied, the household demographics and availability of technology.  If you've
+      opted to stay connected with Kudoso, you'll receive an email from time to time
+      updating you as to the status of Kudoso as well as additional deals, tips and tricks.
+    .action-buttons
+      =link_to 'Return Home', root_path, class: 'button primary radius large'

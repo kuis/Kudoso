@@ -1,0 +1,47 @@
+.filler
+#header.header
+  .logo
+    =image_tag 'kudoso_logo_52.png'
+  %nav#nav
+    %ul.nav.navbar-nav
+      %li
+        %a{href: '/#home'} home
+      %li
+        %a{href: '/#features'} features
+      %li
+        %a{href: '/#how'} how it works
+      %li
+        %a{href: '/#pricing'} pricing
+      %li
+        %a{href: '/#about'} about us
+.sharp-contrast.full-screen
+  %p
+    %h1 Signup for Kudoso
+  .padded-block
+    %p
+      Thank you for your interest in Kudoso!  Kudoso's unparallelled solution has been in
+      development for over 2 years and we excited to begin to offer it our customers.
+    %p
+      Kudoso will initially be available to a limited beta of 100 households beginning in
+      September 2016.  If you would like to be considered a beta tester please complete
+      this form below and a Kudoso representative will contact you.
+  %p
+    = simple_form_for @contact = Contact.new do |f|
+      - @contact.emails.build
+      = f.input :first_name, placeholder: 'First Name', label: false, input_html: { class: 'input-medium' }
+      = f.input :last_name, placeholder: 'Last Name', label: false, input_html: { class: 'input-medium' }
+      = f.input :contact_type_id, as: :hidden, input_html: { value: ContactType.find_by_name('Beta Applicant').id }
+      = f.simple_fields_for :emails do |e|
+        = e.input :address, placeholder: 'Email Address', label: false, input_html: { class: 'input-medium' }
+      = f.input :do_not_email, label: 'Do not send me updates'
+      = f.button :submit, "I'm interested in Kudoso", class: 'button radius'
+  %p
+    %small
+      Note: If you opt to receive updates, you are still eligible for Kudoso beta testing.  When
+      this option is checked, Kudoso will not send you the monthly status updates nor any
+      Kudoso Newsletter or Tips and Tricks emails.
+  %p
+    %small
+      Kudoso takes your privacy seriously, will never sell your email address or personal
+      information to any 3rd party.
+.filler

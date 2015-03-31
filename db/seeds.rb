@@ -20,6 +20,8 @@ phone_types = PhoneType.create([
                                    ])
 contact_types = ContactType.create([
                                        { name: 'Customer' },
+                                       { name: 'Beta Applicant'},
+                                       { name: 'Beta Customer'},
                                        { name: 'Prospect' },
                                        { name: 'Vendor' },
                                        { name: 'Partner' },

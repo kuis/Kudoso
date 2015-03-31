@@ -72,7 +72,7 @@ body {
   nav#nav {
     height: 65px;
     ul {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       li.active {
         background-color: rgba(72, 126, 164, 0.51);
         padding-top: 10px;
@@ -314,6 +314,7 @@ main {
   color: #111111;
   background-color: #ffffff;
   font-size: 1.5rem;
+  margin: 0 auto;
 }
 .block-shadow {
   border: 1px solid #979797;
@@ -348,21 +349,6 @@ main {
   width: 100%;
   background-color: $secondary-color;
   padding: 20px 20px 20px 50px;
-  .action-buttons {
-    text-align: center;
-
-    ul {
-      margin: 0;
-      padding: 0;
-      list-style-type: none;
-      text-align: center;
-      li {
-        display: inline;
-        padding-left: 40px;
-        padding-right: 40px;
-      }
-    }
-  }
 }
 #footer {
   position: relative;
@@ -437,8 +423,98 @@ main {
     margin: 0 2.5%;
   }
 }
+.full-screen {
+  position: relative;
+  width: 90%;
+  margin-top: 5%;
+  margin-left: 5%;
+}
 .clear {
   clear: both;
+}
+.action-buttons {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+    li {
+      display: inline;
+      padding-left: 40px;
+      padding-right: 40px;
+    }
+  }
+}
+.contrast {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: white;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1px 10px;
+  -webkit-box-shadow: 0 0 23px 5px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: 0 0 23px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0 23px 5px rgba(0, 0, 0, 0.4);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -ms-border-radius: 3px;
+  -o-border-radius: 3px;
+  border-radius: 3px;
+  p {
+    font-size: inherit;
+  }
+}
+.sharp-contrast {
+  font-size: 1.5rem;
+  line-height: 2rem;
+  color: white;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 1em;
+  text-align: center;
+  h1 {
+    color: white;
+    font-size: 3rem;
+  }
+  p {
+    font-size: inherit;
+  }
+}
+
+small {
+  font-size: small;
+  color: #b9b9b9;
+}
+.flash-message {
+  &.error {
+    border: solid 4px #900;
+    background-color: #FF6565;
+  }
+  &.success {
+    border: solid 4px #26722D;
+    background-color: #A4E7A0;
+  }
+  color: black;
+  z-index: 999;
+  position: fixed;
+  font-weight: bold;
+  width: 96%;
+  margin: 5px;
+  p {
+    font-size: 110%;
+    margin: 15px 0;
+  }
+  a.close {
+    position: absolute;
+    top: -10px;
+    right: 5px;
+    text-decoration: none;
+  }
+  a.close:hover {
+    text-decoration: none;
+    color: lighten(black, 10%);
+  }
 }
 
 .three-columns {
@@ -564,24 +640,6 @@ ul.inline.even > li {
       margin: 30px 0;
       line-height: 3rem;
     }
-    .contrast {
-      font-size: 1.5rem;
-      line-height: 2rem;
-      color: white;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 1px 10px;
-      -webkit-box-shadow: 0 0 23px 5px rgba(0, 0, 0, 0.4);
-      -moz-box-shadow: 0 0 23px 5px rgba(0, 0, 0, 0.4);
-      box-shadow: 0 0 23px 5px rgba(0, 0, 0, 0.4);
-      -webkit-border-radius: 3px;
-      -moz-border-radius: 3px;
-      -ms-border-radius: 3px;
-      -o-border-radius: 3px;
-      border-radius: 3px;
-      p {
-        font-size: inherit;
-      }
-    }
   }
   .slide-second-details {
     position: absolute;
@@ -593,7 +651,6 @@ ul.inline.even > li {
   }
 }
 
-// Optional
 .slides-navigation {
   margin: 0 auto;
   position: absolute;
@@ -605,6 +662,7 @@ ul.inline.even > li {
     position: absolute;
     display: block;
     color: white;
+    text-shadow: 0 0 4px #000000;
     &.prev {
       left: 20px;
     }
@@ -718,4 +776,24 @@ span.balloon:hover {
   cursor: pointer;
 }
 
-// Pricing Table
+// Forms
+
+input.string {
+  border-width: 1px;
+  border-color: #000000;
+  background-color: white;
+  color: #212121;
+  font-size: 1.4rem;
+  height: 3rem;
+  margin: 3px 0 3px 3px;
+  border-radius: 8px;
+}
+
+.input-long {
+  width: 80%;
+  min-width: 400px;
+}
+.input-medium {
+  width: 40%;
+  min-width: 200px;
+}

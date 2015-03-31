@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+source 'http://rubygems.org'
 
 
 # Core
@@ -95,3 +95,6 @@ group :test do
   gem 'faker'
   gem 'simplecov'
 end
+
+gem 'rubber'
+gem 'open4'

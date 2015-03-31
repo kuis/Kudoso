@@ -9,7 +9,7 @@
     = javascript_include_tag :modernizr
     = csrf_meta_tags
   %body
-    -if current_page?('/') #unless current_page?(controller: 'home', action: 'index')
+    -if controller_name == 'home' #unless current_page?(controller: 'home', action: 'index')
       = render 'layouts/messages'
       = yield
     -else

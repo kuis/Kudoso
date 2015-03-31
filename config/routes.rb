@@ -84,6 +84,8 @@ Rails.application.routes.draw do
     end
 
   end
+  get 'pre_signup', to: 'home#pre_signup'
+  get 'pre_signup_thank_you', to: 'home#pre_signup_thank_you'
 
   root to: 'home#index'
 
