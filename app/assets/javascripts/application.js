@@ -14,7 +14,7 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery.ui.all
-//= require jquery.stickyNavbar
+//= require scrolling_nav
 //= require best_in_place
 //= require jquery.purr
 //= require best_in_place.purr
@@ -22,6 +22,7 @@
 //= require recurring_select
 //= require highcharts/highcharts
 //= require cocoon
+//= require bootstrap-sprockets
 //= require_tree .
 
 
@@ -61,5 +62,9 @@ $(function() {
     $('a.close').click(function(){
        $(this.parentNode).hide(500);
     });
-
+    $('#nav').affix({
+        offset: {
+            top: $('header').height()
+        }
+    });
 });

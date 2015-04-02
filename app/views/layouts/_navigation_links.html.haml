@@ -1,3 +1,52 @@
+-#
+-#  %li.active
+-#    %a{:href => "#"} Home
+-#  %li.divider
+-#  %li
+-#    %a{:href => "#"} Link
+-#  %li
+-#    %a{:href => "#"} Link
+-#  %ul.nav.pull-right.navbar-nav
+-#    %li
+-#      %form.navbar-form
+-#        %input.form-control{:placeholder => "Search", :type => "text"}/
+-#        %button.btn.btn-default{:type => "submit"}
+-#          %i.glyphicon.glyphicon-search
+-#    %li
+-#      %a{:href => "#"}
+-#        %i.glyphicon.glyphicon-flag
+-#        %span.badge 2
+
+- if controller_name == 'home'
+  -if action_name == 'index'
+    -#  Hidden li included to remove active class from about link when scrolled up past about section
+    %li.hidden
+      %a.page-scroll{href: '#page-top'} body
+    %li
+      %a.page-scroll{href: '#home'} home
+    %li
+      %a.page-scroll{href: '#features'} features
+    %li
+      %a.page-scroll{href: '#how'} how it works
+    %li
+      %a.page-scroll{href: '#pricing'} pricing
+    %li
+      %a.page-scroll{href: '#about'} about us
+    %li
+      %a{href: '/pre_signup'} sign up
+  - else
+    %li
+      %a.page-scroll{href: '/'} home
+    %li
+      %a.page-scroll{href: '/#features'} features
+    %li
+      %a.page-scroll{href: '/#how'} how it works
+    %li
+      %a.page-scroll{href: '/#pricing'} pricing
+    %li
+      %a.page-scroll{href: '/#about'} about us
+    %li
+      %a{href: '/pre_signup'} sign up
 - if member_signed_in? || user_signed_in?
 
   - if user_signed_in?

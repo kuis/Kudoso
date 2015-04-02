@@ -11,6 +11,9 @@
  * file per style scope.
  *
  */
+@import "bootstrap-sprockets";
+@import "bootstrap";
+@import "scrolling-nav";
 @import 'bourbon';
 @import 'mixins';
 @import 'jquery.ui.core';
@@ -23,7 +26,6 @@
 @import 'devices';
 @import 'family_activities';
 @import 'animate.min';
-@import 'jquery.stickyNavbar';
 @import 'pricing_table';
 @import 'simpletextrotator';
 
@@ -47,6 +49,8 @@ body {
   font-family: ‘Lucida Sans Unicode’, ‘Lucida Grande’, sans-serif;
 }
 
+
+
 .blur {
   width: 100%;
   height: auto;
@@ -54,43 +58,52 @@ body {
   background-color: rgba(255, 255, 255, .85);
 }
 
-#header {
-  background-color: rgba(180, 180, 180, 0.91);
-  padding: 0;
-  height: 65px;
 
-  position: relative;
-  top: 0px;
-  border-bottom-color: rgb(150, 150, 150);
-  border-bottom-width: 6px;
-  .logo {
-    float: left;
-    img {
-      padding-top: 5px;
-      padding-left: 50px;
-    }
-  }
-  nav#nav {
-    height: 65px;
-    ul {
-      font-size: 1.6rem;
-      li.active {
-        background-color: rgba(72, 126, 164, 0.51);
-        padding-top: 10px;
-        padding-bottom: 30px;
-        a {
-          text-decoration: none !important;
-        }
-      }
-    }
-  }
-}
-
-
-main {
+#main {
   height: 100%;
   width: 100%;
 }
+
+/* bootstrap 3 helpers */
+.navbar-nav {
+  height: 60px;
+}
+.navbar-form input, .form-inline input {
+  width:auto;
+}
+
+.navbar-default {
+  background-color: rgba(248, 248, 248, 0.86);
+  border-color: #e7e7e7;
+}
+.navbar-brand {
+  padding: 0;
+}
+
+.navbar-default .navbar-nav > li > a,
+.navbar-default .navbar-nav > li > a:hover {
+  font-size: 2rem;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus{
+  font-size: 2rem;
+  background-color: rgba(72, 126, 164, 0.51);
+  padding-bottom: 40px;
+}
+
+header {
+  height:80px;
+}
+
+#nav.affix {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index:10;
+}
+
+
 
 .filler {
   width: 100%;
@@ -109,6 +122,7 @@ main {
   text-decoration: none;
   background-color: $theme-color;
   text-align: center;
+  display: inline-block;
 }
 .large {
   font-size: 2rem;
@@ -149,14 +163,18 @@ main {
   background-color: transparent;
   padding: 0;
   .top {
-    padding-top: 60px;
+    padding-top: 120px;
     height: 33%;
     width: 100%;
     text-align: center;
     position: relative;
     .logo {
       top: 20%;
+      img {
+        max-width: 100%;
+      }
     }
+
   }
   .mid {
     height: 33%;
@@ -195,6 +213,11 @@ main {
   }
 }
 
+@include MQ(M) {
+  #home {
+    margin-bottom: -160px;
+  }
+}
 .kudoso-block {
   display: block;
   width: 100%;
@@ -245,7 +268,7 @@ main {
     vertical-align: middle;
     top: 0;
     text-align: left;
-    min-height: 500px;
+    min-height: 300px;
     padding-left: 50%;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -260,7 +283,7 @@ main {
     position: relative;
     vertical-align: middle;
     top: 0;
-    min-height: 500px;
+    min-height: 300px;
     text-align: left;
     padding-right: 50%;
     padding-top: 20px;
@@ -338,6 +361,7 @@ main {
 }
 #pricing {
   padding: 1em;
+  padding-top: 60px;
   position: relative;
   top: 0;
   min-height: 100%;
@@ -443,11 +467,11 @@ main {
     list-style-type: none;
     text-align: center;
     li {
-      display: inline;
       padding-left: 40px;
       padding-right: 40px;
     }
   }
+
 }
 .contrast {
   font-size: 1.5rem;

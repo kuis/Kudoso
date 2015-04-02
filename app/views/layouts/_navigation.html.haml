@@ -1,7 +1,12 @@
-#header.header
-  .logo
-    = link_to root_path do
+%nav#nav.navbar.navbar-default.navbar-fixed-top{role: "navigation"}
+  .navbar-header.page-scroll
+    %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+      %span.sr-only Toggle navigation
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+    = link_to root_path, class: 'navbar-brand page-scroll', :href => "#page-top", title: 'Kudoso' do
       =image_tag 'kudoso_logo_52.png'
-  %nav#nav
-    %ul.nav.navbar-nav
+  .navbar-collapse.collapse
+    %ul.nav.navbar-nav.pull-right
       = render 'layouts/navigation_links'

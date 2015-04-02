@@ -2,6 +2,7 @@
 ######################################
 
 admin = User.create({email: 'kaz@kudoso.com', first_name: 'Mike', last_name: 'Kazmier', password: 'password', password_confirmation: 'password', admin: true, confirmed_at: Time.now})
+rob = User.create({email: 'rob@kudoso.com', first_name: 'Rob', last_name: 'Irizarry', password: 'password', password_confirmation: 'password', admin: true, confirmed_at: Time.now})
 
 # Populate helpdesk fields
 
