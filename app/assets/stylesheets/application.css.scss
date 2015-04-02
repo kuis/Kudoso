@@ -65,8 +65,10 @@ body {
 }
 
 /* bootstrap 3 helpers */
-.navbar-nav {
-  height: 60px;
+@include MQ(M) {
+  .navbar-nav {
+    height: 60px;
+  }
 }
 .navbar-form input, .form-inline input {
   width:auto;
