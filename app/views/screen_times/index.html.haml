@@ -85,7 +85,7 @@ Max is the most screen time that a child can have using Kudos.
 
 
 .panel
-  = render partial: 'screen_time_schedules/screen_time_schedule', locals: {screen_time_schedule: @member.screen_time_schedule}
+  = render partial: 'screen_time_schedules/screen_time_schedule', locals: {screen_time_schedule: @member.screen_time_schedule || @member.screen_time_schedule = ScreenTimeSchedule.create(member_id: @member.id) }
 
 
 .panel

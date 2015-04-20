@@ -92,7 +92,7 @@
                     var end = timeBlocks[x][1] *  minPerBlock * 60;
                     newTime.push([start, end]);
                 }
-                $that.data('timeBlocks', JSON.stringify(newTime));
+                $that.data('timeBlocks', newTime);
             }
 
             function setHeight(e) {

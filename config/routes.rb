@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       resources :my_todos
       resources :screen_times
       resources :st_overrides
+      resources :screen_time_schedules
     end
 
 

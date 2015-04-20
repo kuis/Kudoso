@@ -41,6 +41,9 @@ class Ability
         can :manage, StOverride do |sto|
           sto.try(:member).try(:family) == user.try(:member).try(:family)
         end
+        can :manage, ScreenTimeSchedule do |screen_time_schedule|
+          screen_time_schedule.try(:member).try(:family) == user.try(:member).try(:family)
+        end
         can :manage, MyTodo, :family => user.try(:member).try(:family)
         # can :manage, MyTodo do |todo|
         #   todo.member && user.family && todo.member.family == user.try(:member).try(:family)

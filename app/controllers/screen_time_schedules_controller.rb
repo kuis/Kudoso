@@ -1,7 +1,7 @@
 class ScreenTimeSchedulesController < ApplicationController
   load_and_authorize_resource :family
   load_and_authorize_resource :member, through: :family
-  load_and_authorize_resource :screen_time_schedule, through: :member
+  load_and_authorize_resource :screen_time_schedule, through: :member, except: :update
 
   respond_to :html
 
@@ -15,13 +15,14 @@ class ScreenTimeSchedulesController < ApplicationController
   end
 
   def update
+    @screen_time_schedule = @member.screen_time_schedule
     if params[:screen_time_schedule].try(:[], :restrictions).present?
-      restrictions = JSON.parse(params[:screen_time_schedule].try(:[], :restrictions))
+      restrictions = params[:screen_time_schedule].try(:[], :restrictions)
       params[:screen_time_schedule][:restrictions] = nil
       if restrictions
         # process restrictions
-        @screen_time_schedule.restrictions = restrictions
-        if @screen_time_schedule.update_attribute(:restrictions, restrictions)
+
+        if @screen_time_schedule.update_attribute(:restrictions, JSON.parse(restrictions))
           respond_to do |format|
             format.html { redirect_to family_member_screen_times_path(@family, @member) }
             format.json { render json: {}, status: 200 }
@@ -52,9 +53,9 @@ class ScreenTimeSchedulesController < ApplicationController
   #   redirect_to family_member_screen_times_path(@family, @member)
   # end
 
-  private
-
-    def screen_time_schedule_params
-      params.require(:screen_time_schedule).permit(:member_id, :family_id, :restrictions)
-    end
+  # private
+  #
+  #   def screen_time_schedule_params
+  #     params.require(:screen_time_schedule).permit(:member_id, :family_id, :restrictions)
+  #   end
 end

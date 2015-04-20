@@ -59,5 +59,18 @@ Click on the day to create a restriction, drag to set start/stop times.
        }
 
     });
-   alert(JSON.stringify(restrictions));
+    console.log(restrictions);
+    $.ajax({
+      url: "#{ family_member_screen_time_schedule_url(screen_time_schedule.member.family, screen_time_schedule.member, screen_time_schedule) }",
+      dataType: "json",
+      data: { screen_time_schedule: { restrictions: JSON.stringify(restrictions) } },
+      method: "PUT",
+      success: function(){
+        alert("success");
+      },
+      error: function(){
+        alert("error");
+      }
+
+    })
   }
