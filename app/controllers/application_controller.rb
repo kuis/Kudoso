@@ -19,6 +19,16 @@ class ApplicationController < ActionController::Base
   helper_method :format_counter
   helper_method :format_counter_min
 
+  def after_sign_in_path_for(resource)
+    if resource.try(:admin)
+      admin_families_path
+    else
+      request.env['omniauth.origin'] || stored_location_for(resource) || root_path
+    end
+
+
+  end
+
   def format_counter(seconds)
     sec = seconds % 60
     min = (seconds/60).floor

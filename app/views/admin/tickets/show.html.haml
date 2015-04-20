@@ -1,62 +1,63 @@
-%p#notice= notice
+.simple-wrap
+  %p#notice= notice
 
-%p
-  %b Date openned:
-  = @ticket.date_openned
+  %p
+    %b Date openned:
+    = @ticket.date_openned
 
 
-- if @ticket.date_closed.blank?
-  = simple_form_for [:admin, @ticket] do |f|
-    .panel
-      %p
-        = f.input :ticket_type_id, collection: TicketType.all, label_method: :name, value_method: :id
-      %p
-        = f.input :user_id, collection: User.accounts, label_method: :email, value_method: :id
-      %p
-        = f.input :contact_id, collection: Contact.all.order(:last_name), label_method: :label, value_method: :id
-      %p
-        = f.input :assigned_to_id, collection: User.admins, label_method: :full_name, value_method: :id
-      %p
-        = f.input :status, collection: @ticket.default_statuses
-      %p
-        Close ticket:
-        = check_box_tag 'ticket_close'
-      .links
-        = link_to_add_association 'add note', f, :notes
-      %p
-        = f.button :submit
-    .panel
-      %h2 Ticket Notes
-      -#= f.simple_fields_for :notes do |note|
-      -#  = render 'note_fields', :f => note
-      %hr
+  - if @ticket.date_closed.blank?
+    = simple_form_for [:admin, @ticket] do |f|
+      .panel
+        %p
+          = f.input :ticket_type_id, collection: TicketType.all, label_method: :name, value_method: :id
+        %p
+          = f.input :user_id, collection: User.accounts, label_method: :email, value_method: :id
+        %p
+          = f.input :contact_id, collection: Contact.all.order(:last_name), label_method: :label, value_method: :id
+        %p
+          = f.input :assigned_to_id, collection: User.admins, label_method: :full_name, value_method: :id
+        %p
+          = f.input :status, collection: @ticket.default_statuses
+        %p
+          Close ticket:
+          = check_box_tag 'ticket_close'
+        %p
+          = f.button :submit, class: 'btn btn-success'
+      .panel
+        %h2 Ticket Notes
+        = link_to 'Back', admin_tickets_path, class: 'btn btn-default'
+        = link_to_add_association 'Add Note', f, :notes, class: 'btn btn-primary'
+        -#= f.simple_fields_for :notes do |note|
+        -#  = render 'note_fields', :f => note
+        %table.table.table-striped
+          - @ticket.notes.reverse.each do |note|
+            %tr
+              %td
+                .note
+                  .pull-right
+                    #{note.created_at}
+                  .note-details
+                    %p
+                      %b
+                        #{note.title}
+                      %small
+                        (#{note.note_type.try(:name)})
+                    %p
+                      #{raw(note.body)}
+  -else
+    %p
+      %b Ticket type:
+      = @ticket.ticket_type.name
+    %p
+      %b User / Contact:
+      (#{@ticket.user_id}) #{@ticket.user.try(:email)} /
+      = @ticket.contact.try(:full_name)
+    %p
+      %b Assigned to: #{@ticket.assigned_to.try(:full_name)}
+    %p
+      %b Status: #{@ticket.status}
+    %p
+      %b Date closed:
+      = @ticket.date_closed
 
-      - @ticket.notes.reverse.each do |note|
-        .note
-          .pull-right
-            #{note.created_at}
-          .panel
-            %p
-              %b
-                #{note.title}
-              %small
-                (#{note.note_type.try(:name)})
-            %p
-              #{raw(note.body)}
--else
-  %p
-    %b Ticket type:
-    = @ticket.ticket_type.name
-  %p
-    %b User / Contact:
-    (#{@ticket.user_id}) #{@ticket.user.try(:email)} /
-    = @ticket.contact.try(:full_name)
-  %p
-    %b Assigned to: #{@ticket.assigned_to.try(:full_name)}
-  %p
-    %b Status: #{@ticket.status}
-  %p
-    %b Date closed:
-    = @ticket.date_closed
-
-= link_to 'Back', admin_tickets_path

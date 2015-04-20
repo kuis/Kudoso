@@ -6,7 +6,7 @@ Max is the most screen time that a child can have using Kudos.
 
 .panel
   %h2 Global
-  %table
+  %table.table.table-striped
     %tr
       %th
       %th Sunday
@@ -83,11 +83,16 @@ Max is the most screen time that a child can have using Kudos.
                   %button{onclick: "var tmp = $('#max_custom_dow_#{dow}').val().split(':'); var time = tmp[1] ? ( parseInt(tmp[0])*60*60 + parseInt(tmp[1])*60 ) : ( parseInt(tmp)*60 ); if (isNaN(time)) { alert('Please enter a valid time as HH:MM (ex: 1:35) or MM (ex: 35)') } else { $('#max_time_dow_#{dow}').val(time); $('#screen_time_dow_#{dow}').submit(); } "}
                     Submit
 
+
+.panel
+  = render partial: 'screen_time_schedules/screen_time_schedule', locals: {screen_time_schedule: @member.screen_time_schedule}
+
+
 .panel
   %h2 Activities
   .pull_right
     = link_to 'Reset Activity Limits', family_member_screen_times_path(@family, @member, clear_activities: true), method: :post
-  %table
+  %table.table.table-striped
     %tr
       %th
       %th Sunday
@@ -160,7 +165,7 @@ Max is the most screen time that a child can have using Kudos.
   %h2 Devices
   .pull_right
     = link_to 'Reset Device Limits', family_member_screen_times_path(@family, @member, clear_devices: true), method: :post
-  %table
+  %table.table.table-striped
     %tr
       %th
       %th Sunday

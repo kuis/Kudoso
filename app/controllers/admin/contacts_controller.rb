@@ -3,7 +3,13 @@ class Admin::ContactsController < AdminController
   respond_to :html
 
   def index
-    @contacts = Contact.all
+    @contact_type = params[:contact_type_id]
+    if @contact_type
+      @contacts = Contact.where(contact_type_id: @contact_type)
+    else
+      @contacts = Contact.all
+    end
+    @contact_types = ContactType.all
     respond_with(@contacts)
   end
 

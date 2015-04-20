@@ -13,11 +13,12 @@
       %header
         = render 'layouts/navigation'
       %main{:role => "main"}
-        = render 'layouts/messages'
-        .row
-          .small-12.columns
-            %h1
-              ADMIN SECTION
-        .row
-          .small-12.columns
-            = yield
+        .container
+          = render 'layouts/messages'
+          .row
+            .small-12.columns
+              %h1
+                ADMIN SECTION
+          .row
+            .small-12.columns
+              = yield

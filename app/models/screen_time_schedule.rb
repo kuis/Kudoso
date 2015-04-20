@@ -5,7 +5,7 @@ class ScreenTimeSchedule < ActiveRecord::Base
 
 
 
-  serialize :restrictions, Hash
+  serialize :restrictions, Hash   # [:dow] = [[:start_time, :end_time],...]
 
   after_initialize :init_restrictions
 

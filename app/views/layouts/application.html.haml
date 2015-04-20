@@ -12,8 +12,13 @@
     %header
     = render 'layouts/navigation'
     #main
-      = render 'layouts/messages'
-      = yield
+      - if controller_name == 'home'
+        = render 'layouts/messages'
+        = yield
+      - else
+        .container
+          = render 'layouts/messages'
+          = yield
       #footer
         .container
           .margin

@@ -6,6 +6,7 @@
             controlsSize: 2
         }, options);
 
+
         return this.each(function () {
             var $that = $(this);
             var isDragging = false;
@@ -16,6 +17,7 @@
             var maxBlock = settings.blocks;
             var minPerBlock = 24 * 60 / settings.blocks;
             var startBlock, endBlock = null;
+            setTimeBlocks();
 
             $(this).mousedown(function (e) {
                 var div = null;
@@ -72,6 +74,7 @@
                     divArray.splice(idx, 0, div); // inserts the div into the array
                     var newElm = [startBlock, (startBlock + 1)];
                     timeBlocks.splice(idx, 0, newElm);
+                    setTimeBlocks();
                     div = null;
                 } else {
                     console.log('div is not null!');
@@ -81,6 +84,16 @@
 
 
             });
+
+            function setTimeBlocks(){
+                var newTime = [];
+                for (var x in timeBlocks) {
+                    var start = timeBlocks[x][0] *  minPerBlock * 60; // time is in seconds since midnight
+                    var end = timeBlocks[x][1] *  minPerBlock * 60;
+                    newTime.push([start, end]);
+                }
+                $that.data('timeBlocks', JSON.stringify(newTime));
+            }
 
             function setHeight(e) {
                 e.stopPropagation();
@@ -110,6 +123,8 @@
                 endBlock = Math.max(Math.min((Math.floor(percentY * settings.blocks) + 1), maxBlock), timeBlocks[idx][0] + (settings.controlsSize * 2));
                 startBlock = timeBlocks[idx][0];
                 timeBlocks[idx] = [timeBlocks[idx][0], endBlock];
+
+                setTimeBlocks();
 
 
                 var height = Math.max(Math.floor((timeBlocks[idx][1] - timeBlocks[idx][0]) * base), base);
@@ -143,7 +158,7 @@
 
                 while ((child = child.previousSibling) != null)
                 idx++;
-                
+
                 if (idx > 0) {
                     minBlock = timeBlocks[(idx - 1)][1];
                 } else {
@@ -155,12 +170,12 @@
                 startBlock = Math.min(Math.max((Math.floor(percentY * settings.blocks) + 1), minBlock), timeBlocks[idx][1] - (settings.controlsSize * 2));
                 endBlock = timeBlocks[idx][1];
                 timeBlocks[idx] = [startBlock, timeBlocks[idx][1]];
-
+                setTimeBlocks();
 
                 var height = Math.max(Math.floor((timeBlocks[idx][1] - timeBlocks[idx][0]) * base), base);
 
                 console.log(" -- In setStartHeight -- Height: " + height + " X: " + posX + " Y: " + posY + " e.pageX: " + e.pageX + " e.pageY: " + e.pageY + " Start block: " + timeBlocks[idx][0] + " End block: " + endBlock);
-                
+
                 div.style.top = startBlock * base + $that.position().top + 'px';
                 div.style.height = height + 'px';
 
@@ -260,6 +275,8 @@
 
                 return div;
             }
+
+
         });
     }
 }(jQuery));

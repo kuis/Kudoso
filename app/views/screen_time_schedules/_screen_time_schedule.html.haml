@@ -1,0 +1,63 @@
+%h2 Screen Time Restricted Schedule
+Click on the day to create a restriction, drag to set start/stop times.
+%table.table.table-striped.st_restrictions
+  %tr
+    %th Sunday
+    %th Monday
+    %th Tuesday
+    %th Wednesday
+    %th Thursday
+    %th Friday
+    %th Saturday
+  %tr
+    %td
+      #sunday.rangeSelector
+    %td
+      #monday.rangeSelector
+    %td
+      #tuesday.rangeSelector
+    %td
+      #wednesday.rangeSelector
+    %td
+      #thursday.rangeSelector
+    %td
+      #friday.rangeSelector
+    %td
+      #saturday.rangeSelector
+  %tr
+    %td{colspan: 7, onclick: 'updateScreenTimeRestrictions();'}
+      Update Time Restrictions
+:javascript
+  function updateScreenTimeRestrictions() {
+    var restrictions = { "0": [], "1": [], "2": [], "3": [], "4": [], "5": [], "6": [], "7": [] };
+    $('.rangeSelector').each(function(){
+
+       switch (this.id) {
+        case "sunday":
+          restrictions["0"] =  $(this).data('timeBlocks');
+          break;
+        case "monday":
+          restrictions["1"] =  $(this).data('timeBlocks');
+          break;
+        case "tuesday":
+          restrictions["2"] =  $(this).data('timeBlocks');
+          break;
+        case "wednesday":
+          restrictions["3"] =  $(this).data('timeBlocks');
+          break;
+        case "thursday":
+          restrictions["4"] =  $(this).data('timeBlocks');
+          break;
+        case "friday":
+          restrictions["5"] =  $(this).data('timeBlocks');
+          break;
+        case "saturday":
+          restrictions["6"] =  $(this).data('timeBlocks');
+          break;
+        default:
+          console.log(this.id);
+       }
+
+    });
+   alert(JSON.stringify(restrictions));
+  }

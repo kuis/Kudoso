@@ -14,6 +14,7 @@
 //= require jquery.turbolinks
 //= require jquery_ujs
 //= require jquery.ui.all
+//= require jquery-rangeSelector
 //= require scrolling_nav
 //= require best_in_place
 //= require jquery.purr
@@ -53,6 +54,7 @@ function ready() {
             location.reload();
         }
     });
+    $('.rangeSelector').rangeSelector();
 }
 $(function() {
 
