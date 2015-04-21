@@ -3,7 +3,8 @@
         var settings = $.extend({
             blocks: (4 * 24),
             initialSize: 6,
-            controlsSize: 2
+            controlsSize: 2,
+            times: []
         }, options);
 
 
@@ -17,6 +18,23 @@
             var maxBlock = settings.blocks;
             var minPerBlock = 24 * 60 / settings.blocks;
             var startBlock, endBlock = null;
+
+            console.log('Initial time blocks: ' + JSON.stringify(timeBlocks));
+            //setup initial blocks
+            for (var x in settings.times) {
+                if (typeof(settings.times[x]) == 'object' && settings.times[x].length == 2) {
+                    startBlock = (settings.times[x][0] / 60) / minPerBlock;
+                    endBlock = (settings.times[x][1] / 60) / minPerBlock;
+                    timeBlocks.push([startBlock,endBlock]);
+                    var start = startBlock * base;
+                    var end = endBlock * base;
+                    var div = createDiv(start,end);
+                    $that.append(div);
+                    divArray.push(div);
+                }
+
+            }
+
             setTimeBlocks();
 
             $(this).mousedown(function (e) {
@@ -27,8 +45,8 @@
                 startBlock = Math.floor(percentY * settings.blocks);
                 endBlock = Math.floor(percentY * settings.blocks) + settings.initialSize;
                 console.log('Starting block: ' + startBlock);
-                var start = startBlock * base + $that.position().top;
-                var end = start + base;
+                var start = startBlock * base; // + $that.position().top;
+                var end =  start + (base * settings.initialSize); //start + base;
                 var idx = 0;
 
                 for (var x in timeBlocks) {
@@ -50,7 +68,7 @@
                                 break;
                             } else {
                                 console.log('Creating new div at index: ' + x);
-                                div = createDiv(start);
+                                div = createDiv(start,end);
                                 if (idx == 0) {
                                     $that.prepend(div);
                                 } else {
@@ -69,7 +87,7 @@
                 }
                 if (div == null) {
                     console.log('div still null!');
-                    div = createDiv(start);
+                    div = createDiv(start,end);
                     $that.append(div);
                     divArray.splice(idx, 0, div); // inserts the div into the array
                     var newElm = [startBlock, (startBlock + 1)];
@@ -157,7 +175,7 @@
                 var idx = 0;
 
                 while ((child = child.previousSibling) != null)
-                idx++;
+                    idx++;
 
                 if (idx > 0) {
                     minBlock = timeBlocks[(idx - 1)][1];
@@ -176,7 +194,7 @@
 
                 console.log(" -- In setStartHeight -- Height: " + height + " X: " + posX + " Y: " + posY + " e.pageX: " + e.pageX + " e.pageY: " + e.pageY + " Start block: " + timeBlocks[idx][0] + " End block: " + endBlock);
 
-                div.style.top = startBlock * base + $that.position().top + 'px';
+                div.style.top = startBlock * base  + 'px';
                 div.style.height = height + 'px';
 
                 var hours = Math.floor(startBlock * minPerBlock / 60);
@@ -189,11 +207,12 @@
                 div.lastChild.innerHTML = hours + ":" + minutes;
             }
 
-            function createDiv(startPos) {
+            function createDiv(startPos,endPos) {
+                console.log('Creating div at start: ' + startPos + ' end: ' + endPos);
                 var div = document.createElement("div");
 
                 div.style.top = startPos + 'px';
-                div.style.height = (base * settings.initialSize) + 'px';
+                div.style.height = (endPos - startPos) + 'px'; //(base * settings.initialSize) + 'px';
                 div.style.width = $that.width() + 'px';
                 div.style.position = 'absolute';
                 div.style.backgroundColor = 'yellow';

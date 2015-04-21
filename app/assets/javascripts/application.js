@@ -54,7 +54,9 @@ function ready() {
             location.reload();
         }
     });
-    $('.rangeSelector').rangeSelector();
+    if (typeof(setupRangeSelector) == 'function')
+        setupRangeSelector();
+
 }
 $(function() {
 

@@ -74,3 +74,39 @@ Click on the day to create a restriction, drag to set start/stop times.
 
     })
   }
+  function setupRangeSelector() {
+    $('.rangeSelector').each(function(){
+      switch (this.id) {
+        case "sunday":
+          console.log('Setting up ' + this.id);
+          $(this).rangeSelector( { times: #{ screen_time_schedule.restrictions["0"].as_json } });
+          break;
+        case "monday":
+          console.log('Setting up ' + this.id);
+          $(this).rangeSelector( {times: #{ screen_time_schedule.restrictions["1"].as_json } });
+          break;
+        case "tuesday":
+          console.log('Setting up ' + this.id);
+          $(this).rangeSelector( {times: #{ screen_time_schedule.restrictions["2"].as_json } });
+          break;
+        case "wednesday":
+          console.log('Setting up ' + this.id);
+          $(this).rangeSelector( {timeBlocks: #{ screen_time_schedule.restrictions["3"].as_json } });
+          break;
+        case "thursday":
+          console.log('Setting up ' + this.id);
+          $(this).rangeSelector( {times: #{ screen_time_schedule.restrictions["4"].as_json } });
+          break;
+        case "friday":
+          console.log('Setting up ' + this.id);
+          $(this).rangeSelector( {times: #{ screen_time_schedule.restrictions["5"].as_json } });
+          break;
+        case "saturday":
+          console.log('Setting up ' + this.id);
+          $(this).rangeSelector( {times: #{ screen_time_schedule.restrictions["6"].as_json } });
+          break;
+        default:
+          console.log('Unknown: ' + this.id);
+      }
+    });
+  }
