@@ -61,10 +61,35 @@
                             if (times[0] <= startBlock && times[1] >= startBlock) {
                                 console.log('Using existing div: ' + x);
                                 div = divArray[idx];
-                                var height = (endBlock - times[0]) * base;
-                                timeBlocks[idx][1] = endBlock;
-                                console.log('height: ' + height);
-                                div.style.height = height + 'px';
+                                var dialog = document.createElement("div");
+                                $(dialog).addClass('panel');
+                                $(dialog).attr('title', "Delete this time restriction?");
+                                $(dialog).html('<p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>This time restriction will be deleted, are you sure?</p>');
+                                $that.append(dialog);
+                                $( dialog ).dialog({
+                                    resizable: false,
+                                    height:140,
+                                    modal: true,
+                                    buttons: {
+                                        "Delete Restriction": function() {
+                                            divArray.splice(idx,1);
+                                            timeBlocks.splice(idx,1);
+                                            $( this ).dialog( "close" );
+                                            $( div ).remove();
+
+                                        },
+                                        Cancel: function() {
+                                            $( this ).dialog( "close" );
+                                            $( this).remove();
+                                        }
+                                    }
+                                });
+
+
+                                //var height = (endBlock - times[0]) * base;
+                                //timeBlocks[idx][1] = endBlock;
+                                //console.log('height: ' + height);
+                                //div.style.height = height + 'px';
                                 break;
                             } else {
                                 console.log('Creating new div at index: ' + x);
