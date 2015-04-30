@@ -11,7 +11,7 @@ RSpec.describe Member, :type => :model do
   end
 
   it 'should not allow duplicate usernames within a fmaily' do
-    member_2 = Member.new(first_name: @member.first_name, username: @member.username, family_id: @member.family_id)
+    member_2 = Member.new( username: @member.username, family_id: @member.family_id)
     expect(member_2.valid?).to be_falsey
     expect(member_2.errors[:username].any?).to be_truthy
   end

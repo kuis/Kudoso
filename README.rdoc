@@ -1,6 +1,6 @@
 == KUDOSO
 
-Kudoso's mission is to help parents manage the INFLUENCE of technology on their children through the POSITIVE REINFORCEMENT
+Kudoso's mission is to help parents manage the INFLUENCE of technology on their children through the MUTUAL COOPORATION and POSITIVE REINFORCEMENT
 of family values and life skills.  The Kusoso service does this through a cloud-based service that monitors and controls
 screen time on virtually every electronic device in the household.  When possible, we provide the abilty to filter content
 to ensure that it is appropriate for children ages 2-12.  We instill family values and life skills by restricting access

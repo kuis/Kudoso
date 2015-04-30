@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
     if !self.admin? && self.family_id.nil?
       self.create_family(name: "#{self.last_name} Family", primary_contact_id: self.id)
       self.member = self.family.members.create({username: self.email, parent: true })
-      self.member.create_contact({first_name: self.first_name, last_name: self.last_name, contact_type_id: ContactType.find_by_name('Customer').id})
+      self.member.create_contact({first_name: self.first_name, last_name: self.last_name, contact_type_id: ContactType.find_or_create_by(name: 'Customer').id})
       self.member.contact.emails.create({address: self.email, is_primary: true})
       self.save
       self.member.save

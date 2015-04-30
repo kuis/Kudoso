@@ -24,136 +24,148 @@ RSpec.describe StOverridesController, :type => :controller do
   # StOverride. As you add validations to StOverride, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    {
+        member_id: @member.id,
+        time: 30*60,
+        date: Date.today
+    }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    {
+        time: -30,
+        date: nil
+    }
   }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
-  # StOverridesController. Be sure to keep this updated too.
+  # ActivitiesController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET index" do
-    it "assigns all st_overrides as @st_overrides" do
-      st_override = StOverride.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:st_overrides)).to eq([st_override])
+  context 'as a parent' do
+    before(:each) do
+      @member = FactoryGirl.create(:member, parent: true)
+      @family = @member.family
+      sign_in_member(@member)
     end
-  end
 
-  describe "GET show" do
-    it "assigns the requested st_override as @st_override" do
-      st_override = StOverride.create! valid_attributes
-      get :show, {:id => st_override.to_param}, valid_session
-      expect(assigns(:st_override)).to eq(st_override)
-    end
-  end
-
-  describe "GET new" do
-    it "assigns a new st_override as @st_override" do
-      get :new, {}, valid_session
-      expect(assigns(:st_override)).to be_a_new(StOverride)
-    end
-  end
-
-  describe "GET edit" do
-    it "assigns the requested st_override as @st_override" do
-      st_override = StOverride.create! valid_attributes
-      get :edit, {:id => st_override.to_param}, valid_session
-      expect(assigns(:st_override)).to eq(st_override)
-    end
-  end
-
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new StOverride" do
-        expect {
-          post :create, {:st_override => valid_attributes}, valid_session
-        }.to change(StOverride, :count).by(1)
-      end
-
-      it "assigns a newly created st_override as @st_override" do
-        post :create, {:st_override => valid_attributes}, valid_session
-        expect(assigns(:st_override)).to be_a(StOverride)
-        expect(assigns(:st_override)).to be_persisted
-      end
-
-      it "redirects to the created st_override" do
-        post :create, {:st_override => valid_attributes}, valid_session
-        expect(response).to redirect_to(StOverride.last)
+    describe "GET index" do
+      it "assigns all st_overrides as @st_overrides" do
+        st_override = FactoryGirl.create(:st_override, member_id: @member.id)
+        get :index, {family_id: @family.id, member_id: @member.id}, valid_session
+        expect(assigns(:st_overrides)).to eq([st_override])
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved st_override as @st_override" do
-        post :create, {:st_override => invalid_attributes}, valid_session
+    describe "GET show" do
+      it "assigns the requested st_override as @st_override" do
+        st_override = FactoryGirl.create(:st_override, member_id: @member.id)
+        get :show, {family_id: @family.id, member_id: @member.id, :id => st_override.to_param}, valid_session
+        expect(assigns(:st_override)).to eq(st_override)
+      end
+    end
+
+    describe "GET new" do
+      it "assigns a new st_override as @st_override" do
+        get :new, {family_id: @family.id, member_id: @member.id}, valid_session
         expect(assigns(:st_override)).to be_a_new(StOverride)
       end
-
-      it "re-renders the 'new' template" do
-        post :create, {:st_override => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
     end
-  end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested st_override" do
-        st_override = StOverride.create! valid_attributes
-        put :update, {:id => st_override.to_param, :st_override => new_attributes}, valid_session
-        st_override.reload
-        skip("Add assertions for updated state")
-      end
-
+    describe "GET edit" do
       it "assigns the requested st_override as @st_override" do
-        st_override = StOverride.create! valid_attributes
-        put :update, {:id => st_override.to_param, :st_override => valid_attributes}, valid_session
+        st_override = FactoryGirl.create(:st_override, member_id: @member.id)
+        get :edit, {family_id: @family.id, member_id: @member.id, :id => st_override.to_param}, valid_session
         expect(assigns(:st_override)).to eq(st_override)
-      end
-
-      it "redirects to the st_override" do
-        st_override = StOverride.create! valid_attributes
-        put :update, {:id => st_override.to_param, :st_override => valid_attributes}, valid_session
-        expect(response).to redirect_to(st_override)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the st_override as @st_override" do
-        st_override = StOverride.create! valid_attributes
-        put :update, {:id => st_override.to_param, :st_override => invalid_attributes}, valid_session
-        expect(assigns(:st_override)).to eq(st_override)
+    describe "POST create" do
+      describe "with valid params" do
+        it "creates a new StOverride" do
+          expect {
+            post :create, {family_id: @family.id, member_id: @member.id, :st_override => valid_attributes}, valid_session
+          }.to change(StOverride, :count).by(1)
+        end
+
+        it "assigns a newly created st_override as @st_override" do
+          post :create, {family_id: @family.id, member_id: @member.id, :st_override => valid_attributes}, valid_session
+          expect(assigns(:st_override)).to be_a(StOverride)
+          expect(assigns(:st_override)).to be_persisted
+        end
+
+        it "redirects to the member after creating st_override" do
+          post :create, {family_id: @family.id, member_id: @member.id, :st_override => valid_attributes}, valid_session
+          expect(response).to redirect_to([@family, @member])
+        end
       end
 
-      it "re-renders the 'edit' template" do
-        st_override = StOverride.create! valid_attributes
-        put :update, {:id => st_override.to_param, :st_override => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+      describe "with invalid params" do
+        it "assigns a newly created but unsaved st_override as @st_override" do
+          post :create, {family_id: @family.id, member_id: @member.id, :st_override => invalid_attributes}, valid_session
+          expect(assigns(:st_override)).to be_a_new(StOverride)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {family_id: @family.id, member_id: @member.id, :st_override => invalid_attributes}, valid_session
+          expect(response).to render_template("new")
+        end
+      end
+    end
+
+    describe "PUT update" do
+      describe "with valid params" do
+        let(:new_attributes) {
+          {
+              time: 3600,
+              date: Date.today
+          }
+        }
+
+        it "should not update the st_override" do
+
+          st_override = FactoryGirl.create(:st_override, member_id: @member.id)
+          time_orig = st_override.time
+          put :update, {family_id: @family.id, member_id: @member.id, :id => st_override.to_param, :st_override => new_attributes}, valid_session
+          st_override.reload
+          expect(st_override.time).to eq(time_orig)
+        end
+
+
+        it "redirects to the member after update to st_override" do
+          st_override = FactoryGirl.create(:st_override, member_id: @member.id)
+          put :update, {family_id: @family.id, member_id: @member.id, :id => st_override.to_param, :st_override => valid_attributes}, valid_session
+          expect(response).to redirect_to([@family, @member])
+        end
+      end
+
+    end
+
+    describe "DELETE destroy" do
+      it "destroys the requested st_override" do
+        st_override = FactoryGirl.create(:st_override, member_id: @member.id)
+        expect {
+          delete :destroy, {family_id: @family.id, member_id: @member.id, :id => st_override.to_param}, valid_session
+        }.to change(StOverride, :count).by(-1)
+      end
+
+      it "redirects to the member after delete" do
+        st_override = FactoryGirl.create(:st_override, member_id: @member.id)
+        delete :destroy, {family_id: @family.id, member_id: @member.id, :id => st_override.to_param}, valid_session
+        expect(response).to redirect_to([@family, @member])
       end
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested st_override" do
-      st_override = StOverride.create! valid_attributes
-      expect {
-        delete :destroy, {:id => st_override.to_param}, valid_session
-      }.to change(StOverride, :count).by(-1)
+  context 'as a child' do
+    before(:each) do
+      @member = FactoryGirl.create(:member, parent: false)
+      @family = @member.family
+      sign_in_member(@member)
     end
 
-    it "redirects to the st_overrides list" do
-      st_override = StOverride.create! valid_attributes
-      delete :destroy, {:id => st_override.to_param}, valid_session
-      expect(response).to redirect_to(st_overrides_url)
-    end
+     #todo - write some tests!
   end
 
 end

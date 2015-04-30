@@ -122,16 +122,16 @@ RSpec.describe MembersController, :type => :controller do
     describe "PUT update" do
       describe "with valid params" do
         let(:new_attributes) {
-          {first_name: 'steve',
+          {username: 'steve',
            birth_date: '6/23/1946'
           }
         }
 
         it "updates the requested member" do
-          member = FactoryGirl.create(:member, first_name: 'John', family_id: @family.id)
+          member = FactoryGirl.create(:member, username: 'johnny', family_id: @family.id)
           put :update, {family_id: @family.id, :id => member.to_param, :member => new_attributes}, valid_session
           member.reload
-          expect(member.first_name).to eq('steve')
+          expect(member.username).to eq('steve')
           expect(member.birth_date).to eq(Chronic.parse('6/23/1946').to_date)
         end
 
