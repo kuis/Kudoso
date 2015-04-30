@@ -2,6 +2,7 @@ class ApiKey < ActiveRecord::Base
   before_create :generate_access_token
 
   belongs_to :member
+  belongs_to :user
   has_many :api_sessions
 
   def update_expiration!

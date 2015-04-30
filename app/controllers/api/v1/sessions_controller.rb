@@ -19,7 +19,7 @@ module Api
           else
             messages[:warning] << "This application has been marked for end-of-life at #{device.expires_at.to_formatted_s(:long_ordinal)}.  Please update the application as soon as possible to avoid any problems with access." if  device.expires_at.present?
             # begin
-            if (params[:family_id].present? && params[:username].present?) || params[:auth_key] || params[:provider].present?
+            if (params[:family_id].present? && params[:username].present?) || params[:email] || params[:provider].present?
               params[:provider] ||= 'identity'
               if params[:provider] == 'identity'
 
@@ -51,9 +51,9 @@ module Api
                   end
 
                 end
-                if params[:auth_key].present?
+                if params[:email].present?
 
-                  user = User.find_by_email(params[:auth_key])
+                  user = User.find_by_email(params[:email])
                   if user
                     if user.valid_password?(params[:password])
                       render :json => { user:      user,

@@ -121,15 +121,25 @@ strip functionality, but we MUST present it in a way that is easy to use while b
                 * This is the unique email address used to identify a user
             * password, string, optional
                 * This is the password of requested user or member
+        * Example URL: api.kudoso.com:3000/v1/sessions?email=kaz@kudoso.com&password=password&device_token=3afac3670cbd3ccc8c652a3393c61945
 
     http://api.kudoso.com/v1/sessions/<token> DELETE
         * Immediately terminates an API session
+        * Parmas: None
+        * Example URL: api.kudoso.com:3000/v1/sessions/532a782accf30e50665af3a3e5c5a9e3
+
 
     http://api.kudoso.com/v1/families/<id> GET
         * Retreives the basic family information (not very useful)
+        * Params: None
+        * Header: Authorization: Token token="<token>"
+        * Example URL: api.kudoso.com:3000/v1/families
 
     http://api.kudoso.com/v1/families/<id>/devices
         * Retreives the list of devices associated with the family
+        * Params: None
+        * Header: Authorization: Token token="<token>"
+        * Example URL: api.kudoso.com:3000/v1/families/1
 
     http://api.kudoso.com/v1/families/<id>/activities
         * Retreives the list of activities associated with the family
