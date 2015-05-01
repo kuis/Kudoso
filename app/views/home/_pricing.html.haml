@@ -1,40 +1,38 @@
 .cd-pricing-container.cd-has-margins
   .cd-pricing-switcher
     %p.fieldset
-      %input#yearly-2{:checked => "checked", :name => "duration-2", :type => "radio", :value => "yearly"}/
+      %input#monthly-2{:checked => "checked", :name => "duration-2", :type => "radio", :value => "monthly"}/
+      %label{:for => "monthly-2"} Monthly
+      %input#yearly-2{:name => "duration-2", :type => "radio", :value => "yearly"}/
       %label{:for => "yearly-2"} Yearly
-      %input#monthly-2{:name => "duration-2", :type => "radio", :value => "monthly"}/
-      %label{:for => "monthly-2"} Quarterly
       %span.cd-switch
   %ul.cd-pricing-list.cd-bounce-invert
     %li
       %ul.cd-pricing-wrapper
-        %li.is-hidden.is-ended{"data-type" => "monthly"}
+        %li.is-visible.is-ended{"data-type" => "monthly"}
           %header.cd-pricing-header
-            %h2 Aspen
+            %h2 Plug Only
             .cd-price
               %span.cd-currency $
-              %span.cd-value 45
-              %span.cd-duration qtr
+              %span.cd-value 5
+              %span.cd-duration mth
           .cd-pricing-body
             %ul.cd-pricing-features
               %li
-                %em $15
-                \/ Month
-                %br
-                Paid Quarterly
+                %em Not
+                Available Monthly
               %li
                 %em 1
                 Child
               %li
-                %em 2
-                Devices Managed
+                %em 2 Devices
+                Managed
               %li
-                %em 1 SmartPlug
+                %em SmartPlug
                 Control Included
               %li
                 %em Kudoso Gateway
-                Included
+                Not Included
               %li
                 %em Mobile Devices
                 Not Included
@@ -42,10 +40,78 @@
                 %em Content Filtering
                 Not included
           %footer.cd-pricing-footer
-            = link_to 'Select', pre_signup_path(plan: 'Aspen', annual: false), class: 'cd-select'
-        %li.is-visible.is-ended{"data-type" => "yearly"}
+            = link_to 'Select', pre_signup_path(plan: 'Plug', annual: true), class: 'cd-select'
+        %li.is-hidden.is-ended{"data-type" => "yearly"}
           %header.cd-pricing-header
-            %h2 Aspen
+            %h2 Plug Only
+            .cd-price
+              %span.cd-currency $
+              %span.cd-value 60
+              %span.cd-duration yr
+          .cd-pricing-body
+            %ul.cd-pricing-features
+              %li
+                %em $5
+                \/ Month
+                %br
+                Paid Annually
+              %li
+                %em 1
+                Child
+              %li
+                %em 2 Devices
+                Managed
+              %li
+                %em SmartPlug
+                Control Included
+              %li
+                %em Kudoso Gateway
+                Not Included
+              %li
+                %em Mobile Devices
+                Not Included
+              %li
+                %em Content Filtering
+                Not Included
+          %footer.cd-pricing-footer
+            = link_to 'Select', pre_signup_path(plan: 'Plug', annual: true), class: 'cd-select'
+    %li.cd-popular
+      %ul.cd-pricing-wrapper
+        %li.is-visible.is-ended{"data-type" => "monthly"}
+          %header.cd-pricing-header
+            %h2 Gold
+            .cd-price
+              %span.cd-currency $
+              %span.cd-value 15
+              %span.cd-duration mth
+          .cd-pricing-body
+            %ul.cd-pricing-features
+              %li
+                %em $25
+                Setup Fee
+              %li
+                %em 5
+                Children
+              %li
+                %em 5
+                Devices Managed
+              %li
+                %em SmartPlug
+                Control Included
+              %li
+                %em Kudoso Gateway
+                Included
+              %li
+                %em Mobile Devices
+                Included
+              %li
+                %em Content Filtering
+                Included
+          %footer.cd-pricing-footer
+            = link_to 'Select', pre_signup_path(plan: 'Gold', annual: false), class: 'cd-select'
+        %li.is-hidden.is-ended{"data-type" => "yearly"}
+          %header.cd-pricing-header
+            %h2 Gold
             .cd-price
               %span.cd-currency $
               %span.cd-value 165
@@ -56,52 +122,16 @@
                 %em $13.75
                 \/ Month
                 %br
-                Paid Annually
+                Paid Annually / No Setup Fee
               %li
-                %em 1
-                Child
-              %li
-                %em 2
-                Devices Managed
-              %li
-                %em 1 SmartPlug
-                Included
-              %li
-                %em Kudoso Gateway
-                Included
-              %li
-                %em Mobile Devices
-                Not Included
-              %li
-                %em Content Filtering
-                Not Included
-          %footer.cd-pricing-footer
-            = link_to 'Select', pre_signup_path(plan: 'Aspen', annual: true), class: 'cd-select'
-    %li.cd-popular
-      %ul.cd-pricing-wrapper
-        %li.is-hidden.is-ended{"data-type" => "monthly"}
-          %header.cd-pricing-header
-            %h2 Tamarack
-            .cd-price
-              %span.cd-currency $
-              %span.cd-value 60
-              %span.cd-duration qtr
-          .cd-pricing-body
-            %ul.cd-pricing-features
-              %li
-                %em $20
-                \/ Month
-                %br
-                Paid Quarterly
-              %li
-                %em Unlimited
+                %em 5
                 Children
               %li
                 %em 5
                 Devices Managed
               %li
-                %em 2 SmartPlugs
-                Included
+                %em SmartPlug
+                Control Included
               %li
                 %em Kudoso Gateway
                 Included
@@ -112,66 +142,30 @@
                 %em Content Filtering
                 Included
           %footer.cd-pricing-footer
-            = link_to 'Select', pre_signup_path(plan: 'Tamarack', annual: false), class: 'cd-select'
-        %li.is-visible.is-ended{"data-type" => "yearly"}
-          %header.cd-pricing-header
-            %h2 Tamarack
-            .cd-price
-              %span.cd-currency $
-              %span.cd-value 220
-              %span.cd-duration yr
-          .cd-pricing-body
-            %ul.cd-pricing-features
-              %li
-                %em $18.33
-                \/ Month
-                %br
-                Paid Annually
-              %li
-                %em Unlimited
-                Children
-              %li
-                %em 5
-                Devices Managed
-              %li
-                %em 2 SmartPlugs
-                Included
-              %li
-                %em Kudoso Gateway
-                Included
-              %li
-                %em Mobile Devices
-                Included
-              %li
-                %em Content Filtering
-                Included
-          %footer.cd-pricing-footer
-            = link_to 'Select', pre_signup_path(plan: 'Tamarack', annual: true), class: 'cd-select'
+            = link_to 'Select', pre_signup_path(plan: 'Gold', annual: true), class: 'cd-select'
     %li
       %ul.cd-pricing-wrapper
-        %li.is-hidden.is-ended{"data-type" => "monthly"}
+        %li.is-visible.is-ended{"data-type" => "monthly"}
           %header.cd-pricing-header
-            %h2 Cedar
+            %h2 Platinum
             .cd-price
               %span.cd-currency $
-              %span.cd-value 90
-              %span.cd-duration qtr
+              %span.cd-value 25
+              %span.cd-duration mth
           .cd-pricing-body
             %ul.cd-pricing-features
               %li
-                %em $30
-                \/ Month
-                %br
-                Paid Quarterly
+                %em $25
+                Setup Fee
               %li
-                %em Unlimited
+                %em 10
                 Children
               %li
-                %em Unlimited
+                %em 15
                 Devices Managed
               %li
-                %em 2 SmartPlugs
-                Included
+                %em SmartPlug
+                Control Included
               %li
                 %em Kudoso Gateway
                 Included
@@ -182,30 +176,30 @@
                 %em Content Filtering
                 Included
           %footer.cd-pricing-footer
-            = link_to 'Select', pre_signup_path(plan: 'Cedar', annual: false), class: 'cd-select'
-        %li.is-visible.is-ended{"data-type" => "yearly"}
+            = link_to 'Select', pre_signup_path(plan: 'Platinum', annual: false), class: 'cd-select'
+        %li.is-hidden.is-ended{"data-type" => "yearly"}
           %header.cd-pricing-header
-            %h2 Cedar
+            %h2 Platinum
             .cd-price
               %span.cd-currency $
-              %span.cd-value 300
+              %span.cd-value 275
               %span.cd-duration yr
           .cd-pricing-body
             %ul.cd-pricing-features
               %li
-                %em $25.00
+                %em $22.92
                 \/ Month
                 %br
-                Paid Annually
+                Paid Annually / No Setup Fee
               %li
-                %em Unlimited
+                %em 10
                 Children
               %li
-                %em Unlimited
+                %em 15
                 Devices Managed
               %li
-                %em 3 SmartPlugs
-                Included
+                %em SmartPlug
+                Control Included
               %li
                 %em Kudoso Gateway
                 Included
@@ -216,9 +210,7 @@
                 %em Content Filtering
                 Included
           %footer.cd-pricing-footer
-            = link_to 'Select', pre_signup_path(plan: 'Cedar', annual: true), class: 'cd-select'
+            = link_to 'Select', pre_signup_path(plan: 'Platinum', annual: true), class: 'cd-select'
   .cd-pricing-container.cd-has-margins
     .padded-block.block-shadow
-      The Kudoso Gateway and Kudoso Lockable SmartPlugs remain the property of Kudoso and
-      must be returned within 90 days if the Kudoso service has ended or the customer
-      will be charged for the purchase price of each.
+      The Kudoso Plug is purchased separately. Annual plans have no setup fee and include 1 month free!
