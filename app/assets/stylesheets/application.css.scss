@@ -62,6 +62,7 @@ body {
 #main {
   height: 100%;
   width: 100%;
+  position: relative;
 }
 
 
@@ -161,7 +162,9 @@ header {
 }
 
 #home {
+  position: relative;
   height: 100%;
+  min-height: 700px;
   width: 100%;
   background-color: transparent;
   padding: 0;
@@ -172,10 +175,14 @@ header {
     text-align: center;
     position: relative;
     .logo {
-      top: 10%;
+      position: relative;
+      top: 5px;
+      height: 100%;
+      width: 100%;
       img {
+        position: relative;
         max-width: 100%;
-        max-height: 9%;
+        max-height: 100%;
       }
     }
 
@@ -183,6 +190,7 @@ header {
   .mid {
     height: 30%;
     width: 100%;
+    padding-top: 2%;
     text-align: center;
     position: relative;
 
@@ -204,7 +212,7 @@ header {
     height: 50%;
     width: 100%;
     text-align: center;
-
+    position: relative;
     ul {
       margin: 0;
       padding: 0;
@@ -217,6 +225,8 @@ header {
       }
     }
     #cta {
+      position: relative;
+      bottom: 10px;
       width: 100%;
       max-width: 800px;
 
