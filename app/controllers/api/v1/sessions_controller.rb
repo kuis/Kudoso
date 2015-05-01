@@ -19,7 +19,7 @@ module Api
           else
             messages[:warning] << "This application has been marked for end-of-life at #{device.expires_at.to_formatted_s(:long_ordinal)}.  Please update the application as soon as possible to avoid any problems with access." if  device.expires_at.present?
             # begin
-            if (params[:family_id].present? && params[:username].present?) || params[:email] || params[:provider].present?
+            if params[:password].present? && ((params[:family_id].present? && params[:username].present?) || params[:email].present? )
               params[:provider] ||= 'identity'
               if params[:provider] == 'identity'
 
@@ -73,14 +73,6 @@ module Api
                   end
                 end
 
-              end
-              if params[:provider] == 'facebook'
-                token = params[:token]
-
-                fb_user = FbGraph::User.me(token)
-                fb_user = fb_user.fetch
-
-                user = User.create_with_facebook(fb_user)
               end
             else
               logger.error "Invalid API parameters: #{params.to_yaml}"
