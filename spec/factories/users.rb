@@ -8,6 +8,7 @@ FactoryGirl.define do
     last_name {Faker::Name.last_name}
     email { Faker::Internet.email }
     member { FactoryGirl.create(:member) }
+    admin { false }
 
     after(:build) { |u| u.password_confirmation = u.password = 'password'; u.save; u.confirm! }
 

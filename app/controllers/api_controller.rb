@@ -22,6 +22,7 @@ class ApiController < ApplicationController
       api_key.update_expiration!
       @current_member = api_key.try(:member)
       @current_user = api_key.try(:user)
+      @current_member ||= @current_user.try(:member)
     else
       api_key.try(:destroy)
       head :unauthorized
