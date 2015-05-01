@@ -6,15 +6,38 @@
     %h1.rotate
       Changing the way families manage technology, Manage screen time across ALL your devices, Develop strong family values and life skills, Motivate your children with positive reinforcement
   .bottom
-    - if user_signed_in?
-      %ul
-        %li= link_to('Family Dashboard', family_path(current_user.family), class: 'button large radius')
-    -else
-      %ul
-        %li= link_to('Sign Up', pre_signup_path, class: 'button large radius')
-        %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')
-        - if cookies.signed[:kudoso_family].present?
-          %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius primary')
+    #cta.panel.panel-info
+      .panel-heading
+        .panel-title
+          %h4 Coming Fall 2015, get notified and we'll give you amazing discounts:
+      .panel-body
+        = simple_form_for @contact = Contact.new, html: { class: '' } do |f|
+          - @contact.emails.build
+          .form-group
+            .row
+              .col-xs-6
+                = f.input :first_name, placeholder: 'First Name', label: false, input_html: { class: 'form-control' }
+              .col-xs-6
+                = f.input :last_name, placeholder: 'Last Name', label: false, input_html: { class: 'form-control' }
+            = f.input :contact_type_id, as: :hidden, input_html: { value: ContactType.find_by_name('Beta Applicant').id }
+          .form-group
+            .row
+              .col-sm-8
+                = f.simple_fields_for :emails do |e|
+                  = e.input :address, placeholder: 'Email Address', label: false, input_html: { class: 'form-control' }
+              .col-sm-4
+                = f.button :submit, "I'm interested in Kudoso", class: 'btn btn-primary'
+      .panel-footer
+        We won't give your email to anyone else, we won't spam you.
+    -#- if user_signed_in?
+    -#  %ul
+    -#    %li= link_to('Family Dashboard', family_path(current_user.family), class: 'button large radius')
+    -#-else
+    -#  %ul
+    -#    %li= link_to('Sign Up', pre_signup_path, class: 'button large radius')
+    -#    %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')
+    -#    - if cookies.signed[:kudoso_family].present?
+    -#      %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius primary')
 #features.scrollto
   .kudoso-block
     .header-right
