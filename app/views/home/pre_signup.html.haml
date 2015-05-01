@@ -1,24 +1,38 @@
 .sharp-contrast.full-screen
   %p
-    %h1 Signup for Kudoso
-  .padded-block
-    %p
-      Thank you for your interest in Kudoso!  Kudoso's unparallelled solution has been in
+
+  .panel.panel-info
+    .panel-heading
+      .panel-title
+        %h3 Thank you for your interest in Kudoso!
+    .panel-body
+      Kudoso's unparallelled solution has been in
       development for over 2 years and we excited to begin to offer it our customers.
-    %p
+      %br
       Kudoso will initially be available to a limited beta of 100 households beginning in
-      September 2016.  If you would like to be considered a beta tester please complete
+      Fall 2015.  If you would like to be considered a beta tester please complete
       this form below and a Kudoso representative will contact you.
-  %p
-    = simple_form_for @contact = Contact.new do |f|
-      - @contact.emails.build
-      = f.input :first_name, placeholder: 'First Name', label: false, input_html: { class: 'input-medium' }
-      = f.input :last_name, placeholder: 'Last Name', label: false, input_html: { class: 'input-medium' }
-      = f.input :contact_type_id, as: :hidden, input_html: { value: ContactType.find_by_name('Beta Applicant').id }
-      = f.simple_fields_for :emails do |e|
-        = e.input :address, placeholder: 'Email Address', label: false, input_html: { class: 'input-medium' }
-      = f.input :do_not_email, label: 'Do not send me updates'
-      = f.button :submit, "I'm interested in Kudoso", class: 'button radius'
+      %br
+      = simple_form_for @contact = Contact.new do |f|
+        - @contact.emails.build
+        .form-group
+          .row
+            .col-xs-5.col-xs-offset-1
+              = f.input :first_name, placeholder: 'First Name', label: false, input_html: { class: 'form-control' }
+            .col-xs-5
+              = f.input :last_name, placeholder: 'Last Name', label: false, input_html: { class: 'form-control' }
+          = f.input :contact_type_id, as: :hidden, input_html: { value: ContactType.find_by_name('Beta Applicant').id }
+        .form-group
+          .row
+            .col-sm-7.col-xs-offset-1
+              = f.simple_fields_for :emails do |e|
+                = e.input :address, placeholder: 'Email Address', label: false, input_html: { class: 'form-control' }
+            .col-sm-3
+              = f.input :do_not_email, label: 'Do not send the Kudoso Newsletter, Tips and Tricks.'
+        .form-group
+          .row
+            .col-xs-12
+              = f.button :submit, "Apply to be a Beta Tester", class: 'btn btn-primary btn-lg'
   %p
     %small
       Note: If you opt to receive updates, you are still eligible for Kudoso beta testing.  When
