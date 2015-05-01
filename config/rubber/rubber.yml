@@ -86,7 +86,7 @@ cloud_providers:
     # Ubuntu 14.04.1 Trusty instance-store 64-bit: ami-92f569fa
     #
     # m1.small or m1.large or m1.xlarge
-    image_type: t2.micro
+    image_type: m3.medium
     #image_id: ami-92f569fa
     image_id: ami-dc5e75b4
 
@@ -328,6 +328,29 @@ staging_roles: "#{known_roles.reject {|r| r =~ /slave/ || r =~ /^db$/ }.join(','
 # attached _and_ formatted, but if your host disappears and you recreate
 # it, the volume will only get remounted thereby preserving your data
 #
+hosts:
+  stg-e1a-01:
+    availability_zone: us-east-1a
+    use_static_ip: true
+    cloud_providers:
+      aws:
+        image_type: m3.medium
+        image_id: ami-dc5e75b4
+  app-e1a-01:
+    availability_zone: us-east-1a
+    use_static_ip: true
+    cloud_providers:
+      aws:
+        image_type: m3.medium
+        image_id: ami-dc5e75b4
+  app-e1b-01:
+      availability_zone: us-east-1b
+      use_static_ip: true
+      cloud_providers:
+        aws:
+          image_type: m3.medium
+          image_id: ami-dc5e75b4
+
 # hosts:
 #   my_host:
 #     availability_zone: us-east-1a

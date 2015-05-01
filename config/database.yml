@@ -16,6 +16,10 @@ test: &test
   <<: *default
   database: kudoso_test<%= ENV['TEST_ENV_NUMBER'] %>
 
+staging:
+  <<: *default
+  database: kudoso_stage
+
 production:
   <<: *default
   database: kudoso_prod

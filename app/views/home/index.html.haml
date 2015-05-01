@@ -195,9 +195,9 @@
         Being parents ourselves, we have seen how technology has become the main focus of our children. We knew we needed a solution to not only limit how much screen time our boys were getting, but also a way to control and guide the content they were viewing. We live in a world driven by technology which is rapidly growing and evolving, making it hard for parents to set boundaries. Most parents worry about the technology their kids are using, but aren’t sure how to regain control.  We can’t disconnect our children from our technology driven world, but we can set limits and guide them with Kudoso. The American Academy of Pediatrics recommends that children limit screen time to no more than 2 hours per day and children under the age of 2 should have no exposure.
       %p
         Are your kids spending too much time in front of screens? Are they viewing content that is age appropriate? Are they learning life skills and responsibilities? Kudoso is the solution for you!
-      .action-buttons
-        %ul
-          %li= link_to('Sign Up', pre_signup_path, class: 'button large radius')
-          %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')
-          - if cookies.signed[:kudoso_family].present?
-            %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius primary')
+      -#.action-buttons
+      -#  %ul
+      -#    %li= link_to('Sign Up', pre_signup_path, class: 'button large radius')
+      -#    %li= link_to('Parent Sign In', new_user_session_path, class: 'button large radius secondary')
+      -#    - if cookies.signed[:kudoso_family].present?
+      -#      %li= link_to('Child Sign In', new_member_session_path(id: cookies.signed[:kudoso_family]), class: 'button large radius primary')
