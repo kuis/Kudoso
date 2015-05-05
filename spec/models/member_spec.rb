@@ -58,7 +58,7 @@ RSpec.describe Member, :type => :model do
       end
 
       ( (Date.today - 1.month) .. (Date.yesterday) ).each { |d| Family.memorialize_todos(d) }
-      expect(@member.my_todos.count).to eq(31)
+      expect(@member.my_todos.count).to eq(Time.now.end_of_month.day - 1)
     end
 
     it 'should return a months worth of my_todos when details are called' do
