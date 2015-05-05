@@ -33,7 +33,8 @@
     = f.label 'Recurring schedule rules:'
     = f.fields_for :schedule_rrules do |builder|
       = render 'schedule_rrules/schedule_rrule_fields', f: builder
-    = link_to_add_association 'Add new recurring schedule', f, :schedule_rrules, partial: 'schedule_rrules/schedule_rrule_fields'
+    - # TODO FIXME: the below is throwing an icecube::rule error...
+    = # link_to_add_association 'Add new recurring schedule', f, :schedule_rrules, partial: 'schedule_rrules/schedule_rrule_fields'
   .field
     = f.label :notes
     = f.text_area :notes

@@ -2,8 +2,10 @@ source 'http://rubygems.org'
 
 
 # Core
-gem 'rails', '4.1.6'
+gem 'rails', '4.2.1'
 gem 'pg'
+gem 'responders', '~> 2.0'
+gem 'railties'
 
 # View and Assets
 gem 'sprockets-rails', :require => 'sprockets/railtie'
@@ -17,7 +19,6 @@ gem 'simple_form'
 gem 'jquery-rails'
 gem 'jquery-ui-sass-rails'
 gem 'font-awesome-rails'
-gem 'jquery-turbolinks'
 gem 'lazy_high_charts'
 gem 'bourbon'
 gem 'cocoon' # nested form helper
@@ -25,7 +26,6 @@ gem 'groupdate' # adds group_by_date functions
 gem 'best_in_place' #adds in place editing features
 gem 'kaminari'
 gem 'modernizr-rails'
-gem 'rails_layout', group: :development
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 
@@ -81,6 +81,8 @@ group :development do
   gem 'better_errors'
   gem 'terminal-notifier-guard'
   gem 'habtm_generator'
+  gem 'rails_layout'
+  gem 'web-console', '~> 2.0'
 
   # Deployment
   gem 'capistrano',  "~> 2.15.0"
