@@ -19,47 +19,47 @@
         .container
           = render 'layouts/messages'
           = yield
-      #footer
-        .container
-          .margin
-            #publicity
-              .three-columns
-                .three-column
-                  %a{:href => "http://techcrunch.com/2014/07/01/kudoso-is-a-router-that-rewards-your-kids-with-facebook-time-for-studying-doing-chores/", :target => "_blank"}
-                    =image_tag 'techcrunch.jpg'
-                .three-column
-                  %a{:href => "http://www.usatoday.com/story/tech/personal/2014/07/02/wireless-router-chores/12005603/", :target => "_blank"}
-                    = image_tag 'usatoday.jpg'
-                .three-column
-                  %a{:href => "http://www.engadget.com/2014/07/02/kudoso-router-software/", :target => "_blank"}
-                    = image_tag 'engadget.jpg'
-            .clear
-            #footer-boxes
-              .footer-box
-                %h2 Kudoso
-                %a{:href => "/"} Home
-                %a{:href => "/#how"} How It Works
-                %a{:href => "/#pricing"} Pricing
-                / <a href="/pricing">Early Access</a>
-                / <a href="/buy">Buy Now</a>
-                %a{:href => "/newsletter"} Newsletter
-              .footer-box
-                %h2 About
-                %a{:href => "/#about"} About
-                %a{:href => "/team"} Team
-                %a{:href => "/tos"} Terms of Service
-                %a{:href => "/privacy"} Privacy Policy
-              .footer-box
-                %h2 Help
-                %a{:href => "/support", :target => "_blank"} Support
-                / <a href="/install/ipad">Installation</a>
-                %a{:href => "/contact"} Contact
-              .footer-box
-                %h2 Social
-                %a.facebook{:href => "http://www.facebook.com/pages/Kudoso/549419865079553", :target => "_blank"} Facebook
-                %a{:href => "https://twitter.com/Kudosokids"} Twitter
-                %a{:href => "https://plus.google.com/114467895478866956158", :rel => "publisher"} Google+
-            .clear
-          .copyright
-            Patent Pending © 2014-2015  Kudoso Tech LLC. All Rights Reserved.
+    #footer
+      .container
+        .margin
+          #publicity
+            .three-columns
+              .three-column
+                %a{:href => "http://techcrunch.com/2014/07/01/kudoso-is-a-router-that-rewards-your-kids-with-facebook-time-for-studying-doing-chores/", :target => "_blank"}
+                  =image_tag 'techcrunch.jpg'
+              .three-column
+                %a{:href => "http://www.usatoday.com/story/tech/personal/2014/07/02/wireless-router-chores/12005603/", :target => "_blank"}
+                  = image_tag 'usatoday.jpg'
+              .three-column
+                %a{:href => "http://www.engadget.com/2014/07/02/kudoso-router-software/", :target => "_blank"}
+                  = image_tag 'engadget.jpg'
+          .clear
+          #footer-boxes
+            .footer-box
+              %h2 Kudoso
+              %a{:href => "/"} Home
+              %a{:href => "/#how"} How It Works
+              %a{:href => "/#pricing"} Pricing
+              / <a href="/pricing">Early Access</a>
+              / <a href="/buy">Buy Now</a>
+              %a{:href => "/newsletter"} Newsletter
+            .footer-box
+              %h2 About
+              %a{:href => "/#about"} About
+              %a{:href => "/team"} Team
+              %a{:href => "/tos"} Terms of Service
+              %a{:href => "/privacy"} Privacy Policy
+            .footer-box
+              %h2 Help
+              %a{:href => "/support", :target => "_blank"} Support
+              / <a href="/install/ipad">Installation</a>
+              %a{:href => "/contact"} Contact
+            .footer-box
+              %h2 Social
+              %a.facebook{:href => "http://www.facebook.com/pages/Kudoso/549419865079553", :target => "_blank"} Facebook
+              %a{:href => "https://twitter.com/Kudosokids"} Twitter
+              %a{:href => "https://plus.google.com/114467895478866956158", :rel => "publisher"} Google+
+          .clear
+        .copyright
+          Patent Pending © 2014-2015  Kudoso Tech LLC. All Rights Reserved.
     = javascript_include_tag :application, media: :all, 'data-turbolinks-track' => true

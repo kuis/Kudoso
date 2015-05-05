@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
     if resource.try(:admin)
       admin_families_path
     else
-      request.env['omniauth.origin'] || stored_location_for(resource) || root_path
+      request.env['omniauth.origin'] || stored_location_for(resource) || family_path(resource.family)
     end
 
 

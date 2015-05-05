@@ -31,7 +31,7 @@
 
 html {
   width: 100%;
-  height: 100%;
+  height: 90%;
 }
 html * {
   -webkit-font-smoothing: antialiased;
@@ -41,32 +41,46 @@ html * {
 body {
   width: 100%;
   height: 100%;
-  background: image-url('landing-bg.jpg') no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
   font-family: ‘Lucida Sans Unicode’, ‘Lucida Grande’, sans-serif;
+  background:#EBEAE7;
+  background:asset-data-url('main-bg.png');
 }
 
-
-
-.blur {
-  width: 100%;
-  height: auto;
-  min-height: 100%;
-  background-color: rgba(255, 255, 255, .85);
-}
-
-
-#main {
-  height: 100%;
-  width: 100%;
-  position: relative;
-}
 
 
 /* bootstrap 3 helpers */
+input[type="text"], input[type="password"], input[type="email"], input[type="number"], textarea{
+  background:white;
+  font-size:14px;
+  width:100%;
+  max-width:600px;
+  padding:8px;
+  border:1px solid #B4B4B4;
+  border-radius: 4px;
+  outline:0;
+  margin: 0 auto;
+  &:focus {
+    background-color: white;
+    @include box-shadow(#0095E1 0px 0px 4px 1px);
+  }
+}
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+textarea{
+  height:60px;
+  max-width:100%;
+}
+
+label{
+  display:inline-block;
+  margin-bottom:4px;
+  font-size:16px;
+}
+
 @include MQ(M) {
   .navbar-nav {
     height: 60px;
@@ -100,6 +114,14 @@ header {
   height:80px;
 }
 
+
+#main {
+  min-height: 100%;
+  width: 100%;
+  position: relative;
+  padding-bottom: 120px;
+}
+
 #nav.affix {
   position: fixed;
   top: 0;
@@ -108,6 +130,12 @@ header {
 }
 
 
+.blur {
+  width: 100%;
+  height: auto;
+  min-height: 100%;
+  background-color: rgba(255, 255, 255, .85);
+}
 
 .filler {
   width: 100%;
@@ -167,10 +195,16 @@ header {
   min-height: 700px;
   width: 100%;
   background-color: transparent;
+  background: image-url('landing-bg.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
   padding: 0;
   .top {
     padding-top: 1%;
     height: 20%;
+    min-height: 200px;
     width: 100%;
     text-align: center;
     position: relative;
@@ -189,6 +223,7 @@ header {
   }
   .mid {
     height: 30%;
+    min-height: 200px;
     width: 100%;
     padding-top: 2%;
     text-align: center;
@@ -236,11 +271,6 @@ header {
   }
 }
 
-@include MQ(M) {
-  #home {
-    margin-bottom: -160px;
-  }
-}
 .kudoso-block {
   display: block;
   width: 100%;
@@ -405,6 +435,7 @@ header {
   width: 100%;
   padding: 1em;
   font-size: .8rem;
+  margin-top: -100px;
   #footer-boxes {
     position: relative;
     top:0;
@@ -464,13 +495,17 @@ header {
   }
 }
 
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  .margin {
-    margin: 0 2.5%;
+.container{
+  max-width:1140px;
+  margin:0 auto;
+  .margin{
+    margin:0 2.5%;
+    .padding{
+      padding:40px 0;
+    }
   }
 }
+
 .full-screen {
   position: relative;
   width: 90%;
