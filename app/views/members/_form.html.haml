@@ -1,5 +1,5 @@
 .authform
-  = simple_form_for([@family,@member]) do |f|
+  = simple_form_for([@family,@member], html: { class: 'form-horizontal' }, wrapper: :horizontal_input_group) do |f|
     - if @member.errors.any?
       #error_explanation
         %h2
@@ -9,21 +9,15 @@
           - @member.errors.full_messages.each do |message|
             %li= message
     = f.simple_fields_for :contact do |c|
-
-      .field
-        = c.input :first_name
-      .field
-        = c.input :last_name
-    .field
-      = f.input :username, placeholder: 'Enter a username unique to your family, usually the first name'
-    .field
-      = f.input :birth_date
-    .field
-      = f.input :password, placeholder: 'For younger kids, choose a simple word or 4 digit pin number as a password'
-    .field
-      = f.input :password_confirmation
+      = c.input :first_name
+      = c.input :last_name
+    = f.input :username, placeholder: 'Enter a username unique to your family, usually the first name'
+    = f.input :birth_date, as: :datepicker
+    = f.input :password, placeholder: 'For younger kids, choose a simple word or 4 digit pin number as a password'
+    = f.input :password_confirmation
     - if current_user.member.parent?
-      .field
-        = f.input :parent
-    .field
-      = f.button :submit,  :class => 'button right'
+      .row
+        .col-xs-6.col-xs-offset-3= f.input :parent
+    .row
+      .col-xs-6.col-xs-offset-3
+        = f.button :submit,  :class => 'btn btn-primary '

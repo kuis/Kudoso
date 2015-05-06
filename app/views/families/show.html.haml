@@ -15,7 +15,7 @@
             .todo_wrap
               = render member.todo_schedules
       %li
-        = link_to 'Add new family member', new_family_member_path(@family) if can?(:create, Member)
+        = link_to 'Add new family member', new_family_member_path(@family), class: 'btn btn-primary' if can?(:create, Member)
   .medium-6.columns
     %h2 Family ToDo List
     %ul#family_todo_list
@@ -23,10 +23,42 @@
         %li
           = render todo
       %li
-        %a{href: '#', data: { "reveal-id" => 'todo_template_modal' }}
+        %a.btn.btn-success{href: "#todo_template_add", data: {toggle: "collapse" }, aria: { expanded: "false", controls: "todo_template_add"} }
           Add more ToDo's
+        #todo_template_add.collapse
+          .panel
+            .panel-heading
+              .panel-title
+                %h2 ToDo Templates
+            .panel-body
+              %ul
+                - @todo_templates.each do |todo|
+                  - if @family.todos.where(todo_template_id: todo.id).count == 0
+                    %li
+                      = render todo
+                      = link_to 'Add to Family ToDo List', family_todos_path(@family, todo_template_id: todo.id ), method: :post, class: 'btn btn-primary'
+              .todo_wrap
+                Create your own ToDo:
+                = simple_form_for [@family, Todo.new], html: { class: 'form-horizontal' }, wrapper: :horizontal_input_group do |f|
+                  = f.input :name
+                  = f.input :description
+                  .row
+                    .col-xs-6.col-xs-offset-3
+                      = f.input :required
+                  .row
+                    .col-xs-6.col-xs-offset-3
+                      = f.input :active
+                  .row
+                    .col-xs-6.col-xs-offset-3
+                      =f.label :schedule
+                  .row
+                    .col-xs-6.col-xs-offset-3
+                      =f.select_recurring :schedule
+                  .row
+                    .col-xs-6.col-xs-offset-3
+                      = f.button :submit, class: 'btn btn-success'
       %li
-        = link_to 'Add from Todo Groups', family_todo_groups_path(@family)
+        = link_to 'Add from Todo Groups', family_todo_groups_path(@family), class: 'btn btn-primary'
 
 %hr
 .row
@@ -39,43 +71,12 @@
           %li
             = render device
       %li
-        = link_to 'Add new device', new_family_device_path(@family)
+        = link_to 'Add new device', new_family_device_path(@family), class: 'btn btn-primary'
         %br
-        = link_to 'View all devices', family_devices_path(@family)
+        = link_to 'View all devices', family_devices_path(@family) , class: 'btn btn-default'
   .medium-6.columns
     %h2 Family Activities
     %ul
       - @family.family_activities.each do |fam_act|
         %li
           =render fam_act
-#todo_template_modal.reveal-modal{data: { reveal: true} }
-  %a.close-reveal-modal
-    &#215;
-  %h2 ToDo Templates
-  %ul
-    - @todo_templates.each do |todo|
-      - if @family.todos.where(todo_template_id: todo.id).count == 0
-        %li
-          = render todo
-          = link_to 'Add to Family ToDo List', family_todos_path(@family, todo_template_id: todo.id ), method: :post
-    %li
-      .todo_wrap
-        Create your own ToDo:
-        = form_for [@family, Todo.new] do |f|
-          .form-group
-            = f.label :name
-            = f.text_field :name
-          .form-group
-            = f.label :description
-            = f.text_field :description
-          .form-group
-            = f.label :required
-            = f.check_box :required
-          .form-group
-            = f.label :active
-            = f.check_box :active
-          .form-group
-            =f.label :schedule
-            =f.select_recurring :schedule
-          .form-control
-            = f.submit

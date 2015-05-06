@@ -22,32 +22,30 @@
     %ul
       - todo.members.each do |member|
         %li=member.full_name
+  - # TODO: Only allow assign if there are kids with this todo already
   .todo_assign
     - if can?(:create, TodoSchedule)
-      %dl.accordion{"data-accordion" =>"myAccordionGroup"}
-        %dd.accordion-navigation
-          %a{href: "#assign_todo_#{todo.id}"}
-            Assign to child
-          .content{id: "assign_todo_#{todo.id}"}
-            = form_for [@family, todo, ts = TodoSchedule.new] do |f|
-              %br
+
+      %a.btn.btn-primary{href: "#assign_todo_#{todo.id}", data: {toggle: "collapse" }, aria: { expanded: "false", controls: "assign_todo_#{todo.id}"} }
+        Assign to child
+      .row
+        .col-xs-6.col-xs-offset-2
+          .content.collapse{id: "assign_todo_#{todo.id}"}
+            = simple_form_for [@family, todo, ts = TodoSchedule.new], html: { class: 'form-horizontal' }, wrapper: :horizontal_input_group do |f|
               .form_group
                 = f.label 'Choose a family member:'
                 = f.collection_select :member_id, @family.kids, :id, :full_name
-              .form_group
-                = f.label :start_date
-                = f.text_field :start_date, class: 'fdatepicker'
-              .form_group
-                =f.label 'End Date (optional)'
-                = f.text_field :end_date, class: 'fdatepicker'
-              .form_group
-                = f.label :schedule
-                = f.fields_for :schedule_rrules, ts.schedule_rrules.build(rrule: todo.schedule) do |builder|
-                  = render 'schedule_rrules/schedule_rrule_fields', f: builder
+              = f.input :start_date, as: :datepicker
+              =f.input :end_date, as: :datepicker
+              .row
+                .col-xs-9.col-xs-offset-3
+                  = f.label :schedule
+                  = f.fields_for :schedule_rrules, ts.schedule_rrules.build(rrule: todo.schedule) do |builder|
+                    = render 'schedule_rrules/schedule_rrule_fields', f: builder
                 .links
                   =# link_to_add_association 'Add new recurring schedule', f, :schedule_rrules,  partial: 'schedule_rrules/schedule_rrule_fields'
-              = f.submit
-
+              = f.button :submit, class: 'btn btn-success'
+  %hr
   .todo_actions
-    = link_to 'Edit', edit_family_todo_path(todo.family, todo) if can?(:update, todo)
-    = link_to 'Destroy', family_todo_path(todo.family, todo), :method => :delete, :data => { :confirm => 'Are you sure?' } if can?(:delete, todo)
+    = link_to 'Edit', edit_family_todo_path(todo.family, todo), class: "btn btn-default" if can?(:update, todo)
+    = link_to 'Destroy', family_todo_path(todo.family, todo), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: "btn btn-danger" if can?(:delete, todo)
