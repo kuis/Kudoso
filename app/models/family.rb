@@ -45,7 +45,7 @@ class Family < ActiveRecord::Base
 
       assign_members.each do |i|
         unless i.blank?
-          member = Member.find(i)
+          member = Member.find_by_id(i)
           if member.family_id == self.id
             todo_schedule = member.todo_schedules.build(start_date: Date.today.beginning_of_day, todo_id: todo.id )
             todo_schedule.active = true

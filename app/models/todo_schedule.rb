@@ -12,6 +12,9 @@ class TodoSchedule < ActiveRecord::Base
 
   after_initialize :init
 
+  def kudos
+    todo.kudos
+  end
 
   def schedule
     sch = IceCube::Schedule.new

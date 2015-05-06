@@ -40,7 +40,7 @@ class ActivityTypesController < ApplicationController
 
     def activity_type_params
       params.require(:activity_type).permit(:name).tap do |whitelisted|
-        whitelisted[:metadata_fields] = params[:activity_type][:metadata_fields]
+        whitelisted[:metadata_fields] = params[:activity_type].try(:[], :metadata_fields).is_a?(Hash) ? params[:activity_type][:metadata_fields] : {}
       end
     end
 end

@@ -35,7 +35,7 @@ class MembersController < ApplicationController
     @member = Member.new(params[:member].merge({family_id:@family.id}))
     if @member.save
       flash[:notice] = 'Family member was successfully created.'
-      respond_with([@family,@member])
+      respond_with(@member, location: [@family,@member])
     else
       render :new
     end
@@ -48,7 +48,7 @@ class MembersController < ApplicationController
     params[:member][:birth_date] = Chronic.parse(params[:member][:birth_date]) if params[:member][:birth_date]
     if @member.update(member_params)
       flash[:notice] = 'Family member was successfully updated.'
-      respond_with([@family,@member])
+      respond_with(@member, location: [@family,@member])
     else
       render :edit
     end

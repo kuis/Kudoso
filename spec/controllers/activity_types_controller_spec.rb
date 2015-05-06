@@ -33,7 +33,7 @@ RSpec.describe ActivityTypesController, :type => :controller do
   let(:invalid_attributes) {
     {
         name: nil,
-        metadata_fields: -453
+        metadata_fields: []
     }
   }
 

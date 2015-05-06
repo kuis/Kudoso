@@ -1,42 +1,30 @@
-= form_for [@family, @todo, @todo_schedule] do |f|
+= simple_form_for [@family, @todo, @todo_schedule], html: { class: 'form-horizontal' }, wrapper: :horizontal_input_group do |f|
   - if @todo_schedule.errors.any?
     #error_explanation
       %h2= "#{pluralize(@todo_schedule.errors.count, "error")} prohibited this todo_schedule from being saved:"
       %ul
         - @todo_schedule.errors.full_messages.each do |msg|
           %li= msg
-
-  .field
-    = f.label 'ToDo'
-    = f.hidden_field :todo_id
-    = f.text_field 'todo_name', value: @todo.name, readonly: true
-  .field
-    = f.label 'Assigned To'
-    = f.hidden_field :member_id
-    = f.text_field 'member_name', value: @todo_schedule.member.full_name, readonly: true
-  .field
-    = f.label :start_date
-    = f.text_field :start_date, readonly: true
-  .field
-    = f.label :kudos
-    = f.text_field 'todo_kudos', value: @todo.kudos, readonly: true
-  .field
-    = f.label :end_date
-    - if @todo_schedule.end_date.blank? || @todo_schedule.end_date > Date.today
-      = f.text_field :end_date, class: 'fdatepicker'
-    - else
-      = f.text_field :end_date, readonly: true
-  .field
-    = f.label :active
-    = f.check_box :active
-  .field
-    = f.label 'Recurring schedule rules:'
-    = f.fields_for :schedule_rrules do |builder|
-      = render 'schedule_rrules/schedule_rrule_fields', f: builder
-    - # TODO FIXME: the below is throwing an icecube::rule error...
-    = # link_to_add_association 'Add new recurring schedule', f, :schedule_rrules, partial: 'schedule_rrules/schedule_rrule_fields'
-  .field
-    = f.label :notes
-    = f.text_area :notes
-  .actions
-    = f.submit 'Save'
+  = f.hidden_field :member_id
+  = f.input 'member_name', as: :fake, input_html: { value: @todo_schedule.member.full_name }, disabled: true
+  = f.input 'todo_name', as: :fake, input_html: { value: @todo.name }, disabled: true
+  = f.hidden_field :todo_id
+  = f.input :kudos, disabled: true
+  .row
+    .col-xs-6.col-xs-offset-3
+      %small Edit the Family ToDo to change kudos
+  = f.input :start_date, as: :datepicker, disabled: true
+  = f.input :end_date, as: :datepicker, disabled: !( @todo_schedule.end_date.blank? || @todo_schedule.end_date > Date.today )
+  .row
+    .col-xs-6.col-xs-offset-3
+      = f.input :active, as: :boolean
+  .row
+    .col-xs-6.col-xs-offset-3
+      = f.simple_fields_for :schedule_rrules, label: 'Recurring schedule rules:' do |builder|
+        = render 'schedule_rrules/schedule_rrule_fields', f: builder
+      - # TODO FIXME: the below is throwing an icecube::rule error...
+      = # link_to_add_association 'Add new recurring schedule', f, :schedule_rrules, partial: 'schedule_rrules/schedule_rrule_fields'
+  = f.input :notes
+  .row
+    .col-xs-6.col-xs-offset-3
+      = f.button :submit, class: 'btn btn-primary'
