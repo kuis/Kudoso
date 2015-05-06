@@ -9,7 +9,9 @@ class ApplicationController < ActionController::Base
 
   before_filter do
     if Rails.env.staging?
-      http_basic_authenticate_with :name => "kudoso", :password => "Launching2015"
+      authenticate_or_request_with_http_basic do |username, password|
+        username == "kudoso" && password == "Launching2015!"
+      end
     end
   end
 
