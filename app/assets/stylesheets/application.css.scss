@@ -134,8 +134,11 @@ header {
 #landing {
   width: 100%;
   position: relative;
-  margin: 0 auto;
   color: #444444;
+  background-color: #ffffff;
+  padding-bottom: 100px;
+  margin-bottom: -100px;
+
   #landing-title {
     position: relative;
     background-color: #ffffff;
@@ -330,7 +333,7 @@ header {
   }
   #landing-news {
     text-align: center;
-    padding: 25px 5px 25px 5px;
+    padding: 25px 0 25px 0;
     #landing-news-body {
       background-color: $dark-blue;
       img {

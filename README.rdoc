@@ -150,3 +150,14 @@ strip functionality, but we MUST present it in a way that is easy to use while b
     http://api.kudoso.com/v1/families/<id>/members
         * Retreives the list of members associated with the family
 
+
+==== AWS / Rubber Setup
+    Staging:
+        RUBBER_ENV=staging ALIAS=stg-e1a-01 ROLES=app,nginx,unicorn,web,web_tools,db:primary=true cap rubber:create
+        RUBBER_ENV=staging cap rubber:bootstrap
+        RUBBER_ENV=staging cap deploy
+
+    Production:
+        RUBBER_ENV=production ALIAS=app-e1a-01 ROLES=app,nginx,unicorn,web,web_tools,db:primary=true cap rubber:create
+        RUBBER_ENV=production cap rubber:bootstrap
+        RUBBER_ENV=production cap deploy
