@@ -24,6 +24,7 @@
 //= require highcharts/highcharts
 //= require cocoon
 //= require bootstrap-sprockets
+//= require analytics
 //= require_tree .
 
 
@@ -69,6 +70,11 @@ $(function() {
     $('#nav').affix({
         offset: {
             top: $('header').height()
+        }
+    });
+    $(".signup").keyup(function (e) {
+        if (e.keyCode == 13) {
+            signup();
         }
     });
 });

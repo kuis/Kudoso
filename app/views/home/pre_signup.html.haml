@@ -21,7 +21,7 @@
               = f.input :first_name, placeholder: 'First Name', label: false, input_html: { class: 'form-control' }
             .col-xs-5
               = f.input :last_name, placeholder: 'Last Name', label: false, input_html: { class: 'form-control' }
-          = f.input :contact_type_id, as: :hidden, input_html: { value: ContactType.find_by_name('Beta Applicant').id }
+          = f.input :contact_type_id, as: :hidden, input_html: { value: ContactType.find_or_create_by(name: 'Beta Applicant').id }
         .form-group
           .row
             .col-sm-7.col-xs-offset-1

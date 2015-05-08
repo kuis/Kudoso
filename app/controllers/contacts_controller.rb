@@ -1,21 +1,47 @@
 class ContactsController < ApplicationController
-  respond_to :html
 
 
   def create
-    @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], 0).try(:[],:address)
-    if @primary_email.blank? || params[:contact][:first_name].blank?|| params[:contact][:last_name].blank?
-      redirect_to pre_signup_path, alert: 'All information is required!'
+    @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], "0").try(:[],:address)
+    if @primary_email.blank?
+      respond_to do |format|
+        format.html { redirect_to pre_signup_path, alert: 'All information is required!' }
+        format.json { render :nothing => true, :status => 400 }
+      end
+
     else
       params[:contact].delete(:emails_attributes)
-      @email = Email.find_or_create_by(@primary_email)
-      @contact = @email.try(:contact)
-      @contact ||= Email.contact.create(contact_params)
-      if @contact.save
-        redirect_to pre_signup_thank_you_path, notice: 'Information was successfully received!'
+
+      @email = Email.find_by(address: @primary_email)
+      if @email
+        respond_to do |format|
+          format.html { redirect_to pre_signup_path, alert: 'Sorry, you are already signed up!' }
+          format.json { render json: { error: 'Sorry, this email address is already registered.'}, :status => 409 }
+        end
       else
-        redirect_to pre_signup_path, alert: @contact.errors.full_messages.to_sentence
+        @email = Email.create(address: @primary_email)
+        @contact = @email.try(:contact)
+        if @contact.nil?
+          @contact = Contact.create( contact_params )
+          @email.contact_id = @contact.id
+          @email.save
+        end
+        if @contact.save
+          respond_to do |format|
+            format.html { redirect_to pre_signup_thank_you_path, notice: 'Information was successfully received!' }
+            format.json { render json: {}, :status => 200 }
+          end
+
+        else
+          logger.info  @contact.errors.full_messages.to_sentence
+          respond_to do |format|
+            format.html { redirect_to pre_signup_path, alert: @contact.errors.full_messages.to_sentence }
+            format.json { render json:  {error: @contact.errors.full_messages }, :status => 500 }
+          end
+        end
       end
+
+
     end
 
 

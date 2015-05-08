@@ -1,16 +1,23 @@
 !!!
 %html
   %head
-    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
+    %link{rel: 'icon', type: 'image/png', href: '/favicon.ico'}
+    %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}
     %title= content_for?(:title) ? yield(:title) : "Kudoso"
-    %meta{:content => content_for?(:description) ? yield(:description) : "Kudoso", :name => "description"}/
+    %meta{:content => content_for?(:description) ? yield(:description) : "Kudoso helps parents manage screen time across all technology in the house, filter internet content and provide a positive reward for children.", :name => "description"}
+    %meta{:content => content_for?(:keywords) ? yield(:keywords) : "Kudoso, kids, children, screentime, screen time, parental controls, content filtering, internet filter, game console, mobile, limit internet access, block applications, monitor usage", :name => "keywords"}/
     = stylesheet_link_tag 'reset', media: 'all', 'data-turbolinks-track' => true
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'ss-glyphish-outlined', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag :modernizr
+    %script{src: "//use.typekit.net/cbr8hdy.js"}
+    :javascript
+      try{Typekit.load();}catch(e){}
     = csrf_meta_tags
   %body#page-top{data: {spy: "scroll", target: ".navbar-fixed-top"} }
-    %header
-    = render 'layouts/navigation'
+    - if controller_name != 'home' && action_name != 'landing'
+      %header
+      = render 'layouts/navigation'
     #main
       - if controller_name == 'home'
         = render 'layouts/messages'
@@ -19,47 +26,32 @@
         .container
           = render 'layouts/messages'
           = yield
-    #footer
-      .container
-        .margin
-          #publicity
-            .three-columns
-              .three-column
-                %a{:href => "http://techcrunch.com/2014/07/01/kudoso-is-a-router-that-rewards-your-kids-with-facebook-time-for-studying-doing-chores/", :target => "_blank"}
-                  =image_tag 'techcrunch.jpg'
-              .three-column
-                %a{:href => "http://www.usatoday.com/story/tech/personal/2014/07/02/wireless-router-chores/12005603/", :target => "_blank"}
-                  = image_tag 'usatoday.jpg'
-              .three-column
-                %a{:href => "http://www.engadget.com/2014/07/02/kudoso-router-software/", :target => "_blank"}
-                  = image_tag 'engadget.jpg'
-          .clear
-          #footer-boxes
-            .footer-box
-              %h2 Kudoso
-              %a{:href => "/"} Home
-              %a{:href => "/#how"} How It Works
-              %a{:href => "/#pricing"} Pricing
-              / <a href="/pricing">Early Access</a>
-              / <a href="/buy">Buy Now</a>
-              %a{:href => "/newsletter"} Newsletter
-            .footer-box
-              %h2 About
-              %a{:href => "/#about"} About
-              %a{:href => "/team"} Team
-              %a{:href => "/tos"} Terms of Service
-              %a{:href => "/privacy"} Privacy Policy
-            .footer-box
-              %h2 Help
-              %a{:href => "/support", :target => "_blank"} Support
-              / <a href="/install/ipad">Installation</a>
-              %a{:href => "/contact"} Contact
-            .footer-box
-              %h2 Social
-              %a.facebook{:href => "http://www.facebook.com/pages/Kudoso/549419865079553", :target => "_blank"} Facebook
-              %a{:href => "https://twitter.com/Kudosokids"} Twitter
-              %a{:href => "https://plus.google.com/114467895478866956158", :rel => "publisher"} Google+
-          .clear
-        .copyright
-          Patent Pending © 2014-2015  Kudoso Tech LLC. All Rights Reserved.
+    #footer.container
+      #footer-social
+        = link_to 'http://www.facebook.com/pages/Kudoso/549419865079553' do
+          = image_tag 'facebook_round.png', alt: 'Facebook'
+        =link_to 'https://twitter.com/Kudosokids' do
+          = image_tag 'twitter_round.png', alt: 'Twitter'
+      #footer-body.row
+        .col-sm-4.text-sm-left
+          = link_to 'Privacy Policy', '/privacy'
+        .col-sm-4
+          = image_tag 'KudosoLogo_150.png'
+        .col-sm-4.text-sm-right
+          &copy; 2014 - 2015 Kudoso Tech, LLC
+      #footer-bottom.row
+        .col-sm-6.text-sm-left
+          Kahn Academy and FitBit are registered trademarks of their respective companies
+        .col-sm-6.text-sm-right
+          Kudoso &reg; is a registered trademark of Kudoso Tech, LLC; All Rights Reserved.
+          %br
+          Kudoso is protected by multiple pending patents.
+
     = javascript_include_tag :application, media: :all, 'data-turbolinks-track' => true
+    :javascript
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-62781113-1', 'auto');
+      ga('send', 'pageview');

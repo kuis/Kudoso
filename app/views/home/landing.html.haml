@@ -1,0 +1,186 @@
+#landing.container
+  #landing-title
+    #landing-title-image
+      = image_tag 'KudosoLogo_300.png'
+    #landing-title-tagline
+      Changing the way families
+      %br
+      manage technology
+  #landing-headline
+    #landing-headline-header
+      %span.hidden-xs
+        Born in 2014,
+      %span.superbold
+        Launching Fall 2015
+    #landing-headline-cta.visible-md
+      #landing-headline-cta-title
+        Get updates, tips and
+        %span.bold
+          Amazing Discounts
+        by showing your interest in Kudoso
+      #landing-headline-cta-input
+        #landing-headline-cta-input-title
+          Enter your email address:
+        #landing-headline-cta-input-box
+          %input#email.signup
+      #landing-headline-cta-disclaimer
+        We won't share your email and we won't spam you.
+      #landing-headline-cta-button{onclick: 'signup();'}
+        I'm interested in Kudoso
+  #landing-intro
+    #landing-intro-header
+      Introducing Kudoso
+    #landing-intro-body
+      Our mission is to help parents control the influence of technology on their children through mutual cooperation and
+      the positive reinforcement of family values and life skills.
+      #landing-headline-cta-inline.visible-xs.hidden-md
+        #landing-headline-cta-inline-title
+          Get updates, tips and
+          %span.bold
+            Amazing Discounts
+          by showing your interest in Kudoso
+        #landing-headline-cta-inline-input
+          #landing-headline-cta-inline-input-title
+            Enter your email address:
+          #landing-headline-cta-inline-input-box
+            %input#email-inline.signup
+        #landing-headline-cta-inline-disclaimer
+          We won't share your email and we won't spam you.
+        #landing-headline-cta-inline-button{onclick: 'signup();'}
+          I'm interested in Kudoso
+  #landing-features
+    .row
+      .col-xs-10.col-xs-offset-1
+        #landing-features-header
+          %hr
+        #landing-features-title
+          #landing-features-title-inside
+            Features
+    .row.features
+      .col-md-5.col-xs-offset-1
+        .feature-wrap
+          .feature-icon
+            %i.ss-videogame
+          .feature-body
+            .feature-title
+              Control Screen Time
+            on more devices than ANY other solution: TV, game consoles, phones, tablets & computers
+      .col-md-5.col-xs-offset-1.col-md-offset-0
+        .feature-wrap
+          .feature-icon
+            %i.ss-check
+          .feature-body
+            .feature-title
+              Children Learn
+            about your family values and life skills through Kudoso and Kudoso Integrations
+    .row.features
+      .col-md-5.col-xs-offset-1
+        .feature-wrap
+          .feature-icon
+            %i.ss-trophy
+          .feature-body
+            .feature-title
+              Reward & Partner
+            with your children using Kudos: positive motivation just like your parenting
+      .col-md-5.col-xs-offset-1.col-md-offset-0
+        .feature-wrap
+          .feature-icon
+            %i.ss-piechart
+          .feature-body
+            .feature-title
+              Powerful Reports
+            let you see what devices, apps & activities your children on spending time on; get notifications if there are problems
+    .row.features
+      .col-md-5.col-xs-offset-1
+        .feature-wrap
+          .feature-icon
+            %i.ss-filter
+          .feature-body
+            .feature-title
+              Monitor & Filter
+            the Internet ensuring age-appropriate content throughout your entire home & on mobile devices outside the house
+      .col-md-5.col-xs-offset-1.col-md-offset-0
+        .feature-wrap
+          .feature-icon
+            %i.ss-smartphone
+          .feature-body
+            .feature-title
+              Easy to Use
+            with setup in under 10 minutes, then manage Kudoso from any device, anywhere, anytime
+    .row.features
+      .col-md-5.col-xs-offset-1
+        .feature-wrap
+          .feature-icon
+            %i.ss-like
+          .feature-body
+            .feature-title
+              Encourage
+            children to explore new activities new activities and learn through Kudoso Integrations including Kahn Academy and FitBit
+      .col-md-5.col-xs-offset-1.col-md-offset-0
+        .feature-wrap
+          .feature-icon
+            %i.ss-smile
+          .feature-body
+            .feature-title
+              Smile
+            knowing there are many more features that will change the way your family manages technology!
+  #landing-news
+    #landing-news-title
+      =image_tag 'in-the-news.png', alt: 'Kudoso in the News'
+    #landing-news-body
+      = link_to 'http://www.engadget.com/2014/07/02/kudoso-router-software/' do
+        = image_tag 'engadget.jpg'
+      = link_to 'http://www.usatoday.com/story/tech/personal/2014/07/02/wireless-router-chores/12005603/' do
+        = image_tag 'usatoday.jpg'
+      =link_to 'http://techcrunch.com/2014/07/01/kudoso-is-a-router-that-rewards-your-kids-with-facebook-time-for-studying-doing-chores/' do
+        = image_tag 'techcrunch.jpg'
+
+  #thankyou.modal.fade
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button.close{"aria-label" => "Close", "data-dismiss" => "modal", :type => "button"}
+            %span{"aria-hidden" => "true"} ×
+          %h4.modal-title Thank you
+        .modal-body
+          %p We appreciate your support, we will occasionally send you updates as Kudoso gets closer to launch.
+:javascript
+  function signup() {
+    var email = $.trim($('#email').val());
+    if (email.length < 5) {
+        email = $.trim($('#email-inline').val());
+    }
+    if ( email.length < 5 || !validateEmail(email) ) {
+      alert("We're sorry, it doesn't appear that you have input a valid email address, please try again");
+    } else {
+      $.ajax({
+         url: '/contacts',
+         dataType: 'json',
+         method: 'POST',
+         data: {
+          contact: {
+            emails_attributes: [ { address: email } ],
+            contact_type_id: #{ ContactType.find_or_create_by(name: 'Beta Applicant').id }
+          }
+         },
+         statusCode: {
+          200: function(e) {
+            $('#thankyou').modal();
+           },
+          400: function(e) {
+            alert("We're sorry, the server did not receive your email address, please try again.");
+          },
+          409: function(e) {
+            alert("We're sorry, this email address is already registered.");
+          },
+          500: function(e) {
+            alert("We're sorry, the server had an error processing your registration, please try again later.");
+          }
+         }
+      });
+    }
+  }
+  function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+  }

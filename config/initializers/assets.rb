@@ -8,4 +8,4 @@ Rails.application.config.assets.version = '1.0'
 # Rails.application.config.assets.precompile += %w( search.js )
 
 Rails.application.config.assets.precompile += %w( vendor/modernizr.js )
-Rails.application.config.assets.precompile += %w( home.js reset.css jquery.superslides.js jquery.simple-text-rotator.js simpletextrotator.css)
+Rails.application.config.assets.precompile += %w( home.js reset.css jquery.superslides.js jquery.simple-text-rotator.js simpletextrotator.css ss-glyphish-outlined.css)

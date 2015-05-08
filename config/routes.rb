@@ -93,8 +93,9 @@ Rails.application.routes.draw do
   get 'contact', to: 'home#contact'
   get 'support', to: 'home#support'
   get 'newsletter', to: 'home#newsletter'
-
-  root to: 'home#index'
+  get 'landing', to: 'home#landing'
+  get 'privacy', to: 'home#privacy'
+  root to: 'home#landing'
 
   match "*path", to: "errors#catch_404", via: :all
 
