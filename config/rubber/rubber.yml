@@ -343,13 +343,13 @@ hosts:
       aws:
         image_type: m3.medium
         image_id: ami-dc5e75b4
-  app-e1b-01:
-      availability_zone: us-east-1b
-      use_static_ip: true
-      cloud_providers:
-        aws:
-          image_type: m3.medium
-          image_id: ami-dc5e75b4
+#  app-e1b-01:
+#      availability_zone: us-east-1b
+#      use_static_ip: true
+#      cloud_providers:
+#        aws:
+#          image_type: m3.medium
+#          image_id: ami-dc5e75b4
 
 # hosts:
 #   my_host:
