@@ -22,7 +22,8 @@ staging:
 
 production:
   <<: *default
-  database: kudoso_prod
+  password: KJfn#4$**1hqW##@aVbZZlW5&8
+  database: kudoso_production
 
 cucumber:
   <<: *test
