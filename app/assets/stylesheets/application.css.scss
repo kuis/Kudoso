@@ -656,8 +656,20 @@ header {
   }
   #footer-social {
     margin-top: -110px;
-    img {
-      padding: 0 10px 20px 10px;
+    padding: 0 10px 20px 10px;
+    .social-link {
+      display: inline-block;
+      width: 60px;
+      height: 60px;
+      font-size: 48px;
+      line-height: 69px;
+      text-align: center;
+      border-radius:50%;
+      background-color: $dark-blue;
+      margin: 0 10px 0 10px;
+      a:hover {
+        text-decoration: none;
+      }
     }
   }
   #footer-body {

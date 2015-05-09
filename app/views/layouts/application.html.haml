@@ -25,6 +25,7 @@
     = stylesheet_link_tag 'reset', media: 'all', 'data-turbolinks-track' => true
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
     = stylesheet_link_tag 'ss-glyphish-outlined', media: 'all', 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'ss-social-circle', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag :modernizr
     %script{src: "//use.typekit.net/cbr8hdy.js"}
     :javascript
@@ -44,10 +45,12 @@
           = yield
     #footer.container
       #footer-social
-        = link_to 'http://www.facebook.com/pages/Kudoso/549419865079553' do
-          = image_tag 'facebook_round.png', alt: 'Facebook'
-        =link_to 'https://twitter.com/Kudosokids' do
-          = image_tag 'twitter_round.png', alt: 'Twitter'
+        .social-link
+          = link_to 'http://www.facebook.com/pages/Kudoso/549419865079553' do
+            %i.ss-facebook
+        .social-link
+          =link_to 'https://twitter.com/Kudosokids' do
+            %i.ss-twitter
       #footer-body.row
         .col-sm-4.text-sm-left
           = link_to 'Privacy Policy', '/privacy'
