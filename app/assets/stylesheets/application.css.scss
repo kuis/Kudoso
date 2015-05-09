@@ -44,7 +44,7 @@ body {
   font-family: "proxima-nova",sans-serif;
   font-style: normal;
   font-weight: 100;
-  background:#EBEAE7;
+  background: #d2d2d2;
   background:asset-data-url('main-bg.png');
 }
 
@@ -138,6 +138,8 @@ header {
   background-color: #ffffff;
   padding-bottom: 100px;
   margin-bottom: -100px;
+  padding-left: 0;
+  padding-right: 0;
 
   #landing-title {
     position: relative;
