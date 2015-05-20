@@ -1,60 +1,60 @@
-#landing.container.clear
-  #landing-title
-    #landing-title-image
+.marketing.container.clear
+  .marketing-title
+    .marketing-title-image
       = image_tag 'KudosoLogo_300.png'
-    #landing-title-tagline
+    .marketing-title-tagline
       Changing the way families
       %br
       manage technology
-  #landing-headline
-    #landing-headline-header
+  #landing-headline.marketing-headline
+    .marketing-headline-header
       %span.hidden-xs
         Born in 2014,
       %span.superbold
         Launching Fall 2015
-    #landing-headline-cta.visible-md.visible-lg.hidden-sm.hidden-xs
-      #landing-headline-cta-title
+    .marketing-headline-cta.visible-md.visible-lg.hidden-sm.hidden-xs
+      .marketing-headline-cta-title
         We're launching this fall, to get up to a
         %span.bold
           30% DISCOUNT
         join our newsletter now!
-      #landing-headline-cta-input
-        #landing-headline-cta-input-title
+      .marketing-headline-cta-input
+        .marketing-headline-cta-input-title
           Enter your email address:
-        #landing-headline-cta-input-box
+        .marketing-headline-cta-input-box
           %input#email.signup
-      #landing-headline-cta-disclaimer
+      .marketing-headline-cta-disclaimer
         We won't share your email and we won't spam you.
-      #landing-headline-cta-button{onclick: 'signup();'}
+      .marketing-headline-cta-button{onclick: 'signup();'}
         I'm interested in Kudoso
-  #landing-intro
-    #landing-intro-header
+  .marketing-intro
+    .marketing-intro-header
       Introducing Kudoso
-    #landing-intro-body
+    .marketing-intro-body
       Our mission is to help parents control the influence of technology on their children through mutual cooperation and
       the positive reinforcement of family values and life skills.
-      #landing-headline-cta-inline.visible-xs.visible-sm.hidden-md.hidden-lg
-        #landing-headline-cta-inline-title
+      .marketing-headline-cta-inline.visible-xs.visible-sm.hidden-md.hidden-lg
+        .marketing-headline-cta-inline-title
           We're launching this fall, to get up to a
         %span.bold
           30% DISCOUNT
         join our newsletter now!
-        #landing-headline-cta-inline-input
-          #landing-headline-cta-inline-input-title
+        .marketing-headline-cta-inline-input
+          .marketing-headline-cta-inline-input-title
             Enter your email address:
-          #landing-headline-cta-inline-input-box
+          .marketing-headline-cta-inline-input-box
             %input#email-inline.signup
-        #landing-headline-cta-inline-disclaimer
+        .marketing-headline-cta-inline-disclaimer
           We won't share your email and we won't spam you.
-        #landing-headline-cta-inline-button{onclick: 'signup();'}
+        .marketing-headline-cta-inline-button{onclick: 'signup();'}
           I'm interested in Kudoso
-  #landing-features
+  .marketing-features.blue
     .row
       .col-xs-10.col-xs-offset-1
-        #landing-features-header
+        .marketing-features-header
           %hr
-        #landing-features-title
-          #landing-features-title-inside
+        .marketing-features-title
+          .marketing-features-title-inside.blue
             Features
     .row.features
       .col-md-5.col-xs-offset-1
@@ -124,10 +124,10 @@
             .feature-title
               Smile
             knowing there are many more features that will change the way your family manages technology!
-  #landing-news
-    #landing-news-title
+  .marketing-news
+    .marketing-news-title
       =image_tag 'in-the-news.png', alt: 'Kudoso in the News'
-    #landing-news-body
+    .marketing-news-body
       = link_to 'http://www.engadget.com/2014/07/02/kudoso-router-software/' do
         = image_tag 'engadget.jpg'
       = link_to 'http://www.usatoday.com/story/tech/personal/2014/07/02/wireless-router-chores/12005603/' do

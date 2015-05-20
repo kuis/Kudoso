@@ -16,4 +16,8 @@ class HomeController < ApplicationController
 
   end
 
+  def screen_time_limits
+
+  end
+
 end
