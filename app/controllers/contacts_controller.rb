@@ -12,16 +12,19 @@ class ContactsController < ApplicationController
     else
       params[:contact].delete(:emails_attributes)
 
-      agile_contact = AgileCRMWrapper::Contact.search_by_email(address: @primary_email)
+      agile_contact = AgileCRMWrapper::Contact.search_by_email(@primary_email)
       @email = Email.find_by(address: @primary_email)
       if @email
+        if agile_contact
+          agile_contact.update(tags: ["newsletter"])
+        end
         respond_to do |format|
           format.html { redirect_to pre_signup_path, alert: 'Sorry, you are already signed up!' }
           format.json { render json: { error: 'Sorry, this email address is already registered.'}, :status => 409 }
         end
       else
         begin
-          agile_contact = AgileCRMWrapper::Contact.create(email: @primary_email)
+          agile_contact = AgileCRMWrapper::Contact.create( tags: [ "newsletter" ], email: @primary_email )
         rescue AgileCRMWrapper::BadRequest
           logger.debug "AgileCRMWrapper: BadRequest for email: #{@primary_email}"
         end
