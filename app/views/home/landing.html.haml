@@ -124,16 +124,6 @@
             .feature-title
               Smile
             knowing there are many more features that will change the way your family manages technology!
-  .marketing-news
-    .marketing-news-title
-      =image_tag 'in-the-news.png', alt: 'Kudoso in the News'
-    .marketing-news-body
-      = link_to 'http://www.engadget.com/2014/07/02/kudoso-router-software/' do
-        = image_tag 'engadget.jpg'
-      = link_to 'http://www.usatoday.com/story/tech/personal/2014/07/02/wireless-router-chores/12005603/' do
-        = image_tag 'usatoday.jpg'
-      =link_to 'http://techcrunch.com/2014/07/01/kudoso-is-a-router-that-rewards-your-kids-with-facebook-time-for-studying-doing-chores/' do
-        = image_tag 'techcrunch.jpg'
 
   #thankyou.modal.fade
     .modal-dialog
@@ -166,12 +156,16 @@
          statusCode: {
           200: function(e) {
             $('#thankyou').modal();
+            _agile.set_email(email);
+            _agile.add_score(10);
             ga('send','pageview','/landing_singup_thankyou');
            },
           400: function(e) {
             alert("We're sorry, the server did not receive your email address, please try again.");
           },
           409: function(e) {
+            _agile.set_email(email);
+            _agile.add_score(10);
             alert("We're sorry, this email address is already registered.");
           },
           500: function(e) {

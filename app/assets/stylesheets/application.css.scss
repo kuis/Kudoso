@@ -350,16 +350,7 @@ header {
     padding: 20px 5px 20px 5px;
 
   }
-  .marketing-news {
-    text-align: center;
-    padding: 25px 0 25px 0;
-    .marketing-news-body {
-      background-color: $dark-blue;
-      img {
-        padding: 10px 10px 10px 10px;
-      }
-    }
-  }
+
 }
 
 .blur {
@@ -515,6 +506,9 @@ header {
 .white {
   background-color: #ffffff;
 }
+.spacer {
+  height: 30px;
+}
 
 .kudoso-block {
   display: block;
@@ -665,8 +659,7 @@ header {
 #footer {
   position: relative;
   top: 0;
-  background-color: $dark-blue;
-  color: white;
+  background-color: #ffffff;
   width: 100%;
   font-size: 1.2rem;
   margin-top: -100px;
@@ -675,15 +668,28 @@ header {
   a, a:hover {
     color: white;
   }
+  .footer-news {
+    margin-top: -210px;
+    text-align: center;
+    padding: 25px 0 110px 0;
+    .footer-news-body {
+      background-color: $dark-blue;
+      img {
+        padding: 10px 10px 10px 10px;
+      }
+    }
+  }
   #footer-social {
-    margin-top: -110px;
+    margin-top: -130px;
+    background-color: #ffffff;
+    color: white;
     padding: 0 10px 20px 10px;
     .social-link {
       display: inline-block;
-      width: 60px;
-      height: 60px;
-      font-size: 48px;
-      line-height: 69px;
+      width: 57px;
+      height: 57px;
+      font-size: 39px;
+      line-height: 67px;
       text-align: center;
       border-radius:50%;
       background-color: $dark-blue;
@@ -694,8 +700,11 @@ header {
     }
   }
   #footer-body {
+    background-color: $dark-blue;
     color: white;
     padding-bottom: 15px;
+    padding-top: 50px;
+    margin-top: -50px;
   }
   #footer-bottom {
     padding: 10px 5px 10px 5px;
@@ -704,6 +713,8 @@ header {
     font-size: 0.9rem;
   }
   #footer-boxes {
+    background-color: $dark-blue;
+    color: white;
     position: relative;
     top:0;
     padding-top: 20px;
