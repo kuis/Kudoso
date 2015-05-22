@@ -95,6 +95,7 @@ Rails.application.routes.draw do
   get 'landing', to: 'home#landing'
   get 'privacy', to: 'home#privacy'
   get 'screen_time_limits', to: 'home#screen_time_limits'
+  get 'content_filtering', to: 'home#content_filtering'
   root to: 'home#landing'
 
   match "*path", to: "errors#catch_404", via: :all

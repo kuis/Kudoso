@@ -20,4 +20,8 @@ class HomeController < ApplicationController
 
   end
 
+  def content_filtering
+
+  end
+
 end
