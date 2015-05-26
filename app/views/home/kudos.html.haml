@@ -1,7 +1,8 @@
 .marketing.container.clear
   .marketing-title
     .marketing-title-image
-      = image_tag 'KudosoLogo_300.png'
+      %a{href: '/'}
+        = image_tag 'KudosoLogo_300.png'
     .marketing-title-tagline
       Changing the way families
       %br
@@ -12,6 +13,19 @@
         Directed Engagement:
       %span.superbold
         Encourage, Learn and Earn
+  .marketing-links.small-marketing-links
+    %a{href: '/content_filtering'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Filter & Protect
+    %a{href: '/screen_time_limits'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Limit & Liberate
+    %a{href: '/rewards'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Fun & Rewards
   .marketing-intro
     .marketing-intro-header
       Kudos and Connected Partners

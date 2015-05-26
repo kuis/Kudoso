@@ -1,7 +1,8 @@
 .marketing.container.clear
   .marketing-title
     .marketing-title-image
-      = image_tag 'KudosoLogo_300.png'
+      %a{href: '/'}
+        = image_tag 'KudosoLogo_300.png'
     .marketing-title-tagline
       Changing the way families
       %br
@@ -12,6 +13,19 @@
         Control Obsessions,
       %span.superbold
         Limit Screen Time
+  .marketing-links.small-marketing-links
+    %a{href: '/content_filtering'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Filter & Protect
+    %a{href: '/kudos'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Learn & Earn
+    %a{href: '/rewards'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Fun & Rewards
   .marketing-intro
     .marketing-intro-header
       Kudoso Screen Time Controls

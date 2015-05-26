@@ -1,7 +1,8 @@
 .marketing.container.clear
   .marketing-title
     .marketing-title-image
-      = image_tag 'KudosoLogo_300.png'
+      %a{href: '/'}
+        = image_tag 'KudosoLogo_300.png'
     .marketing-title-tagline
       Changing the way families
       %br
@@ -12,6 +13,19 @@
         Why Kids Love Kudoso:
       %span.superbold
         Fun & Rewards
+  .marketing-links.small-marketing-links
+    %a{href: '/content_filtering'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Filter & Protect
+    %a{href: '/screen_time_limits'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Limit & Liberate
+    %a{href: '/kudos'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Learn & Earn
   .marketing-intro
     .marketing-intro-header
       Kudoso is full of Fun & Rewards
@@ -94,12 +108,7 @@
         their Kudos in for real items like their allowance or merchandise as approved by parents.
     .row
       .col-md-3.col-md-offset-1.col-xs-offset-0
-        %br
-        %br
-        %br
-        %br
-        %h2 Image of bank or ??
-        =# image_tag 'Khan-Academy-Logo.png', alt: 'Kahn Academy', class: 'img-responsive'
+        = image_tag '3ddollarsign.png', alt: 'Kudos: Virtual Currency', class: 'img-responsive'
       .col-md-6.col-md-offset-1.col-xs-offset-0
         %h4 Unlocking Activities
         Kudos can be used by kids to unlock content or even additional screen time.  As a parent, you have
