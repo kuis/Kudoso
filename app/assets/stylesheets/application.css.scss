@@ -178,6 +178,22 @@ header {
     -o-background-size: cover;
     background-size: cover;
   }
+  #kudos-headline {
+     background: image-url('woman_ipad.jpg') no-repeat center center;
+     background-size: cover;
+     -webkit-background-size: cover;
+     -moz-background-size: cover;
+     -o-background-size: cover;
+     background-size: cover;
+   }
+  #rewards-headline {
+    background: image-url('kids-outside.jpg') no-repeat center center;
+    background-size: cover;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
   .marketing-headline {
     position: relative;
     width: 100%;
@@ -257,7 +273,7 @@ header {
       padding-bottom: 10px;
     }
     .marketing-intro-body {
-      max-width: 640px;
+      max-width: 720px;
       margin: 0 auto;
       font-size: 1.5rem;
     }
@@ -310,7 +326,6 @@ header {
   .marketing-features {
     position: relative;
     width: 100%;
-    color: #ffffff;
     padding-right: 5px;
     padding-bottom: 20px;
     .marketing-features-header {
@@ -323,13 +338,13 @@ header {
       position: absolute;
       height: 80px;
       line-height: 80px;
-      width: 180px;
       font-size: 24px;
       left: 50%;
       top: 0;
     text-align: center;
       .marketing-features-title-inside {
         position: relative;
+        padding: 0 15px;
         left: -50%;
       }
     }
@@ -379,18 +394,26 @@ header {
 
 .green {
   background-color: $kudoso-green;
+  color: #ffffff;
 }
 .gray {
   background-color: #9B9B9B;
+  color: #ffffff;
 }
 .blue {
   background-color: $kudoso-blue;
+  color: #ffffff;
 }
 .white {
   background-color: #ffffff;
+  color: #000000;
 }
 .spacer {
   height: 30px;
+}
+
+.bold {
+  font-weight: 700;
 }
 
 #footer {
@@ -420,7 +443,8 @@ header {
     margin-top: -130px;
     background-color: #ffffff;
     color: white;
-    padding: 0 10px 20px 10px;
+    padding: 0 10px;
+    font-size: 1.4rem;
     .social-link {
       display: inline-block;
       width: 57px;

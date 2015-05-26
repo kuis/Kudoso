@@ -24,4 +24,12 @@ class HomeController < ApplicationController
 
   end
 
+  def kudos
+
+  end
+
+  def rewards
+
+  end
+
 end

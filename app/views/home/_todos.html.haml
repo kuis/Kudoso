@@ -1,0 +1,48 @@
+- color ||= 'white'
+.row
+  .col-xs-10.col-xs-offset-1
+    .marketing-features-header
+      %hr
+    .marketing-features-title
+      .marketing-features-title-inside{ class: color}
+        ToDos & Chores
+  .row.features
+    .col-xs-10.col-xs-offset-1
+      Kudoso teaches kids about work ethic, responsibility and priorities through ToDos.  While it starts
+      with "chores", Kudoso ToDos are so much more than chores we had to give it another name!  ToDos provide
+      your child with a list of required and optional activities for the day.  The required activities restrict
+      any screen time access until they are compete where the optional activities are intended to direct and
+      encourage certain behaviors.  Best of all, kids are rewarded for a
+      %span.bold
+        Job Well Done
+      by unlocking their screen time and earning Kudos which they can save up for a rainy day (literally, Kudos
+      are great to have on a rainy day to unlock some extra screen time)!
+      %h3 Simple Chore Setup
+      As a parent, no one wants to spend hours setting up and maintaining chore charts. At Kudoso, we are parents
+      and we made it incredibly fast and easy to create and assign chores to your kids. It starts with ToDo Groups:
+      these are pre-built, curated lists of age-appropriate chores.  Kudoso has already done the research and
+      crearted these great starter sets of chores for your kids that you can assign with a single click.  It
+      doesn't get easier that that!  We've even built an extended curated list of age-approprite (but not default)
+      chores so if you're stumped trying to think of the right chores for child you can find the inspiration in
+      one of ours.
+      %h3 Completely Customizable
+      There is never a "one size fits all" approach that works with parenting, and importantly Kudoso doesn't
+      want to restrict your abilities, we want to enhance them!  That's why Kudoso ToDos are completely customizable.
+      Kudoso Todos allow you to create and assign your own ToDos to your kids.  You can edit the default chore
+      list to set a schedule that works for your family.  Perhaps you have child with more needs than others, you
+      can extend the description to match the vocabulary your child will understand and provide direction unique
+      to your family.
+      -# TODO: Add screen shots
+      %h3 More than Chores
+      Kudoso is more than a parental control app, and Kudoso ToDos are so much more than chores!  Through
+      - if controller_name == 'home' && action_name == 'kudos'
+        Kudoso Connected Partners
+      -else
+        = link_to 'Kudoso Connected Partners', '/kudos'
+      you can add beneficial activities to your child's ToDo list such as "Play outside for 30 minutes" and "Reading
+      Exercise at Kahn Academy."  You can even reward your kids by awarding them Kudos for completing these
+      activities.
+      %h4
+        We all know that doing chores help children grow and learn valuable life skills, but time is a precious
+        commodity so lets maximize it!  Kudoso will help organize and direct your child's time with minimal effort
+        and time commitment from you, their parent.
