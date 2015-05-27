@@ -13,19 +13,7 @@
         Control Obsessions,
       %span.superbold
         Limit Screen Time
-  .marketing-links.small-marketing-links
-    %a{href: '/content_filtering'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Filter & Protect
-    %a{href: '/kudos'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Learn & Earn
-    %a{href: '/rewards'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Fun & Rewards
+  = render partial: 'home/marketing_header'
   .marketing-intro
     .marketing-intro-header
       Kudoso Screen Time Controls
@@ -174,4 +162,4 @@
             devices including Roku, AppleTV, and Amazon FireTV.
   .marketing-features.white
     = render partial: 'home/todos'
-
+  = render partial: 'home/marketing_footer'

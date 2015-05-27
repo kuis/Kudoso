@@ -13,19 +13,7 @@
         Why Kids Love Kudoso:
       %span.superbold
         Fun & Rewards
-  .marketing-links.small-marketing-links
-    %a{href: '/content_filtering'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Filter & Protect
-    %a{href: '/screen_time_limits'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Limit & Liberate
-    %a{href: '/kudos'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Learn & Earn
+  = render partial: 'home/marketing_header'
   .marketing-intro
     .marketing-intro-header
       Kudoso is full of Fun & Rewards
@@ -131,7 +119,7 @@
         kids earn Kudos, their bank account reflects this as credits.  When they use Kudos, their accounts are
         debitted just like a real bank account.  And kids can clearly see their progress toward their next
         goal as they save their Kudos.
-
+  = render partial: 'home/marketing_footer'
 
 
 

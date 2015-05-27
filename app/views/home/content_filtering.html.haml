@@ -13,19 +13,7 @@
         Protect your child,
       %span.superbold
         Advanced Content Filtering
-  .marketing-links.small-marketing-links
-    %a{href: '/screen_time_limits'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Limit & Liberate
-    %a{href: '/kudos'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Learn & Earn
-    %a{href: '/rewards'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Fun & Rewards
+  = render partial: 'home/marketing_header'
   .marketing-intro
     .marketing-intro-header
       Content Monitoring and Filtering
@@ -167,7 +155,7 @@
               Correlated Information
             about your child's web activity from other parents and trusted 3rd party resources allow
             you to stay informed and connect with your children in new ways
-
+  = render partial: 'home/marketing_footer'
 
 
 

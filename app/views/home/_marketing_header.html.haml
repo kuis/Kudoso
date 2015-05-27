@@ -1,0 +1,21 @@
+.marketing-links.small-marketing-links.visible-md.visible-lg.hidden-sm.hidden-xs
+  - unless action_name == 'content_filtering'
+    %a{href: '/content_filtering'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Filter & Protect
+  - unless action_name == 'screen_time_limits'
+    %a{href: '/screen_time_limits'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Limit & Liberate
+  - unless action_name == 'kudos'
+    %a{href: '/kudos'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Learn & Earn
+  - unless action_name == 'rewards'
+    %a{href: '/rewards'}
+      .marketing-link.small-marketing-link
+        .marketing-link-title.title-bottom
+          Fun & Rewards

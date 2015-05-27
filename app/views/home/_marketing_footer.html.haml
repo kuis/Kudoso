@@ -1,0 +1,36 @@
+.hidden-md.hidden-lg.visible-sm.visible-xs
+  .row
+    .col-xs-10.col-xs-offset-1
+      %br
+      %br
+      %h3 Additional information:
+      %hr
+  .row
+    .col-xs-10.col-xs-offset-1
+      %a{href: '/'}
+        Home >
+      %hr
+  -unless action_name == 'content_filtering'
+    .row
+      .col-xs-10.col-xs-offset-1
+        %a{href: '/content_filtering'}
+          Filter & Protect >
+        %hr
+  -unless action_name == 'screen_time_limits'
+    .row
+      .col-xs-10.col-xs-offset-1
+        %a{href: '/screen_time_limits'}
+          Limit & Liberate >
+        %hr
+  -unless action_name == 'kudos'
+    .row
+      .col-xs-10.col-xs-offset-1
+        %a{href: '/kudos'}
+          Learn & Earn >
+        %hr
+  -unless action_name == 'rewards'
+    .row
+      .col-xs-10.col-xs-offset-1
+        %a{href: '/rewards'}
+          Fun & Rewards >
+        %hr

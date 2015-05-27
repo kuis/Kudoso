@@ -13,19 +13,7 @@
         Directed Engagement:
       %span.superbold
         Encourage, Learn and Earn
-  .marketing-links.small-marketing-links
-    %a{href: '/content_filtering'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Filter & Protect
-    %a{href: '/screen_time_limits'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Limit & Liberate
-    %a{href: '/rewards'}
-      .marketing-link.small-marketing-link
-        .marketing-link-title.title-bottom
-          Fun & Rewards
+  = render partial: 'home/marketing_header'
   .marketing-intro
     .marketing-intro-header
       Kudos and Connected Partners
@@ -137,7 +125,7 @@
 
   #todos.marketing-features.green
     = render partial: 'home/todos', locals: { color: 'green'}
-
+  = render partial: 'home/marketing_footer'
 
 
 
