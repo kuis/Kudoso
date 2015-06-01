@@ -30,24 +30,35 @@
   .marketing-intro
     .marketing-intro-header
       Introducing Kudoso
-    .marketing-intro-body
-      Our mission is to help parents control the influence of technology on their children through mutual cooperation and
-      the positive reinforcement of family values and life skills.
-      .marketing-headline-cta-inline.visible-xs.visible-sm.hidden-md.hidden-lg
-        .marketing-headline-cta-inline-title
-          We're launching this fall, to get up to a
+    .row
+      .col-md-5.col-md-offset-1
+        .marketing-intro-body
+          Our mission is to help parents control the influence of technology on their children through mutual cooperation and
+          the positive reinforcement of family values and life skills.
+      .col-md-6
+        .marketing-intro-video
+          .hidden-xs.hidden-sm.visible-md.visible-lg
+            %a{:class => "wistia-popover[height=388,playerColor=00528c,width=640]", :href => "//fast.wistia.net/embed/iframe/3hbt5e8rum?popover=true"}
+              %img{:alt => "Kudoso Intro Video", :src => "https://embed-ssl.wistia.com/deliveries/8e14b288a030aeb15be1b8dcc1bc0feb0cc19c54.jpg?image_play_button=true&image_play_button_color=00528ce0&image_crop_resized=300x169"}/
+            %script{:charset => "ISO-8859-1", :src => "//fast.wistia.com/assets/external/popover-v1.js"}
+          .visible-xs.visible-sm.hidden-md.hidden-lg
+            %iframe.wistia_embed{:allowfullscreen => "", :allowtransparency => "true", :frameborder => "0", :height => "388", :mozallowfullscreen => "", :msallowfullscreen => "", :name => "wistia_embed", :oallowfullscreen => "", :scrolling => "no", :src => "//fast.wistia.net/embed/iframe/3hbt5e8rum?videoFoam=true", :webkitallowfullscreen => "", :width => "640"}
+            %script{:src => "//fast.wistia.net/assets/external/E-v1.js"}
+    .marketing-headline-cta-inline.visible-xs.visible-sm.hidden-md.hidden-lg
+      .marketing-headline-cta-inline-title
+        We're launching this fall, to get up to a
         %span.bold
           30% DISCOUNT
         join our newsletter now!
-        .marketing-headline-cta-inline-input
-          .marketing-headline-cta-inline-input-title
-            Enter your email address:
-          .marketing-headline-cta-inline-input-box
-            %input#email-inline.signup
-        .marketing-headline-cta-inline-disclaimer
-          We won't share your email and we won't spam you.
-        .marketing-headline-cta-inline-button{onclick: 'signup();'}
-          I'm interested in Kudoso
+      .marketing-headline-cta-inline-input
+        .marketing-headline-cta-inline-input-title
+          Enter your email address:
+        .marketing-headline-cta-inline-input-box
+          %input#email-inline.signup
+      .marketing-headline-cta-inline-disclaimer
+        We won't share your email and we won't spam you.
+      .marketing-headline-cta-inline-button{onclick: 'signup();'}
+        I'm interested in Kudoso
   .marketing-features.blue
     .row
       .col-xs-10.col-xs-offset-1
