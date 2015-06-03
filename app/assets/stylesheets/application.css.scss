@@ -121,7 +121,7 @@ header {
   min-height: 100%;
   width: 100%;
   position: relative;
-  padding-bottom: 160px;
+  padding-bottom: 200px;
 }
 
 #nav.affix {
@@ -163,7 +163,7 @@ header {
     background-size: cover;
   }
   #screentime-headline {
-    background: image-url('video_game_control.jpg') no-repeat center bottom;
+    background: image-url('kids_gaming_1140x500.jpg') no-repeat center top;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -171,7 +171,7 @@ header {
     background-size: cover;
   }
   #filtering-headline {
-    background: image-url('kid_ipad.jpg') no-repeat center bottom;
+    background: image-url('mom_ipad_detail_1140x500.jpg') no-repeat center bottom;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -179,7 +179,7 @@ header {
     background-size: cover;
   }
   #kudos-headline {
-     background: image-url('woman_ipad.jpg') no-repeat center center;
+     background: image-url('kids_dishes_1140x500.jpg') no-repeat center center;
      background-size: cover;
      -webkit-background-size: cover;
      -moz-background-size: cover;
@@ -187,7 +187,7 @@ header {
      background-size: cover;
    }
   #rewards-headline {
-    background: image-url('kids-outside.jpg') no-repeat center center;
+    background: image-url('kids_sports_1140x500.jpg') no-repeat center top;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -266,18 +266,20 @@ header {
   .marketing-intro {
     width: 100%;
     background-color: #ffffff;
-    padding: 25px 10px 25px 10px;
+    padding: 25px 25px 25px 10px;
     text-align: center;
+    position: relative;
     .marketing-intro-header {
       font-size: 3.5rem;
-      padding-bottom: 40px;
     }
     .marketing-intro-body {
       max-width: 720px;
       margin: 0 auto;
       font-size: 2.0rem;
     }
-
+    .marketing-intro-video {
+      max-width: 100%;
+    }
   }
   .marketing-headline-cta-inline {
     width: 100%;
@@ -375,7 +377,7 @@ header {
 
   }
   #link-protect {
-    background: image-url('kid_ipad.jpg') no-repeat center bottom;
+    background: image-url('mom_ipad_detail_570x300.jpg') no-repeat center bottom;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -383,7 +385,7 @@ header {
     background-size: cover;
   }
   #link-limit {
-    background: image-url('video_game_control.jpg') no-repeat center bottom;
+    background: image-url('kids_gaming_570x300.jpg') no-repeat center top;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -391,7 +393,7 @@ header {
     background-size: cover;
   }
   #link-kudos {
-    background: image-url('woman_ipad.jpg') no-repeat center bottom;
+    background: image-url('kids_dishes_570x300.jpg') no-repeat 75% center;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -399,7 +401,7 @@ header {
     background-size: cover;
   }
   #link-reward {
-    background: image-url('kids-outside.jpg') no-repeat center bottom;
+    background: image-url('kids_sports_570x300.jpg') no-repeat 28% top;
     background-size: cover;
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -438,7 +440,9 @@ header {
     }
   }
   .small-marketing-links {
+    position: relative;
     margin-top: -40px;
+    padding-bottom: 40px;
   }
   .small-marketing-link {
     height: 40px;
@@ -502,8 +506,8 @@ header {
   background-color: #ffffff;
   width: 100%;
   font-size: 1.2rem;
-  margin-top: -100px;
-  padding-top: 80px;
+  margin-top: -200px;
+  padding-top: 190px;
   text-align: center;
   a, a:hover {
     color: white;
@@ -514,6 +518,9 @@ header {
     padding: 25px 0 110px 0;
     .footer-news-body {
       background-color: $dark-blue;
+      max-width: 600px;
+      margin: 0 auto;
+      border-radius: 8px;
       img {
         padding: 10px 10px 10px 10px;
       }

@@ -45,16 +45,17 @@
           = yield
     #footer.container
       - if controller_name == 'home'
-        .row.footer-news
-          .footer-news-title
-            =image_tag 'in-the-news.png', alt: 'Kudoso in the News'
-          .footer-news-body
-            = link_to 'http://www.engadget.com/2014/07/02/kudoso-router-software/' do
-              = image_tag 'engadget.jpg'
-            = link_to 'http://www.usatoday.com/story/tech/personal/2014/07/02/wireless-router-chores/12005603/' do
-              = image_tag 'usatoday.jpg'
-            =link_to 'http://techcrunch.com/2014/07/01/kudoso-is-a-router-that-rewards-your-kids-with-facebook-time-for-studying-doing-chores/' do
-              = image_tag 'techcrunch.jpg'
+        .row
+          .footer-news
+            .footer-news-title
+              =image_tag 'in-the-news.png', alt: 'Kudoso in the News'
+            .footer-news-body
+              = link_to 'http://www.engadget.com/2014/07/02/kudoso-router-software/' do
+                = image_tag 'engadget.jpg'
+              = link_to 'http://www.usatoday.com/story/tech/personal/2014/07/02/wireless-router-chores/12005603/' do
+                = image_tag 'usatoday.jpg'
+              =link_to 'http://techcrunch.com/2014/07/01/kudoso-is-a-router-that-rewards-your-kids-with-facebook-time-for-studying-doing-chores/' do
+                = image_tag 'techcrunch.jpg'
       .row.spacer.white
       #footer-social.row
         .social-link
