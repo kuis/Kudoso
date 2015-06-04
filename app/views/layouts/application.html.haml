@@ -19,9 +19,12 @@
     %meta{:content => "/ms-icon-144x144.png", :name => "msapplication-TileImage"}/
     %meta{:content => "#ffffff", :name => "theme-color"}/
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
-    %title= content_for?(:title) ? yield(:title) : "Kudoso"
-    %meta{:content => content_for?(:description) ? yield(:description) : "Kudoso helps parents manage screen time across all technology in the house, filter internet content and provide a positive reward for children.", :name => "description"}/
+    %title= content_for?(:title) ? yield(:title) : "Kudoso helps families manage the influence of technology"
+    %meta{:content => content_for?(:description) ? yield(:description) : "Kudoso helps parents manage screen time across all technology in the house, filter internet content and provide positive rewards for children.", :name => "description"}/
     %meta{:content => content_for?(:keywords) ? yield(:keywords) : "Kudoso, kids, children, screentime, screen time, parental controls, content filtering, internet filter, game console, mobile, limit internet access, block applications, monitor usage", :name => "keywords"}/
+    %meta{:content => content_for?(:title) ? yield(:title) : "Kudoso helps families manage the influence of technology", :property => "og:title"}/
+    %meta{:content => content_for?(:description) ? yield(:description) : "Kudoso provides the leading solution for managing technology your kids are using. Kudoso teaches life skills and rewards positive behavior while protecting your children from unsavory internet content and obsessive device usage. ", :property => "og:description"}/
+    %meta{:content => 'http://www.kudoso.com/Kudoso_Facebook_Cover.png', :property => "og:image"}/
     = stylesheet_link_tag 'reset', media: 'all', 'data-turbolinks-track' => true
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
     = stylesheet_link_tag 'ss-glyphish-outlined', media: 'all', 'data-turbolinks-track' => true
