@@ -1,24 +1,31 @@
-<h2>Sign up</h2>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+      <h2>Welcome to Kudoso!</h2>
+      We are going to walk you through this simple setup wizard to get you started:
+      <hr/>
+      <%= render partial: 'wizard/signup_wizard', locals: { step: 1 } %>
+    </div>
+    <div class="panel-body">
+      <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-horizontal' },
+                          wrapper: :horizontal_input_group ) do |f| %>
+          <%= f.error_notification %>
 
-Welcome to Kudoso!  We are going to walk you through this simple setup wizard to get you started:
-<%= render partial: 'home/signup_wizard', locals: { step: 1 } %>
+          <div class="form-inputs">
+            <%= f.input :email, required: true, autofocus: true %>
+            <%= f.input :first_name, required: true %>
+            <%= f.input :last_name, required: true %>
+            <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @validatable) %>
+            <%= f.input :password_confirmation, required: true %>
+          </div>
 
-<br/>
-<%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-horizontal' },
-    wrapper: :horizontal_input_group ) do |f| %>
-  <%= f.error_notification %>
+          <div class="form-actions">
+            <%= f.button :submit, "Sign up", class: 'btn btn-primary' %>
+          </div>
+      <% end %>
+    </div>
+    <div class="panel-footer">
+      <%= render "users/shared/links" %>
+    </div>
+</div>
 
-  <div class="form-inputs">
-    <%= f.input :email, required: true, autofocus: true %>
-    <%= f.input :first_name, required: true %>
-    <%= f.input :last_name, required: true %>
-    <%= f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @validatable) %>
-    <%= f.input :password_confirmation, required: true %>
-  </div>
 
-  <div class="form-actions">
-    <%= f.button :submit, "Sign up" %>
-  </div>
-<% end %>
-
-<%= render "users/shared/links" %>
