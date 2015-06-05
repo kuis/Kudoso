@@ -2,7 +2,7 @@ class MembersController < ApplicationController
   load_and_authorize_resource :family
   load_and_authorize_resource :member, through: :family
 
-  respond_to :html, :json
+  respond_to :html, :json, :js
 
   # GET /members
   # GET /members.json
@@ -34,10 +34,17 @@ class MembersController < ApplicationController
   def create
     @member = Member.new(params[:member].merge({family_id:@family.id}))
     if @member.save
-      flash[:notice] = 'Family member was successfully created.'
-      respond_with(@member, location: [@family,@member])
+      respond_to do |format|
+        format.html { redirect_to  [@family,@member], notice: 'Family member was successfully created.'}
+        format.json { render json: @member }
+        format.js
+      end
+
     else
-      render :new
+      respond_to do |format|
+        format.html { render :new }
+        format.json { render json: { message: @member.errors.full_messages }, status: 409 }
+      end
     end
 
   end

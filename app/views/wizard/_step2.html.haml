@@ -1,0 +1,76 @@
+
+.row
+  .col-md-4.col-md-offset-1
+    %h3 Add Family Member:
+.row
+  .col-md-2.col-md-offset-1
+    First name:
+    = text_field_tag 'member_first_name'
+  .col-md-2
+    Birth Date
+    = text_field_tag 'member_birth_date', nil, placeholder: 'MM/DD/YYYY'
+  .col-md-2
+    Password (optional):
+    = text_field_tag 'member_password', '1234'
+  .col-md-1
+    Parent?
+    = check_box_tag 'member_parent'
+  .col-md-1
+    %button#add_member.btn.btn-default{onclick: 'add_member();'}
+      Add Member
+
+%hr
+.row
+  .col-xs-10.col-xs-offset-1
+    %h3 Family Members:
+.row
+  .col-xs-10.col-xs-offset-1
+    .family_members
+      %ul
+        = render current_user.family.members
+
+.panel-footer
+  %button.btn.btn-default
+    Next
+
+:javascript
+  function add_member() {
+    if ( $('#member_first_name').val().length < 1 ) {
+      alert('A first name is required');
+      return;
+    }
+    $.ajax({
+       url: '/families/#{current_user.family.id}/members',
+       dataType: 'json',
+       method: 'POST',
+       data: {
+         member: {
+           first_name: $('#member_first_name').val(),
+           last_name: '#{current_user.member.last_name}',
+           username: $('#member_first_name').val(),
+           password: $('#member_password').val(),
+           parent: $('member_parent').is(':checked'),
+           birth_date: $('#member_birth_date').val()
+         }
+       },
+       success: function(e) {
+         console.log(e);
+         $.ajax({
+            url: '/families/#{current_user.family.id}/members',
+           dataType: 'script',
+           method: 'GET'
+         });
+         $("#member_first_name").val("");
+         $("#member_birth_date").val("");
+         $("#member_password").val("1234");
+         $("#member_parent").prop('checked', false);
+         alert('Family Member Added');
+       } ,
+       error: function(e) {
+        var json = JSON.parse(e.responseText);
+        alert('The following error occured:\n' + json.message );
+        console.log(e);
+       }
+    });
+
+  }

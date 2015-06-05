@@ -7,6 +7,8 @@ class Family < ActiveRecord::Base
   has_one :screen_time_schedule
   belongs_to :primary_contact, class_name: 'User'
 
+  accepts_nested_attributes_for :members, :reject_if => :all_blank, :allow_destroy => true
+
   def kids
     members.where('parent IS NOT true')
   end

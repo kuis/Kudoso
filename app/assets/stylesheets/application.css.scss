@@ -796,6 +796,16 @@ ul.kudoso-bullets li:before {
   content:"\2713\0020";
 }
 
+.wizard-wrap {
+  .wizard-step {
+    display: inline;
+    padding: 5px;
+  }
+  .active {
+    background-color: $kudoso-green;
+  }
+}
+
 .text-xs-left { text-align: left; }
 .text-xs-right { text-align: right; }
 .text-xs-center { text-align: center; }

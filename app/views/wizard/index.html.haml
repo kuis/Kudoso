@@ -1,0 +1,23 @@
+Current User: #{current_user.id}
+Wizard step: #{current_user.wizard_step}
+%br
+
+.panel.panel-primary
+  .panel-heading.wizard-header
+    %h2 Kudoso Signup Wizard
+    = render partial: 'wizard/signup_wizard', locals: { step: current_user.wizard_step }
+  .panel.wizard-body
+    - if current_user.wizard_step == 1
+      = render partial: 'wizard/step1'
+    - elsif current_user.wizard_step == 2
+      = render partial: 'wizard/step2'
+    - elsif current_user.wizard_step == 3
+      = render partial: 'wizard/step3'
+    - elsif current_user.wizard_step == 4
+      = render partial: 'wizard/step4'
+    - elsif current_user.wizard_step == 5
+      = render partial: 'wizard/step5'
+    -else
+      = render partial: 'wizard/complete'
+
+

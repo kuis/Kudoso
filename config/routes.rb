@@ -27,6 +27,7 @@ Rails.application.routes.draw do
 
 
   devise_for :users, :controllers => { :sessions => "users/sessions" }
+
   resources :families do
     resources :devices
     resources :family_activities
@@ -98,6 +99,7 @@ Rails.application.routes.draw do
   get 'content_filtering', to: 'home#content_filtering'
   get 'kudos', to: 'home#kudos'
   get 'rewards', to: 'home#rewards'
+  get 'wizard', to: 'wizard#index'
   root to: 'home#landing'
 
   match "*path", to: "errors#catch_404", via: :all

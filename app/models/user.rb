@@ -55,6 +55,7 @@ class User < ActiveRecord::Base
       self.member = self.family.members.create({username: self.email, parent: true })
       self.member.create_contact({first_name: self.first_name, last_name: self.last_name, contact_type_id: ContactType.find_or_create_by(name: 'Customer').id})
       self.member.contact.emails.create({address: self.email, is_primary: true})
+      self.wizard_step = 1
       self.save
       self.member.save
     end

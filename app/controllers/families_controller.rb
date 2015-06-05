@@ -11,6 +11,10 @@ class FamiliesController < ApplicationController
   # GET /families/1
   # GET /families/1.json
   def show
+    if current_user.wizard_step
+      redirect_to '/wizard', alert: 'Please complete the setup wizard to continue.'
+      return
+    end
     @todo_templates = TodoTemplate.where(active: true)
   end
 
