@@ -30,10 +30,20 @@ class ApplicationController < ActionController::Base
     if resource.try(:admin)
       admin_families_path
     else
-      request.env['omniauth.origin'] || stored_location_for(resource) || family_path(resource.family)
+      if resource.wizard_step
+        '/wizard'
+      else
+        request.env['omniauth.origin'] || stored_location_for(resource) || family_path(resource.family)
+      end
     end
+  end
 
-
+  def after_sign_up_path_for(resource)
+    if resource.wizard_step
+      '/wizard'
+    else
+      families
+    end
   end
 
   def format_counter(seconds)
