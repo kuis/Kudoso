@@ -43,15 +43,15 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   end
 
   create_table "activity_templates", force: :cascade do |t|
-    t.string   "name",             limit: 255
-    t.string   "description",      limit: 255
+    t.string   "name"
+    t.string   "description"
     t.integer  "rec_min_age"
     t.integer  "rec_max_age"
-    t.integer  "cost",                         default: 0
-    t.integer  "reward",                       default: 0
+    t.integer  "cost",             default: 0
+    t.integer  "reward",           default: 0
     t.integer  "time_block"
     t.integer  "activity_type_id"
-    t.boolean  "restricted",                   default: false
+    t.boolean  "restricted",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -64,28 +64,28 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   add_index "activity_templates_device_types", ["activity_template_id", "device_type_id"], name: "activity_templates_device_types_index", unique: true, using: :btree
 
   create_table "activity_types", force: :cascade do |t|
-    t.string   "name",            limit: 255
+    t.string   "name"
     t.text     "metadata_fields"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "address_types", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "api_devices", force: :cascade do |t|
-    t.string   "device_token", limit: 255
-    t.string   "name",         limit: 255
+    t.string   "device_token"
+    t.string   "name"
     t.date     "expires_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "api_keys", force: :cascade do |t|
-    t.string   "access_token", limit: 255
+    t.string   "access_token"
     t.datetime "expires_at"
     t.integer  "member_id"
     t.integer  "user_id"
@@ -94,22 +94,22 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   end
 
   create_table "contact_types", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "contacts", force: :cascade do |t|
-    t.string   "first_name",      limit: 255
-    t.string   "last_name",       limit: 255
-    t.string   "company",         limit: 255
-    t.string   "address1",        limit: 255
-    t.string   "address2",        limit: 255
-    t.string   "city",            limit: 255
-    t.string   "state",           limit: 255
-    t.string   "zip",             limit: 255
+    t.string   "first_name"
+    t.string   "last_name"
+    t.string   "company"
+    t.string   "address1"
+    t.string   "address2"
+    t.string   "city"
+    t.string   "state"
+    t.string   "zip"
     t.integer  "address_type_id"
-    t.string   "phone",           limit: 255
+    t.string   "phone"
     t.integer  "phone_type_id"
     t.datetime "last_contact"
     t.boolean  "do_not_call"
@@ -120,37 +120,37 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   end
 
   create_table "content_descriptors", force: :cascade do |t|
-    t.string   "tag",         limit: 255
-    t.string   "short",       limit: 255
+    t.string   "tag"
+    t.string   "short"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "content_ratings", force: :cascade do |t|
-    t.string   "org",         limit: 255
-    t.string   "tag",         limit: 255
-    t.string   "short",       limit: 255
+    t.string   "org"
+    t.string   "tag"
+    t.string   "short"
     t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "content_types", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "contents", force: :cascade do |t|
     t.integer  "content_type_id"
-    t.string   "title",             limit: 255
-    t.string   "year",              limit: 255
+    t.string   "title"
+    t.string   "year"
     t.integer  "content_rating_id"
     t.date     "release_date"
-    t.string   "language",          limit: 255
+    t.string   "language"
     t.text     "description"
-    t.string   "length",            limit: 255
+    t.string   "length"
     t.text     "metadata"
     t.text     "references"
     t.datetime "created_at"
@@ -161,10 +161,10 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   add_index "contents", ["content_type_id"], name: "index_contents_on_content_type_id", using: :btree
 
   create_table "device_types", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.string   "description", limit: 255
-    t.string   "os",          limit: 255
-    t.string   "version",     limit: 255
+    t.string   "name"
+    t.string   "description"
+    t.string   "os"
+    t.string   "version"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -177,17 +177,17 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   add_index "device_types_family_activities", ["device_type_id", "family_activity_id"], name: "device_types_family_activities_index", unique: true, using: :btree
 
   create_table "devices", force: :cascade do |t|
-    t.string   "name",                  limit: 255
+    t.string   "name"
     t.integer  "device_type_id"
     t.integer  "family_id"
-    t.boolean  "managed",                           default: false
+    t.boolean  "managed",               default: false
     t.integer  "management_id"
     t.integer  "primary_member_id"
     t.integer  "current_activity_id"
-    t.integer  "managed_devices_count",             default: 0
+    t.integer  "managed_devices_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "uuid",                  limit: 255
+    t.string   "uuid"
   end
 
   add_index "devices", ["device_type_id"], name: "index_devices_on_device_type_id", using: :btree
@@ -195,8 +195,8 @@ ActiveRecord::Schema.define(version: 20150605191618) do
 
   create_table "emails", force: :cascade do |t|
     t.integer  "contact_id"
-    t.string   "address",    limit: 255
-    t.boolean  "is_primary",             default: false
+    t.string   "address"
+    t.boolean  "is_primary", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -204,23 +204,23 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   add_index "emails", ["contact_id"], name: "index_emails_on_contact_id", using: :btree
 
   create_table "families", force: :cascade do |t|
-    t.string   "name",               limit: 255
+    t.string   "name"
     t.integer  "primary_contact_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.date     "memorialized_date"
-    t.string   "timezone",           limit: 255
+    t.string   "timezone"
   end
 
   create_table "family_activities", force: :cascade do |t|
     t.integer  "family_id"
     t.integer  "activity_template_id"
-    t.string   "name",                 limit: 255
-    t.string   "description",          limit: 255
-    t.integer  "cost",                             default: 0
-    t.integer  "reward",                           default: 0
+    t.string   "name"
+    t.string   "description"
+    t.integer  "cost",                 default: 0
+    t.integer  "reward",               default: 0
     t.integer  "time_block"
-    t.boolean  "restricted",                       default: false
+    t.boolean  "restricted",           default: false
     t.text     "device_chains"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -230,7 +230,7 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   add_index "family_activities", ["family_id"], name: "index_family_activities_on_family_id", using: :btree
 
   create_table "members", force: :cascade do |t|
-    t.string   "username",             limit: 255
+    t.string   "username"
     t.date     "birth_date"
     t.boolean  "parent"
     t.integer  "family_id"
@@ -243,9 +243,9 @@ ActiveRecord::Schema.define(version: 20150605191618) do
     t.integer  "sign_in_count",                    default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
-    t.string   "current_sign_in_ip",   limit: 255
-    t.string   "last_sign_in_ip",      limit: 255
-    t.string   "authentication_token", limit: 255
+    t.string   "current_sign_in_ip"
+    t.string   "last_sign_in_ip"
+    t.string   "authentication_token"
   end
 
   add_index "members", ["family_id"], name: "index_members_on_family_id", using: :btree
@@ -269,13 +269,13 @@ ActiveRecord::Schema.define(version: 20150605191618) do
 
   create_table "note_attachments", force: :cascade do |t|
     t.integer  "note_id"
-    t.string   "name",       limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "note_types", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -283,21 +283,21 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   create_table "notes", force: :cascade do |t|
     t.integer  "ticket_id"
     t.integer  "note_type_id"
-    t.string   "title",        limit: 255
+    t.string   "title"
     t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "phone_types", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "schedule_rrules", force: :cascade do |t|
     t.integer  "todo_schedule_id"
-    t.string   "rrule",            limit: 255
+    t.string   "rrule"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -330,7 +330,7 @@ ActiveRecord::Schema.define(version: 20150605191618) do
     t.integer  "created_by_id"
     t.integer  "time"
     t.datetime "date"
-    t.string   "comment",       limit: 255
+    t.string   "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -339,7 +339,7 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   add_index "st_overrides", ["member_id"], name: "index_st_overrides_on_member_id", using: :btree
 
   create_table "ticket_types", force: :cascade do |t|
-    t.string   "name",       limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -351,13 +351,13 @@ ActiveRecord::Schema.define(version: 20150605191618) do
     t.integer  "ticket_type_id"
     t.datetime "date_openned"
     t.datetime "date_closed"
-    t.string   "status",         limit: 255
+    t.string   "status"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "todo_groups", force: :cascade do |t|
-    t.string   "name",        limit: 255
+    t.string   "name"
     t.integer  "rec_min_age"
     t.integer  "rec_max_age"
     t.boolean  "active"
@@ -388,19 +388,19 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   add_index "todo_schedules", ["todo_id"], name: "index_todo_schedules_on_todo_id", using: :btree
 
   create_table "todo_templates", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.string   "description", limit: 255
+    t.string   "name"
+    t.string   "description"
     t.boolean  "required"
-    t.string   "schedule",    limit: 255
+    t.string   "schedule"
     t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "kudos",                   default: 0
+    t.integer  "kudos",       default: 0
   end
 
   create_table "todos", force: :cascade do |t|
-    t.string   "name",             limit: 255
-    t.string   "description",      limit: 255
+    t.string   "name"
+    t.string   "description"
     t.boolean  "required"
     t.integer  "kudos"
     t.integer  "todo_template_id"
@@ -415,31 +415,31 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   add_index "todos", ["todo_template_id"], name: "index_todos_on_todo_template_id", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 255, default: "",    null: false
-    t.string   "encrypted_password",     limit: 255, default: "",    null: false
-    t.string   "reset_password_token",   limit: 255
+    t.string   "email",                  default: "",    null: false
+    t.string   "encrypted_password",     default: "",    null: false
+    t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",                      default: 0,     null: false
+    t.integer  "sign_in_count",          default: 0,     null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
-    t.string   "confirmation_token",     limit: 255
+    t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
-    t.string   "unconfirmed_email",      limit: 255
-    t.integer  "failed_attempts",                    default: 0,     null: false
-    t.string   "unlock_token",           limit: 255
+    t.string   "unconfirmed_email"
+    t.integer  "failed_attempts",        default: 0,     null: false
+    t.string   "unlock_token"
     t.datetime "locked_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "first_name",             limit: 255
-    t.string   "last_name",              limit: 255
-    t.boolean  "admin",                              default: false, null: false
+    t.string   "first_name"
+    t.string   "last_name"
+    t.boolean  "admin",                  default: false, null: false
     t.integer  "family_id"
     t.integer  "member_id"
-    t.integer  "wizard_step",                        default: 1
+    t.integer  "wizard_step",            default: 1
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

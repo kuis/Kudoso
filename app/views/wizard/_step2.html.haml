@@ -64,7 +64,7 @@
          $("#member_birth_date").val("");
          $("#member_password").val("1234");
          $("#member_parent").prop('checked', false);
-         alert('Family Member Added');
+         // TODO: add a flash alert about the success
        } ,
        error: function(e) {
         var json = JSON.parse(e.responseText);
