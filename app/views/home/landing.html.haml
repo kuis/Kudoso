@@ -1,7 +1,7 @@
 .marketing.container.clear
   .marketing-title
     .marketing-title-image
-      = image_tag 'KudosoLogo_300.png'
+      = image_tag 'kudoso-logo.svg'
     .marketing-title-tagline
       Changing the way families
       %br
@@ -143,28 +143,32 @@
     %a{href: '/content_filtering'}
       #link-protect.marketing-link
         .marketing-link-title.title-top
-          %span.hidden-xs
-            Filter &
-          Protect
+          %span.nav-btn
+            %span.hidden-xs
+              Filter &
+            Protect
     %a{href: '/screen_time_limits'}
       #link-limit.marketing-link
         .marketing-link-title.title-top
-          Limit
-          %span.hidden-xs
-            Screen Time
+          %span.nav-btn
+            Limit
+            %span.hidden-xs
+              Screen Time
   .marketing-links
     %a{href: '/kudos'}
       #link-kudos.marketing-link
         .marketing-link-title.title-bottom
-          %span.hidden-xs
-            Teach
-          Life Skills
+          %span.nav-btn
+            %span.hidden-xs
+              Teach
+            Life Skills
     %a{href: '/rewards'}
       #link-reward.marketing-link
         .marketing-link-title.title-bottom
-          %span.hidden-xs
-            Fun &
-          Rewards
+          %span.nav-btn
+            %span.hidden-xs
+              Fun &
+            Rewards
 
   #thankyou.modal.fade
     .modal-dialog
