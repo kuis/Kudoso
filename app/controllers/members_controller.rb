@@ -33,6 +33,7 @@ class MembersController < ApplicationController
   # POST /members.json
   def create
     @member = Member.new(params[:member].merge({family_id:@family.id}))
+    @member.username = @member.username.downcase
     if @member.save
       respond_to do |format|
         format.html { redirect_to  [@family,@member], notice: 'Family member was successfully created.'}
