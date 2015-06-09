@@ -38,9 +38,10 @@
 
       $(this).mousedown(function (e) {
         var div = null;
-        var posX = $(this).position().left,
-          posY = $(this).position().top;
+        var posX = $(this).offset().left;
+        var posY = $(this).offset().top;
         var percentY = (e.pageY - posY) / $that.height();
+
         startBlock = Math.floor(percentY * settings.blocks);
         endBlock = startBlock + settings.initialSize;
         console.log('Block: ' + startBlock + ', ' + endBlock);
@@ -147,50 +148,51 @@
       }
 
       function setHeight(e) {
-        e.stopPropagation();
-        var div = e.data.div;
-        if (div == null) {
-          console.log("ERROR - div cannot be null here!");
-          return;
-        }
-        // this = day div
-        var posX = $(this).position().left,
-          posY = $(this).position().top;
+          e.stopPropagation();
+          var div = e.data.div;
+          if (div == null) {
+            console.log("ERROR - div cannot be null here!");
+            return;
+          }
+          // this = day div
+          var posX = $(this).offset().left,
+            posY = $(this).offset().top;
 
-        var child = div;
-        var idx = 0;
-        while ((child = child.previousSibling) != null)
-          idx++;
+          var child = div;
+          var idx = 0;
+          while ((child = child.previousSibling) != null)
+            idx++;
 
-        if (timeBlocks.length > idx + 1) {
-          maxBlock = timeBlocks[(idx + 1)][0];
-        } else {
-          maxBlock = settings.blocks;
-        }
-
-
-        var percentY = (e.pageY - posY) / $(this).height();
-        console.log('max blocks: ' + maxBlock + ' idx: ' + idx + ' %Y: ' + percentY);
-        endBlock = Math.max(Math.min((Math.floor(percentY * settings.blocks) + 1), maxBlock), timeBlocks[idx][0] + (settings.controlsSize * 2));
-        startBlock = timeBlocks[idx][0];
-        timeBlocks[idx] = [timeBlocks[idx][0], endBlock];
-
-        setTimeBlocks();
+          if (timeBlocks.length > idx + 1) {
+            maxBlock = timeBlocks[(idx + 1)][0];
+          } else {
+            maxBlock = settings.blocks;
+          }
 
 
-        var height = Math.max(Math.floor((timeBlocks[idx][1] - timeBlocks[idx][0]) * base), base);
+          var percentY = (e.pageY - posY) / $(this).height();
+          //var percentY = e.offsetY / $that.height();
+          console.log('max blocks: ' + maxBlock + ' idx: ' + idx + ' %Y: ' + percentY);
+          endBlock = Math.max(Math.min((Math.floor(percentY * settings.blocks) + 1), maxBlock), timeBlocks[idx][0] + (settings.controlsSize * 2));
+          startBlock = timeBlocks[idx][0];
+          timeBlocks[idx] = [timeBlocks[idx][0], endBlock];
 
-        console.log(" -- In setHeight -- Height: " + height + " X: " + posX + " Y: " + posY + " e.pageX: " + e.pageX + " e.pageY: " + e.pageY + " Start block: " + timeBlocks[idx][0] + " End block: " + endBlock);
-        div.style.height = height + 'px';
+          setTimeBlocks();
 
-        var hours = Math.floor(startBlock * minPerBlock / 60);
-        var minutes = (startBlock * minPerBlock % 60) + "";
-        while (minutes.length < 2) minutes = "0" + minutes;
-        div.firstChild.innerHTML = hours + ":" + minutes;
-        hours = Math.floor(endBlock * minPerBlock / 60);
-        minutes = (endBlock * minPerBlock % 60) + "";
-        while (minutes.length < 2) minutes = "0" + minutes;
-        div.lastChild.innerHTML = hours + ":" + minutes;
+
+          var height = Math.max(Math.floor((timeBlocks[idx][1] - timeBlocks[idx][0]) * base), base);
+
+          console.log(" -- In setHeight -- Height: " + height + " X: " + posX + " Y: " + posY + " e.pageX: " + e.pageX + " e.pageY: " + e.pageY + " offsetY" + e.offsetY + " Start block: " + timeBlocks[idx][0] + " End block: " + endBlock);
+          div.style.height = height + 'px';
+
+          var hours = Math.floor(startBlock * minPerBlock / 60);
+          var minutes = (startBlock * minPerBlock % 60) + "";
+          while (minutes.length < 2) minutes = "0" + minutes;
+          div.firstChild.innerHTML = hours + ":" + minutes;
+          hours = Math.floor(endBlock * minPerBlock / 60);
+          minutes = (endBlock * minPerBlock % 60) + "";
+          while (minutes.length < 2) minutes = "0" + minutes;
+          div.lastChild.innerHTML = hours + ":" + minutes;
       }
 
       function setStartHeight(e) {
@@ -201,8 +203,8 @@
           return;
         }
         // this = day div
-        var posX = $(this).position().left,
-          posY = $(this).position().top;
+        var posX = $(this).offset().left,
+          posY = $(this).offset().top;
 
         var child = div;
         var idx = 0;
@@ -217,6 +219,7 @@
         }
 
         var percentY = (e.pageY - posY) / $(this).height();
+        //var percentY = e.offsetY / $that.height();
         console.log('idx' + idx + 'min blocks: ' + minBlock + ' idx: ' + idx + ' %Y: ' + percentY);
         startBlock = Math.min(Math.max((Math.floor(percentY * settings.blocks) + 1), minBlock), timeBlocks[idx][1] - (settings.controlsSize * 2));
         endBlock = timeBlocks[idx][1];
@@ -332,9 +335,3 @@
     });
   }
 }(jQuery));
-
-$('#today').rangeSelector();
-$('#tomorrow').rangeSelector({
-  blocks: (1 * 24),
-  initialSize: 4
-});
