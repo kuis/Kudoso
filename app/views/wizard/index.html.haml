@@ -4,20 +4,58 @@ Wizard step: #{current_user.wizard_step}
 
 .panel.panel-primary
   .panel-heading.wizard-header
-    %h2 Kudoso Signup Wizard
-    = render partial: 'wizard/signup_wizard', locals: { step: current_user.wizard_step }
+    = render partial: 'wizard/signup_wizard'
   .panel.wizard-body
-    - if current_user.wizard_step == 1
-      = render partial: 'wizard/step1'
-    - elsif current_user.wizard_step == 2
-      = render partial: 'wizard/step2'
-    - elsif current_user.wizard_step == 3
-      = render partial: 'wizard/step3'
-    - elsif current_user.wizard_step == 4
-      = render partial: 'wizard/step4'
-    - elsif current_user.wizard_step == 5
-      = render partial: 'wizard/step5'
+    - if (1..5).include?(current_user.wizard_step)
+      = render partial: "wizard/step#{current_user.wizard_step}"
     -else
       = render partial: 'wizard/complete'
 
+:javascript
+  function next_step() {
+    $.ajax({
+       url: '/wizard',
+       dataType: 'script',
+       method: 'POST'
+    });
+  }
+  function add_member() {
+    if ( $('#member_first_name').val().length < 1 ) {
+      alert('A first name is required');
+      return;
+    }
+    $.ajax({
+       url: '/families/#{current_user.family.id}/members',
+       dataType: 'json',
+       method: 'POST',
+       data: {
+         member: {
+           first_name: $('#member_first_name').val(),
+           last_name: '#{current_user.member.last_name}',
+           username: $('#member_first_name').val(),
+           password: $('#member_password').val(),
+           parent: $('member_parent').is(':checked'),
+           birth_date: $('#member_birth_date').val()
+         }
+       },
+       success: function(e) {
+         console.log(e);
+         $.ajax({
+            url: '/families/#{current_user.family.id}/members',
+           dataType: 'script',
+           method: 'GET'
+         });
+         $("#member_first_name").val("");
+         $("#member_birth_date").val("");
+         $("#member_password").val("1234");
+         $("#member_parent").prop('checked', false);
+         // TODO: add a flash alert about the success
+       } ,
+       error: function(e) {
+        var json = JSON.parse(e.responseText);
+        alert('The following error occured:\n' + json.message );
+        console.log(e);
+       }
+    });
 
+  }
