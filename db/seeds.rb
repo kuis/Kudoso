@@ -111,40 +111,53 @@ activity_types = ActivityType.create([
                                          { name: 'Physical', metadata_fields: { } }
                                      ])
 
-ipod = DeviceType.create({ name: 'iPod Touch', description: 'Apple iPod Touch', os: 'iOS', version: '' })
-iphone = DeviceType.create({ name: 'iPhone', description: 'Apple iPhone', os: 'iOS', version: '' })
-ipad = DeviceType.create({ name: 'iPad', description: 'Apple iPad', os: 'iOS', version: '' })
-android_tablet = DeviceType.create({ name: 'Android Phone', description: '', os: 'Android', version: '' })
-android_phone = DeviceType.create({ name: 'Android Tablet', description: '', os: 'Android', version: '' })
-fire_phone = DeviceType.create({ name: 'Amazon Fire Phone', description: '', os: '', version: '' })
-kindle = DeviceType.create({ name: 'Amazon Fire Tablet', description: 'Kindle Fire/HD/HDx', os: 'FireOS', version: '' })
-ps2 = DeviceType.create({ name: 'Playstation 2', description: '', os: '', version: '' })
-ps3 = DeviceType.create({ name: 'Playstation 3', description: '', os: '', version: '' })
-ps4 = DeviceType.create({ name: 'Playstation 4', description: '', os: '', version: '' })
-xbox360 = DeviceType.create({ name: 'xBox 360', description: '', os: '', version: '' })
-xbox1 = DeviceType.create({ name: 'xBox One', description: '', os: '', version: '' })
-wii = DeviceType.create({ name: 'Nintendo Wii', description: '', os: '', version: '' })
-n3ds = DeviceType.create({ name: 'Nintendo 3DS', description: '', os: '', version: '' })
+
+# Device Catagories:
+# Video Devices (TV/BluRay/DVR/Streaming Media, etc etc)
+# Game Consoles
+# Mobile Devices
+# Computers
+
+mobile_devices = DeviceCategory.create({ name: 'Mobile Devices', description: 'Mobile devices such as iPhone, iPad, Android or Kindle devices.'})
+computers = DeviceCategory.create({ name: 'Computers', description: 'Personal Computers such as Mac or Windows.'})
+game_consoles = DeviceCategory.create({ name: 'Game Consoles', description: 'Game consoles such as Sony Playstation, Microsoft X-Box, or Nintendo Wii.'})
+video_devices= DeviceCategory.create({ name: 'Video Devices', description: 'Video devices such as Televisions, BluRay/DVD Players, AppleTV, Roku, or Amazon FireTV.'})
+
+
+
+ipod = DeviceType.create({ name: 'iPod Touch', description: 'Apple iPod Touch', os: 'iOS', version: '', device_category: mobile_devices })
+iphone = DeviceType.create({ name: 'iPhone', description: 'Apple iPhone', os: 'iOS', version: '', device_category: mobile_devices })
+ipad = DeviceType.create({ name: 'iPad', description: 'Apple iPad', os: 'iOS', version: '', device_category: mobile_devices })
+android_tablet = DeviceType.create({ name: 'Android Phone', description: '', os: 'Android', version: '', device_category: mobile_devices })
+android_phone = DeviceType.create({ name: 'Android Tablet', description: '', os: 'Android', version: '', device_category: mobile_devices })
+fire_phone = DeviceType.create({ name: 'Amazon Fire Phone', description: '', os: '', version: '', device_category: mobile_devices })
+kindle = DeviceType.create({ name: 'Amazon Fire Tablet', description: 'Kindle Fire/HD/HDx', os: 'FireOS', version: '', device_category: mobile_devices })
+ps2 = DeviceType.create({ name: 'Playstation 2', description: '', os: '', version: '', device_category: game_consoles })
+ps3 = DeviceType.create({ name: 'Playstation 3', description: '', os: '', version: '', device_category: game_consoles })
+ps4 = DeviceType.create({ name: 'Playstation 4', description: '', os: '', version: '', device_category: game_consoles })
+xbox360 = DeviceType.create({ name: 'xBox 360', description: '', os: '', version: '', device_category: game_consoles })
+xbox1 = DeviceType.create({ name: 'xBox One', description: '', os: '', version: '', device_category: game_consoles })
+wii = DeviceType.create({ name: 'Nintendo Wii', description: '', os: '', version: '', device_category: game_consoles })
 kudososp = DeviceType.create({ name: 'Kudoso SmartPlug', description: '', os: 'Kudoso', version: '' })
 kudoso = DeviceType.create({ name: 'Kudoso Gateway', description: '', os: 'Kudoso', version: '' })
-bluray = DeviceType.create({ name: 'BluRay Player', description: '', os: '', version: '' })
-hdtv = DeviceType.create({ name: 'HDTV', description: 'Not Connected', os: '', version: '' })
-smartv = DeviceType.create({ name: 'Smart-TV HDTV', description: 'Smart-TV Connected TV', os: '', version: '' })
-appletv = DeviceType.create({ name: 'AppleTV', description: '', os: '', version: '' })
-roku = DeviceType.create({ name: 'Roku', description: '', os: '', version: '' })
-firetv = DeviceType.create({ name: 'Amazon FireTV', description: '', os: '', version: '' })
-pc = DeviceType.create({ name: 'Windows Personal Computer', description: '', os: '', version: '' })
-mac = DeviceType.create({ name: 'Apple Macintosh Personal Computer', description: '', os: '', version: '' })
+bluray = DeviceType.create({ name: 'BluRay Player', description: '', os: '', version: '', device_category: video_devices })
+hdtv = DeviceType.create({ name: 'HDTV', description: 'Not Connected', os: '', version: '', device_category: video_devices })
+smartv = DeviceType.create({ name: 'Smart-TV HDTV', description: 'Smart-TV Connected TV', os: '', version: '', device_category: video_devices })
+appletv = DeviceType.create({ name: 'AppleTV', description: '', os: '', version: '', device_category: video_devices })
+roku = DeviceType.create({ name: 'Roku', description: '', os: '', version: '', device_category: video_devices })
+firetv = DeviceType.create({ name: 'Amazon FireTV', description: '', os: '', version: '', device_category: video_devices })
+pc = DeviceType.create({ name: 'Windows Personal Computer', description: '', os: '', version: '', device_category: computers })
+mac = DeviceType.create({ name: 'Apple Macintosh Personal Computer', description: '', os: '', version: '', device_category: computers })
 
 
 activity_template = ActivityTemplate.create({ name: 'Play a game', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
-[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, n3ds, pc, mac].each { |device_type| activity_template.device_types << device_type }
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, pc, mac].each { |device_type| activity_template.device_types << device_type }
 
 activity_template = ActivityTemplate.create({ name: 'Surf the internet (entertainment)', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
-[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, n3ds, pc, mac, smartv, roku, appletv, firetv].each { |device_type| activity_template.device_types << device_type }
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, pc, mac, smartv, roku, appletv, firetv].each { |device_type| activity_template.device_types << device_type }
 
 activity_template = ActivityTemplate.create({ name: 'Surf the internet (education)', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 })
-[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, n3ds, pc, mac, smartv, roku, appletv, firetv].each { |device_type| activity_template.device_types << device_type }
+[ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, pc, mac, smartv, roku, appletv, firetv].each { |device_type| activity_template.device_types << device_type }
 
 activity_template = ActivityTemplate.create({ name: 'Read a book', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 })
 [ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, pc, mac].each { |device_type| activity_template.device_types << device_type }

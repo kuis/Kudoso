@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150605191618) do
+ActiveRecord::Schema.define(version: 20150609133001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -160,6 +160,13 @@ ActiveRecord::Schema.define(version: 20150605191618) do
   add_index "contents", ["content_rating_id"], name: "index_contents_on_content_rating_id", using: :btree
   add_index "contents", ["content_type_id"], name: "index_contents_on_content_type_id", using: :btree
 
+  create_table "device_categories", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
   create_table "device_types", force: :cascade do |t|
     t.string   "name"
     t.string   "description"
@@ -167,6 +174,7 @@ ActiveRecord::Schema.define(version: 20150605191618) do
     t.string   "version"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "device_category_id"
   end
 
   create_table "device_types_family_activities", id: false, force: :cascade do |t|
