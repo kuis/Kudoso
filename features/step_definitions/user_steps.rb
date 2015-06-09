@@ -29,5 +29,7 @@ Then(/^The wizard should be on step "(.*?)"$/) do |step|
 end
 
 Then(/^A family member with the username "(.*?)" should exist$/) do |username|
-  expect(@current_user.family.members.where(username: username).first).not_to eq(nil)
+  member = @current_user.family.members.where( username: username ).first
+  expect(member).not_to eq(nil)
+  expect(member.username).to eq(username)
 end

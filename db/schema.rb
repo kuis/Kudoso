@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150609133001) do
+ActiveRecord::Schema.define(version: 20150609165558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -236,6 +236,14 @@ ActiveRecord::Schema.define(version: 20150609133001) do
 
   add_index "family_activities", ["activity_template_id"], name: "index_family_activities_on_activity_template_id", using: :btree
   add_index "family_activities", ["family_id"], name: "index_family_activities_on_family_id", using: :btree
+
+  create_table "family_device_categories", force: :cascade do |t|
+    t.integer  "family_id"
+    t.integer  "device_category_id"
+    t.integer  "amount",             default: 0
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
 
   create_table "members", force: :cascade do |t|
     t.string   "username"

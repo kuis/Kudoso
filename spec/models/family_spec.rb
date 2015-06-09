@@ -23,7 +23,7 @@ RSpec.describe Family, :type => :model do
       before_todos = @family.todos.count
       kids_array = @kids.sample(2)
       unassigned_child = (@kids - kids_array).sample
-      assigned_child = Member.find(kids_array[0])
+      assigned_child = Member.find(kids_array[0].id)
       before_todo_scehdules_assigned = assigned_child.todo_schedules.count
       before_todo_scehdules_unassigned = unassigned_child.todo_schedules.count
       todo = @family.assign_template(template,kids_array )
@@ -41,7 +41,7 @@ RSpec.describe Family, :type => :model do
       before_todos = @family.todos.count
       kids_array = @kids.sample(2)
       unassigned_child = (@kids - kids_array).sample
-      assigned_child = Member.find(kids_array[0])
+      assigned_child = Member.find(kids_array[0].id)
       before_todo_scehdules_assigned = assigned_child.todo_schedules.count
       before_todo_scehdules_unassigned = unassigned_child.todo_schedules.count
       @family.assign_group(todo_group,kids_array )

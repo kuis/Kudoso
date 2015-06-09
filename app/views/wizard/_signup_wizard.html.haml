@@ -1,10 +1,10 @@
 %h2 Kudoso Signup Wizard
 .wizard-wrap
-  .wizard-step{ class: (current_user.wizard_step == 1) ? 'active' : '' }
+  .wizard-step{ class: (current_user.nil? || current_user.wizard_step == 1) ? 'active' : '' }
     Step 1 - User Registration
-  .wizard-step{ class: (current_user.wizard_step == 2) ? 'active' : '' }
+  .wizard-step{ class: (current_user.try(:wizard_step) == 2) ? 'active' : '' }
     Step 2 - Family Details
-  .wizard-step{ class: (current_user.wizard_step == 3) ? 'active' : '' }
+  .wizard-step{ class: (current_user.try(:wizard_step) == 3) ? 'active' : '' }
     Step 3 - Device Setup
-  .wizard-step{ class: (current_user.wizard_step == 4) ? 'active' : '' }
+  .wizard-step{ class: (current_user.try(:wizard_step) == 4) ? 'active' : '' }
     Step 4 - Assign Tasks
