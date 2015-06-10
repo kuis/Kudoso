@@ -31,6 +31,7 @@ class MembersController < ApplicationController
   # POST /members
   # POST /members.json
   def create
+    params[:member][:birth_date] = Chronic.parse(params[:member][:birth_date]).to_date.to_s(:db) if params[:member][:birth_date]
     @member = Member.new(params[:member].merge({family_id:@family.id}))
     @member.username = @member.username.downcase
     if @member.save
@@ -52,7 +53,7 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
-    params[:member][:birth_date] = Chronic.parse(params[:member][:birth_date]) if params[:member][:birth_date]
+    params[:member][:birth_date] = Chronic.parse(params[:member][:birth_date]).to_date.to_s(:db) if params[:member][:birth_date]
     if @member.update(member_params)
       flash[:notice] = 'Family member was successfully updated.'
       respond_with(@member, location: [@family,@member])
