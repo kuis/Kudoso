@@ -41,7 +41,7 @@ html * {
 body {
   width: 100%;
   height: 100%;
-  font-family: "proxima-nova",sans-serif;
+  font-family: "proxima-nova-alt",sans-serif;
   font-style: normal;
   font-weight: 100;
   background: #d2d2d2;
@@ -218,58 +218,76 @@ header {
       right: 20px;
       top: 55px;
       width: 320px;
-      background-color: #ffffff;
-      border: 3px solid $kudoso-blue;
+      background-color: $kudoso-blue;
+      border: 2px solid #ffffff;
       border-radius: 8px;
       box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.56);
       text-align: center;
       padding: 15px 15px 15px 15px;
+      font-weight: 500;
 
       .marketing-headline-cta-title {
-        font-size: 1.6rem;
-        padding-bottom: 5px;
+        font-size: 1.5rem;
+        padding-bottom: 15px;
+        color: #fff;
       }
       .marketing-headline-cta-input {
-        background-color: $kudoso-blue;
-        color: white;
-        border-radius: 8px;
+        background-color: rgba(0,0,0,.5); //$kudoso-blue;
+        border-radius: 4px;
         font-size: 1.8rem;
-        padding: 10px 5px 5px 10px;
+        padding: 10px 5px 5px 5px;
         .marketing-headline-cta-input-title {
-
+          color: #fff;
         }
         .marketing-headline-cta-input-box {
           input {
             width: 100%;
             padding: 5px 0 5px 0;
-            color: black;
+            /* color: black; */
+
+            border-radius: 5px;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.5);
+            border: 1px solid rgba(0,0,0,.5);
+            padding: 7px 7px 4px;
+            font-size: .9em;
+            font-weight: 500;
+            text-align: center;
           }
         }
       }
       .marketing-headline-cta-disclaimer {
-        font-size: 0.9rem;
-        color: #505050;
+        font-size: 1.2rem;
+        color: rgba(0,0,0,0.7);
         padding: 5px 0 10px 0;
       }
       .marketing-headline-cta-button {
         width: 100%;
-        height: 40px;
+        // height: 40px;
         border-radius: 8px;
-        background-color: $kudoso-green;
+        //background-color: rgb(37, 184, 157); //$kudoso-green;
+        background-color: #26BC00; //rgb(38, 188, 0);
+        background-image: linear-gradient(-180deg, #2FE700 0%, #26BC00 100%);
         color: white;
         font-size: 2rem;
         line-height: 40px;
         cursor: pointer;
+        font-weight: bold;
+        box-shadow: 0px -3px 0px rgba(0, 0, 0, 0.2) inset, 0px 2px 3px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,.5);
+        text-shadow: -1px -1px 1px rgba(0,0,0,.2);
+
+        padding: 7px 5px;
       }
     }
   }
-  .marketing-intro {
+  .marketing-intro,
+  .marketing-links-intro {
     width: 100%;
     background-color: #ffffff;
-    padding: 25px 25px 25px 10px;
+    padding: 5em 25px;
     text-align: center;
     position: relative;
-    .marketing-intro-header {
+    .marketing-intro-header,
+    .marketing-links-intro-header{
       font-size: 3.5rem;
     }
     .marketing-intro-body {
@@ -280,6 +298,10 @@ header {
     .marketing-intro-video {
       max-width: 100%;
     }
+  }
+  .marketing-links-intro {
+    color: #FFF;
+    background: #222 none repeat scroll 0% 0% !important;
   }
   .marketing-headline-cta-inline {
     width: 100%;
@@ -330,6 +352,8 @@ header {
     width: 100%;
     padding-right: 5px;
     padding-bottom: 20px;
+    padding-top: 5em;
+    padding-bottom: 5em;
     .marketing-features-header {
       padding: 20px 0 20px;
       position: relative;
@@ -339,7 +363,7 @@ header {
     .marketing-features-title {
       position: absolute;
       height: 80px;
-      min-width: 300px;
+      min-width: 170px;
       line-height: 80px;
       font-size: 24px;
       left: 50%;
@@ -352,7 +376,7 @@ header {
       }
     }
     .features {
-      font-size: 1.5rem;
+      font-size: 1.7rem;
       .feature-icon {
         position: absolute;
         height: 80px;
@@ -369,7 +393,7 @@ header {
   }
   .feature-title {
     display: inline;
-    font-family: "proxima-nova",sans-serif;
+    font-family: "proxima-nova-alt",sans-serif;
     font-weight: 700;
   }
   .marketing-body {
@@ -449,6 +473,10 @@ header {
       background: rgba(0, 0, 0, 0.7) none repeat scroll 0% 0%;
     }
   }
+  .marketing-links:nth-child(1) {
+    padding-bottom: 50px;
+    background: red;
+  }
   .small-marketing-links {
     position: relative;
     margin-top: -40px;
@@ -523,7 +551,7 @@ header {
     color: white;
   }
   .footer-news {
-    margin-top: -210px;
+    margin: -210px 10px 0px;
     text-align: center;
     padding: 25px 0 110px 0;
     .footer-news-body {
@@ -550,7 +578,7 @@ header {
       line-height: 67px;
       text-align: center;
       border-radius:50%;
-      background-color: $dark-blue;
+      background-color: #1C2331; // $dark-blue;
       margin: 0 10px 0 10px;
       a:hover {
         text-decoration: none;
@@ -562,16 +590,18 @@ header {
     }
   }
   #footer-body {
-    background-color: $dark-blue;
+    background-color: #1C2331; //$dark-blue;
     color: white;
     padding-bottom: 15px;
     padding-top: 100px;
     margin-top: -93px;
-
+    a {
+      text-decoration: underline;
+    }
   }
   #footer-bottom {
     //background-color: $kudoso-green;
-    background-color: #141419;
+    background-color: #12141E;
     //color: $dark-blue;
     color: rgba(255,255,255,.5);
     padding: 10px 5px 10px 5px;
@@ -833,6 +863,10 @@ ul.kudoso-bullets li:before {
    .text-sm-right { text-align: right; }
    .text-sm-center { text-align: center; }
    .text-sm-justify { text-align: justify; }
+
+   .col-md-5 {
+     margin-right: 0;
+   }
 }
 
 @media (min-width: $screen-md-min) {
@@ -847,4 +881,8 @@ ul.kudoso-bullets li:before {
   .text-lg-right { text-align: right; }
   .text-lg-center { text-align: center; }
   .text-lg-justify { text-align: justify; }
+}
+
+.marketing .row {
+  margin-right: 0 !important;
 }

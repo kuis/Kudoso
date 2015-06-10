@@ -22,7 +22,7 @@
         .marketing-headline-cta-input-title
           Enter your email address:
         .marketing-headline-cta-input-box
-          %input#email.signup
+          %input#email.signup{"placeholder"=>"bobsyouruncle@website.com"}
       .marketing-headline-cta-disclaimer
         We won't share your email and we won't spam you.
       .marketing-headline-cta-button{onclick: 'signup();'}
@@ -136,10 +136,10 @@
             .feature-title
               Smile
             knowing there are many more features that will change the way your family manages technology!
-  .marketing-intro
-    .marketing-intro-header
-      Kudoso Helps You:
-  .marketing-links
+  .marketing-links-intro
+    .marketing-links-intro-header
+      Kudoso Helps You &#133;
+  .marketing-links.clearfix
     %a{href: '/content_filtering'}
       #link-protect.marketing-link
         .marketing-link-title.title-top
@@ -154,7 +154,7 @@
             Limit
             %span.hidden-xs
               Screen Time
-  .marketing-links
+  .marketing-links.clearfix
     %a{href: '/kudos'}
       #link-kudos.marketing-link
         .marketing-link-title.title-bottom
