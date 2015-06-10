@@ -46,6 +46,7 @@ class WizardController < ApplicationController
 
     end
 
+
     respond_to do |format|
       format.json { render json: { message: "success" } }
     end
