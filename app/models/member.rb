@@ -1,8 +1,6 @@
 class Member < ActiveRecord::Base
   belongs_to :family
   has_one :user, dependent: :nullify
-  belongs_to :contact
-  has_many :emails, through: :contact
   has_many :todo_schedules, dependent: :destroy
   has_many :my_todos, dependent: :destroy
   has_many :primary_devices, class_name: 'Device', foreign_key: 'primary_member_id', dependent: :nullify
@@ -12,8 +10,6 @@ class Member < ActiveRecord::Base
   has_many :st_overrides
   has_one :screen_time_schedule
   has_many :api_keys
-
-  accepts_nested_attributes_for :contact
 
 
   # Include default devise modules. Others available are:
@@ -31,12 +27,14 @@ class Member < ActiveRecord::Base
     where(:username => warden_conditions[:username], :family_id => warden_conditions[:family_id]).first
   end
 
-  def first_name
-    contact.try(:first_name) || ''
-  end
+  def age
+    if self.birth_date.present?
+      now = Time.now.utc.to_date
+      now.year - self.birth_date.year - (self.birth_date.to_date.change(:year => now.year) > now ? 1 : 0)
+    else
+      return -1
+    end
 
-  def last_name
-    contact.try(:last_name) || ''
   end
 
   def full_name

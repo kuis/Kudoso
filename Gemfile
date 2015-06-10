@@ -20,6 +20,7 @@ gem 'jquery-rails'
 gem 'jquery-ui-sass-rails'
 gem 'font-awesome-rails'
 gem 'lazy_high_charts'
+gem 'bootstrap-datepicker-rails'
 gem 'bourbon'
 gem 'cocoon' # nested form helper
 gem 'groupdate' # adds group_by_date functions
@@ -96,6 +97,7 @@ group :test do
   gem 'zeus', :require => false
   gem 'shoulda-matchers'
   gem 'pdf-inspector'
+  gem 'poltergeist'
   gem 'selenium-webdriver'
   gem 'faker'
   gem 'simplecov'

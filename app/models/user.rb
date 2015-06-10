@@ -10,8 +10,6 @@ class User < ActiveRecord::Base
   scope :admins, -> { where(admin: true) }
   scope :accounts, -> { where.not(admin: true) }
 
-  attr_accessor :first_name, :last_name
-
   after_create :build_family
 
 
@@ -23,7 +21,8 @@ class User < ActiveRecord::Base
          :authentication_keys => [:email]
 
 
-  validates_presence_of :first_name, :last_name, :email
+  validates_presence_of :email
+  validates_uniqueness_of :email
 
   def set_admin!
     self.update_attribute(:admin, true)
@@ -34,7 +33,7 @@ class User < ActiveRecord::Base
   end
 
   def full_name
-    member.try(:full_name) || email
+    "#{first_name} #{last_name}"
   end
 
   def get_api_key
@@ -52,10 +51,8 @@ class User < ActiveRecord::Base
   def build_family
     if !self.admin? && self.family_id.nil?
       self.create_family(name: "#{self.last_name} Family", primary_contact_id: self.id)
-      self.member = self.family.members.create({username: self.email, parent: true })
-      self.member.create_contact({first_name: self.first_name, last_name: self.last_name, contact_type_id: ContactType.find_or_create_by(name: 'Customer').id})
-      self.member.contact.emails.create({address: self.email, is_primary: true})
       self.wizard_step = 2
+      self.member = self.family.members.create({username: self.email, parent: true, first_name: self.first_name, last_name: self.last_name, email: self.email })
       self.save
       self.member.save
     end

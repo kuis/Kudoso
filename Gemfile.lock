@@ -81,6 +81,8 @@ GEM
       rack (>= 0.9.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    bootstrap-datepicker-rails (1.4.0)
+      railties (>= 3.0)
     bootstrap-sass (3.3.4.1)
       autoprefixer-rails (>= 5.0.0.1)
       sass (>= 3.2.19)
@@ -109,6 +111,7 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
     clamp (0.6.4)
+    cliver (0.3.2)
     cocoon (1.2.6)
     coderay (1.1.0)
     coffee-rails (4.0.1)
@@ -373,6 +376,11 @@ GEM
       ruby-rc4
       ttfunk
     pg (0.18.1)
+    poltergeist (1.5.1)
+      capybara (~> 2.1)
+      cliver (~> 0.3.1)
+      multi_json (~> 1.0)
+      websocket-driver (>= 0.2.0)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -510,6 +518,7 @@ GEM
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
     websocket (1.2.1)
+    websocket-driver (0.3.4)
     xpath (2.0.0)
       nokogiri (~> 1.3)
     zeus (0.13.3)
@@ -527,6 +536,7 @@ DEPENDENCIES
   best_in_place
   better_errors
   binding_of_caller
+  bootstrap-datepicker-rails
   bootstrap-sass (~> 3.3.4)
   bourbon
   byebug
@@ -563,6 +573,7 @@ DEPENDENCIES
   parallel_tests
   pdf-inspector
   pg
+  poltergeist
   quiet_assets
   rack-livereload
   rails (= 4.2.1)

@@ -88,6 +88,7 @@ Rails.application.routes.draw do
 
   end
 
+
   get 'tos', to: 'home#tos'
   get 'privacy', to: 'home#privacy'
   get 'contact', to: 'home#contact'
@@ -100,6 +101,8 @@ Rails.application.routes.draw do
   get 'kudos', to: 'home#kudos'
   get 'rewards', to: 'home#rewards'
   get 'wizard', to: 'wizard#index'
+  put 'wizard', to: 'wizard#update'
+  post 'wizard', to: 'wizard#create'
   root to: 'home#landing'
 
   match "*path", to: "errors#catch_404", via: :all

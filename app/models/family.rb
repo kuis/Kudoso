@@ -6,6 +6,7 @@ class Family < ActiveRecord::Base
   has_many :family_activities, dependent: :destroy
   has_one :screen_time_schedule
   belongs_to :primary_contact, class_name: 'User'
+  has_many :family_device_categories, dependent: :destroy
 
   accepts_nested_attributes_for :members, :reject_if => :all_blank, :allow_destroy => true
 

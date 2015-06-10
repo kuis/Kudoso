@@ -22,7 +22,6 @@ class MembersController < ApplicationController
     @family = Family.find(params[:family_id])
     @parent = @family.members.where(parent: true).limit(1).first
     @member = Member.new(family_id: @family.id)
-    @member.contact = Contact.new(last_name: @parent.last_name)
   end
 
   # GET /members/1/edit
@@ -32,6 +31,7 @@ class MembersController < ApplicationController
   # POST /members
   # POST /members.json
   def create
+    params[:member][:birth_date] = Chronic.parse(params[:member][:birth_date]).to_date.to_s(:db) if params[:member][:birth_date]
     @member = Member.new(params[:member].merge({family_id:@family.id}))
     @member.username = @member.username.downcase
     if @member.save
@@ -53,7 +53,7 @@ class MembersController < ApplicationController
   # PATCH/PUT /members/1
   # PATCH/PUT /members/1.json
   def update
-    params[:member][:birth_date] = Chronic.parse(params[:member][:birth_date]) if params[:member][:birth_date]
+    params[:member][:birth_date] = Chronic.parse(params[:member][:birth_date]).to_date.to_s(:db) if params[:member][:birth_date]
     if @member.update(member_params)
       flash[:notice] = 'Family member was successfully updated.'
       respond_with(@member, location: [@family,@member])
@@ -79,6 +79,6 @@ class MembersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def member_params
-    params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :contact_attributes => [:first_name, :last_name, :id])
+    params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :email)
   end
 end

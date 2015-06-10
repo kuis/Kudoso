@@ -1,1 +1,31 @@
-Step 4
+.row
+  .col-md-4.col-md-offset-1
+    %h3 Assign Tasks:
+.row
+  .col-md-8.col-md-offset-1
+    Tasks are parent directed daily activities that you assign to your kids.  We have currated this simple list of
+    age appropriate chores to get you started, you can assign them as Tasks to each child with a single click below.
+    You can customize your assigned Tasks for each child after the setup wizard is complete.
+.row
+  .col-md-11.col-md-offset-1
+    %hr
+- current_user.family.kids.each do |kid|
+  - if (2..12).include?(kid.age)
+    .row
+      .col-md-3.col-md-offset-1
+        = "#{kid.first_name} (age: #{kid.age})"
+      .col-md-4
+        %table.table
+          -  @todo_groups = TodoGroup.active.where('rec_min_age <= ? AND rec_max_age >= ?', kid.age, kid.age )
+          - if @todo_groups.size > 0
+            - @todo_groups.each do |todo_group|
+              .panel.panel-default
+                .panel-heading
+                  #{todo_group.name} (Ages: #{todo_group.rec_min_age} - #{todo_group.rec_max_age})
+                .panel-body
+                  %ul
+                    - todo_group.todo_templates.each do |todo_template|
+                      %li #{todo_template.name}
+                .panel-footer
+                  %button.btn.btn-default{ onclick: 'alert("Not working yet...");'}
+                    Assign to #{kid.first_name}

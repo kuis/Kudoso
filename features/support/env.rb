@@ -5,6 +5,10 @@
 # files.
 
 require 'cucumber/rails'
+require 'capybara/poltergeist'
+# Capybara.default_driver = :poltergeist
+# Capybara.default_driver = :selenium
+Capybara.javascript_driver = :poltergeist
 
 # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
 # order to ease the transition to Capybara we set the default here. If you'd
@@ -29,13 +33,30 @@ Capybara.default_selector = :css
 #
 ActionController::Base.allow_rescue = false
 
+Cucumber::Rails::World.use_transactional_fixtures = false
+
 # Remove/comment out the lines below if your app doesn't have a database.
 # For some databases (like MongoDB and CouchDB) you may need to use :truncation instead.
 begin
-  DatabaseCleaner.strategy = :transaction
+  DatabaseCleaner.strategy = :truncation
+  #DatabaseCleaner.logger = Rails.logger
 rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
+
+module CustomWorld
+  def wait_for_ajax
+    Timeout.timeout(Capybara.default_wait_time) do
+      loop until finished_all_ajax_requests?
+    end
+  end
+
+  def finished_all_ajax_requests?
+    page.evaluate_script('jQuery.active').zero?
+  end
+end
+World(CustomWorld)
+Cucumber::Rails::Database.javascript_strategy = :truncation
 
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:
@@ -48,3 +69,7 @@ end
 #     DatabaseCleaner.strategy = :transaction
 #   end
 #
+
+Around do |scenario, block|
+  DatabaseCleaner.cleaning(&block)
+end

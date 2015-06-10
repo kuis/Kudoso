@@ -42,7 +42,7 @@ class ApplicationController < ActionController::Base
     if resource.wizard_step
       '/wizard'
     else
-      families
+      families_path
     end
   end
 

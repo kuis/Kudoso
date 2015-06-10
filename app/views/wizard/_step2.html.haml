@@ -8,7 +8,7 @@
     = text_field_tag 'member_first_name'
   .col-md-2
     Birth Date
-    = text_field_tag 'member_birth_date', nil, placeholder: 'MM/DD/YYYY'
+    = text_field_tag 'member_birth_date', nil, placeholder: 'MM/DD/YYYY', data: { provide: 'datepicker' }
   .col-md-2
     Password (optional):
     = text_field_tag 'member_password', '1234'
@@ -28,15 +28,32 @@
     .family_members
       %ul
         = render current_user.family.members
-
-.panel-footer
-  %button.btn.btn-default
-    Next
-
 :javascript
+  function save_info(args) {
+    $.ajax({
+      url: '/wizard',
+      dataType: 'json',
+      method: 'PUT',
+      data: {
+        step: 2
+      },
+      success: function() {
+        args && args.success && args.success();
+      },
+      error: function(e) {
+        alert("Sorry, there was an error saving your information.");
+      }
+
+    });
+
+  }
   function add_member() {
     if ( $('#member_first_name').val().length < 1 ) {
       alert('A first name is required');
+      return;
+    }
+    if ( $('#member_birth_date').val().length < 1 && !($('member_parent').is(':checked')) ) {
+      alert('A birth day is required for children');
       return;
     }
     $.ajax({
@@ -46,7 +63,7 @@
        data: {
          member: {
            first_name: $('#member_first_name').val(),
-           last_name: '#{current_user.member.last_name}',
+           last_name: '#{current_user.last_name}',
            username: $('#member_first_name').val(),
            password: $('#member_password').val(),
            parent: $('member_parent').is(':checked'),
