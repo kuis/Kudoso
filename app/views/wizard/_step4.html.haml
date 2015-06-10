@@ -1,1 +1,12 @@
-Step 4
+.row
+  .col-md-4.col-md-offset-1
+    %h3 Assign Tasks:
+.row
+  .col-md-8.col-md-offset-1
+    Tasks are parent directed daily activities that you assign to your kids.  We have currated this simple list of
+    age appropriate chores to get you started, you can assign them as Tasks to each child with a single click below.
+    You can customize your assigned Tasks for each child after the setup wizard is complete.
+- current_user.family.kids.each do |kid|
+  .row
+    .col-md-3.col-md-offset-1
+      = "#{kid.first_name} (age: #{kid.age})"
