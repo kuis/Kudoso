@@ -208,7 +208,7 @@ todo_templates = TodoTemplate.create([
                                          { name: 'Mow lawn', description: 'Maintaining our home requires everyone to help.', required: true, schedule: "#{saturdays.to_yaml}", active: true, kudos: 20 }
                                      ])
 
-group_one = TodoGroup.create({ name: 'Group One', rec_min_age: 2, rec_max_age: 12, active: true })
+group_one = TodoGroup.create({ name: 'Group One', rec_min_age: 2, rec_max_age: 5, active: true })
 
 group_one.todo_templates << todo_templates[0]
 group_one.todo_templates << todo_templates[1]
@@ -216,7 +216,7 @@ group_one.todo_templates << todo_templates[2]
 
 
 
-group_two = TodoGroup.create({ name: 'Group Two', rec_min_age: 6, rec_max_age: 12, active: true })
+group_two = TodoGroup.create({ name: 'Group Two', rec_min_age: 6, rec_max_age: 8, active: true })
 
 group_two.todo_templates << todo_templates[3]
 group_two.todo_templates << todo_templates[4]
@@ -243,9 +243,9 @@ group_three.todo_templates << todo_templates[5]
 # 1. Create family
   parent = User.create({email: 'parent@kudoso.com', first_name: 'Parent', last_name: 'Test', password: 'password', password_confirmation: 'password', confirmed_at: Time.now})
 
-  johnny = Member.create({username: 'johnny', password: '1234', family_id: parent.member.family_id, contact_attributes: { first_name: 'Johnny', last_name: 'Test', contact_type_id: ContactType.find_by_name('Customer').id } })
+  johnny = Member.create({username: 'johnny', password: '1234', family_id: parent.member.family_id, first_name: 'Johnny', last_name: 'Test' })
 
-  suzy = Member.create({username: 'suzy', password: '4321', family_id: parent.member.family_id, contact_attributes: {first_name: 'Suzy', last_name: 'Test', contact_type_id: ContactType.find_by_name('Customer').id}})
+  suzy = Member.create({username: 'suzy', password: '4321', family_id: parent.member.family_id, first_name: 'Suzy', last_name: 'Test'})
 
 # 2. Add Todos by assigning groups to the family
   parent.member.family.assign_group(group_one, [johnny.id, suzy.id ])
