@@ -24,6 +24,7 @@
 //= require highcharts/highcharts
 //= require cocoon
 //= require bootstrap-sprockets
+//= require bootstrap-datepicker
 //= require analytics
 //= require_tree .
 
