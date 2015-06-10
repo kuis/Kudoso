@@ -10,13 +10,28 @@ Wizard step: #{current_user.wizard_step}
       = render partial: "wizard/step#{current_user.wizard_step}"
     -else
       = render partial: 'wizard/complete'
-
+  .panel-footer
+    %button.btn.btn-default{onclick: 'next_step();'}
+      Next
 :javascript
   function next_step() {
-    $.ajax({
-       url: '/wizard',
-       dataType: 'script',
-       method: 'POST'
+    save_info({ success: function(){
+      $.ajax({
+         url: '/wizard',
+         dataType: 'json',
+         method: 'POST',
+         success: function() {
+          $.ajax({
+             url: '/wizard',
+             dataType: 'script',
+             method: 'GET'
+          });
+         },
+         error: function() {
+           alert("We're sorry, there was error prossessing your information.  Please try again later.");
+         }
+      });
+     }
     });
   }
   function add_member() {

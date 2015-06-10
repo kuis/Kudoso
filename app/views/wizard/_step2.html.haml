@@ -28,7 +28,22 @@
     .family_members
       %ul
         = render current_user.family.members
+:javascript
+  function save_info(args) {
+    $.ajax({
+      url: '/wizard',
+      dataType: 'json'
+      method: 'PUT',
+      data: {
+        step: 2
+      },
+      success: function() {
+        args && args.success && args.success();
+      },
+      error: function(e) {
+        alert("Sorry, there was an error saving your information.");
+      }
 
-.panel-footer
-  %button.btn.btn-default{onclick: 'next_step();'}
-    Next
+    });
+
+  }
