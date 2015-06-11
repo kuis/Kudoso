@@ -2,7 +2,7 @@ class TodoGroupsController < ApplicationController
   before_action :authenticate_member! unless @current_user.present?
   load_and_authorize_resource
 
-  respond_to :html
+  respond_to :html, :json
 
   def index
     @family = Family.find(params[:family_id]) if params[:family_id]
@@ -44,13 +44,18 @@ class TodoGroupsController < ApplicationController
       @todo_group = TodoGroup.find(params[:id])
 
       @family.assign_group(@todo_group, @members)
+      respond_to do |format|
+        format.html { redirect_to @family }
+        format.json { head :no_content }
+      end
+
     else
       logger.warn "#{current_user.present? ? "User #{current_user.id}" : "Member #{current_member.id}"} attempted to assign todo_group #{params[:id]} to family #{params[:family_id]} (#{current_user.present? ? "#{current_user.member.family_id}" : "#{current_member.family_id}"}) but failed."
-      flash[:error] = 'Sorry, an error occurred trying to assign this todo group, please try again.'
+      respond_to do |format|
+        format.html { redirect_to @family, flash: { error: 'Sorry, an error occurred trying to assign this todo group, please try again.' } }
+        format.json { render json: { message: 'Task Group or Member not found.'}, status: 404 }
+      end
     end
-
-
-    redirect_to @family
   end
 
   private

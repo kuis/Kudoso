@@ -40,26 +40,29 @@ class Family < ActiveRecord::Base
   def assign_template(todo_template, assign_members = Array.new)
     return false if todo_template.nil?
     #add to family if not already in their todo list
-    unless self.todos.find {|todo| todo.todo_template_id == todo_template.id}
+    todo = self.todos.find {|todos| todos.todo_template_id == todo_template.id}
+    unless todo.present?
       todo = self.todos.build({name: todo_template.name, description: todo_template.description, schedule: todo_template.schedule, todo_template_id: todo_template.id, kudos: todo_template.kudos})
       todo.active = true; #can't mass assign this
       todo.save
       # add the todo to each family member
+    end
 
-      assign_members.each do |i|
-        unless i.blank?
-          member = Member.find_by_id(i)
-          if member.family_id == self.id
-            todo_schedule = member.todo_schedules.build(start_date: Date.today.beginning_of_day, todo_id: todo.id )
-            todo_schedule.active = true
-            todo_schedule.save
-            todo_schedule.schedule_rrules.create(rrule: todo.schedule)
-          else
-            logger.warn "Attempted to assigning todo_template #{todo_template.id} to member #{member.id} who is not part of family #{self.id}"
-          end
+    assign_members.each do |i|
+      unless i.blank?
+        member = Member.find_by_id(i)
+        # only assign it if the member is in the same family and does not already have this todo
+        if member.family_id == self.id && !(member.todo_schedules.find {|ts| ts.todo_id == todo.id})
+          todo_schedule = member.todo_schedules.build(start_date: Date.today.beginning_of_day, todo_id: todo.id )
+          todo_schedule.active = true
+          todo_schedule.save
+          todo_schedule.schedule_rrules.create(rrule: todo.schedule)
+        else
+          logger.warn "Attempted to assigning todo_template #{todo_template.id} to member #{member.id} who is not part of family #{self.id} or already has it"
         end
       end
     end
+
     todo
   end
 

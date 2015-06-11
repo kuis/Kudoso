@@ -33,10 +33,10 @@ Rails.application.routes.draw do
     resources :family_activities
     member do
       devise_for :members, class: 'Member', :controllers => { :sessions => "members/sessions" }
-      resources :todo_groups do
-        member do
-          post :assign
-        end
+    end
+    resources :todo_groups do
+      member do
+        post :assign
       end
     end
     resources :members do
@@ -47,6 +47,9 @@ Rails.application.routes.draw do
       resources :screen_times
       resources :st_overrides
       resources :screen_time_schedules
+      member do
+        post '/todo_groups/:todo_group_id/assign', to: "members#assign_todo_group"
+      end
     end
 
 
@@ -78,15 +81,13 @@ Rails.application.routes.draw do
     resources :tickets
   end
 
-  constraints subdomain: 'api' do
-    namespace :api, path: nil, defaults: { format: 'json' } do
-      namespace :v1 do
-        resources :sessions
-        resources :families
-      end
+  namespace :api, defaults: { format: 'json' } do
+    namespace :v1 do
+      resources :sessions
+      resources :families
     end
-
   end
+
 
 
   get 'tos', to: 'home#tos'
