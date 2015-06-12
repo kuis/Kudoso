@@ -88,6 +88,7 @@ Rails.application.routes.draw do
       resources :families do
         resources :members
       end
+      resources :todo_groups
     end
   end
 
