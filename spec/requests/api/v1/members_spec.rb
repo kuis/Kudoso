@@ -37,4 +37,15 @@ describe 'Members API', type: :request do
     get "/api/v1/families/#{other_family.id}/members", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
     expect(response.status).to eq(403)
   end
+
+  it 'creates a new family member' do
+    prev = @user.family.members.count
+    post "/api/v1/families/#{@user.family.id}/members",
+         { member: { username: "dave", email: "dave@example.com", first_name: "dave", last_name: @user.last_name, password: 'password', birth_date: "7/4/2001"} }.to_json,
+         { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
+    expect(response.status).to eq(200)
+    @user.reload
+    expect(@user.family.members.count).to eq(prev+1)
+  end
+
 end
