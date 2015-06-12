@@ -2,6 +2,9 @@ class TodoTemplate < ActiveRecord::Base
   has_many :todos, dependent: :nullify
   has_and_belongs_to_many :todo_groups, join_table: :todo_groups_todo_templates
 
+  scope :active, -> { where(active: true).order(:name) }
+
+
   validates_presence_of :name
   validates_uniqueness_of :name
 

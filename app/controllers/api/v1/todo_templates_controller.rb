@@ -1,19 +1,19 @@
 module Api
   module V1
-    class TodoGroupsController < ApiController
+    class TodoTemplatesController < ApiController
       def index
         messages = init_messages
 
-        @todo_groups = TodoGroup.active
-        render :json => { :todo_groups => @todo_groups, :messages => messages }, :status => 200
+        @todo_templates = TodoTemplate.active
+        render :json => { :todo_templates => @todo_templates, :messages => messages }, :status => 200
 
       end
 
       def show
         messages = init_messages
         begin
-          @todo_group = TodoGroup.includes(:todo_templates).find(params[:id])
-          render :json => { :todo_group => @todo_group.as_json({ include: :todo_templates }), :messages => messages }, :status => 200
+          @todo_template = TodoTemplate.find(params[:id])
+          render :json => { :todo_template => @todo_template, :messages => messages }, :status => 200
 
 
         rescue ActiveRecord::RecordNotFound
@@ -29,12 +29,12 @@ module Api
       def assign
         messages = init_messages
         begin
-          @todo_group = TodoGroup.includes(:todo_templates).find(params[:id])
+          @todo_template = TodoTemplate.find(params[:id])
           @family = Family.find(params[:family_id])
           @member = Member.find(params[:member_id])
 
-          if @family && @member && @todo_group && @current_user.try(:admin) || (@current_member.try(:family) == @family)
-            @family.assign_group(@todo_group, [ @member ])
+          if @family && @member && @todo_template && @current_user.try(:admin) || (@current_member.try(:family) == @family)
+            @family.assign_template(@todo_template, [ @member ])
             render :json => { :messages => messages }, :status => 200
           end
 

@@ -86,9 +86,15 @@ Rails.application.routes.draw do
       resources :sessions
       resources :users
       resources :todo_groups
+      resources :todo_templates
       resources :families do
         resources :members do
           resources :todo_groups do
+            member do
+              post :assign
+            end
+          end
+          resources :todo_templates do
             member do
               post :assign
             end
