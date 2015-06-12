@@ -21,7 +21,7 @@ class User < ActiveRecord::Base
          :authentication_keys => [:email]
 
 
-  validates_presence_of :email
+  validates_presence_of :email, :last_name
   validates_uniqueness_of :email
 
   def set_admin!

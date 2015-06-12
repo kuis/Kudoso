@@ -50,7 +50,6 @@ module Api
           @family = Family.find(params[:family_id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family )
             local_params = member_create_params.merge(family_id: @family.id)
-            logger.info local_params.inspect
             local_params[:birth_date] = Chronic.parse(local_params[:birth_date]).to_date.to_s(:db) if local_params[:birth_date]
             @member = Member.new(local_params)
             if @member.save
