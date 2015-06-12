@@ -28,5 +28,11 @@ describe 'Todo Groups API', type: :request do
     expect(json["todo_group"]["todo_templates"].length).to eq(@todo_group.todo_templates.count)
   end
 
+  it 'assigns todo group to family member' do
+    @todo_group = @todo_groups.sample
+    post "/api/v1/families/#{@user.family.id}/members/#{@user.family.members.last.id}/todo_groups/#{@todo_group.id}/assign", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(200)
+  end
+
 
 end

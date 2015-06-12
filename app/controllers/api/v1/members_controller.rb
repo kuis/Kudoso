@@ -28,7 +28,7 @@ module Api
           @family = Family.find(params[:family_id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family )
             @member = @family.members.find(params[:id])
-            render :json => { :member => member, :messages => messages }, :status => 200
+            render :json => { :member => @member, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403

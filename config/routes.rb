@@ -85,10 +85,16 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :sessions
       resources :users
-      resources :families do
-        resources :members
-      end
       resources :todo_groups
+      resources :families do
+        resources :members do
+          resources :todo_groups do
+            member do
+              post :assign
+            end
+          end
+        end
+      end
     end
   end
 
