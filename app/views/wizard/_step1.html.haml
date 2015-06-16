@@ -1,1 +1,35 @@
-Not currently used - provided by Devise User Registration
+
+.row
+  .col-md-4.col-md-offset-1
+    %h3 Default Protection:
+.row
+  .col-xs-10.col-xs-offset-1
+    Content Filtering Level:
+    = select_tag 'default_filter', options_for_select(['Strict', 'Moderate', 'Mature', 'Monitor'], 'Strict')
+.row
+  .col-xs-10.col-xs-offset-1
+    Screen Time per Day
+    = select_tag 'default_time', options_for_select(['1/2 Hour', '1 Hour', '1.5 Hours', '2 Hours'], '2 Hours')
+
+
+:javascript
+  function save_info(args) {
+    $.ajax({
+      url: '/wizard',
+      dataType: 'json',
+      method: 'PUT',
+      data: {
+        step: 1,
+        default_filter: $('#default_filter').val(),
+        default_time: $('#default_time').val()
+      },
+      success: function() {
+        args && args.success && args.success();
+      },
+      error: function(e) {
+        alert("Sorry, there was an error saving your information.");
+      }
+
+    });
+
+  }

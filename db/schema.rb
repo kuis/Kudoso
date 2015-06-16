@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150610170216) do
+ActiveRecord::Schema.define(version: 20150616203617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -218,6 +218,8 @@ ActiveRecord::Schema.define(version: 20150610170216) do
     t.datetime "updated_at"
     t.date     "memorialized_date"
     t.string   "timezone"
+    t.integer  "default_screen_time", default: 7200
+    t.string   "default_filter",      default: "monitor"
   end
 
   create_table "family_activities", force: :cascade do |t|

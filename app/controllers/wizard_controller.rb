@@ -28,6 +28,12 @@ class WizardController < ApplicationController
   end
 
   def update
+    if params[ "step" ].to_i == 1
+      current_user.family.default_screen_time = params["default_time"].to_i if params["default_time"]
+      current_user.family.default_filter = params["default_filter"].downcase if params["default_filter"]
+      current_user.family.save
+    end
+
     if params[ "step" ].to_i == 3
        params[ "device_categories" ].each do |key, value|
          unless key.ends_with?('_other')
