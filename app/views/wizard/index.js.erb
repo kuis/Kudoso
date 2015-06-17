@@ -5,7 +5,7 @@ $('.wizard-body').html("<%=j (1..4).include?(current_user.wizard_step) ? (render
 <% else %>
     $('#back_btn').show();
 <% end %>
-<% if current_user.wizard_step == 5 %>
+<% if [0,5].include?(current_user.wizard_step) %>
     $('#next_btn').hide();
 <% else %>
     $('#next_btn').show();

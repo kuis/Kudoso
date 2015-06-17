@@ -16,12 +16,14 @@ class WizardController < ApplicationController
 
   def create
     if params["back"]
-      if (2..5).include?(current_user.wizard_step)
+      if current_user.wizard_step > 1
         current_user.update_attribute(:wizard_step, current_user.wizard_step-1 )
+      elsif current_user.wizard_step == 0
+        current_user.update_attribute(:wizard_step, 4 )
       end
 
     else
-      if (1..4).include?(current_user.wizard_step)
+      if (1..3).include?(current_user.wizard_step)
         current_user.update_attribute(:wizard_step, current_user.wizard_step+1 )
       else
         current_user.update_attribute(:wizard_step, 0 )
