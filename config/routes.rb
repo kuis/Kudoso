@@ -49,6 +49,7 @@ Rails.application.routes.draw do
       resources :screen_time_schedules
       member do
         post '/todo_groups/:todo_group_id/assign', to: "members#assign_todo_group"
+        post '/todo_templates/assign', to: "members#assign_todo_templates"
       end
     end
 

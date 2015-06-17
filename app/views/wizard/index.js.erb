@@ -1,2 +1,12 @@
 $('.wizard-header').html("<%=j render partial: 'wizard/signup_wizard' %>");
-$('.wizard-body').html("<%=j (1..5).include?(current_user.wizard_step) ? (render partial: "wizard/step#{current_user.wizard_step}") : (render partial: 'wizard/complete') %>");
+$('.wizard-body').html("<%=j (1..4).include?(current_user.wizard_step) ? (render partial: "wizard/step#{current_user.wizard_step}") : (render partial: 'wizard/complete') %>");
+<% if current_user.wizard_step == 1 %>
+    $('#back_btn').hide();
+<% else %>
+    $('#back_btn').show();
+<% end %>
+<% if current_user.wizard_step == 5 %>
+    $('#next_btn').hide();
+<% else %>
+    $('#next_btn').show();
+<% end %>

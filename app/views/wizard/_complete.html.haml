@@ -1,3 +1,7 @@
-Complete!
-.panel-footer
-  =link_to 'Continue to Family Dashboard', current_user.family, class: 'btn btn-primary'
+%h2 Complete!
+=link_to 'Continue to Family Dashboard', current_user.family, class: 'btn btn-success'
+:javascript
+  function save_info(args) {
+    // Nothing to save, just return
+    args && args.success && args.success();
+  }

@@ -92,6 +92,27 @@ class MembersController < ApplicationController
     end
   end
 
+
+  def assign_todo_templates
+    assigned_templates = []
+    params[ "todo_template_ids"].each do |id|
+      begin
+        @todo_template = TodoTemplate.find(id)
+        @family.assign_template(@todo_template, [ @member.id ])
+        assigned_templates << @todo_template
+      rescue
+        logger.error "Unable find todo template: #{id}"
+      end
+
+    end
+
+    respond_to do |format|
+      format.html { redirect_to @family }
+      format.json { render json: assigned_templates.as_json, status: 200 }
+    end
+
+  end
+
   private
 
 

@@ -6,34 +6,65 @@
     Tasks are parent directed daily activities that you assign to your kids.  We have currated this simple list of
     age appropriate chores to get you started, you can assign them as Tasks to each child with a single click below.
     You can customize your assigned Tasks for each child after the setup wizard is complete.
-- current_user.family.kids.each do |kid|
-  - if (2..12).include?(kid.age)
-    .row
-      .col-md-11.col-md-offset-1
-        %hr
-    .row
-      .col-md-3.col-md-offset-1
-        = "#{kid.first_name} (age: #{kid.age})"
-        %small
-          Assigned tasks:
-          %div{id: "child_#{kid.id}_tasks"}
-            - kid.todos.each do |todo|
-              #{todo.inspect}
-      .col-md-4
-        %table.table
-          -  @todo_groups = TodoGroup.active.where('rec_min_age <= ? AND rec_max_age >= ?', kid.age, kid.age )
-          - if @todo_groups.size > 0
-            - @todo_groups.each do |todo_group|
-              .panel.panel-default{ id: "child_#{kid.id}_group_#{todo_group.id}"}
-                .panel-heading
-                  #{todo_group.name} (Ages: #{todo_group.rec_min_age} - #{todo_group.rec_max_age})
-                .panel-body
-                  %ul
-                    - todo_group.todo_templates.each do |todo_template|
-                      %li #{todo_template.name}
-                .panel-footer
-                  %button.btn.btn-default{ onclick: "assign_group(#{todo_group.id}, #{kid.id});"}
-                    Assign to #{kid.first_name}
+.row
+  .col-md-10-col-md-offset-1
+    .cd-pricing-container.cd-has-margins
+      .cd-pricing-switcher
+        %p.fieldset.blue
+          %input#simple-2{:checked => "checked", :name => "tasks-2", :type => "radio", :value => "simple"}/
+          %label{:for => "simple-2"} Simple
+          %input#advanced-2{:name => "tasks-2", :type => "radio", :value => "advanced"}/
+          %label{:for => "advanced-2"} Advanced
+          %span.cd-switch
+      - current_user.family.kids.each do |kid|
+        .row
+          .col-md-11.col-md-offset-1
+            %hr
+        .row
+          .col-md-3.col-md-offset-1
+            = "#{kid.first_name} (age: #{kid.age})"
+            %br
+            %small
+              Assigned tasks:
+              %div{id: "child_#{kid.id}_tasks"}
+                - kid.todo_schedules.each do |ts|
+                  #{ts.todo_template.name}
+                  %br
+          .col-md-8
+            %ul.cd-pricing-list.cd-bounce-invert
+              %li
+                %ul.cd-pricing-wrapper
+                  %li.is-visible.is-ended{"data-type" => "simple"}
+                    #group_tasks
+                      %table.table
+                        -  @todo_groups = TodoGroup.active.where('rec_min_age <= ? AND rec_max_age >= ?', kid.age, kid.age )
+                        - if @todo_groups.size > 0
+                          - @todo_groups.each do |todo_group|
+                            .panel.panel-default{ id: "child_#{kid.id}_group_#{todo_group.id}"}
+                              .panel-heading
+                                #{todo_group.name} (Ages: #{todo_group.rec_min_age} - #{todo_group.rec_max_age})
+                              .panel-body
+                                %ul
+                                  - todo_group.todo_templates.each do |todo_template|
+                                    %li #{todo_template.name}
+                              .panel-footer
+                                %button.btn.btn-default{ onclick: "assign_group(#{todo_group.id}, #{kid.id});"}
+                                  Assign to #{kid.first_name}
+                        - else
+                          Sorry, there are no default tasks for #{kid.age} year only children.
+                  %li.is-hidden.is-ended{"data-type" => "advanced"}
+                    .manual_tasks{ id: "manual_tasks_#{kid.id}"}
+                      %h3 Select tasks:
+                      - TodoTemplate.active.find_each do |todo|
+                        - unless kid.todo_templates.include?(todo)
+                          - checked = false
+                          - @todo_groups.each { |tg| checked = true if tg.todo_templates.include?(todo)}
+                          %input{ name: "manual_tasks_#{kid.id}", value: todo.id, type: :checkbox, checked: checked }
+                          #{todo.name}
+                          %br
+                      %button.btn.btn-default{ onclick: "assign_tasks(#{kid.id});"}
+                        Assign to #{kid.first_name}
+
 :javascript
   function assign_group(groupId, kidId) {
     $("#child_" + kidId + "_group_" + groupId).slideUp();
@@ -51,6 +82,30 @@
       error: function() {
         alert('error');
         $("#child_" + kidId + "_group_" + groupId).slideDown();
+      }
+    });
+  }
+  function assign_tasks(kidId) {
+    $('#manual_tasks_' + kidId ).slideUp();
+    var tasks_array = $('#manual_tasks_' + kidId + ' input').serializeArray();
+    var tasks_hash = { todo_template_ids : [] }
+    jQuery.each( tasks_array, function( i, field) {
+       tasks_hash.todo_template_ids.push(field.value);
+    });
+    $.ajax({
+      url: "/families/#{ current_user.family_id }/members/" + kidId + "/todo_templates/assign",
+      dataType: 'json',
+      method: 'POST',
+      data: tasks_hash,
+      success: function(e) {
+        console.log(e);
+        jQuery.each(e, function(i, task){
+           $("#child_" + kidId + "_tasks").append(task.name + "<br/>");
+        });
+      },
+      error: function() {
+        alert('error');
+        $('#manual_tasks_' + kidId ).slideDown();
       }
     });
   }
