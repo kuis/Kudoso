@@ -17,7 +17,7 @@ RSpec.describe Member, :type => :model do
   end
 
   it 'should return available screen time' do
-    expect(@member.get_available_screen_time).to eq(60*60*24) # 24 hours in seconds
+    expect(@member.get_available_screen_time).to eq(@member.family.default_screen_time) # 24 hours in seconds
 
     @member.set_screen_time!(Date.today.wday, 3600, 4800)
     expect(@member.get_available_screen_time).to eq(3600)

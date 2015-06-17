@@ -22,6 +22,12 @@ class Member < ActiveRecord::Base
 
   validates :username, uniqueness: { scope: :family_id }
 
+  after_create do
+    (0..6).each do |dow|
+      self.set_screen_time!(dow, family.default_screen_time, (family.default_screen_time * 1.5).floor)
+    end
+  end
+
   # override to scope username into family_id
   def self.find_for_authentication(warden_conditions)
     where(:username => warden_conditions[:username], :family_id => warden_conditions[:family_id]).first
