@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150616203617) do
+ActiveRecord::Schema.define(version: 20150618232045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,6 +220,9 @@ ActiveRecord::Schema.define(version: 20150616203617) do
     t.string   "timezone"
     t.integer  "default_screen_time", default: 7200
     t.string   "default_filter",      default: "monitor"
+    t.string   "mobicip_password"
+    t.string   "mobicip_id"
+    t.string   "mobicip_token"
   end
 
   create_table "family_activities", force: :cascade do |t|
@@ -267,6 +270,7 @@ ActiveRecord::Schema.define(version: 20150616203617) do
     t.string   "first_name"
     t.string   "last_name"
     t.string   "email"
+    t.string   "mobicip_profile"
   end
 
   add_index "members", ["family_id"], name: "index_members_on_family_id", using: :btree
