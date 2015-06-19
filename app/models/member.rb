@@ -2,6 +2,7 @@ class Member < ActiveRecord::Base
   belongs_to :family
   has_one :user, dependent: :nullify
   has_many :todo_schedules, dependent: :destroy
+  has_many :todo_templates, through: :todo_schedules
   has_many :my_todos, dependent: :destroy
   has_many :primary_devices, class_name: 'Device', foreign_key: 'primary_member_id', dependent: :nullify
   has_many :activities, dependent: :destroy, inverse_of: :member
@@ -21,6 +22,12 @@ class Member < ActiveRecord::Base
   validates_presence_of :username, :family
 
   validates :username, uniqueness: { scope: :family_id }
+
+  after_create do
+    (0..6).each do |dow|
+      self.set_screen_time!(dow, family.default_screen_time, (family.default_screen_time * 1.5).floor)
+    end
+  end
 
   # override to scope username into family_id
   def self.find_for_authentication(warden_conditions)

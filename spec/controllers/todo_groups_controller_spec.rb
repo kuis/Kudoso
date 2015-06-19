@@ -266,7 +266,7 @@ RSpec.describe TodoGroupsController, :type => :controller do
           assign_to = kids.sample(2)
           post :assign, {id: todo_group.to_param, family_id: @member.family_id, todo_group: { member_ids: assign_to.map(&:id)} }, valid_session
           expect(response.status).to eq(302)
-          expect(flash[:error]).to be_present
+          expect( flash[:error] ).to be_present
         end
       end
     end

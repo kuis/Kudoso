@@ -67,6 +67,9 @@ input[type="text"], input[type="password"], input[type="email"], input[type="num
     @include box-shadow(#0095E1 0px 0px 4px 1px);
   }
 }
+select {
+
+}
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
@@ -119,7 +122,7 @@ header {
 
 
 #main {
-  min-height: 100%;
+  //min-height: 100%;
   width: 100%;
   position: relative;
   padding-bottom: 200px;
@@ -851,6 +854,13 @@ ul.kudoso-bullets li:before {
   }
   .active {
     background-color: $kudoso-green;
+  }
+}
+
+.wizard-body {
+  .manual-tasks {
+    overflow-y: scroll;
+    max-height: 80px;
   }
 }
 

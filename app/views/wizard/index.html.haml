@@ -7,13 +7,24 @@ Wizard step: #{current_user.wizard_step}
   .panel-heading.wizard-header
     = render partial: 'wizard/signup_wizard'
   .panel.wizard-body
-    - if (1..5).include?(current_user.wizard_step)
+    - if (1..4).include?(current_user.wizard_step)
       = render partial: "wizard/step#{current_user.wizard_step}"
     -else
       = render partial: 'wizard/complete'
   .panel-footer
-    %button.btn.btn-default{onclick: 'next_step();'}
+    %button#back_btn.btn.btn-default.hidden{onclick: 'prev_step();'}
+      Back
+    %button#next_btn.btn.btn-default{onclick: 'next_step();'}
       Next
+- if current_user.wizard_step == 1
+  :javascript
+    setTimeout( function(){ $('#back_btn').hide(); }, 1000);
+- else
+  :javascript
+    setTimeout( function(){ $('#back_btn').removeClass('hidden'); }, 1000);
+- if [0,5].include?(current_user.wizard_step)
+  :javascript
+    setTimeout( function(){ $('#next_btn').hide(); }, 1000);
 :javascript
   function next_step() {
     save_info({ success: function(){
@@ -31,6 +42,27 @@ Wizard step: #{current_user.wizard_step}
          error: function() {
            alert("We're sorry, there was error prossessing your information.  Please try again later.");
          }
+      });
+     }
+    });
+  }
+  function prev_step() {
+    save_info({ success: function(){
+      $.ajax({
+       url: '/wizard',
+       dataType: 'json',
+       method: 'POST',
+       data: { back: true },
+       success: function() {
+        $.ajax({
+           url: '/wizard',
+           dataType: 'script',
+           method: 'GET'
+        });
+       },
+       error: function() {
+         alert("We're sorry, there was error prossessing your information.  Please try again later.");
+       }
       });
      }
     });

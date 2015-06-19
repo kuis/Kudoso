@@ -15,10 +15,19 @@ class WizardController < ApplicationController
   end
 
   def create
-    if (1..4).include?(current_user.wizard_step)
-      current_user.update_attribute(:wizard_step, current_user.wizard_step+1 )
+    if params["back"]
+      if current_user.wizard_step > 1
+        current_user.update_attribute(:wizard_step, current_user.wizard_step-1 )
+      elsif current_user.wizard_step == 0
+        current_user.update_attribute(:wizard_step, 4 )
+      end
+
     else
-      current_user.update_attribute(:wizard_step, 0 )
+      if (1..3).include?(current_user.wizard_step)
+        current_user.update_attribute(:wizard_step, current_user.wizard_step+1 )
+      else
+        current_user.update_attribute(:wizard_step, 0 )
+      end
     end
 
     respond_to do |format|
@@ -28,6 +37,12 @@ class WizardController < ApplicationController
   end
 
   def update
+    if params[ "step" ].to_i == 1
+      current_user.family.default_screen_time = params["default_time"].to_i if params["default_time"]
+      current_user.family.default_filter = params["default_filter"].downcase if params["default_filter"]
+      current_user.family.save
+    end
+
     if params[ "step" ].to_i == 3
        params[ "device_categories" ].each do |key, value|
          unless key.ends_with?('_other')

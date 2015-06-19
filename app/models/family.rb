@@ -40,26 +40,29 @@ class Family < ActiveRecord::Base
   def assign_template(todo_template, assign_members = Array.new)
     return false if todo_template.nil?
     #add to family if not already in their todo list
-    unless self.todos.find {|todo| todo.todo_template_id == todo_template.id}
+    todo = self.todos.find {|todos| todos.todo_template_id == todo_template.id}
+    unless todo.present?
       todo = self.todos.build({name: todo_template.name, description: todo_template.description, schedule: todo_template.schedule, todo_template_id: todo_template.id, kudos: todo_template.kudos})
       todo.active = true; #can't mass assign this
       todo.save
       # add the todo to each family member
+    end
 
-      assign_members.each do |i|
-        unless i.blank?
-          member = Member.find_by_id(i)
-          if member.family_id == self.id
-            todo_schedule = member.todo_schedules.build(start_date: Date.today.beginning_of_day, todo_id: todo.id )
-            todo_schedule.active = true
-            todo_schedule.save
-            todo_schedule.schedule_rrules.create(rrule: todo.schedule)
-          else
-            logger.warn "Attempted to assigning todo_template #{todo_template.id} to member #{member.id} who is not part of family #{self.id}"
-          end
+    assign_members.each do |i|
+      unless i.blank?
+        member = Member.find_by_id(i)
+        # only assign it if the member is in the same family and does not already have this todo
+        if member.family_id == self.id && !(member.todo_schedules.find {|ts| ts.todo_id == todo.id})
+          todo_schedule = member.todo_schedules.build(start_date: Date.today.beginning_of_day, todo_id: todo.id )
+          todo_schedule.active = true
+          todo_schedule.save
+          todo_schedule.schedule_rrules.create(rrule: todo.schedule)
+        else
+          logger.warn "Attempted to assigning todo_template #{todo_template.id} to member #{member.id} who is not part of family #{self.id} or already has it"
         end
       end
     end
+
     todo
   end
 
@@ -91,6 +94,34 @@ class Family < ActiveRecord::Base
     end
 
     rec.to_a
+  end
+
+  def create_mobicip_account_xml
+    require 'rexml/document'
+    self.mobicip_password ||= SecureRandom.hex(18)
+    doc = REXML::Document.new
+    doc.add_element("request")
+    doc.elements["request"].add_element("account")
+    doc.elements["request"].elements["account"].add_element "user"
+    doc.elements["request"].elements["account"].elements["user"].add_element "email"
+    doc.elements["request"].elements["account"].elements["user"].elements["email"].add_text "family_#{self.id}@kudoso.com"
+    doc.elements["request"].elements["account"].elements["user"].add_element "password"
+    doc.elements["request"].elements["account"].elements["user"].elements["password"].add_text self.mobicip_password
+    doc.elements["request"].elements["account"].elements["user"].add_element "passwordConfirmation"
+    doc.elements["request"].elements["account"].elements["user"].elements["passwordConfirmation"].add_text self.mobicip_password
+    doc.elements["request"].elements["account"].add_element "acceptTerms"
+    doc.elements["request"].elements["account"].elements["acceptTerms"].add_text "true"
+    doc.elements["request"].elements["account"].add_element "location"
+    doc.elements["request"].elements["account"].elements["location"].add_text "America"
+    doc.elements["request"].elements["account"].add_element "receiveNewsletters"
+    doc.elements["request"].elements["account"].elements["receiveNewsletters"].add_text "false"
+    doc.elements["request"].add_element("client")
+    doc.elements["request"].elements["client"].add_element "id"
+    doc.elements["request"].elements["client"].elements["id"].add_text "MobicipDev05"
+    doc.elements["request"].elements["client"].add_element "version"
+    doc.elements["request"].elements["client"].elements["version"].add_text "1.0"
+    doc
+    xml = '<?xml version="1.0" encoding="UTF-8"?>' + doc.to_s
   end
 
 end

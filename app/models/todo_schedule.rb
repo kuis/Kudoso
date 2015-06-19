@@ -3,6 +3,7 @@ class TodoSchedule < ActiveRecord::Base
   belongs_to :member
   has_many :my_todos, dependent: :destroy
   has_many :schedule_rrules, dependent: :destroy
+  has_one :todo_template, through: :todo
   accepts_nested_attributes_for :schedule_rrules, :reject_if => :all_blank, :allow_destroy => true
 
   validate :valid_dates?

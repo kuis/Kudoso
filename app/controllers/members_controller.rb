@@ -74,6 +74,45 @@ class MembersController < ApplicationController
     redirect_to family_members_path(@family)
   end
 
+  def assign_todo_group
+    @todo_group = TodoGroup.find(params[:todo_group_id])
+    if @todo_group
+      @family.assign_group(@todo_group, [ @member.id ])
+      respond_to do |format|
+        format.html { redirect_to @family }
+        format.json { render json: @member.my_todos }
+      end
+
+    else
+      logger.warn "#{current_user.present? ? "User #{current_user.id}" : "Member #{current_member.id}"} attempted to assign todo_group #{params[:id]} to family #{params[:family_id]} (#{current_user.present? ? "#{current_user.member.family_id}" : "#{current_member.family_id}"}) but failed."
+      respond_to do |format|
+        format.html { redirect_to @family, error: 'Sorry, an error occurred trying to assign this todo group, please try again.' }
+        format.json { render json: { message: 'Task Group or Member not found.'}, status: 404 }
+      end
+    end
+  end
+
+
+  def assign_todo_templates
+    assigned_templates = []
+    params[ "todo_template_ids"].each do |id|
+      begin
+        @todo_template = TodoTemplate.find(id)
+        @family.assign_template(@todo_template, [ @member.id ])
+        assigned_templates << @todo_template
+      rescue
+        logger.error "Unable find todo template: #{id}"
+      end
+
+    end
+
+    respond_to do |format|
+      format.html { redirect_to @family }
+      format.json { render json: assigned_templates.as_json, status: 200 }
+    end
+
+  end
+
   private
 
 

@@ -1,3 +1,25 @@
+Given(/^I am on step "(.*?)" of the wizard$/) do |step|
+  @current_user = FactoryGirl.create(:user)
+  step = step.to_i
+  if step > 1
+    # set family defaults - already set
+  end
+  if step > 2
+    # add children
+    kids = FactoryGirl.create_list(:member, 3, family_id: @current_user.family.id)
+  end
+  if step > 3
+    #set devices
+    # TODO: Setup device defaults for family
+  end
+  @current_user.update_attribute(:wizard_step, step)
+  visit '/users/sign_in'
+  fill_in 'user_email', with: @current_user.email
+  fill_in 'user_password', with: 'password'
+  click_button 'Log in'
+  visit('/wizard')
+end
+
 Given /^I am not authenticated$/ do
   visit('/users/sign_out') # ensure that at least
 end

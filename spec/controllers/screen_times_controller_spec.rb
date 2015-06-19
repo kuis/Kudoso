@@ -57,7 +57,7 @@ RSpec.describe ScreenTimesController, :type => :controller do
       it "assigns all screen_times as @screen_times" do
         screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
         get :index, {family_id: @family.id, member_id: @kid.id}, valid_session
-        expect(assigns(:screen_times)).to match_array([screen_time])
+        expect(assigns(:screen_times)).to include(screen_time)
       end
     end
 
@@ -269,7 +269,7 @@ RSpec.describe ScreenTimesController, :type => :controller do
       it "assigns all screen_times as @screen_times" do
         screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
         get :index, {family_id: @family.id, member_id: @kid.id}, valid_session
-        expect(assigns(:screen_times)).to match_array([screen_time])
+        expect(assigns(:screen_times)).to include(screen_time)
       end
     end
 

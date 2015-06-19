@@ -7,13 +7,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActionController::RoutingError, :with =>  :error_render_method
 
-  before_filter do
-    if Rails.env.staging?
-      authenticate_or_request_with_http_basic do |username, password|
-        username == "kudoso" && password == "Launching2015!"
-      end
-    end
-  end
+  before_filter :restrict_access
 
   before_filter do
     resource = controller_name.singularize.to_sym
@@ -126,6 +120,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def restrict_access
+    logger.info 'Restricting access!'
+    if Rails.env.staging?
+      authenticate_or_request_with_http_basic do |username, password|
+        username == "kudoso" && password == "Launching2015!"
+      end
+    end
+  end
 
 
 

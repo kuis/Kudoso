@@ -11,7 +11,7 @@ class FamiliesController < ApplicationController
   # GET /families/1
   # GET /families/1.json
   def show
-    if current_user.wizard_step
+    if current_user.wizard_step != 0
       redirect_to '/wizard', alert: 'Please complete the setup wizard to continue.'
       return
     end
