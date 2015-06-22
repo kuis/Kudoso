@@ -1,7 +1,7 @@
 module Api
   module V1
     class UsersController < ApiController
-      skip_before_filter :restrict_api_access, only: :create
+      skip_before_filter :restrict_api_access, only: [:create, :reset_password]
 
       def show
         messages = init_messages
@@ -60,7 +60,7 @@ module Api
       def reset_password
         messages = init_messages
         user = User.find_by_email(params[:email])
-        if user.present
+        if user.present?
           user.send_reset_password_instructions
           render :json => { :messages => messages }
         else
