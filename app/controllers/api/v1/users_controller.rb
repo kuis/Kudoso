@@ -57,6 +57,18 @@ module Api
 
       end
 
+      def reset_password
+        messages = init_messages
+        user = User.find_by_email(params[:email])
+        if user.present
+          user.send_reset_password_instructions
+          render :json => { :messages => messages }
+        else
+          messages[:error] << 'Email not found'
+          render :json => { :messages => messages }, :status => 409
+        end
+      end
+
       private
 
 

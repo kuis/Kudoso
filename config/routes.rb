@@ -85,7 +85,11 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :sessions
-      resources :users
+      resources :users do
+        collection do
+          post :reset_password
+        end
+      end
       resources :todo_groups
       resources :todo_templates
       resources :families do

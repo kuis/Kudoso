@@ -1,23 +1,23 @@
 class Mobicip
   require 'rest-client'
 
-  def initialize(token='NOTOKEN')
+  def initialize(target, token='NOTOKEN')
     @client_id = "MobicipDev5"
-    @target = "https://portal.mobicip.net/api/"
+    @target = "https://portal.mobicip.net/api/#{target}"
     @request = nil
     @xmlString = nil
     @token = token
     prepare_request
   end
 
-  def create_account(family)
-    @target = @target + "users/createAccount"
+  def self.create_account(family)
+    mobicip = Mobicip.new('users/createAccount')
     if family.mobicip_password.nil?
       family.update_attribute(:mobicip_password, SecureRandom.hex(18))
     end
-    family_to_mobicip_createUser_xml(family)
-    prepare_request
-    result = post_request
+    mobicip.family_to_mobicip_createUser_xml(family)
+    mobicip.prepare_request
+    return mobicip.post_request
   end
 
   private
