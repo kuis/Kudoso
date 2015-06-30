@@ -46,5 +46,19 @@ describe 'Users API', type: :request do
     expect(json2["user"]).to be_present
   end
 
+  it 'can reset user password for a valid user' do
+    @user = FactoryGirl.create(:user)
+    post '/api/v1/users/reset_password', { device_token: @device.device_token, email: @user.email }.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+    expect(response.status).to eq(200)
+  end
+
+  it 'cannot reset user password for an invalid user' do
+    @user = FactoryGirl.create(:user)
+    post '/api/v1/users/reset_password', { device_token: @device.device_token, email: 'jibberish@noemail.co' }.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+    expect(response.status).to eq(409)
+    json = JSON.parse(response.body)
+    expect(json["messages"]["error"].length).to be >= 1
+  end
+
 
 end

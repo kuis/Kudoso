@@ -7,6 +7,7 @@ gem 'pg'
 gem 'responders', '~> 2.0'
 gem 'railties'
 gem 'rest-client'
+gem 'settingslogic'
 
 # View and Assets
 gem 'sprockets-rails', :require => 'sprockets/railtie'
