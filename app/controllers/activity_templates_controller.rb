@@ -33,7 +33,8 @@ class ActivityTemplatesController < ApplicationController
 
   def destroy
     @activity_template.destroy
-    respond_with(@activity_template)
+    # respond_with(@activity_template)
+    redirect_to activity_templates_path
   end
 
   private

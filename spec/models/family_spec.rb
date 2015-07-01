@@ -103,6 +103,11 @@ RSpec.describe Family, :type => :model do
       pc = DeviceType.create({ name: 'Windows Personal Computer', description: '', os: '', version: '' })
       mac = DeviceType.create({ name: 'Apple Macintosh Personal Computer', description: '', os: '', version: '' })
 
+      entertainment = ActivityType.create({ name: 'Entertainment', metadata_fields: { } } )
+      education = ActivityType.create({ name: 'Education', metadata_fields: { } } )
+      health = ActivityType.create({ name: 'Health', metadata_fields: { } } )
+
+
       #create devices
       @kudoso_smartplug_1 = @family.devices.create({name: 'Living Room SmartPlug', device_type_id: DeviceType.find_by_name('Kudoso SmartPlug').id, managed: true})
       @kudoso_smartplug_2 = @family.devices.create({name: 'Play Room SmartPlug', device_type_id: DeviceType.find_by_name('Kudoso SmartPlug').id, managed: true})
@@ -115,34 +120,34 @@ RSpec.describe Family, :type => :model do
                                        ])
 
       #create activities
-      activity_template = ActivityTemplate.create({ name: 'Play a game', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+      activity_template = ActivityTemplate.create({ name: 'Play a game', description: '', restricted: true, cost: 0, reward: 0, time_block: 10, activity_type: entertainment })
       [ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, n3ds, pc, mac].each { |device_type| activity_template.device_types << device_type }
 
-      activity_template = ActivityTemplate.create({ name: 'Surf the internet (entertainment)', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+      activity_template = ActivityTemplate.create({ name: 'Surf the internet (entertainment)', description: '', restricted: true, cost: 0, reward: 0, time_block: 10, activity_type: entertainment })
       [ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, n3ds, pc, mac, smartv, roku, appletv, firetv].each { |device_type| activity_template.device_types << device_type }
 
-      activity_template = ActivityTemplate.create({ name: 'Surf the internet (education)', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 })
+      activity_template = ActivityTemplate.create({ name: 'Surf the internet (education)', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 , activity_type: education})
       [ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps2, ps3, ps4, xbox360, xbox1, wii, n3ds, pc, mac, smartv, roku, appletv, firetv].each { |device_type| activity_template.device_types << device_type }
 
-      activity_template = ActivityTemplate.create({ name: 'Read a book', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 })
+      activity_template = ActivityTemplate.create({ name: 'Read a book', description: '', restricted: false, cost: 0, reward: 0, time_block: 10, activity_type: education })
       [ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, pc, mac].each { |device_type| activity_template.device_types << device_type }
 
-      activity_template = ActivityTemplate.create({ name: 'Read a magazine', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+      activity_template = ActivityTemplate.create({ name: 'Read a magazine', description: '', restricted: true, cost: 0, reward: 0, time_block: 10, activity_type: entertainment })
       [ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, pc, mac].each { |device_type| activity_template.device_types << device_type }
 
-      activity_template = ActivityTemplate.create({ name: 'Kahn Academy', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 })
+      activity_template = ActivityTemplate.create({ name: 'Kahn Academy', description: '', restricted: false, cost: 0, reward: 0, time_block: 10 , activity_type: education})
       [ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, pc, mac].each { |device_type| activity_template.device_types << device_type }
 
-      activity_template = ActivityTemplate.create({ name: 'Watch Netflix', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+      activity_template = ActivityTemplate.create({ name: 'Watch Netflix', description: '', restricted: true, cost: 0, reward: 0, time_block: 10, activity_type: entertainment })
       [ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps3, ps4, xbox360, xbox1, wii, pc, mac, appletv, firetv, roku, smartv, bluray].each { |device_type| activity_template.device_types << device_type }
 
-      activity_template = ActivityTemplate.create({ name: 'Watch Amazon Prime', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+      activity_template = ActivityTemplate.create({ name: 'Watch Amazon Prime', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 , activity_type: entertainment})
       [ipod, iphone, ipad, android_tablet, android_phone, fire_phone, kindle, ps3, ps4, xbox360, xbox1, wii, pc, mac, appletv, firetv, roku, smartv, bluray].each { |device_type| activity_template.device_types << device_type }
 
-      activity_template = ActivityTemplate.create({ name: 'Watch BluRay', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+      activity_template = ActivityTemplate.create({ name: 'Watch BluRay', description: '', restricted: true, cost: 0, reward: 0, time_block: 10, activity_type: entertainment })
       [smartv, hdtv, bluray ].each { |device_type| activity_template.device_types << device_type }
 
-      activity_template = ActivityTemplate.create({ name: 'Watch television', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
+      activity_template = ActivityTemplate.create({ name: 'Watch television', description: '', restricted: true, cost: 0, reward: 0, time_block: 10, activity_type: entertainment })
       [hdtv, smartv, bluray, appletv, firetv, roku].each { |device_type| activity_template.device_types << device_type }
 
     end
@@ -167,7 +172,8 @@ RSpec.describe Family, :type => :model do
       expect(@family.recommended_activities.count).to eq(8)
     end
 
-    it 'should be able assign an activity' do
+    skip 'should be able assign an activity' do
+      #TODO: refactor based on no family activities
       act = @family.recommended_activities.sample
       before_act_count = @family.family_activities.count
       @family.assign_activity(act)

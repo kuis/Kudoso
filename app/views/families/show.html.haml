@@ -75,8 +75,6 @@
         %br
         = link_to 'View all devices', family_devices_path(@family) , class: 'btn btn-default'
   .medium-6.columns
-    %h2 Family Activities
+    %h2 Available Activities
     %ul
-      - @family.family_activities.each do |fam_act|
-        %li
-          =render fam_act
+      = render partial: 'activity_templates/activity_templates_list', locals: { member: current_member, activity_templates: ActivityTemplate.all }

@@ -163,21 +163,21 @@ class Member < ActiveRecord::Base
     my_time.save
   end
 
-  def new_activity(family_activity, device)
+  def new_activity(activity_template, device)
     # TODO: Check cost of activity before creating
-    act = self.activities.create(family_activity_id: family_activity.id, device_id: device.try(:id), created_by_id: self.id)
+    act = self.activities.create(activity_template_id: activity_template.id, device_id: device.try(:id), created_by_id: self.id)
   end
 
   def current_activity
     activities.where(end_time: nil).last
   end
 
-  def can_do_activity?(family_activity, device = nil)
+  def can_do_activity?(activity_template, device = nil)
     #TODO: Implement device logic
     ret = false
 
     # Check if activity is restricted
-    if family_activity.restricted?
+    if activity_template.restricted?
       ret = !!get_available_screen_time if todos_complete?
     else
       ret = !!get_available_screen_time

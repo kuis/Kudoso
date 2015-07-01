@@ -1,5 +1,6 @@
 class Device < ActiveRecord::Base
   belongs_to :device_type
+  has_one :device_category, through: :device_type
   belongs_to :family
   belongs_to :primary_member, class_name: 'Member'
   has_many :activities, dependent: :nullify

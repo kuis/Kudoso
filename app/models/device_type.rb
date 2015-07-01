@@ -1,6 +1,6 @@
 class DeviceType < ActiveRecord::Base
-  has_and_belongs_to_many :family_activities
-  has_and_belongs_to_many :activity_templates
+  has_many :activity_template_device_types, dependent: :destroy
+  has_many :activity_templates, through: :activity_template_device_types
   has_many :devices, dependent: :restrict_with_error
   belongs_to :device_category
 

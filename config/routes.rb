@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :activity_template_device_types
   resources :partners
   resources :contacts
 
@@ -31,8 +32,7 @@ Rails.application.routes.draw do
 
   resources :families do
     resources :devices
-    resources :family_activities
-    member do
+      member do
       devise_for :members, class: 'Member', :controllers => { :sessions => "members/sessions" }
     end
     resources :todo_groups do

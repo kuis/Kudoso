@@ -3,7 +3,6 @@ class Family < ActiveRecord::Base
   has_many :members, dependent: :destroy
   has_many :todos, dependent: :destroy
   has_many :devices, dependent: :destroy
-  has_many :family_activities, dependent: :destroy
   has_one :screen_time_schedule
   belongs_to :primary_contact, class_name: 'User'
   has_many :family_device_categories, dependent: :destroy
@@ -64,20 +63,6 @@ class Family < ActiveRecord::Base
     end
 
     todo
-  end
-
-  def assign_activity(activity_template)
-    return nil if activity_template.nil?
-
-    family_activities.create({name: activity_template.name,
-                              description: activity_template.description,
-                              activity_template_id: activity_template.id,
-                              restricted: activity_template.restricted,
-                              cost: activity_template.cost,
-                              reward: activity_template.reward,
-                              time_block: activity_template.time_block
-                             })
-
   end
 
   # returns integer of managed devices for license purposes

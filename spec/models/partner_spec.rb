@@ -1,5 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Partner, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'has a valid factory' do
+    partner = FactoryGirl.create(:partner)
+    expect(partner.valid?).to be_truthy
+    expect(partner.api_key.present?).to be_truthy
+  end
 end

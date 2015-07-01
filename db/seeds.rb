@@ -100,23 +100,25 @@ content_types = ContentType.create([
                                        {name: 'Magazine'}
                                    ])
 
-# generate device types
+
+
 
 activity_types = ActivityType.create([
-                                         { name: 'Other', metadata_fields: { } },
-                                         { name: 'Play a Game', metadata_fields: { } },
-                                         { name: 'Surf the Internet', metadata_fields: { } },
-                                         { name: 'Read', metadata_fields: { } },
-                                         { name: 'Stream Media', metadata_fields: { } },
-                                         { name: 'Physical', metadata_fields: { } }
+                                       { name: 'Entertainment', metadata_fields: { } },
+                                       { name: 'Education', metadata_fields: { } },
+                                       { name: 'Health', metadata_fields: { } },
+                                       { name: 'Other', metadata_fields: { } }
+                                         ])
+
+activity_templates = ActivityTemplate.create([
+                                         { name: 'Play on my device', time_block: 30, activity_type: ActivityType.find_by_name('Entertainment') },
+                                         { name: 'Read a book', time_block: 30, activity_type: ActivityType.find_by_name('Education') },
+                                         { name: 'Stream Media', time_block: 30, activity_type: ActivityType.find_by_name('Entertainment') },
+                                         { name: 'Play outside', time_block: 30, activity_type: ActivityType.find_by_name('Health') }
                                      ])
 
 
 # Device Catagories:
-# Video Devices (TV/BluRay/DVR/Streaming Media, etc etc)
-# Game Consoles
-# Mobile Devices
-# Computers
 
 mobile_devices = DeviceCategory.create({ name: 'Mobile Devices', description: 'Mobile devices such as iPhone, iPad, Android or Kindle devices.'})
 computers = DeviceCategory.create({ name: 'Computers', description: 'Personal Computers such as Mac or Windows.'})
@@ -124,6 +126,7 @@ game_consoles = DeviceCategory.create({ name: 'Game Consoles', description: 'Gam
 video_devices= DeviceCategory.create({ name: 'Video Devices', description: 'Video devices such as Televisions, BluRay/DVD Players, AppleTV, Roku, or Amazon FireTV.'})
 
 
+# generate device types
 
 ipod = DeviceType.create({ name: 'iPod Touch', description: 'Apple iPod Touch', os: 'iOS', version: '', device_category: mobile_devices })
 iphone = DeviceType.create({ name: 'iPhone', description: 'Apple iPhone', os: 'iOS', version: '', device_category: mobile_devices })

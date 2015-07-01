@@ -1,0 +1,14 @@
+= simple_form_for(@activity_template_device_type) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :activity_template_id
+    = f.input :device_type_id
+    = f.input :type
+    = f.input :launch_url
+    = f.input :app_name
+    = f.input :app_id
+    = f.input :app_store_url
+
+  .form-actions
+    = f.button :submit

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150701140926) do
+ActiveRecord::Schema.define(version: 20150701171132) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,20 +19,18 @@ ActiveRecord::Schema.define(version: 20150701140926) do
   create_table "activities", force: :cascade do |t|
     t.integer  "member_id"
     t.integer  "created_by_id"
-    t.integer  "family_activity_id"
     t.datetime "start_time"
     t.datetime "end_time"
     t.integer  "device_id"
     t.integer  "content_id"
     t.integer  "allowed_time"
-    t.integer  "activity_type_id"
     t.integer  "cost"
     t.integer  "reward"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "activity_template_id"
   end
 
-  add_index "activities", ["family_activity_id"], name: "index_activities_on_family_activity_id", using: :btree
   add_index "activities", ["member_id"], name: "index_activities_on_member_id", using: :btree
 
   create_table "activity_details", force: :cascade do |t|
@@ -40,6 +38,18 @@ ActiveRecord::Schema.define(version: 20150701140926) do
     t.text     "metadata"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "activity_template_device_types", force: :cascade do |t|
+    t.integer  "activity_template_id"
+    t.integer  "device_type_id"
+    t.string   "type"
+    t.string   "launch_url"
+    t.string   "app_name"
+    t.string   "app_id"
+    t.string   "app_store_url"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
   create_table "activity_templates", force: :cascade do |t|
@@ -55,14 +65,8 @@ ActiveRecord::Schema.define(version: 20150701140926) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "external_id"
+    t.boolean  "disabled"
   end
-
-  create_table "activity_templates_device_types", id: false, force: :cascade do |t|
-    t.integer "activity_template_id"
-    t.integer "device_type_id"
-  end
-
-  add_index "activity_templates_device_types", ["activity_template_id", "device_type_id"], name: "activity_templates_device_types_index", unique: true, using: :btree
 
   create_table "activity_types", force: :cascade do |t|
     t.string   "name"
@@ -226,23 +230,6 @@ ActiveRecord::Schema.define(version: 20150701140926) do
     t.string   "mobicip_id"
     t.string   "mobicip_token"
   end
-
-  create_table "family_activities", force: :cascade do |t|
-    t.integer  "family_id"
-    t.integer  "activity_template_id"
-    t.string   "name"
-    t.string   "description"
-    t.integer  "cost",                 default: 0
-    t.integer  "reward",               default: 0
-    t.integer  "time_block"
-    t.boolean  "restricted",           default: false
-    t.text     "device_chains"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "family_activities", ["activity_template_id"], name: "index_family_activities_on_activity_template_id", using: :btree
-  add_index "family_activities", ["family_id"], name: "index_family_activities_on_family_id", using: :btree
 
   create_table "family_device_categories", force: :cascade do |t|
     t.integer  "family_id"

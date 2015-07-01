@@ -1,8 +1,7 @@
 FactoryGirl.define do
   factory :partner do
-    name "MyString"
-description "MyString"
-api_key "MyString"
+    name { Faker::Lorem.sentence(3)}
+    description { Faker::Lorem.sentence(5)}
   end
 
 end

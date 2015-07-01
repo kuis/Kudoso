@@ -31,8 +31,8 @@ RSpec.describe Member, :type => :model do
   it 'should record activities as screen time' do
     device = FactoryGirl.create(:device, family_id: @member.family.id )
     start_time = @member.get_available_screen_time(Date.today, device.id)
-    family_activity = FactoryGirl.create(:family_activity, family_id: @member.family.id, device_types: [device.device_type] )
-    act = @member.new_activity(family_activity, device)
+    activity_template = FactoryGirl.create(:activity_template)
+    act = @member.new_activity(activity_template, device)
     act.start!
     sleep(3)
     act.stop!

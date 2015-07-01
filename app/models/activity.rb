@@ -1,13 +1,12 @@
 class Activity < ActiveRecord::Base
   belongs_to :member                            # Family member who PERFORMED the activity, may be nil
   belongs_to :created_by, class_name: 'Member', foreign_key: 'created_by_id'  # Family member who CREATED the activity, required, allows tracking of anonymous access
-  belongs_to :family_activity
   belongs_to :device
   has_one :family, through: :created_by
-  belongs_to :activity_type
+  belongs_to :activity_template
   has_many :details, class_name: 'ActivityDetail'
 
-  validates_presence_of :created_by
+  validates_presence_of :created_by, :activity_template
 
   validate :check_screen_time, on: :create
 

@@ -81,15 +81,15 @@ RSpec.describe ActivitiesController, :type => :controller do
     describe "GET create" do
       # We use a get link to create activities
       it "creates a new Activity" do
-        family_activity = FactoryGirl.create(:family_activity, family_id: @family.id, restricted: false)
+        activity_template = FactoryGirl.create(:activity_template, restricted: false)
         expect {
-          get :new, {family_id: @family.id, member_id: @member.id, family_activity_id: family_activity.id}
+          get :new, {family_id: @family.id, member_id: @member.id, activity_template_id: activity_template.id}
         }.to change(Activity, :count).by(1)
       end
 
       it "creates and starts a new Activity" do
-        family_activity = FactoryGirl.create(:family_activity, family_id: @family.id, restricted: false)
-        get :new, {family_id: @family.id, member_id: @member.id, family_activity_id: family_activity.id, start: true}
+        activity_template = FactoryGirl.create(:activity_template, restricted: false)
+        get :new, {family_id: @family.id, member_id: @member.id,  activity_template_id: activity_template.id, start: true}
         expect(assigns(:activity).start_time).to be_between(Time.now.localtime - 1.minute, Time.now.localtime)
       end
     end

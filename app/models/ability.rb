@@ -29,9 +29,6 @@ class Ability
         can :manage, Device do |device|
           device.try(:family) == user.try(:member).try(:family)
         end
-        can :manage, FamilyActivity do |famact|
-          famact.try(:family) == user.try(:member).try(:family)
-        end
         can :manage, Member do |family_member|
           family_member.try(:family) == user.try(:member).try(:family)
         end
