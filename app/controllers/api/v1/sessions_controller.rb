@@ -28,7 +28,8 @@ module Api
                   if family
                     member = family.members.where(username: params[:username]).first
                     if member
-                      if member.valid_password?(params[:password])
+                      logger.info "\n\nPassword: [#{params[:password]}]\n\n"
+                      if member.valid_password?( params[:password] )
                         render :json => { member:    member,
                                           token:     member.get_api_key.access_token,
                                           messages:  messages }, :status => 200

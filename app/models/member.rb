@@ -12,6 +12,9 @@ class Member < ActiveRecord::Base
   has_one :screen_time_schedule
   has_many :api_keys
 
+  # ensure we have a secure password even if the user has no password
+  before_save :secure_password
+
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :omniauthable
@@ -205,5 +208,16 @@ class Member < ActiveRecord::Base
       key.update_expiration!
     end
     key
+  end
+
+  protected
+
+  def secure_password
+    unless self.password.nil? || self.password_confirmation.nil?
+      if self.password == self.password_confirmation
+        self.password = self.password_confirmation = Digest::MD5.hexdigest(self.password + self.family.secure_key).to_s
+        logger.info "\n\nProtecting member password: #{self.password}\n\nKey: #{self.family.secure_key}"
+      end
+    end
   end
 end

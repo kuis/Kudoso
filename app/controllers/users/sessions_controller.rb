@@ -7,6 +7,7 @@ class Users::SessionsController < Devise::SessionsController
     super
     unless current_user.nil? || current_user.admin?
       cookies.signed[:kudoso_family] = { :value => current_user.member.family_id, :expires => 50.years.from_now }
+      cookies.signed[:kudoso_family_key] = { :value => current_user.member.family.secure_key, :expires => 50.years.from_now }
       sign_in :member, current_user.member
     end
 

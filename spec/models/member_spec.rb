@@ -10,6 +10,13 @@ RSpec.describe Member, :type => :model do
     expect(@member.full_name).to eq("#{@member.first_name} #{@member.last_name}")
   end
 
+  it 'secures the members password' do
+    pwd = 'thepassword'
+    new_member = Member.create(username: 'thetest', password: pwd, password_confirmation: pwd, birth_date: 10.years.ago, family_id: @member.family_id)
+    expect(new_member.valid_password?(pwd)).to be_falsey
+    expect(new_member.valid_password?(Digest::MD5.hexdigest(pwd + @member.family.secure_key))).to be_truthy
+  end
+
   it 'should not allow duplicate usernames within a fmaily' do
     member_2 = Member.new( username: @member.username, family_id: @member.family_id)
     expect(member_2.valid?).to be_falsey
