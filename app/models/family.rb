@@ -96,32 +96,9 @@ class Family < ActiveRecord::Base
     rec.to_a
   end
 
-  def create_mobicip_account_xml
-    require 'rexml/document'
-    self.mobicip_password ||= SecureRandom.hex(18)
-    doc = REXML::Document.new
-    doc.add_element("request")
-    doc.elements["request"].add_element("account")
-    doc.elements["request"].elements["account"].add_element "user"
-    doc.elements["request"].elements["account"].elements["user"].add_element "email"
-    doc.elements["request"].elements["account"].elements["user"].elements["email"].add_text "family_#{self.id}@kudoso.com"
-    doc.elements["request"].elements["account"].elements["user"].add_element "password"
-    doc.elements["request"].elements["account"].elements["user"].elements["password"].add_text self.mobicip_password
-    doc.elements["request"].elements["account"].elements["user"].add_element "passwordConfirmation"
-    doc.elements["request"].elements["account"].elements["user"].elements["passwordConfirmation"].add_text self.mobicip_password
-    doc.elements["request"].elements["account"].add_element "acceptTerms"
-    doc.elements["request"].elements["account"].elements["acceptTerms"].add_text "true"
-    doc.elements["request"].elements["account"].add_element "location"
-    doc.elements["request"].elements["account"].elements["location"].add_text "America"
-    doc.elements["request"].elements["account"].add_element "receiveNewsletters"
-    doc.elements["request"].elements["account"].elements["receiveNewsletters"].add_text "false"
-    doc.elements["request"].add_element("client")
-    doc.elements["request"].elements["client"].add_element "id"
-    doc.elements["request"].elements["client"].elements["id"].add_text "MobicipDev05"
-    doc.elements["request"].elements["client"].add_element "version"
-    doc.elements["request"].elements["client"].elements["version"].add_text "1.0"
-    doc
-    xml = '<?xml version="1.0" encoding="UTF-8"?>' + doc.to_s
+  def create_mobicip_account
+    mobicip = Mobicip.new
+    result = mobicip.create_account(self)
   end
 
 end
