@@ -13,7 +13,7 @@ class Device < ActiveRecord::Base
   validates_presence_of :device_type_id, :device_type
   validates_presence_of :family_id
 
-  before_create { self.uuid = SecureRandom.hex(24) }
+  before_create { self.uuid = SecureRandom.uuid }
 
   attr_readonly :uuid
 

@@ -9,6 +9,8 @@ class Family < ActiveRecord::Base
 
   accepts_nested_attributes_for :members, :reject_if => :all_blank, :allow_destroy => true
 
+  before_create { self.secure_key = SecureRandom.base64 }
+
   def kids
     members.where('parent IS NOT true')
   end

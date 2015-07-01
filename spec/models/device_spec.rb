@@ -4,7 +4,7 @@ RSpec.describe Device, :type => :model do
   it 'has a valid factory' do
     device = FactoryGirl.create(:device)
     expect(device.valid?).to be_truthy
-    expect(device.uuid.length).to eq(48)
+    expect(device.uuid.length).to eq(36)
   end
 
   it 'returns the current active member' do
