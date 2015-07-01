@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150618232045) do
+ActiveRecord::Schema.define(version: 20150701140926) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 20150618232045) do
     t.boolean  "restricted",       default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "external_id"
   end
 
   create_table "activity_templates_device_types", id: false, force: :cascade do |t|
@@ -68,6 +69,7 @@ ActiveRecord::Schema.define(version: 20150618232045) do
     t.text     "metadata_fields"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "partner_id"
   end
 
   create_table "address_types", force: :cascade do |t|
@@ -312,6 +314,14 @@ ActiveRecord::Schema.define(version: 20150618232045) do
     t.text     "body"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "partners", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.string   "api_key"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "phone_types", force: :cascade do |t|

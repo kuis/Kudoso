@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @partner.name
+%p
+  %b Description:
+  = @partner.description
+%p
+  %b Api key:
+  = @partner.api_key
+
+= link_to 'Edit', edit_partner_path(@partner)
+\|
+= link_to 'Back', partners_path
