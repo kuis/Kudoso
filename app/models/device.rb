@@ -3,7 +3,7 @@ class Device < ActiveRecord::Base
   belongs_to :family
   belongs_to :primary_member, class_name: 'Member'
   has_many :activities, dependent: :nullify
-  belongs_to :current_activity, class_name: 'Activity'
+  has_one :current_activity, class_name: 'Activity'
   belongs_to :management_device, class_name: 'Device', foreign_key: 'management_id', counter_cache: :managed_devices_count
   has_many :managed_devices, class_name: 'Device', foreign_key: 'management_id'
   has_many :screen_times
@@ -17,7 +17,6 @@ class Device < ActiveRecord::Base
   attr_readonly :uuid
 
   def current_member
-    current_member = nil
-    current_member =  current_activity.member if current_activity.present?
+    current_activity.try(:member)
   end
 end
