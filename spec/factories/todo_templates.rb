@@ -10,7 +10,7 @@ FactoryGirl.define do
     def_min_age { rec_min_age }
     def_max_age { rec_max_age - 1  }
 
-    after(:build) { |tt| tt.rule = IceCube::Rule.daily.to_yaml }
+    after(:build) { |tt| tt.rule = IceCube::Rule.daily.to_yaml; tt.save; }
   end
 
 end

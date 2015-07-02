@@ -78,7 +78,7 @@ module Api
         messages = init_messages
         begin
           @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family )
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent ) || @current_member.id == params[:id]
             @member = @family.members.find(params[:id])
             local_params = member_create_params.merge(family_id: @family.id)
             local_params[:birth_date] = Chronic.parse(local_params[:birth_date]).to_date.to_s(:db) if local_params[:birth_date]
@@ -90,6 +90,28 @@ module Api
               render :json => { :member => @member, :messages => messages }, :status => 400
             end
 
+          else
+            messages[:error] << 'You are not authorized to do this.'
+            render :json => { :messages => messages }, :status => 403
+          end
+
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Family not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
+        end
+
+      end
+
+      def todos
+        messages = init_messages
+        begin
+          @family = Family.find(params[:family_id])
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent ) || @current_member.id == params[:id]
+            @member = @family.members.find(params[:id])
+            render :json => { :member => @member, todos: @member.todos, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403

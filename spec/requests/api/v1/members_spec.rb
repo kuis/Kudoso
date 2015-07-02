@@ -59,4 +59,19 @@ describe 'Members API', type: :request do
     expect(member.birth_date).not_to eq(original_birth_date)
   end
 
+  it 'returns a list of todos for a family member' do
+    member = @members.sample
+    todo_templates = FactoryGirl.create_list(:todo_template, 5)
+    todo_templates.each do |todo|
+      res = member.family.assign_template(todo, [ member.id ])
+    end
+    member.reload
+
+    get "/api/v1/families/#{@user.family.id}/members/#{member.id}/todos",
+          nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
+    expect(response.status).to eq(200)
+    json = JSON.parse(response.body)
+    expect(json["todos"].length).to eq(todo_templates.length)
+  end
+
 end
