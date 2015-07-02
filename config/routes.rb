@@ -88,6 +88,7 @@ Rails.application.routes.draw do
           resources :todo_templates do
             member do
               post :assign
+              delete :unassign
             end
           end
         end

@@ -28,10 +28,18 @@ describe 'Todo Templates API', type: :request do
     expect(json["todo_template"]["name"]).to eq(@todo_template.name)
   end
 
-  it 'assigns todo template to family member' do
+  it 'assigned and un-assigns todo template to family member' do
     @todo_template = @todo_templates.sample
-    post "/api/v1/families/#{@user.family.id}/members/#{@user.family.members.last.id}/todo_templates/#{@todo_template.id}/assign", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    member = @user.family.members.last
+    expect(member.todo_schedules.count).to eq(0)
+    post "/api/v1/families/#{@user.family.id}/members/#{member.id}/todo_templates/#{@todo_template.id}/assign", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
     expect(response.status).to eq(200)
+    member.reload
+    expect(member.todo_schedules.count).to eq(1)
+    delete "/api/v1/families/#{@user.family.id}/members/#{member.id}/todo_templates/#{@todo_template.id}/unassign", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(200)
+    member.reload
+    expect(member.todo_schedules.count).to eq(0)
   end
 
 

@@ -48,6 +48,28 @@ module Api
         end
       end
 
+      def unassign
+        messages = init_messages
+        begin
+          @todo_template = TodoTemplate.find(params[:id])
+          @family = Family.find(params[:family_id])
+          @member = Member.find(params[:member_id])
+
+          if @family && @member && @todo_template && @current_user.try(:admin) || (@current_member.try(:family) == @family)
+            @family.remove_template(@todo_template, [ @member ])
+            render :json => { :messages => messages }, :status => 200
+          end
+
+
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Record not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
+        end
+      end
+
     end
   end
 end
