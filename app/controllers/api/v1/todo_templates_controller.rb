@@ -4,7 +4,7 @@ module Api
       def index
         messages = init_messages
 
-        @todo_templates = TodoTemplate.active
+        @todo_templates = TodoTemplate.all
         render :json => { :todo_templates => @todo_templates, :messages => messages }, :status => 200
 
       end

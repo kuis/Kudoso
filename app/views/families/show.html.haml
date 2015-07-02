@@ -50,6 +50,9 @@
                       = f.input :active
                   .row
                     .col-xs-6.col-xs-offset-3
+                      =f.input :kudos
+                  .row
+                    .col-xs-6.col-xs-offset-3
                       =f.label :schedule
                   .row
                     .col-xs-6.col-xs-offset-3
@@ -57,8 +60,6 @@
                   .row
                     .col-xs-6.col-xs-offset-3
                       = f.button :submit, class: 'btn btn-success'
-      %li
-        = link_to 'Add from Todo Groups', family_todo_groups_path(@family), class: 'btn btn-primary'
 
 %hr
 .row

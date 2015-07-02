@@ -24,7 +24,7 @@ RSpec.describe TodoTemplate, :type => :model do
   it 'should not save an invalid rule' do
     todo_t = FactoryGirl.create(:todo_template)
     rule = todo_t.rule
-    todo_t.rule = 'wdfwdfwfd'
+    todo_t.rule = 'wfwfwdfaa'
     todo_t.reload
     expect(todo_t.schedule).to eq(rule.to_yaml)
     expect(todo_t.errors.any?).to be_truthy

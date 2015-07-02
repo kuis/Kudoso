@@ -22,8 +22,6 @@ Rails.application.routes.draw do
 
   resources :device_types
 
-  resources :todo_groups
-
   resources :todo_templates
 
 
@@ -34,11 +32,6 @@ Rails.application.routes.draw do
     resources :devices
       member do
       devise_for :members, class: 'Member', :controllers => { :sessions => "members/sessions" }
-    end
-    resources :todo_groups do
-      member do
-        post :assign
-      end
     end
     resources :members do
       resources :activities do
@@ -56,7 +49,6 @@ Rails.application.routes.draw do
 
 
 
-    resources :todo_groups
     resources :todos do
       resources :todo_schedules do
         resources :members do
@@ -77,7 +69,6 @@ Rails.application.routes.draw do
     resources :todo_templates
     resources :devices
     resources :device_types
-    resources :todo_groups
     resources :todo_templates
     resources :activity_templates
     resources :tickets
@@ -91,15 +82,9 @@ Rails.application.routes.draw do
           post :reset_password
         end
       end
-      resources :todo_groups
-      resources :todo_templates
+          resources :todo_templates
       resources :families do
         resources :members do
-          resources :todo_groups do
-            member do
-              post :assign
-            end
-          end
           resources :todo_templates do
             member do
               post :assign

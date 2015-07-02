@@ -33,24 +33,6 @@ RSpec.describe Family, :type => :model do
       expect(unassigned_child.todo_schedules.count).to eq(before_todo_scehdules_unassigned)
     end
 
-    it 'should assign a group of todo_templates to specific family members' do
-      todo_group =  FactoryGirl.create(:todo_group)
-      #   def assign_group(todo_group, assign_members = Array.new)
-
-      num_templates_in_group = todo_group.todo_templates.count
-      before_todos = @family.todos.count
-      kids_array = @kids.sample(2)
-      unassigned_child = (@kids - kids_array).sample
-      assigned_child = Member.find(kids_array[0].id)
-      before_todo_scehdules_assigned = assigned_child.todo_schedules.count
-      before_todo_scehdules_unassigned = unassigned_child.todo_schedules.count
-      @family.assign_group(todo_group,kids_array )
-      expect(@family.todos.count).to eq(before_todos + num_templates_in_group)
-      expect(assigned_child.todo_schedules.count).to eq(before_todo_scehdules_assigned + num_templates_in_group)
-      expect(unassigned_child.todo_schedules.count).to eq(before_todo_scehdules_unassigned)
-
-    end
-
     it 'should memorialize todos from previous days' do
 
       kid = @kids[0]

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150701185109) do
+ActiveRecord::Schema.define(version: 20150702150544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -415,10 +415,14 @@ ActiveRecord::Schema.define(version: 20150701185109) do
     t.string   "description"
     t.boolean  "required"
     t.string   "schedule"
-    t.boolean  "active"
+    t.boolean  "disabled"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "kudos",       default: 0
+    t.integer  "rec_min_age"
+    t.integer  "rec_max_age"
+    t.integer  "def_min_age"
+    t.integer  "def_max_age"
   end
 
   create_table "todos", force: :cascade do |t|

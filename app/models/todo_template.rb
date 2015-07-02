@@ -1,12 +1,19 @@
 class TodoTemplate < ActiveRecord::Base
+  include NotDeleteable
+
   has_many :todos, dependent: :nullify
-  has_and_belongs_to_many :todo_groups, join_table: :todo_groups_todo_templates
-
-  scope :active, -> { where(active: true).order(:name) }
-
 
   validates_presence_of :name
   validates_uniqueness_of :name
+
+  validates :rec_min_age, :rec_max_age, :def_min_age, :def_max_age, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 99, only_integer: true }, allow_blank: true
+
+  validates_presence_of :rec_max_age, if: :rec_ages_present?
+  validates_presence_of :def_max_age, if: :def_ages_present?
+
+  validates :rec_max_age, numericality: { greater_than: :rec_min_age }, if: :rec_ages_present?
+  validates :def_max_age, numericality: { greater_than: :def_min_age }, if: :def_ages_present?
+
 
   def rule
     IceCube::Rule.from_yaml(schedule)
@@ -25,5 +32,14 @@ class TodoTemplate < ActiveRecord::Base
 
   def label
     "#{name}: #{rule.to_s}"
+  end
+
+  private
+
+  def rec_ages_present?
+    rec_min_age.present?
+  end
+  def def_ages_present?
+    def_min_age.present?
   end
 end

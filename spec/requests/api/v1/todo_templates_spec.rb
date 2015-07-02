@@ -1,4 +1,4 @@
-# spec/requests/api/v1/todo_groups_spec.rb
+# spec/requests/api/v1/todo_templates_spec.rb
 
 require 'rails_helper'
 
@@ -17,7 +17,7 @@ describe 'Todo Templates API', type: :request do
     get '/api/v1/todo_templates', nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)
-    expect(json["todo_templates"].length).to eq(TodoTemplate.active.count)
+    expect(json["todo_templates"].length).to eq(TodoTemplate.all.count)
   end
 
   it 'returns a todo template' do

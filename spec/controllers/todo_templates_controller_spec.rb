@@ -29,7 +29,10 @@ RSpec.describe TodoTemplatesController, :type => :controller do
         description: 'template description',
         required: true,
         schedule: "#{IceCube::Rule.daily.to_yaml}",
-        active: true
+        rec_min_age: 2,
+        rec_max_age: 8,
+        def_min_age: 4,
+        def_max_age: 6
     }
   }
 
@@ -54,7 +57,7 @@ RSpec.describe TodoTemplatesController, :type => :controller do
       it "assigns all todo_templates as @todo_templates" do
         todo_template = FactoryGirl.create(:todo_template)
         get :index, {}, valid_session
-        expect(assigns(:todo_templates)).to match_array([todo_template])
+        expect(assigns(:todo_templates)).to match_array(TodoTemplate.all)
       end
     end
 
@@ -257,7 +260,7 @@ RSpec.describe TodoTemplatesController, :type => :controller do
       it "assigns all todo_templates as @todo_templates" do
         todo_template = FactoryGirl.create(:todo_template)
         get :index, {}, valid_session
-        expect(assigns(:todo_templates)).to match_array([todo_template])
+        expect(assigns(:todo_templates)).to match_array(TodoTemplate.all)
       end
     end
 

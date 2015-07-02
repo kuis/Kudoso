@@ -53,8 +53,7 @@ class Ability
             false
           end
         end
-        can :read, TodoTemplate, :active => true
-        can [:read, :assign], TodoGroup, :active => true
+        can :read, TodoTemplate, :disabled => false
 
         # CRM Functions
         can [:read, :create], Ticket, :user_id => user.try(:id)
