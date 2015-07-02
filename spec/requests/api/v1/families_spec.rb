@@ -44,4 +44,16 @@ describe 'Families API', type: :request do
     expect(json["family"]["default_filter"]).to eq('moderate')
     expect(json["family"]["default_screen_time"].to_i).to eq(120*60)
   end
+
+  it 'allows updates to family device categories' do
+    device_categories = FactoryGirl.create_list(:device_category, 4)
+    postHash = Hash.new
+    device_categories.each do |cat|
+      postHash[cat.id] = rand(1..5)
+    end
+    patch "/api/v1/families/#{@user.member.family.id}", { device_categories: postHash}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(200)
+    json = JSON.parse(response.body)
+    expect(@user.family.family_device_categories.count).to eq(device_categories.count)
+  end
 end

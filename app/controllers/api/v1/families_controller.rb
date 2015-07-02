@@ -41,6 +41,23 @@ module Api
             @family.default_screen_time = params["default_time"].to_i if params["default_time"]
             @family.default_filter = params["default_filter"].downcase if params["default_filter"]
             @family.name = params["name"] if params["name"]
+            if params[ "device_categories" ].present? &&  params[ "device_categories" ].is_a?(Hash)
+              params[ "device_categories" ].each do |key, value|
+                unless key.ends_with?('_other')
+                  id = "#{key}"
+                  id.slice!('device_category_')
+                  device_category = FamilyDeviceCategory.find_or_create_by(device_category_id: id.to_i, family_id: @family.id)
+                  if value.to_i != 4
+                    device_category.amount = value.to_i
+                  else
+                    device_category.amount = params[ "device_categories" ][ "device_category_#{id}_other"].to_i
+                  end
+                  device_category.save
+                  logger.info "Saved device category: #{device_category.inspect}"
+                end
+              end
+            end
+
             if @family.save
               render :json => { :family => @family, :messages => messages }, :status => 200
             else
