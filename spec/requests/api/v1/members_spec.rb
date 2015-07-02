@@ -48,4 +48,15 @@ describe 'Members API', type: :request do
     expect(@user.family.members.count).to eq(prev+1)
   end
 
+  it 'updates a family member information' do
+    member = @members.sample
+    original_birth_date = member.birth_date
+    patch "/api/v1/families/#{@user.family.id}/members/#{member.id}",
+         { member: { birth_date: "7/4/2002"} }.to_json,
+         { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
+    expect(response.status).to eq(200)
+    member.reload
+    expect(member.birth_date).not_to eq(original_birth_date)
+  end
+
 end

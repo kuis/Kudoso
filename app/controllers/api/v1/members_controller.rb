@@ -74,6 +74,37 @@ module Api
 
       end
 
+      def update
+        messages = init_messages
+        begin
+          @family = Family.find(params[:family_id])
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family )
+            @member = @family.members.find(params[:id])
+            local_params = member_create_params.merge(family_id: @family.id)
+            local_params[:birth_date] = Chronic.parse(local_params[:birth_date]).to_date.to_s(:db) if local_params[:birth_date]
+
+            if @member.update_attributes(local_params)
+              render :json => { :member => @member, :messages => messages }, :status => 200
+            else
+              messages[:error] << @member.errors.full_messages
+              render :json => { :member => @member, :messages => messages }, :status => 400
+            end
+
+          else
+            messages[:error] << 'You are not authorized to do this.'
+            render :json => { :messages => messages }, :status => 403
+          end
+
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Family not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
+        end
+
+      end
+
       private
 
 

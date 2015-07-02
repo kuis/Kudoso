@@ -216,7 +216,6 @@ class Member < ActiveRecord::Base
     unless self.password.nil? || self.password_confirmation.nil?
       if self.password == self.password_confirmation
         self.password = self.password_confirmation = Digest::MD5.hexdigest(self.password + self.family.secure_key).to_s
-        logger.info "\n\nProtecting member password: #{self.password}\n\nKey: #{self.family.secure_key}"
       end
     end
   end
