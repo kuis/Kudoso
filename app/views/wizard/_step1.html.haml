@@ -14,6 +14,11 @@
 
 :javascript
   function save_info(args) {
+    var computedTime = 0;
+    if ( $('#default_time').val() == '1/2 Hour') { computedTime = 30*60; }
+    if ( $('#default_time').val() == '1 Hour') { computedTime = 60*60; }
+    if ( $('#default_time').val() == '1.5 Hours') { computedTime = 90*60; }
+    if ( $('#default_time').val() == '2 Hours') { computedTime = 120*60; }
     $.ajax({
       url: '/wizard',
       dataType: 'json',
@@ -21,7 +26,7 @@
       data: {
         step: 1,
         default_filter: $('#default_filter').val(),
-        default_time: $('#default_time').val()
+        default_time: computedTime
       },
       success: function() {
         args && args.success && args.success();
