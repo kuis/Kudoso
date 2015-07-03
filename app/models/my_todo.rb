@@ -13,6 +13,12 @@ class MyTodo < ActiveRecord::Base
   def required?
     todo.required
   end
+
+  def verify!(verified_by)
+    return false unless verified_by.try(:parent) &&  verified_by.try(:family) == self.family
+    self.update_attributes( { verified_by: verified_by.id, verified_at: Time.now } )
+  end
+
   private
 
   def my_todo_schedule

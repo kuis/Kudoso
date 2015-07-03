@@ -106,7 +106,31 @@ module Api
       end
 
       def verify
-        # TODO
+        messages = init_messages
+        begin
+          @family = Family.find(params[:family_id])
+          @member = @family.members.find(params[:member_id])
+          @my_todo = @member.my_todos.find(params[:id])
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
+            if @my_todo.verify!(@current_member)
+              render :json => { :my_todo => @my_todo, :messages => messages }, :status => 200
+            else
+              messages[:error] << @my_todo.errors.full_messages
+              render :json => { :my_todo => @my_todo, :messages => messages }, :status => 400
+            end
+
+          else
+            messages[:error] << 'You are not authorized to do this.'
+            render :json => { :messages => messages }, :status => 403
+          end
+
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Family not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
+        end
       end
 
 
