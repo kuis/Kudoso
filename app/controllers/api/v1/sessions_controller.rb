@@ -3,6 +3,49 @@ module Api
     class SessionsController < ApiController
       skip_before_filter :restrict_api_access
 
+      resource_description do
+        short 'API Sessions'
+        formats ['json']
+        api_version "v1"
+        error 404, "Missing"
+        error 500, "Server processing error"
+        meta :author => {:name => 'Mike', :surname => 'Kazmier'}
+        description <<-EOS
+          == API Seesions
+          All access to the API must be contained within a session.  A succesful authentication
+          will yeild a session token which is used for all subsequent calls.  API sessions remain
+          valid for 1 hour after the last asscess.
+
+          === Authenticating to Kudoso
+          Every user must supply the Device Token.  This is a pre-shared key that either our apps use or
+          Connected Partners are given to allow API access.
+
+          You can authenticate as a USER or a (family) MEMBER
+
+          User's require the following params:
+            email: String
+            password: String
+
+          Member's require the following params:
+            family_id: Integer
+            username: String
+            password: String
+        EOS
+      end
+
+      def_param_group :session do
+        param :device_token, String, :required => true
+        param :email, String
+        param :username, String
+        param :family_id, String
+        param :password, String, :required => true
+      end
+
+      api :POST, "/api/v1/sessions", "Create a session"
+      param_group :session
+      error code: 401, desc: 'Unauthorized'
+      example " { user: {...}, token: 'ABCD1234', messages: { error: [...], warning: [...], info: [...] } "
+      example " { member: {...}, token: 'ABCD1234', messages: { error: [...], warning: [...], info: [...] } "
       def create
         messages = init_messages
         # api_session = ApiSession.create(url: request.url, params: params, remote_ip: request.remote_ip.inspect, query_string: request.query_string.inspect, method: request.method.inspect, location: params[:location])

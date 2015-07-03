@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/Apipie/apipie-rails.git
+  revision: 928bd858fd14ec67eeb9483ba0d43b3be8339608
+  ref: 928bd858fd14ec67eeb9483ba0d43b3be8339608
+  specs:
+    apipie-rails (0.3.4)
+      json
+
+GIT
   remote: git://github.com/thoughtbot/capybara-webkit.git
   revision: 61403a2bfdec2c188ba8e38f3946c6ec0809b3f8
   branch: master
@@ -545,6 +553,7 @@ PLATFORMS
 
 DEPENDENCIES
   agilecrm-wrapper
+  apipie-rails!
   awesome_print
   best_in_place
   better_errors
