@@ -85,9 +85,7 @@ Rails.application.routes.draw do
           resources :todo_templates
       resources :families do
         resources :members do
-          member do
-            get :todos
-          end
+          resources :my_todos
           resources :todo_templates do
             member do
               post :assign

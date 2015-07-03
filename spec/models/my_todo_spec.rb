@@ -27,5 +27,13 @@ RSpec.describe MyTodo, :type => :model do
     expect(@member.kudos).to eq(before_kudos)
   end
 
+  it 'should not allow saving someone elses todo schedule' do
+    @member = FactoryGirl.create(:member)
+    ts = FactoryGirl.create(:todo_schedule)
+    expect(ts.member).not_to eq(@member)
+    my_todo = @member.my_todos.create(todo_schedule_id: ts.id, due_date: Date.today)
+    expect(my_todo.valid?).to be_falsey
+  end
+
 
 end
