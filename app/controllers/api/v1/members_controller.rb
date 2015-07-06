@@ -113,7 +113,7 @@ module Api
             @member = @family.members.find(params[:id])
             local_params = member_create_params.merge(family_id: @family.id)
             local_params[:birth_date] = Chronic.parse(local_params[:birth_date]).to_date.to_s(:db) if local_params[:birth_date]
-
+            local_params[:avatar] = parse_image_data(local_params[:avatar]) if local_params[:avatar]
             if @member.update_attributes(local_params)
               render :json => { :member => @member, :messages => messages }, :status => 200
             else
@@ -133,6 +133,8 @@ module Api
           messages[:error] << 'A server error occurred.'
           render :json => { :messages => messages }, :status => 500
         end
+      ensure
+        clean_tempfile
 
       end
 
@@ -171,7 +173,30 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def member_create_params
-        params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :email)
+        params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :email, :avatar)
+      end
+
+      # http://paoloibarra.com/2014/09/27/Image-Upload-Using-Rails-API-And-Paperclip/
+      def parse_image_data(image_data)
+        @tempfile = Tempfile.new("member_image_#{ Time.now.to_i}")
+        @tempfile.binmode
+        @tempfile.write Base64.decode64(image_data[:content])
+        @tempfile.rewind
+
+        uploaded_file = ActionDispatch::Http::UploadedFile.new(
+            tempfile: @tempfile,
+            filename: image_data[:filename]
+        )
+
+        uploaded_file.content_type = image_data[:content_type]
+        uploaded_file
+      end
+
+      def clean_tempfile
+        if @tempfile
+          @tempfile.close
+          @tempfile.unlink
+        end
       end
 
     end

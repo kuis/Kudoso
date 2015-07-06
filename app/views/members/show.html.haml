@@ -2,6 +2,8 @@
 %h2
   = best_in_place [@family, @member], :first_name
   = best_in_place [@family, @member], :last_name
+- if @member.avatar.exists?
+  = image_tag @member.avatar.url(:thumb)
 .row
   .medium-3.columns
     Kudos:
