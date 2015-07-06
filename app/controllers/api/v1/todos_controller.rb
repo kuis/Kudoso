@@ -35,7 +35,7 @@ module Api
         param :schedule, String, desc: 'A YAML representation of an IceCube Recurring Rule.  See https://github.com/seejohnrun/ice_cube and https://github.com/GetJobber/recurring_select', required: true
       end
 
-      api :GET, "/v1/families/:family_id/todo_templates", "Retrieve all todos for the family"
+      api :GET, "/v1/families/:family_id/todo", "Retrieve all todos for the family"
       def index
         messages = init_messages
         begin
@@ -56,7 +56,7 @@ module Api
         end
       end
 
-      api :GET, "/v1/families/:family_id/todo_templates/:todo_template_id", "Retrieve a specific todo for the family"
+      api :GET, "/v1/families/:family_id/todo/:todo_id", "Retrieve a specific todo for the family"
       def show
         messages = init_messages
         begin
@@ -80,7 +80,7 @@ module Api
 
       end
 
-      api :POST, "/v1/families/:family_id/todo_templates", "Create a new todo (manual, not from a todo_template)"
+      api :POST, "/v1/families/:family_id/todos", "Create a new todo (manual, not from a todo_template)"
       param_group :todos
       def create
         messages = init_messages
@@ -110,7 +110,7 @@ module Api
 
       end
 
-      api :PATCH, "/v1/families/:family_id/todo_templates/:todo_template_id", "Update a todo"
+      api :PATCH, "/v1/families/:family_id/todos/:todo_id", "Update a todo"
       param_group :todos
       def update
         messages = init_messages
@@ -140,7 +140,7 @@ module Api
 
       end
 
-      api :DELETE, "/v1/families/:family_id/todo_templates/:todo_template_id", "Delete a todo"
+      api :DELETE, "/v1/families/:family_id/todos/:todo_id", "Delete a todo"
       def destroy
         messages = init_messages
         begin
