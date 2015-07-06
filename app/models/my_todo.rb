@@ -19,6 +19,9 @@ class MyTodo < ActiveRecord::Base
     self.update_attributes( { verified_by: verified_by.id, verified_at: Time.now } )
   end
 
+  def as_json(options = {})
+    super({ methods: :required? }.merge(options))
+  end
   private
 
   def my_todo_schedule

@@ -4,12 +4,12 @@ module Api
       skip_before_filter :restrict_api_access
 
       resource_description do
-        short 'API Sessions'
+        short 'API Sessions (sign in/out)'
         formats ['json']
         api_version "v1"
+        error code: 401, desc: 'Unauthorized'
         error 404, "Missing"
-        error 500, "Server processing error"
-        meta :author => {:name => 'Mike', :surname => 'Kazmier'}
+        error 500, "Server processing error (check messages object)"
         description <<-EOS
           == API Seesions
           All access to the API must be contained within a session.  A succesful authentication
@@ -41,9 +41,8 @@ module Api
         param :password, String, :required => true
       end
 
-      api :POST, "/api/v1/sessions", "Create a session"
+      api :POST, "/api/v1/sessions", "Create a session (sign in)"
       param_group :session
-      error code: 401, desc: 'Unauthorized'
       example " { user: {...}, token: 'ABCD1234', messages: { error: [...], warning: [...], info: [...] } "
       example " { member: {...}, token: 'ABCD1234', messages: { error: [...], warning: [...], info: [...] } "
       def create
@@ -135,6 +134,9 @@ module Api
         render :json => { :messages => msg }, :status => 401
       end
 
+
+      api :DELETE, "/api/v1/sessions/:id", "Delete a session (sign out)"
+      example " { messages: { error: [...], warning: [...], info: [...] } "
       def destroy
         messages = init_messages
         api_key = params[:id]

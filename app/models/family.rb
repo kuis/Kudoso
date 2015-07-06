@@ -16,6 +16,18 @@ class Family < ActiveRecord::Base
     members.where('parent IS NOT true')
   end
 
+  def as_json(options = {})
+    super({except: [:mobicip_id, :mobicip_password, :mobicip_token], methods: :device_categories }.merge(options))
+  end
+
+  def device_categories
+    summary = Hash.new
+    family_device_categories.each do |cat|
+      summary["device_category_#{cat.device_category.id}"] = { amount: cat.amount, "device_category_name" => cat.device_category.name }
+    end
+    summary
+  end
+
   def self.memorialize_todos(for_date = Date.yesterday)
     for_date = for_date.end_of_day
     @families = self.includes(:members => {:todo_schedules => [:my_todos, :schedule_rrules]})
