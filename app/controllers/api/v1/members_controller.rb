@@ -16,9 +16,9 @@ module Api
         EOS
       end
       def_param_group :member do
-        param :first_name, String, required: true
-        param :username, String, desc: "The username is used for logging in the member, this should in most cases just be the member's first name", required: true
-        param :birth_date, String, desc: "The member's birth date in MM/DD/YYYY format", required: true
+        param :first_name, String
+        param :username, String, desc: "The username is used for logging in the member, this should in most cases just be the member's first name"
+        param :birth_date, String, desc: "The member's birth date in MM/DD/YYYY format"
         param :email, String, desc: "Optionally define an email address for this member (useful for notifications and updates)"
         param :parent, [true, false], desc: "Set to true if this member is a parent in the family (default: false)"
       end
@@ -113,7 +113,10 @@ module Api
             @member = @family.members.find(params[:id])
             local_params = member_create_params.merge(family_id: @family.id)
             local_params[:birth_date] = Chronic.parse(local_params[:birth_date]).to_date.to_s(:db) if local_params[:birth_date]
-            local_params[:avatar] = parse_image_data(local_params[:avatar]) if local_params[:avatar]
+            if local_params[:avatar]
+              local_params[:avatar] = parse_image_data(local_params[:avatar])
+            end
+
             if @member.update_attributes(local_params)
               render :json => { :member => @member, :messages => messages }, :status => 200
             else
@@ -178,6 +181,7 @@ module Api
 
       # http://paoloibarra.com/2014/09/27/Image-Upload-Using-Rails-API-And-Paperclip/
       def parse_image_data(image_data)
+        logger.info image_data.inspect
         @tempfile = Tempfile.new("member_image_#{ Time.now.to_i}")
         @tempfile.binmode
         @tempfile.write Base64.decode64(image_data[:content])
