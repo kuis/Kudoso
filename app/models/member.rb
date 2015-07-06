@@ -35,6 +35,12 @@ class Member < ActiveRecord::Base
     end
   end
 
+
+  def as_json(options = {})
+    super({methods: [ :age, :avatar_urls, :screen_time, :used_screen_time], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at] }.merge(options))
+  end
+
+
   # override to scope username into family_id
   def self.find_for_authentication(warden_conditions)
     where(:username => warden_conditions[:username], :family_id => warden_conditions[:family_id]).first
@@ -48,6 +54,15 @@ class Member < ActiveRecord::Base
       return -1
     end
 
+  end
+
+  def avatar_urls
+    urls = Hash.new
+    if self.avatar.exists?
+      urls[:medium] = self.avatar.url(:medium)
+      urls[:thumb] = self.avatar.url(:thumb)
+    end
+    return urls
   end
 
   def full_name
@@ -88,13 +103,13 @@ class Member < ActiveRecord::Base
   end
 
 
-  def get_screen_time_overrides(date = Date.today)
+  def screen_time_overrides(date = Date.today)
     st_overrides.where(date: date.beginning_of_day..date.end_of_day).sum(:time)
   end
 
 
 
-  def get_used_screen_time(date = Date.today, device_id = nil, activity_id=nil)
+  def used_screen_time(date = Date.today, device_id = nil, activity_id=nil)
     if device_id.present?
       activities.where('device_id = ? AND end_time BETWEEN ? AND ?', device_id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)').ceil
     elsif activity_id.present?
@@ -104,7 +119,7 @@ class Member < ActiveRecord::Base
     end
   end
 
-  def get_screen_time(date = Date.today, device_id = nil, activity_id = nil)
+  def screen_time(date = Date.today, device_id = nil, activity_id = nil)
     rec = screen_times.where(dow: date.wday).last
 
     if device_id.nil? && activity_id.nil?
@@ -120,14 +135,14 @@ class Member < ActiveRecord::Base
       end
 
     end
-    result += get_screen_time_overrides
+    result += screen_time_overrides
 
     result = 60*60*24 if result > 60*60*24
 
     result
   end
 
-  def get_max_screen_time(date = Date.today, device_id = nil, activity_id = nil)
+  def max_screen_time(date = Date.today, device_id = nil, activity_id = nil)
     rec = screen_times.where(dow: date.wday).last
 
     if device_id.nil? && activity_id.nil?
@@ -147,8 +162,8 @@ class Member < ActiveRecord::Base
     result
   end
 
-  def get_available_screen_time(date = Date.today, device_id = nil, activity_id = nil)
-    (get_screen_time(date, device_id, activity_id) - get_used_screen_time(date, device_id, activity_id)).to_i
+  def available_screen_time(date = Date.today, device_id = nil, activity_id = nil)
+    (screen_time(date, device_id, activity_id) - used_screen_time(date, device_id, activity_id)).to_i
   end
 
 
@@ -184,9 +199,9 @@ class Member < ActiveRecord::Base
 
     # Check if activity is restricted
     if activity_template.restricted?
-      ret = !!get_available_screen_time if todos_complete?
+      ret = !!available_screen_time if todos_complete?
     else
-      ret = !!get_available_screen_time
+      ret = !!available_screen_time
     end
 
     if ret
