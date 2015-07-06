@@ -9,6 +9,7 @@ class ApiController < ApplicationController
     api_key = nil
     authenticate_or_request_with_http_token do |token, options|
       begin
+        logger.debug "API session key: #{token}"
         api_key = ApiKey.includes(:member).find_by_access_token(token)
         if api_key and api_key.expires_at <= DateTime.now
           api_key = nil
@@ -25,6 +26,7 @@ class ApiController < ApplicationController
       @current_user = api_key.try(:user)
       @current_member ||= @current_user.try(:member)
     else
+      logger.debug "API Authentication failed: #{api_key.inspect}"
       api_key.try(:destroy)
       head :unauthorized
     end

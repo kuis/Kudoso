@@ -13,6 +13,8 @@ describe 'Sessions API', type: :request do
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)
     expect(json["user"]).to_not be_nil
+    expect(json["member"]).to_not be_nil
+    expect(json["family"]).to_not be_nil
     expect(json["token"]).to_not be_nil
     expect(json["messages"]).to_not be_nil
     expect(json["messages"]["error"].length).to eq(0)
@@ -45,12 +47,12 @@ describe 'Sessions API', type: :request do
   end
 
   it 'successfully creates a new session as a member' do
-    @member = Member.create(username: 'thetest', password: 'password', password_confirmation: 'password', birth_date: 10.years.ago, family_id: @user.family_id)
+    @member = Member.create(username: 'thetest', password: 'password', password_confirmation: 'password', birth_date: 10.years.ago, family_id: @user.family.id)
     #@member = FactoryGirl.create(:member, family_id: @user.family.id)   # TODO: Figure out why this doesn't work like above
     expect(@member.valid?).to be_truthy
     expect(@member.persisted?).to be_truthy
     pwd = Digest::MD5.hexdigest( 'password' + @member.family.secure_key ).to_s
-    post '/api/v1/sessions', { device_token: @device.device_token,  username: @member.username, password: pwd, family_id: @member.family.id}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+    post '/api/v1/sessions', { device_token: @device.device_token,  username: @member.username, password: pwd, family_id: @member.family.id.to_s}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
     json = JSON.parse(response.body)
     expect(response.status).to eq(200)
 
