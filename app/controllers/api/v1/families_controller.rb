@@ -28,7 +28,7 @@ module Api
         end
       end
 
-      api :GET, "/api/v1/families/:family_id", "Retrieve family information"
+      api :GET, "/v1/families/:family_id", "Retrieve family information"
       example '  {"id"=>1, "name"=>"Test Family", "primary_contact_id"=>3, "created_at"=>Thu, 02 Jul 2015 10:15:52 MDT -06:00, "updated_at"=>Thu, 02 Jul 2015 10:22:23 MDT -06:00, "memorialized_date"=>Wed, 01 Jul 2015, "timezone"=>nil, "default_screen_time"=>2, "default_filter"=>"strict", "secure_key"=>"oz3zBBWWqpJAshu/S3ZgmA==", "device_categories"=>{"device_category_1"=>{:amount=>2, "device_category_name"=>"Mobile Devices"}, "device_category_2"=>{:amount=>1, "device_category_name"=>"Computers"}, "device_category_3"=>{:amount=>2, "device_category_name"=>"Game Consoles"}, "device_category_4"=>{:amount=>2, "device_category_name"=>"Video Devices"}}}  '
 
       def show
@@ -52,7 +52,7 @@ module Api
 
       end
 
-      api :PATCH, "/api/v1/families/:family_id", "Update family information"
+      api :PATCH, "/v1/families/:family_id", "Update family information"
       param :name, String, desc: 'The family name'
       param :default_time, Integer, desc: 'Default screen time per day (in minutes)'
       param :default_filter, [ 'strict', 'moderate', 'mature', 'monitor'], desc: 'Default content filtering for new family members'

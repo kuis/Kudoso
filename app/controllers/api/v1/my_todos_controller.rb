@@ -18,11 +18,9 @@ module Api
 
         EOS
       end
-      def_param_group :my_todo do
 
-      end
 
-      api :GET, "/api/v1/families/:family_id/members/:member_id/my_todos", "Retrieve all tasks for a member (default: today's tasks)"
+      api :GET, "/v1/families/:family_id/members/:member_id/my_todos", "Retrieve all tasks for a member (default: today's tasks)"
       param :start_date, Date, desc: "Optionnaly specify a start date"
       param :end_date, Date, desc: "Optionnaly specify an end date"
       example ' [{"id"=>nil, "todo_schedule_id"=>1, "member_id"=>2, "due_date"=>Sun, 05 Jul 2015 00:00:00 MDT -06:00, "due_time"=>nil, "complete"=>nil, "verify"=>nil, "verified_at"=>nil, "verified_by"=>nil, "created_at"=>nil, "updated_at"=>nil}, {"id"=>nil, "todo_schedule_id"=>3, "member_id"=>2, "due_date"=>Sun, 05 Jul 2015 00:00:00 MDT -06:00, "due_time"=>nil, "complete"=>nil, "verify"=>nil, "verified_at"=>nil, "verified_by"=>nil, "created_at"=>nil, "updated_at"=>nil}, {"id"=>nil, "todo_schedule_id"=>5, "member_id"=>2, "due_date"=>Sun, 05 Jul 2015 00:00:00 MDT -06:00, "due_time"=>nil, "complete"=>nil, "verify"=>nil, "verified_at"=>nil, "verified_by"=>nil, "created_at"=>nil, "updated_at"=>nil}]  '
@@ -47,7 +45,7 @@ module Api
         end
       end
 
-      api :GET, "/api/v1/families/:family_id/members/:member_id/my_todos/:my_todo_id", "Retrieve a task for a member"
+      api :GET, "/v1/families/:family_id/members/:member_id/my_todos/:my_todo_id", "Retrieve a task for a member"
       example '  {"id"=>403, "todo_schedule_id"=>1, "member_id"=>2, "due_date"=>Sat, 04 Jul 2015 23:59:59 MDT -06:00, "due_time"=>nil, "complete"=>nil, "verify"=>nil, "verified_at"=>nil, "verified_by"=>nil, "created_at"=>Sun, 05 Jul 2015 22:03:40 MDT -06:00, "updated_at"=>Sun, 05 Jul 2015 22:03:40 MDT -06:00} '
       def show
         messages = init_messages
@@ -72,7 +70,7 @@ module Api
 
       end
 
-      api :POST, "/api/v1/families/:family_id/members/:member_id/my_todos", "Mark a task as complete"
+      api :POST, "/v1/families/:family_id/members/:member_id/my_todos", "Mark a task as complete"
       param :due_date, Date, desc: "Date of the task", required: true
       param :todo_schedule_id, Integer, desc: "The reference to the appropriate todo_schedule", required: true
       param :complete, [true, false], required: true
@@ -106,7 +104,7 @@ module Api
 
       end
 
-      api :PATCH, "/api/v1/families/:family_id/members/:member_id/my_todos/:my_todo_id", "Mark a task as complete"
+      api :PATCH, "/v1/families/:family_id/members/:member_id/my_todos/:my_todo_id", "Mark a task as complete"
       param :complete, [true, false], required: true
       def update
         messages = init_messages
@@ -137,7 +135,7 @@ module Api
 
       end
 
-      api :POST, "/api/v1/families/:family_id/members/:member_id/my_todos/:my_todo_id/verify", "Mark a task as verified (only as a parent)"
+      api :POST, "/v1/families/:family_id/members/:member_id/my_todos/:my_todo_id/verify", "Mark a task as verified (only as a parent)"
       def verify
         messages = init_messages
         begin

@@ -41,7 +41,7 @@ module Api
         param :password, String, :required => true
       end
 
-      api :POST, "/api/v1/sessions", "Create a session (sign in)"
+      api :POST, "/v1/sessions", "Create a session (sign in)"
       param_group :session
       example " { user: {...}, token: 'ABCD1234', messages: { error: [...], warning: [...], info: [...] } "
       example " { member: {...}, token: 'ABCD1234', messages: { error: [...], warning: [...], info: [...] } "
@@ -135,7 +135,7 @@ module Api
       end
 
 
-      api :DELETE, "/api/v1/sessions/:id", "Delete a session (sign out)"
+      api :DELETE, "/v1/sessions/:id", "Delete a session (sign out)"
       example " { messages: { error: [...], warning: [...], info: [...] } "
       def destroy
         messages = init_messages

@@ -1,6 +1,36 @@
 module Api
   module V1
     class TodoTemplatesController < ApiController
+
+      resource_description do
+        short 'API Todo Templates (also know as Task Templates)'
+        formats ['json']
+        api_version "v1"
+        error code: 401, desc: 'Unauthorized'
+        error 404, "Missing"
+        error 500, "Server processing error (check messages object)"
+        description <<-EOS
+          == Todo_Template (Task Templates)
+          Tasks are parent directed activities, the task templates are a collection of pre-defined templates that
+          Kudoso provides to make it easy for parents to assign them.
+
+          Todo_templates should not be confused with Todos or my_todos.  Here is how the association works:
+          1. When a todo_template is "assigned", a Todo is created at the FAMILY level
+          2. A todo_schedule is created (initially from the defaults in the todo_template) which links the todo to
+             a family member
+          3. A my_todo is an instance of a todo_schedule for a member on a particular day.  In effect, the my_todo
+             records the details of the actual task performed
+
+          === Key attributes
+          * __rec_min_age__ This is the recommended minimum age for the task
+          * __rec_max_age__ This is the recommended maximum age for the task
+          * __def_min_age__ If the member's age is >= to def_min_age it should be selected by default (in the wizard)
+          * __def_max_age__ If the member's age is <= to def_max_age it should be selected by default (in the wizard)
+
+        EOS
+      end
+
+      api :GET, "/v1/todo_templates", "Retrieve all task templates"
       def index
         messages = init_messages
 
@@ -9,6 +39,7 @@ module Api
 
       end
 
+      api :GET, "/v1/todo_templates/:todo_template_id", "Retrieve a single task template"
       def show
         messages = init_messages
         begin
@@ -26,6 +57,7 @@ module Api
 
       end
 
+      api :POST, "/v1/families/:family_id/members/:member_id/todo_templates/:todo_template_id/assign", "Assign a todo_template to a member (must be a parent)"
       def assign
         messages = init_messages
         begin
@@ -48,6 +80,7 @@ module Api
         end
       end
 
+      api :DELETE, "/v1/families/:family_id/members/:member_id/todo_templates/:todo_template_id/unassign", "Remove a todo_template from a member (must be a parent)"
       def unassign
         messages = init_messages
         begin
