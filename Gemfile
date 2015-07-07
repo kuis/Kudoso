@@ -81,6 +81,7 @@ group :development, :test do
   gem 'binding_of_caller'
   gem 'pry'
   gem 'pry-rails'
+  gem 'pry-stack_explorer'
 end
 
 group :development do

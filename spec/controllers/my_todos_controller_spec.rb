@@ -72,6 +72,7 @@ RSpec.describe MyTodosController, :type => :controller do
     describe "GET new" do
       it "assigns a new my_todo as @my_todo" do
         todo_schedule = FactoryGirl.create(:todo_schedule, member_id: @member.id)
+        expect(todo_schedule.valid?).to be_truthy
         get :new, {family_id: @family.id, member_id: @member.id, todo_schedule_id: todo_schedule.id}, valid_session
         expect(assigns(:my_todo)).to be_a_new(MyTodo)
       end
@@ -86,7 +87,7 @@ RSpec.describe MyTodosController, :type => :controller do
     end
 
     describe "DELETE destroy" do
-      it "does not destroys the requested my_todo" do
+      it "destroys the requested my_todo" do
         my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
         expect {
           delete :destroy, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param}, valid_session
@@ -189,5 +190,29 @@ RSpec.describe MyTodosController, :type => :controller do
 
 
   end
+  context 'as a child' do
+    before(:each) do
+      @member = FactoryGirl.create(:member, parent: false)
+      @family = @member.family
+      sign_in_member(@member)
+    end
+
+    describe "DELETE destroy" do
+      it "does not destroys the requested my_todo" do
+        my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+        expect {
+          delete :destroy, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param}, valid_session
+        }.to change(MyTodo, :count).by(0)
+      end
+
+      it "redirects to the current member dashboard" do
+        my_todo = FactoryGirl.create(:my_todo, member_id: @member.id)
+        delete :destroy, {family_id: @family.id, member_id: @member.id, :id => my_todo.to_param}, valid_session
+        expect(flash[:error]).to be_truthy
+        expect(response).to redirect_to(family_member_path(@family, @member))
+      end
+    end
+  end
+
 
 end

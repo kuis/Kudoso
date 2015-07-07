@@ -76,6 +76,6 @@ class MyTodosController < ApplicationController
   private
 
     def my_todo_params
-      params.require(:my_todo).permit(:due_date, :due_time, :complete, :verify, :verified_at, :verified_by)
+      params.require(:my_todo).permit(:due_date, :due_time, :complete, :verify, :verified_at, :verified_by, :todo_schedule_id)
     end
 end
