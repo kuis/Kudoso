@@ -102,7 +102,7 @@ class AdminServer < EventMachine::HttpServer::Server
     puts "Start Admin Server"
     # Try to bind
     begin
-      EM::start_server("192.168.98.1", 10000, self)
+      EM::start_server("0.0.0.0", 10000, self)
     rescue => e
       puts "UNABLE TO CONNECT ADMIN SERVER: #{e.inspect}\n\n#{e.backtrace}"
     end

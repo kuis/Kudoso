@@ -79,6 +79,8 @@ group :development, :test do
   gem 'parallel_tests'
   gem 'zeus-parallel_tests'
   gem 'binding_of_caller'
+  gem 'pry'
+  gem 'pry-rails'
 end
 
 group :development do
