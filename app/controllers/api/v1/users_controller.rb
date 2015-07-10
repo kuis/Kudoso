@@ -95,6 +95,9 @@ module Api
 
       private
 
+      def failure(msg)
+        render :json => { :messages => msg }, :status => 401
+      end
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def user_create_params
