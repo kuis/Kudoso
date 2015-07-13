@@ -74,6 +74,7 @@ module Api
                       if member.valid_password?( params[:password] )
                         render :json => { member:    member,
                                           token:     member.get_api_key.access_token,
+                                          family:    user.family,
                                           messages:  messages }, :status => 200
                         return
                       else
