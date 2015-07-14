@@ -29,9 +29,6 @@ class Ability
         can :manage, Device do |device|
           device.try(:family) == user.try(:member).try(:family)
         end
-        can :manage, FamilyActivity do |famact|
-          famact.try(:family) == user.try(:member).try(:family)
-        end
         can :manage, Member do |family_member|
           family_member.try(:family) == user.try(:member).try(:family)
         end
@@ -44,10 +41,10 @@ class Ability
         can :manage, ScreenTimeSchedule do |screen_time_schedule|
           screen_time_schedule.try(:member).try(:family) == user.try(:member).try(:family)
         end
-        can :manage, MyTodo, :family => user.try(:member).try(:family)
-        # can :manage, MyTodo do |todo|
-        #   todo.member && user.family && todo.member.family == user.try(:member).try(:family)
-        # end
+        #can :manage, MyTodo, :family => user.try(:member).try(:family)
+        can :manage, MyTodo do |todo|
+          todo.member && todo.member.family_id == user.member.family_id
+        end
         can :manage, Todo,  :family_id => user.try(:member).try(:family_id)
         can :manage, TodoSchedule do |ts|
           if ts.present? && ts.todo.present?
@@ -56,8 +53,7 @@ class Ability
             false
           end
         end
-        can :read, TodoTemplate, :active => true
-        can [:read, :assign], TodoGroup, :active => true
+        can :read, TodoTemplate, :disabled => false
 
         # CRM Functions
         can [:read, :create], Ticket, :user_id => user.try(:id)
@@ -80,7 +76,7 @@ class Ability
         can :read, ScreenTime, member_id: user.try(:member_id)
         can :read, TodoSchedule, :member_id => user.try(:member_id)
         can :read, Todo, :family_id => user.try(:member).try(:family_id)
-        can :manage, MyTodo, :member_id => user.try(:member_id)
+        can [:create, :read, :update], MyTodo, :member_id => user.try(:member_id)
       end
 
       # Both children and parents

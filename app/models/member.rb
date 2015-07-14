@@ -12,6 +12,12 @@ class Member < ActiveRecord::Base
   has_one :screen_time_schedule
   has_many :api_keys
 
+  has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
+  validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+
+  # ensure we have a secure password even if the user has no password
+  before_save :secure_password
+
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :omniauthable
@@ -29,6 +35,12 @@ class Member < ActiveRecord::Base
     end
   end
 
+
+  def as_json(options = {})
+    super({methods: [ :age, :avatar_urls, :screen_time, :used_screen_time], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at] }.merge(options))
+  end
+
+
   # override to scope username into family_id
   def self.find_for_authentication(warden_conditions)
     where(:username => warden_conditions[:username], :family_id => warden_conditions[:family_id]).first
@@ -44,6 +56,15 @@ class Member < ActiveRecord::Base
 
   end
 
+  def avatar_urls
+    urls = Hash.new
+    if self.avatar.exists?
+      urls[:medium] = self.avatar.url(:medium)
+      urls[:thumb] = self.avatar.url(:thumb)
+    end
+    return urls
+  end
+
   def full_name
     "#{first_name} #{last_name}"
   end
@@ -55,9 +76,9 @@ class Member < ActiveRecord::Base
   def todos(start_date = Date.today, end_date = Date.today)
     todos = []
     (start_date .. end_date).each do |date|
-      local_todos = self.my_todos.where("due_date >= ? AND due_date <= ?", date.beginning_of_day, date.end_of_day).map.to_a
+      local_todos = self.my_todos.includes(:todo).where("due_date >= ? AND due_date <= ?", date.beginning_of_day, date.end_of_day).map.to_a
       logger.info "Local todos count: #{local_todos.count}"
-      self.todo_schedules.where('start_date <= ? AND (end_date IS NULL OR end_date >= ?)', start_date, end_date).find_each do |ts|
+      self.todo_schedules.includes(:schedule_rrules).where('start_date <= ? AND (end_date IS NULL OR end_date >= ?)', start_date.beginning_of_day, end_date.end_of_day).find_each do |ts|
         todo = local_todos.find{ |td| td.todo_schedule_id == ts.id }
         if todo.nil?
           schedule = IceCube::Schedule.new
@@ -82,13 +103,13 @@ class Member < ActiveRecord::Base
   end
 
 
-  def get_screen_time_overrides(date = Date.today)
+  def screen_time_overrides(date = Date.today)
     st_overrides.where(date: date.beginning_of_day..date.end_of_day).sum(:time)
   end
 
 
 
-  def get_used_screen_time(date = Date.today, device_id = nil, activity_id=nil)
+  def used_screen_time(date = Date.today, device_id = nil, activity_id=nil)
     if device_id.present?
       activities.where('device_id = ? AND end_time BETWEEN ? AND ?', device_id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)').ceil
     elsif activity_id.present?
@@ -98,7 +119,7 @@ class Member < ActiveRecord::Base
     end
   end
 
-  def get_screen_time(date = Date.today, device_id = nil, activity_id = nil)
+  def screen_time(date = Date.today, device_id = nil, activity_id = nil)
     rec = screen_times.where(dow: date.wday).last
 
     if device_id.nil? && activity_id.nil?
@@ -114,14 +135,14 @@ class Member < ActiveRecord::Base
       end
 
     end
-    result += get_screen_time_overrides
+    result += screen_time_overrides
 
     result = 60*60*24 if result > 60*60*24
 
     result
   end
 
-  def get_max_screen_time(date = Date.today, device_id = nil, activity_id = nil)
+  def max_screen_time(date = Date.today, device_id = nil, activity_id = nil)
     rec = screen_times.where(dow: date.wday).last
 
     if device_id.nil? && activity_id.nil?
@@ -141,8 +162,8 @@ class Member < ActiveRecord::Base
     result
   end
 
-  def get_available_screen_time(date = Date.today, device_id = nil, activity_id = nil)
-    (get_screen_time(date, device_id, activity_id) - get_used_screen_time(date, device_id, activity_id)).to_i
+  def available_screen_time(date = Date.today, device_id = nil, activity_id = nil)
+    (screen_time(date, device_id, activity_id) - used_screen_time(date, device_id, activity_id)).to_i
   end
 
 
@@ -163,24 +184,24 @@ class Member < ActiveRecord::Base
     my_time.save
   end
 
-  def new_activity(family_activity, device)
+  def new_activity(activity_template, device)
     # TODO: Check cost of activity before creating
-    act = self.activities.create(family_activity_id: family_activity.id, device_id: device.try(:id), created_by_id: self.id)
+    act = self.activities.create(activity_template_id: activity_template.id, device_id: device.try(:id), created_by_id: self.id)
   end
 
   def current_activity
     activities.where(end_time: nil).last
   end
 
-  def can_do_activity?(family_activity, device = nil)
+  def can_do_activity?(activity_template, device = nil)
     #TODO: Implement device logic
     ret = false
 
     # Check if activity is restricted
-    if family_activity.restricted?
-      ret = !!get_available_screen_time if todos_complete?
+    if activity_template.restricted?
+      ret = !!available_screen_time if todos_complete?
     else
-      ret = !!get_available_screen_time
+      ret = !!available_screen_time
     end
 
     if ret
@@ -205,5 +226,15 @@ class Member < ActiveRecord::Base
       key.update_expiration!
     end
     key
+  end
+
+  protected
+
+  def secure_password
+    unless self.password.nil? || self.password_confirmation.nil?
+      if self.password == self.password_confirmation
+        self.password = self.password_confirmation = Digest::MD5.hexdigest(self.password + self.family.secure_key).to_s
+      end
+    end
   end
 end

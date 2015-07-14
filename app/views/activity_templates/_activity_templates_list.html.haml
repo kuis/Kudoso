@@ -1,0 +1,4 @@
+- member ||= nil
+- activity_templates.each do |act|
+  %li
+    =render partial: 'activity_templates/activity_template', locals: { member: member, available: (member.present? && member.can_do_activity?(act)), activity_template: act}

@@ -5,4 +5,8 @@ RSpec.describe ActivityTemplate, :type => :model do
     act_temp = FactoryGirl.create(:activity_template)
     expect(act_temp.valid?).to be_truthy
   end
+
+  it 'should not delete but disabled on destroy' do
+
+  end
 end

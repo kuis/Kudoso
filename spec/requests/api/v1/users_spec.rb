@@ -60,5 +60,12 @@ describe 'Users API', type: :request do
     expect(json["messages"]["error"].length).to be >= 1
   end
 
+  it 'retruns a proper error when no device token is submited' do
+    post '/api/v1/users', { user: { email: "john@example.com", password: 'password', password_confirmation: 'password', first_name: 'John', last_name: 'Depp'} }.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+    expect(response.status).to eq(401)
+    json = JSON.parse(response.body)
+    expect(json["messages"]["error"].length).to be >= 1
+  end
+
 
 end

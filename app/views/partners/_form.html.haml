@@ -1,0 +1,10 @@
+= simple_form_for(@partner) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :description
+    = f.input :api_key
+
+  .form-actions
+    = f.button :submit

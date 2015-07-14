@@ -1,0 +1,16 @@
+- available ||= false
+
+.activity_template{ class: available ? 'unrestricted' : 'restricted'}
+  .name
+    = activity_template.name
+  .kudos
+    - if activity_template.cost > 0
+      Cost: #{activity_template.cost}
+    - else
+      Reward: #{activity_template.reward}
+  .time
+    Time block: #{pluralize(activity_template.time_block,'minute')}
+  .restrictions
+    Restricted: #{activity_template.restricted?}
+  -if available
+    = link_to "Start #{activity_template.name}", new_family_member_activity_path(member.family, member, activity_template_id: activity_template.id, start: true)

@@ -1,11 +1,11 @@
 - if @member.current_activity
-  In activity #{@member.current_activity.family_activity.name}
-  = link_to "Stop #{@member.current_activity.family_activity.name}", family_member_activity_path(@family, @member, @member.current_activity, stop: true), method: :put
+  In activity #{@member.current_activity.activity_template.name}
+  = link_to "Stop #{@member.current_activity.activity_template.name}", family_member_activity_path(@family, @member, @member.current_activity, stop: true), method: :put
 
 
 - else
   %h1 Approved Family Activities
-  = render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @family.family_activities }
+  = # TODO: Update this to activity_templates: render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @family.family_activities }
 
 %h1 Completed activities
 
@@ -29,7 +29,7 @@
     %tr
       %td= activity.member.full_name
       %td= activity.created_by.full_name
-      %td= activity.family_activity.name
+      %td= activity.activity_template.name
       %td= activity.start_time
       %td= activity.end_time
       %td= activity.device.try(:name) if activity.device.present?

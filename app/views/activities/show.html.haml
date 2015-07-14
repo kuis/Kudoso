@@ -7,8 +7,8 @@
   %b Created by:
   = @activity.created_by
 %p
-  %b Family activity:
-  = @activity.family_activity_id
+  %b Activity_template:
+  = "(#{@activity.activity_template_id}) #{@activity.activity_template.name}"
 %p
   %b Start time:
   = @activity.start_time
@@ -24,9 +24,6 @@
 %p
   %b Allowed time:
   = @activity.allowed_time
-%p
-  %b Activity type:
-  = @activity.activity_type_id
 %p
   %b Cost:
   = @activity.cost

@@ -1,0 +1,27 @@
+%p#notice= notice
+
+%p
+  %b Activity template:
+  = @activity_template_device_type.activity_template_id
+%p
+  %b Device type:
+  = @activity_template_device_type.device_type_id
+%p
+  %b Type:
+  = @activity_template_device_type.type
+%p
+  %b Launch url:
+  = @activity_template_device_type.launch_url
+%p
+  %b App name:
+  = @activity_template_device_type.app_name
+%p
+  %b App:
+  = @activity_template_device_type.app_id
+%p
+  %b App store url:
+  = @activity_template_device_type.app_store_url
+
+= link_to 'Edit', edit_activity_template_device_type_path(@activity_template_device_type)
+\|
+= link_to 'Back', activity_template_device_types_path

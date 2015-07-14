@@ -32,7 +32,8 @@ RSpec.describe ActivityTemplatesController, :type => :controller do
         cost: 20,
         reward: 0,
         time_block: 30,
-        restricted: true
+        restricted: true,
+        activity_type_id: @activity_type.id
     }
   }
 
@@ -52,6 +53,7 @@ RSpec.describe ActivityTemplatesController, :type => :controller do
   context "As an adminstrator" do
     before(:each) do
       @user = FactoryGirl.create(:user, admin: true)
+      @activity_type = FactoryGirl.create(:activity_type)
       sign_in(@user)
     end
 
@@ -195,6 +197,7 @@ RSpec.describe ActivityTemplatesController, :type => :controller do
   context "As a user or member" do
     before(:each) do
       @user = FactoryGirl.create(:user, admin: false)
+      @activity_type = FactoryGirl.create(:activity_type)
       sign_in(@user)
     end
 

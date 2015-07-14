@@ -2,6 +2,8 @@
 %h2
   = best_in_place [@family, @member], :first_name
   = best_in_place [@family, @member], :last_name
+- if @member.avatar.exists?
+  = image_tag @member.avatar.url(:thumb)
 .row
   .medium-3.columns
     Kudos:
@@ -10,13 +12,13 @@
   .medium-3.columns
     Max Screen Time:
     .screen_time
-      #{format_counter @member.get_max_screen_time}
+      #{format_counter @member.max_screen_time}
     %div
       = link_to 'Adjust Screen Time', family_member_screen_times_path(@family,@member) if can?(:edit, ScreenTime)
   .medium-3.columns
     Available Screen Time:
     .screen_time
-      #{format_counter @member.get_available_screen_time}
+      #{format_counter @member.available_screen_time}
   .medium-3.columns
     Screen Time Overrides:
     %ul
@@ -60,13 +62,13 @@
 %hr
 %h2 Activities
 - if @member.current_activity
-  In activity #{@member.current_activity.family_activity.name}
-  = link_to "Stop #{@member.current_activity.family_activity.name}", family_member_activity_path(@family, @member, @member.current_activity, stop: true), method: :put
+  In activity #{@member.current_activity.activity_template.name}
+  = link_to "Stop #{@member.current_activity.activity_template.name}", family_member_activity_path(@family, @member, @member.current_activity, stop: true), method: :put
 
 
 - else
   %ul#family_activities_list
-    = render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @family.family_activities }
+    = # TODO: Update this: render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @family.family_activities }
 
 %p= link_to 'Edit Member Information', edit_family_member_path(@family, @member)
 %p= link_to 'Back', @member.family

@@ -13,8 +13,8 @@
     = f.label :created_by
     = f.number_field :created_by
   .field
-    = f.label :family_activity_id
-    = f.number_field :family_activity_id
+    = f.label :activity_template_id
+    = f.number_field :activity_template_id
   .field
     = f.label :start_time
     = f.datetime_select :start_time
@@ -30,9 +30,6 @@
   .field
     = f.label :allowed_time
     = f.number_field :allowed_time
-  .field
-    = f.label :activity_type_id
-    = f.number_field :activity_type_id
   .field
     = f.label :cost
     = f.number_field :cost

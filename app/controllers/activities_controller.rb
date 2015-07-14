@@ -15,13 +15,13 @@ class ActivitiesController < ApplicationController
   end
 
   def new
-    if params[:family_activity_id]
-      famact = FamilyActivity.find(params[:family_activity_id])
-      if !famact.restricted? || (famact.restricted? && @member.todos_complete?)
-        @activity = @member.new_activity(famact, nil)
+    if params[:activity_template_id]
+      activity_template = ActivityTemplate.find(params[:activity_template_id])
+      if !activity_template.restricted? || (activity_template.restricted? && @member.todos_complete?)
+        @activity = @member.new_activity(activity_template, nil)
         if params[:start]
           @activity.start!
-          flash[:notice] = "You have started #{famact.name}, enjoy!"
+          flash[:notice] = "You have started #{activity_template.name}, enjoy!"
         end
         redirect_to [@family, @member]
       else
@@ -47,7 +47,7 @@ class ActivitiesController < ApplicationController
   def update
     if params[:stop]
       @activity.stop!
-      flash[:notice] = "You have stoped #{@activity.family_activity.name}."
+      flash[:notice] = "You have stoped #{@activity.activity_template.name}."
       redirect_to [@family, @member]
     else
       params[:activity][:member_id] = @member.id
@@ -67,7 +67,7 @@ class ActivitiesController < ApplicationController
     end
 
     def activity_params
-      params.require(:activity).permit(:member_id, :created_by, :family_activity_id, :start_time, :end_time, :device_id, :content_id, :allowed_time, :activity_type_id, :cost, :reward)
-      params.permit(:family_activity_id, :start)
+      params.require(:activity).permit(:member_id, :created_by, :activity_template_id, :start_time, :end_time, :device_id, :content_id, :allowed_time, :cost, :reward)
+      params.permit(:activity_template_id, :start)
     end
 end

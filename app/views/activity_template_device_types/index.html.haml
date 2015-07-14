@@ -1,0 +1,33 @@
+%h1 Listing activity_template_device_types
+
+%table
+  %thead
+    %tr
+      %th Activity template
+      %th Device type
+      %th Type
+      %th Launch url
+      %th App name
+      %th App
+      %th App store url
+      %th
+      %th
+      %th
+
+  %tbody
+    - @activity_template_device_types.each do |activity_template_device_type|
+      %tr
+        %td= activity_template_device_type.activity_template_id
+        %td= activity_template_device_type.device_type_id
+        %td= activity_template_device_type.type
+        %td= activity_template_device_type.launch_url
+        %td= activity_template_device_type.app_name
+        %td= activity_template_device_type.app_id
+        %td= activity_template_device_type.app_store_url
+        %td= link_to 'Show', activity_template_device_type
+        %td= link_to 'Edit', edit_activity_template_device_type_path(activity_template_device_type)
+        %td= link_to 'Destroy', activity_template_device_type, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Activity template device type', new_activity_template_device_type_path

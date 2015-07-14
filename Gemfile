@@ -29,6 +29,7 @@ gem 'groupdate' # adds group_by_date functions
 gem 'best_in_place' #adds in place editing features
 gem 'kaminari'
 gem 'modernizr-rails'
+gem 'paperclip', "~> 4.3"
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 
@@ -41,6 +42,7 @@ gem 'jquery-turbolinks'
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
+gem 'apipie-rails', github: 'Apipie/apipie-rails', ref: '928bd858fd14ec67eeb9483ba0d43b3be8339608'
 
 
 # User management
@@ -77,6 +79,9 @@ group :development, :test do
   gem 'parallel_tests'
   gem 'zeus-parallel_tests'
   gem 'binding_of_caller'
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-stack_explorer'
 end
 
 group :development do

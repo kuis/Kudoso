@@ -48,7 +48,8 @@ class TodoTemplatesController < ApplicationController
 
   def destroy
     @todo_template.destroy
-    respond_with(@todo_template)
+    #respond_with(@todo_template)
+    redirect_to todo_templates_path
   end
 
   private

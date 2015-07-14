@@ -120,7 +120,8 @@ RSpec.describe ScreenTimesController, :type => :controller do
           expect(response).to redirect_to(family_member_screen_times_path(@family, @kid))
         end
 
-        it "resets activities restrictions when requested" do
+        skip "resets activities restrictions when requested" do
+          # TODO: Refect this since there are no more family activities
           sc = @kid.screen_times.create(dow: Date.today.wday, default_time: 7200, max_time: 12000)
           fam_act = FactoryGirl.create(:family_activity, family_id: @kid.family_id)
           sc.restrictions[:activities][fam_act.id] = { default_time: 3000, max_time: 5000 }
@@ -209,7 +210,8 @@ RSpec.describe ScreenTimesController, :type => :controller do
       end
 
       describe "with restrict params" do
-        it "updates the default screen_time for an activity" do
+        skip "updates the default screen_time for an activity" do
+          # TODO: refactor this since we no longer have family activities
           screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
           fam_act = FactoryGirl.create(:family_activity, family_id: @kid.family_id)
           new_attributes = {
@@ -219,7 +221,8 @@ RSpec.describe ScreenTimesController, :type => :controller do
           screen_time.reload
           expect(screen_time.restrictions[:activities][fam_act.id][:default_time]).to eq(7200)
         end
-        it "updates the max screen_time for an activity" do
+        skip "updates the max screen_time for an activity" do
+          # TODO: refactor this since we no longer have family activities
           screen_time = FactoryGirl.create(:screen_time, member_id: @kid.id)
           fam_act = FactoryGirl.create(:family_activity, family_id: @kid.family_id)
           new_attributes = {

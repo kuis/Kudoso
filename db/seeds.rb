@@ -100,23 +100,25 @@ content_types = ContentType.create([
                                        {name: 'Magazine'}
                                    ])
 
-# generate device types
+
+
 
 activity_types = ActivityType.create([
-                                         { name: 'Other', metadata_fields: { } },
-                                         { name: 'Play a Game', metadata_fields: { } },
-                                         { name: 'Surf the Internet', metadata_fields: { } },
-                                         { name: 'Read', metadata_fields: { } },
-                                         { name: 'Stream Media', metadata_fields: { } },
-                                         { name: 'Physical', metadata_fields: { } }
+                                       { name: 'Entertainment', metadata_fields: { } },
+                                       { name: 'Education', metadata_fields: { } },
+                                       { name: 'Health', metadata_fields: { } },
+                                       { name: 'Other', metadata_fields: { } }
+                                         ])
+
+activity_templates = ActivityTemplate.create([
+                                         { name: 'Play on my device', time_block: 30, activity_type: ActivityType.find_by_name('Entertainment') },
+                                         { name: 'Read a book', time_block: 30, activity_type: ActivityType.find_by_name('Education') },
+                                         { name: 'Stream Media', time_block: 30, activity_type: ActivityType.find_by_name('Entertainment') },
+                                         { name: 'Play outside', time_block: 30, activity_type: ActivityType.find_by_name('Health') }
                                      ])
 
 
 # Device Catagories:
-# Video Devices (TV/BluRay/DVR/Streaming Media, etc etc)
-# Game Consoles
-# Mobile Devices
-# Computers
 
 mobile_devices = DeviceCategory.create({ name: 'Mobile Devices', description: 'Mobile devices such as iPhone, iPad, Android or Kindle devices.'})
 computers = DeviceCategory.create({ name: 'Computers', description: 'Personal Computers such as Mac or Windows.'})
@@ -124,6 +126,7 @@ game_consoles = DeviceCategory.create({ name: 'Game Consoles', description: 'Gam
 video_devices= DeviceCategory.create({ name: 'Video Devices', description: 'Video devices such as Televisions, BluRay/DVD Players, AppleTV, Roku, or Amazon FireTV.'})
 
 
+# generate device types
 
 ipod = DeviceType.create({ name: 'iPod Touch', description: 'Apple iPod Touch', os: 'iOS', version: '', device_category: mobile_devices })
 iphone = DeviceType.create({ name: 'iPhone', description: 'Apple iPhone', os: 'iOS', version: '', device_category: mobile_devices })
@@ -199,32 +202,15 @@ daily = IceCube::Rule.daily
 weekdays = IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday)
 saturdays = IceCube::Rule.weekly.day(:saturday)
 todo_templates = TodoTemplate.create([
-                                         { name: 'Brush teeth', description: 'To prevent cavities bush your teeth for at least 60 seconds.', required: true, schedule: "#{daily.to_yaml}", active: true, kudos: 20 },
-                                         { name: 'Brush hair', description: 'Look your best and get rid of that bed hed!', required: true, schedule: "#{daily.to_yaml}", active: true, kudos: 20 },
-                                         { name: 'Make bed', description: 'Your room is a reflection of you. Your neat! So your bed should be made neatly too.', required: true, schedule: "#{daily.to_yaml}", active: true, kudos: 20 },
-                                         { name: 'Read a book', description: 'Reading is fun, red for at least 30 minute!', required: true, schedule: "#{weekdays.to_yaml}", active: true, kudos: 20 },
-                                         { name: 'Pick up room', description: 'Its easier to pickup every week than to let the mess build!', required: true, schedule: "#{saturdays.to_yaml}", active: true, kudos: 20 },
-                                         { name: 'Finish homework', description: 'Work hard, play hard! Its important to finish your work before playing.', required: true, schedule: "#{weekdays.to_yaml}", active: true, kudos: 20 },
-                                         { name: 'Mow lawn', description: 'Maintaining our home requires everyone to help.', required: true, schedule: "#{saturdays.to_yaml}", active: true, kudos: 20 }
+                                         { name: 'Brush teeth', description: 'To prevent cavities bush your teeth for at least 60 seconds.', required: true, schedule: "#{daily.to_yaml}", kudos: 20, rec_min_age: 2, rec_max_age: 99, def_min_age: 2, def_max_age: 12 },
+                                         { name: 'Brush hair', description: 'Look your best and get rid of that bed hed!', required: true, schedule: "#{daily.to_yaml}", kudos: 20, rec_min_age: 5, rec_max_age: 99, def_min_age: 5, def_max_age: 16 },
+                                         { name: 'Make bed', description: 'Your room is a reflection of you. Your neat! So your bed should be made neatly too.', required: true, schedule: "#{daily.to_yaml}", kudos: 20, rec_min_age: 4, rec_max_age: 99, def_min_age: 4, def_max_age: 12 },
+                                         { name: 'Read a book', description: 'Reading is fun, red for at least 30 minute!', required: true, schedule: "#{weekdays.to_yaml}", kudos: 20, rec_min_age: 6, rec_max_age: 99, def_min_age: 6, def_max_age: 18 },
+                                         { name: 'Pick up room', description: 'Its easier to pickup every week than to let the mess build!', required: true, schedule: "#{saturdays.to_yaml}", kudos: 20, rec_min_age: 2, rec_max_age: 99, def_min_age: 2, def_max_age: 12 },
+                                         { name: 'Finish homework', description: 'Work hard, play hard! Its important to finish your work before playing.', required: true, schedule: "#{weekdays.to_yaml}", kudos: 20, rec_min_age: 7, rec_max_age: 99, def_min_age: 10, def_max_age: 18 },
+                                         { name: 'Mow lawn', description: 'Maintaining our home requires everyone to help.', required: true, schedule: "#{saturdays.to_yaml}",kudos: 20, rec_min_age: 2, rec_max_age: 99, def_min_age: 2, def_max_age: 12 }
                                      ])
 
-group_one = TodoGroup.create({ name: 'Group One', rec_min_age: 2, rec_max_age: 5, active: true })
-
-group_one.todo_templates << todo_templates[0]
-group_one.todo_templates << todo_templates[1]
-group_one.todo_templates << todo_templates[2]
-
-
-
-group_two = TodoGroup.create({ name: 'Group Two', rec_min_age: 6, rec_max_age: 8, active: true })
-
-group_two.todo_templates << todo_templates[3]
-group_two.todo_templates << todo_templates[4]
-
-group_three = TodoGroup.create({ name: 'Group Three', rec_min_age: 9, rec_max_age: 12, active: true })
-
-group_three.todo_templates << todo_templates[5]
-group_three.todo_templates << todo_templates[5]
 
 
 
@@ -243,13 +229,18 @@ group_three.todo_templates << todo_templates[5]
 # 1. Create family
   parent = User.create({email: 'parent@kudoso.com', first_name: 'Parent', last_name: 'Test', password: 'password', password_confirmation: 'password', confirmed_at: Time.now})
 
-  johnny = Member.create({username: 'johnny', password: '1234', family_id: parent.member.family_id, first_name: 'Johnny', last_name: 'Test' })
+  johnny = Member.create({username: 'johnny', password: '1234', family_id: parent.member.family_id, first_name: 'Johnny', last_name: 'Test', birth_date: 10.years.ago })
 
-  suzy = Member.create({username: 'suzy', password: '4321', family_id: parent.member.family_id, first_name: 'Suzy', last_name: 'Test'})
+  suzy = Member.create({username: 'suzy', password: '4321', family_id: parent.member.family_id, first_name: 'Suzy', last_name: 'Test', birth_date: 6.years.ago})
 
-# 2. Add Todos by assigning groups to the family
-  parent.member.family.assign_group(group_one, [johnny.id, suzy.id ])
+# 2. Add Todos by assigning defaults to the family
+  todo_templates.each do |todo|
 
+    assign_to = Array.new
+    assign_to << johnny.id if (todo.def_min_age .. todo.def_max_age).include?(johnny.age)
+    assign_to << suzy.id if (todo.def_min_age .. todo.def_max_age).include?(suzy.age)
+    parent.member.family.assign_template(todo, assign_to)
+  end
   # reset todo_schedules to the past
   TodoSchedule.find_each do |ts|
     ts.start_date = 45.days.ago.to_date

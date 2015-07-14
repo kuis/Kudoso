@@ -74,24 +74,6 @@ class MembersController < ApplicationController
     redirect_to family_members_path(@family)
   end
 
-  def assign_todo_group
-    @todo_group = TodoGroup.find(params[:todo_group_id])
-    if @todo_group
-      @family.assign_group(@todo_group, [ @member.id ])
-      respond_to do |format|
-        format.html { redirect_to @family }
-        format.json { render json: @member.my_todos }
-      end
-
-    else
-      logger.warn "#{current_user.present? ? "User #{current_user.id}" : "Member #{current_member.id}"} attempted to assign todo_group #{params[:id]} to family #{params[:family_id]} (#{current_user.present? ? "#{current_user.member.family_id}" : "#{current_member.family_id}"}) but failed."
-      respond_to do |format|
-        format.html { redirect_to @family, error: 'Sorry, an error occurred trying to assign this todo group, please try again.' }
-        format.json { render json: { message: 'Task Group or Member not found.'}, status: 404 }
-      end
-    end
-  end
-
 
   def assign_todo_templates
     assigned_templates = []
@@ -118,6 +100,6 @@ class MembersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def member_params
-    params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :email)
+    params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :email, :avatar)
   end
 end
