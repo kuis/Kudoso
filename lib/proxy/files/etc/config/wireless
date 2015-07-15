@@ -1,14 +1,40 @@
-
-config wifi-device 'wl0'
-	option type 'broadcom'
-	option channel '11'
-	option disabled '0'
+config wifi-device 'radio0'
+        option type 'mac80211'
+        option channel '36'
+        option hwmode '11a'
+        option path 'virtual/RTKWiFi0/RTKWiFi0'
+        option htmode 'VHT80'
+        option disabled '0'
 
 config wifi-iface
-	option device 'wl0'
-	option network 'lan'
-	option mode 'ap'
-	option ssid 'Kudoso'
-	option 'encryption' 'psk2'
-	option 'key'        'kudo5o13'
+        option device 'radio0'
+        option network 'lan'
+        option mode 'ap'
+        option ssid 'Kudoso5GHz'
+        option encryption 'psk2'
+        option key 'kudoso'
+
+config wifi-device 'radio1'
+        option type 'mac80211'
+        option channel '11'
+        option hwmode '11g'
+        option path 'virtual/RTKWiFi1/RTKWiFi1'
+        option htmode 'HT20'
+        option disabled '0'
+
+config wifi-iface
+        option device 'radio1'
+        option network 'lan'
+        option mode 'ap'
+        option ssid 'Kudoso2GHz'
+        option encryption 'psk2'
+        option key 'kudoso'
+
+config wifi-iface
+        option device 'radio1'
+        option mode 'ap'
+        option network 'guest'
+        option ssid 'kudoso-guest'
+        option encryption 'psk2'
+        option key 'kudoso'
 

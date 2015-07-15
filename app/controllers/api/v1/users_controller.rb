@@ -64,7 +64,11 @@ module Api
 
               @user = User.new(user_create_params)
               if @user.save
-                render :json => { :user => @user, token: @user.get_api_key.access_token, :messages => messages }, :status => 200
+                render :json => { user:      @user,
+                                  member:    @user.member,
+                                  family:    @user.family,
+                                  token:     @user.get_api_key.access_token,
+                                  :messages => messages }, :status => 200
               else
                 messages[:error] << @user.errors.full_messages
                 render :json => { :user => @user, :messages => messages }, :status => 400
