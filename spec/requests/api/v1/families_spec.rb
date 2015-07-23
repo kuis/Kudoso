@@ -56,4 +56,18 @@ describe 'Families API', type: :request do
     json = JSON.parse(response.body)
     expect(@user.family.family_device_categories.count).to eq(device_categories.count)
   end
+
+  it 'allows updates to family time zone' do
+    timezone = @user.family.timezone
+    loop do
+      timezone = ActiveSupport::TimeZone.us_zones.collect{|tz| tz.name }.sample
+      break if timezone != @user.family.timezone
+    end
+
+
+    patch "/api/v1/families/#{@user.member.family.id}", { time_zone: timezone}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(200)
+    @user.family.reload
+    expect(@user.family.timezone).to eq(timezone)
+  end
 end

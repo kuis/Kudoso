@@ -66,6 +66,7 @@ module Api
           if @current_user.try(:admin) || (@current_member.try(:family) == @family)
             @family.default_screen_time = params["default_time"].to_i if params["default_time"]
             @family.default_filter = params["default_filter"].downcase if params["default_filter"]
+            @family.timezone = params["time_zone"] if params["time_zone"]
             @family.name = params["name"] if params["name"]
             if params[ "device_categories" ].present? &&  params[ "device_categories" ].is_a?(Hash)
               params[ "device_categories" ].each do |key, value|
@@ -107,6 +108,6 @@ module Api
         end
 
       end
+      end
     end
-  end
 end

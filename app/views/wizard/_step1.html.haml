@@ -5,12 +5,15 @@
 .row
   .col-xs-10.col-xs-offset-1
     Content Filtering Level:
-    = select_tag 'default_filter', options_for_select(['Strict', 'Moderate', 'Mature', 'Monitor'], 'Strict')
+    = select_tag 'default_filter', options_for_select(['Strict', 'Moderate', 'Mature', 'Monitor'], "#{current_user.family.default_filter.titleize}")
 .row
   .col-xs-10.col-xs-offset-1
     Screen Time per Day
-    = select_tag 'default_time', options_for_select(['1/2 Hour', '1 Hour', '1.5 Hours', '2 Hours'], '2 Hours')
-
+    = select_tag 'default_time', options_for_select(['1/2 Hour', '1 Hour', '1.5 Hours', '2 Hours'], "#{@default_time}")
+.row
+  .col-xs-10.col-xs-offset-1
+    Time Zone
+    = select_tag 'time_zone', time_zone_options_for_select( current_user.family.try(:timezone) || "Mountain Time (US & Canada)",  ActiveSupport::TimeZone.us_zones )
 
 :javascript
   function save_info(args) {
@@ -26,7 +29,8 @@
       data: {
         step: 1,
         default_filter: $('#default_filter').val(),
-        default_time: computedTime
+        default_time: computedTime,
+        time_zone: $('#time_zone').val()
       },
       success: function() {
         args && args.success && args.success();

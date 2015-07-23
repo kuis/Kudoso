@@ -2,14 +2,27 @@ class WizardController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    if current_user.wizard_step == 3
-      @family_device_categories = Array.new
-      DeviceCategory.find_each do |device_category|
-        @family_device_categories << { id: device_category.id,
-                                       name: device_category.name,
-                                       description: device_category.description,
-                                       amount: current_user.family.family_device_categories.where(device_category_id: device_category.id).first.try(:amount) || 0 }
-      end
+    case current_user.wizard_step
+      when 1
+        @default_time = '2 Hours'
+        case current_user.family.default_screen_time
+          when 1800
+            @default_time = '1/2 Hour'
+          when 3600
+            @default_time = '1 Hour'
+          when 5400
+            @default_time = '1.5 Hours'
+        end
+      when 3
+        @family_device_categories = Array.new
+
+
+        DeviceCategory.find_each do |device_category|
+          @family_device_categories << { id: device_category.id,
+                                         name: device_category.name,
+                                         description: device_category.description,
+                                         amount: current_user.family.family_device_categories.where(device_category_id: device_category.id).first.try(:amount) || 0 }
+        end
 
     end
   end
@@ -40,6 +53,7 @@ class WizardController < ApplicationController
     if params[ "step" ].to_i == 1
       current_user.family.default_screen_time = params["default_time"].to_i if params["default_time"]
       current_user.family.default_filter = params["default_filter"].downcase if params["default_filter"]
+      current_user.family.timezone = params["time_zone"] if params["time_zone"]
       current_user.family.save
     end
 
