@@ -43,7 +43,7 @@ strip functionality, but we MUST present it in a way that is easy to use while b
     uniwue within a family.  As such, a parent (user) must FIRST authenticate on the household devices BEFORE a child
     (member) account can authenticate.  The user authentication places a secure cookie in on the device which is used
     in conjunction with the member's credentials to provide a little more security without making the process overly
-    complex for younger users.
+    complex for younger users. See the family.secure_key to see how family member passwords are stored.
 
     == Understanding Screen Time
         When a child (a family "member") wants to perform an activity, the system must check if its allowed.
