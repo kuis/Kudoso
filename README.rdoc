@@ -58,6 +58,8 @@ strip functionality, but we MUST present it in a way that is easy to use while b
 
 ==== KudosoCRM
 
+(This is outdated, will rip out soon!)
+
     The CRM is designed to handle the daily support and sales inquries for Kudoso and to generally ensure that our daily
     operations are handled without issues.  This all done through Tickets.  When a new email comes into info@kudoso.com or
     to support@kudoso.com the MailMan gem downloads this, and creates a new ticket.  Likewise, a customer can create thier
@@ -103,53 +105,7 @@ strip functionality, but we MUST present it in a way that is easy to use while b
 
 ==== Kudoso API
 
-    To use the API, you must first POST to the sessions controller and create a new API session.  You can authenticate
-    either as a family member using three params (family_id, username, password) or as a user using two params (email, password)
-
-    http://api.kudoso.com/v1/sessions POST
-        * Create a new API sessions and generate/return the TOKEN for subsequent API calls
-        * Params:
-            * device_token, string, required
-                * A valid device token is used to identify known end points (software builds or partners)
-            * provider, string, optional (default: 'identity')
-                * Used to define the authentication provider, identity is the local user/pass, 'facebook', etc
-            * username, string, optional
-                * Username is used in conjunction with family_id to identify a member
-            * family_id, integer, optional
-                * This is the family_id in the Kudoso system, used in conjunction with 'username'
-            * email, string, optional
-                * This is the unique email address used to identify a user
-            * password, string, optional
-                * This is the password of requested user or member
-        * Example URL: api.kudoso.com:3000/v1/sessions?email=kaz@kudoso.com&password=password&device_token=3afac3670cbd3ccc8c652a3393c61945
-
-    http://api.kudoso.com/v1/sessions/<token> DELETE
-        * Immediately terminates an API session
-        * Parmas: None
-        * Example URL: api.kudoso.com:3000/v1/sessions/532a782accf30e50665af3a3e5c5a9e3
-
-
-    http://api.kudoso.com/v1/families/<id> GET
-        * Retreives the basic family information (not very useful)
-        * Params: None
-        * Header: Authorization: Token token="<token>"
-        * Example URL: api.kudoso.com:3000/v1/families
-
-    http://api.kudoso.com/v1/families/<id>/devices
-        * Retreives the list of devices associated with the family
-        * Params: None
-        * Header: Authorization: Token token="<token>"
-        * Example URL: api.kudoso.com:3000/v1/families/1
-
-    http://api.kudoso.com/v1/families/<id>/activities
-        * Retreives the list of activities associated with the family
-
-    http://api.kudoso.com/v1/families/<id>/todos
-        * Retreives the list of todos associated with the family
-
-    http://api.kudoso.com/v1/families/<id>/members
-        * Retreives the list of members associated with the family
-
+    See /api_docs/v1 for API documentation
 
 ==== AWS / Rubber Setup
     Staging:
