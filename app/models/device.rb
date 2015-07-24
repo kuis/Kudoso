@@ -10,7 +10,8 @@ class Device < ActiveRecord::Base
   has_many :screen_times
   has_many :commands
 
-  validates_uniqueness_of :name, :uuid
+  validates :name, uniqueness: { scope: :family_id }
+  validates_uniqueness_of :uuid
   validates_presence_of :device_type_id, :device_type
   validates_presence_of :family_id
 
