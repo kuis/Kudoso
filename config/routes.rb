@@ -86,6 +86,7 @@ Rails.application.routes.draw do
       resources :todo_templates
       resources :families do
         resources :todos
+        resources :devices
         resources :members do
           resources :my_todos do
             member do
@@ -101,6 +102,8 @@ Rails.application.routes.draw do
         end
       end
       resources :timezones
+      post "/devices/:uuid/deviceDidRegister", to: 'devices#deviceDidRegister'
+      patch "/devices/:uuid/status", to: 'devices#status'
     end
   end
 

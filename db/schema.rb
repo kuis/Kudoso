@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150706220042) do
+ActiveRecord::Schema.define(version: 20150724153622) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,6 +97,17 @@ ActiveRecord::Schema.define(version: 20150706220042) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "commands", force: :cascade do |t|
+    t.integer  "device_id"
+    t.string   "name"
+    t.boolean  "executed"
+    t.datetime "sent"
+    t.integer  "status"
+    t.string   "result"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contact_types", force: :cascade do |t|
@@ -202,6 +213,12 @@ ActiveRecord::Schema.define(version: 20150706220042) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "uuid"
+    t.string   "udid"
+    t.string   "wifi_mac"
+    t.datetime "last_contact"
+    t.string   "os_version"
+    t.string   "build_version"
+    t.string   "product_name"
   end
 
   add_index "devices", ["device_type_id"], name: "index_devices_on_device_type_id", using: :btree
