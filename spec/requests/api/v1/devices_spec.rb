@@ -10,7 +10,7 @@ describe 'Devices API', type: :request do
 
   it 'successfully handles a mobicip deviceDidRegister callback' do
     wifi_mac = SecureRandom.hex(12)
-    query_str = { device_token: @api_device.device_token, wifi_mac:wifi_mac, product_name: 'yahoo', model_name: @device.device_type.name }
+    query_str = { device_token: @api_device.device_token, wifi_mac:wifi_mac, udid: SecureRandom.uuid, product_name: 'yahoo', model_name: @device.device_type.name }
     post "/api/v1/devices/#{@device.uuid}/deviceDidRegister", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
     expect(response.status).to eq(200)
     @device.reload
