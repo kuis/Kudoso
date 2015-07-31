@@ -12,6 +12,8 @@ class Family < ActiveRecord::Base
 
   before_create { self.secure_key = SecureRandom.base64 }
 
+  validate :validate_timezone
+
   def kids
     members.where('parent IS NOT true')
   end
@@ -121,6 +123,13 @@ class Family < ActiveRecord::Base
   def create_mobicip_account
     mobicip = Mobicip.new
     result = mobicip.create_account(self)
+  end
+
+  private
+
+  def validate_timezone
+    timezones = ActiveSupport::TimeZone.us_zones.collect{|tz| tz.name }
+    errors.add(:timezone, "is not a valid US Time Zone") unless timezone.nil? || timezones.include?(timezone)
   end
 
 end
