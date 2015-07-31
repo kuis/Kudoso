@@ -74,12 +74,10 @@ module Api
                 unless key.ends_with?('_other')
                   id = "#{key}"
                   id.slice!('device_category_')
-                  device_category = FamilyDeviceCategory.find_or_create_by(device_category_id: id.to_i, family_id: @family.id)
-                  if value.to_i != 4
-                    device_category.amount = value.to_i
-                  else
-                    device_category.amount = params[ "device_categories" ][ "device_category_#{id}_other"].to_i
-                  end
+                  id = id.to_i
+                  device_category = FamilyDeviceCategory.find_or_create_by(device_category_id: id, family_id: @family.id)
+                  device_category.amount = value["amount"].to_i
+                  device_category.name = value["device_category_name"] unless value["device_category_name"].blank?
                   device_category.save
                   logger.info "Saved device category: #{device_category.inspect}"
                 end

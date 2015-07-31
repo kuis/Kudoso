@@ -126,7 +126,7 @@ module Api
           else
             messages[:warning] << "This application has been marked for end-of-life at #{device.expires_at.to_formatted_s(:long_ordinal)}.  Please update the application as soon as possible to avoid any problems with access." if  device.expires_at.present?
 
-            # begin
+            begin
               @device = Device.find_by_udid(params[:udid])
 
               if params[:lastReachedAt]
@@ -154,13 +154,13 @@ module Api
 
               render :json => { :device => @device, :messages => messages }, :status => (messages[:error].length == 0) ? 200 : 400
 
-            # rescue ActiveRecord::RecordNotFound
-            #   messages[:error] << 'Device not found.'
-            #   render :json => { :messages => messages }, :status => 404
-            # rescue
-            #   messages[:error] << 'A server error occurred.'
-            #   render :json => { :messages => messages }, :status => 500
-            # end
+            rescue ActiveRecord::RecordNotFound
+              messages[:error] << 'Device not found.'
+              render :json => { :messages => messages }, :status => 404
+            rescue
+              messages[:error] << 'A server error occurred.'
+              render :json => { :messages => messages }, :status => 500
+            end
           end
         end
 
