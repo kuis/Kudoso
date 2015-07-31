@@ -64,7 +64,7 @@ module Api
         messages = init_messages
         begin
           @family = Family.find(params[:id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family)
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
             @family.default_screen_time = params["default_time"].to_i if params["default_time"]
             @family.default_filter = params["default_filter"].downcase if params["default_filter"]
             @family.timezone = params["timezone"] if params["timezone"]
@@ -77,7 +77,6 @@ module Api
                   id = id.to_i
                   device_category = FamilyDeviceCategory.find_or_create_by(device_category_id: id, family_id: @family.id)
                   device_category.amount = value["amount"].to_i
-                  device_category.name = value["device_category_name"] unless value["device_category_name"].blank?
                   device_category.save
                   logger.info "Saved device category: #{device_category.inspect}"
                 end
