@@ -219,6 +219,7 @@ ActiveRecord::Schema.define(version: 20150729224133) do
     t.string   "os_version"
     t.string   "build_version"
     t.string   "product_name"
+    t.string   "mobicip_device_id"
   end
 
   add_index "devices", ["device_type_id"], name: "index_devices_on_device_type_id", using: :btree

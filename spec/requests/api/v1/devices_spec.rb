@@ -19,11 +19,13 @@ describe 'Devices API', type: :request do
 
   it 'successfully handles a mobicip stats callback' do
     cmd = Faker::Lorem.sentence(3)
-    query_str = { device_token: @api_device.device_token, udid: @device.udid, commandExecuted: cmd }
-    patch "/api/v1/devices/#{@device.uuid}/status", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
+    last_seen = 5.minutes.ago
+    query_str = { device_token: @api_device.device_token, commandExecuted: cmd, lastReachedAt: last_seen.to_i.to_s }
+    patch "/api/v1/devices/#{@device.udid}/status", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
     expect(response.status).to eq(200)
     @device.reload
     expect(@device.commands.last.name).to eq(cmd)
+    expect(@device.last_contact.to_i).to eq(last_seen.to_i)
   end
 
 
