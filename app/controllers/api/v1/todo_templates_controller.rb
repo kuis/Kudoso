@@ -30,12 +30,32 @@ module Api
         EOS
       end
 
+      api :GET, "/v1/families/:family_id/members/:member_id/todo_templates", "Retrieve all task templates assigned to a member"
       api :GET, "/v1/todo_templates", "Retrieve all task templates"
       def index
         messages = init_messages
+        if params[:family_id] && params[:id]
+          begin
+            @family = Family.find(params[:family_id])
+            if @current_user.try(:admin) || (@current_member.try(:family) == @family )
+              @member = @family.members.find(params[:id])
+              render :json => { :todo_templates => @member.todo_templates, :messages => messages }, :status => 200
+            else
+              messages[:error] << 'You are not authorized to do this.'
+              render :json => { :messages => messages }, :status => 403
+            end
+          rescue ActiveRecord::RecordNotFound
+            messages[:error] << 'Family or Member not found.'
+            render :json => { :messages => messages }, :status => 404
+          rescue
+            messages[:error] << 'A server error occurred.'
+            render :json => { :messages => messages }, :status => 500
+          end
+        else
+          @todo_templates = TodoTemplate.all
+          render :json => { :todo_templates => @todo_templates, :messages => messages }, :status => 200
+        end
 
-        @todo_templates = TodoTemplate.all
-        render :json => { :todo_templates => @todo_templates, :messages => messages }, :status => 200
 
       end
 
