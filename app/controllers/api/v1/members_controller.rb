@@ -177,7 +177,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def member_create_params
-        params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :email, avatar: %w(content-type content))
+        params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :email, :theme_id, avatar: %w(content-type content))
       end
 
       def parse_image_data(image_data)

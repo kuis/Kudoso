@@ -10,13 +10,19 @@ class Member < ActiveRecord::Base
   has_many :screen_times
   has_many :st_overrides
   has_one :screen_time_schedule
+  belongs_to :theme
   has_many :api_keys
+
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
   validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
+  validates_inclusion_of :gender, :in => %w( m f ), allow_blank: :true
 
   # ensure we have a secure password even if the user has no password
   before_save :secure_password
+  before_create do
+    self.theme_id ||= Theme.first.id
+  end
 
 
   # Include default devise modules. Others available are:
@@ -37,7 +43,7 @@ class Member < ActiveRecord::Base
 
 
   def as_json(options = {})
-    super({methods: [ :age, :avatar_urls, :screen_time, :used_screen_time], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at] }.merge(options))
+    super({methods: [ :age, :avatar_urls, :screen_time, :used_screen_time], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at], include: [ {theme: {except: [:created_at, :updated_at] } }] }.merge(options))
   end
 
 

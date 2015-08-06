@@ -1,0 +1,29 @@
+%h1 Listing themes
+
+%table
+  %thead
+    %tr
+      %th Name
+      %th Primary color
+      %th Secondary color
+      %th Primary bg color
+      %th Secondard bg color
+      %th
+      %th
+      %th
+
+  %tbody
+    - @themes.each do |theme|
+      %tr
+        %td= theme.name
+        %td= theme.primary_color
+        %td= theme.secondary_color
+        %td= theme.primary_bg_color
+        %td= theme.secondard_bg_color
+        %td= link_to 'Show', theme
+        %td= link_to 'Edit', edit_theme_path(theme)
+        %td= link_to 'Destroy', theme, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Theme', new_theme_path

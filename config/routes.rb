@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :themes
   apipie
   resources :activity_template_device_types
   resources :partners

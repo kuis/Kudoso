@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150729224133) do
+ActiveRecord::Schema.define(version: 20150806172313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(version: 20150729224133) do
     t.string   "build_version"
     t.string   "product_name"
     t.string   "mobicip_device_id"
+    t.string   "device_name"
   end
 
   add_index "devices", ["device_type_id"], name: "index_devices_on_device_type_id", using: :btree
@@ -284,6 +285,8 @@ ActiveRecord::Schema.define(version: 20150729224133) do
     t.integer  "avatar_file_size"
     t.datetime "avatar_updated_at"
     t.string   "mobicip_filter"
+    t.integer  "theme_id"
+    t.string   "gender",               limit: 1
   end
 
   add_index "members", ["family_id"], name: "index_members_on_family_id", using: :btree
@@ -383,6 +386,16 @@ ActiveRecord::Schema.define(version: 20150729224133) do
 
   add_index "st_overrides", ["member_id", "date"], name: "index_st_overrides_on_member_id_and_date", using: :btree
   add_index "st_overrides", ["member_id"], name: "index_st_overrides_on_member_id", using: :btree
+
+  create_table "themes", force: :cascade do |t|
+    t.string   "name"
+    t.string   "primary_color",      limit: 7
+    t.string   "secondary_color",    limit: 7
+    t.string   "primary_bg_color",   limit: 7
+    t.string   "secondary_bg_color", limit: 7
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+  end
 
   create_table "ticket_types", force: :cascade do |t|
     t.string   "name"

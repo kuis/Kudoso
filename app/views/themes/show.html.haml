@@ -1,0 +1,21 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @theme.name
+%p
+  %b Primary color:
+  = @theme.primary_color
+%p
+  %b Secondary color:
+  = @theme.secondary_color
+%p
+  %b Primary bg color:
+  = @theme.primary_bg_color
+%p
+  %b Secondard bg color:
+  = @theme.secondard_bg_color
+
+= link_to 'Edit', edit_theme_path(@theme)
+\|
+= link_to 'Back', themes_path
