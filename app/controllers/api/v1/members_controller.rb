@@ -13,6 +13,8 @@ module Api
           == API Members
           Once authenticated, you can retrieve Member specific information.
 
+          Member object returns as JSON with embedded Theme object.
+
         EOS
       end
       def_param_group :member do
@@ -21,6 +23,7 @@ module Api
         param :birth_date, String, desc: "The member's birth date in MM/DD/YYYY format"
         param :email, String, desc: "Optionally define an email address for this member (useful for notifications and updates)"
         param :parent, [true, false], desc: "Set to true if this member is a parent in the family (default: false)"
+        param :gender, ['m', 'f'], desc: "Gender of member as (m)ale or (f)emale"
       end
 
       api :GET, "/v1/families/:family_id/members", "Retrieve all family members (authenticated user must be a parent)"
@@ -177,7 +180,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def member_create_params
-        params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :email, :theme_id, avatar: %w(content-type content))
+        params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :gender, :email, :theme_id, avatar: %w(content-type content))
       end
 
       def parse_image_data(image_data)
