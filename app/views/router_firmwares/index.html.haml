@@ -1,0 +1,27 @@
+%h1 Listing router_firmwares
+
+%table
+  %thead
+    %tr
+      %th Router model
+      %th Version
+      %th Url
+      %th Notes
+      %th
+      %th
+      %th
+
+  %tbody
+    - @router_firmwares.each do |router_firmware|
+      %tr
+        %td= router_firmware.router_model_id
+        %td= router_firmware.version
+        %td= router_firmware.url
+        %td= router_firmware.notes
+        %td= link_to 'Show', router_firmware
+        %td= link_to 'Edit', edit_router_firmware_path(router_firmware)
+        %td= link_to 'Destroy', router_firmware, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Router firmware', new_router_firmware_path

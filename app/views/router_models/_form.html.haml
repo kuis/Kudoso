@@ -1,0 +1,9 @@
+= simple_form_for(@router_model) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :num
+
+  .form-actions
+    = f.button :submit

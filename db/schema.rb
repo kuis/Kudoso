@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150806172313) do
+ActiveRecord::Schema.define(version: 20150813210043) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -343,6 +343,38 @@ ActiveRecord::Schema.define(version: 20150806172313) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "router_firmwares", force: :cascade do |t|
+    t.integer  "router_model_id"
+    t.string   "version"
+    t.string   "url"
+    t.text     "notes"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "router_models", force: :cascade do |t|
+    t.string   "name"
+    t.string   "num"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "routers", force: :cascade do |t|
+    t.integer  "router_model_id"
+    t.integer  "router_firmware_id"
+    t.integer  "family_id"
+    t.string   "last_known_ip"
+    t.datetime "last_seen"
+    t.datetime "last_firmware_update"
+    t.string   "mac_address"
+    t.string   "secure_key"
+    t.boolean  "registered"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "routers", ["mac_address"], name: "index_routers_on_mac_address", using: :btree
 
   create_table "schedule_rrules", force: :cascade do |t|
     t.integer  "todo_schedule_id"

@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Router model:
+  = @router_firmware.router_model_id
+%p
+  %b Version:
+  = @router_firmware.version
+%p
+  %b Url:
+  = @router_firmware.url
+%p
+  %b Notes:
+  = @router_firmware.notes
+
+= link_to 'Edit', edit_router_firmware_path(@router_firmware)
+\|
+= link_to 'Back', router_firmwares_path

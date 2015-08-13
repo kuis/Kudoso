@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @router_model.name
+%p
+  %b Num:
+  = @router_model.num
+
+= link_to 'Edit', edit_router_model_path(@router_model)
+\|
+= link_to 'Back', router_models_path

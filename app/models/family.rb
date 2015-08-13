@@ -7,6 +7,7 @@ class Family < ActiveRecord::Base
   has_one :screen_time_schedule
   belongs_to :primary_contact, class_name: 'User'
   has_many :family_device_categories, dependent: :destroy
+  has_many :routers
 
   accepts_nested_attributes_for :members, :reject_if => :all_blank, :allow_destroy => true
 
@@ -123,6 +124,11 @@ class Family < ActiveRecord::Base
   def create_mobicip_account
     mobicip = Mobicip.new
     result = mobicip.create_account(self)
+  end
+
+  def active?
+    #TODO: Implement this
+    true
   end
 
   private
