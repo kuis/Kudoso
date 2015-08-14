@@ -15,13 +15,13 @@ module Api
         auth = request.headers["Signature"]
         if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"])
           messages[:error] << "Invalid Signature"
-          failure (messages)
+          router_failure(messages)
           return
         end
 
         if params[:mac].blank?
           messages[:error] << "Invalid Params, must send MAC Address"
-          failure (messages)
+          router_failure(messages)
           return
         end
 
@@ -29,14 +29,14 @@ module Api
           @router = Router.find_by_mac_address(params[:mac].downcase)
           if router.family_id.blank? || !router.family.active?
             messages[:error] << "Router is not assigned to an active account, please contact Kudoso support."
-            failure (messages, 400)
+            router_failure(messages, 400)
             return
           end
 
 
           if @router.registered
             messages[:error] << "Router was previously registered"
-            failure (messages, 400)
+            router_failure(messages, 400)
             return
           end
 
@@ -45,11 +45,11 @@ module Api
 
         rescue ActiveRecord::RecordNotFound
           messages[:error] << "Unknown router"
-          failure (messages, 404)
+          router_failure (messages, 404)
           return
         rescue
           messages[:error] << "Unknown error"
-          failure (messages, 400)
+          router_failure(messages, 400)
           return
         end
 
@@ -66,12 +66,12 @@ module Api
         auth = request.headers["Signature"]
         if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @router.secure_key)
           messages[:error] << "Invalid Signature"
-          failure (messages)
+          router_failure(messages)
           return
         else
           if !@router.registered
             messages[:error] << "Router is not registered, register first"
-            failure (messages, 403)
+            router_failure(messages, 403)
             return
           end
           @router.touch(request)
@@ -83,7 +83,7 @@ module Api
 
 
 
-      def failure(msg, status = 401)
+      def router_failure(msg, status = 401)
         logger.error "ROUTERS API failure: #{msg.inspect}"
         render :json => { :messages => msg }, :status => status
       end
