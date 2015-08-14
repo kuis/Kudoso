@@ -60,25 +60,29 @@ module Api
       api :GET, "/v1/routers/:id", "Returns current information about the router"
       def show
         messages = init_messages
-
-        @router = Router.find(:id)
-        #binding.pry
-        auth = request.headers["Signature"]
-        if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @router.secure_key)
-          messages[:error] << "Invalid Signature"
-          router_failure(messages)
-          return
-        else
-          if !@router.registered
-            messages[:error] << "Router is not registered, register first"
-            router_failure(messages, 403)
+        begin
+          @router = Router.find(:id)
+          #binding.pry
+          auth = request.headers["Signature"]
+          if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @router.secure_key)
+            messages[:error] << "Invalid Signature"
+            router_failure(messages)
             return
+          else
+            if !@router.registered
+              messages[:error] << "Router is not registered, register first"
+              router_failure(messages, 403)
+              return
+            end
+            @router.touch(request)
           end
-          @router.touch(request)
+
+          render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
+        rescue
+          messages[:error] << "Unknown error"
+          router_failure(messages, 400)
+          return
         end
-
-        render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => msg }, :status => 200
-
       end   #show
 
 
