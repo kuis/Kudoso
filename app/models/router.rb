@@ -12,9 +12,9 @@ class Router < ActiveRecord::Base
     self.mac_address = self.mac_address.downcase
   end
 
-  def touch(req)
-    self.last_seen= Time.now
-    self.last_known_ip=req.try(:remote_ip)
+  def touch(ip)
+    self.last_seen = Time.now
+    self.last_known_ip = ip
     self.save!
   end
 

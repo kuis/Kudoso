@@ -74,7 +74,7 @@ module Api
               router_failure(messages, 403)
               return
             end
-            @router.touch(request)
+            @router.touch(request.remote_ip.to_s)
           end
 
           render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
