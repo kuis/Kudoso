@@ -41,7 +41,7 @@ module Api
           end
 
           @router.update_attribute(:registered, true)
-          render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => msg }, :status => 200
+          render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
 
         rescue ActiveRecord::RecordNotFound
           messages[:error] << "Unknown router"
