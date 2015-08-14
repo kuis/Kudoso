@@ -61,7 +61,7 @@ module Api
       def show
         messages = init_messages
         begin
-          @router = Router.find(:id)
+          @router = Router.find(params[:id])
           #binding.pry
           auth = request.headers["Signature"]
           if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @router.secure_key)
