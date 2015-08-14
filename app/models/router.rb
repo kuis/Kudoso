@@ -5,7 +5,7 @@ class Router < ActiveRecord::Base
 
   validates_uniqueness_of :mac_address
 
-  validates_format_of :mac_address, with: %r(\A([0-9A-F]{2}[:]){5}([0-9A-F]{2})\z)
+  validates_format_of :mac_address, with: %r(\A([0-9a-f]{2}[:]){5}([0-9a-f]{2})\z)
   before_create :generate_secure_key
 
   before_save do
