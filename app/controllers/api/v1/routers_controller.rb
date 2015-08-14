@@ -27,7 +27,7 @@ module Api
 
         begin
           @router = Router.find_by_mac_address(params[:mac].downcase)
-          if router.family_id.blank? || !router.family.active?
+          if @router.family.nil? || !@router.family.active?
             messages[:error] << "Router is not assigned to an active account, please contact Kudoso support."
             router_failure(messages, 400)
             return

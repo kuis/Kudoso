@@ -6,10 +6,10 @@ class Router < ActiveRecord::Base
   validates_uniqueness_of :mac_address
 
   validates_format_of :mac_address, with: %r(\A([0-9A-F]{2}[:]){5}([0-9A-F]{2})\z)
-  before_create :generate_device_token
+  before_create :generate_secure_key
 
   before_save do
-    self.mac = self.mac.downcase
+    self.mac_address = self.mac_address.downcase
   end
 
   def touch(req)
@@ -19,7 +19,7 @@ class Router < ActiveRecord::Base
   end
 
   def latest_firmware
-    self.latest_firmware.last
+    self.router_firmware.last
   end
 
   private
