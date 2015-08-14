@@ -45,7 +45,7 @@ module Api
 
         rescue ActiveRecord::RecordNotFound
           messages[:error] << "Unknown router"
-          router_failure (messages, 404)
+          router_failure(messages, 404)
           return
         rescue
           messages[:error] << "Unknown error"
