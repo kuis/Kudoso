@@ -19,7 +19,7 @@ class Router < ActiveRecord::Base
   end
 
   def latest_firmware
-    RouterFirmware.where(router_model_id: self.router_model_id).last
+    RouterFirmware.where(router_model_id: self.router_model_id).order('version desc').limit(3)
   end
 
   private
