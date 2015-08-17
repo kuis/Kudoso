@@ -1,5 +1,5 @@
 set daemon 60
-set idfile /root/em/log/monit.pid
+set idfile /root/gateway/gatewayRunner.rb.pid
 
 set httpd port 2812 and
     use address localhost  # only accept connection from localhost
@@ -7,7 +7,7 @@ set httpd port 2812 and
     allow admin:monit
 
 check process proxy
-      with pidfile /root/em/log/proxy.pid
-      start = "/usr/bin/ruby /root/em/proxy_control.rb start"
-      stop = "/usr/bin/ruby /root/em/proxy_control.rb stop"
-      restart = "/usr/bin/ruby /root/em/proxy_control.rb restart"
+      with pidfile /root/gateway/gatewayRunner.rb
+      start = "/usr/bin/ruby /root/gateway/gatewayRunner.rb start"
+      stop = "/usr/bin/ruby /root/gateway/gatewayRunner.rb stop"
+      restart = "/usr/bin/ruby /root/gateway/gatewayRunner.rb restart"
