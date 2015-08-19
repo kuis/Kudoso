@@ -10,9 +10,12 @@
   %b Url:
   = @router_firmware.url
 %p
+  %b Checksum:
+  = @router_firmware.checksum
+%p
   %b Notes:
   = @router_firmware.notes
 
-= link_to 'Edit', edit_router_firmware_path(@router_firmware)
+= link_to 'Edit', edit_admin_router_firmware_path(@router_firmware)
 \|
-= link_to 'Back', router_firmwares_path
+= link_to 'Back', admin_router_firmwares_path

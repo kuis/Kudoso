@@ -31,6 +31,10 @@ class Family < ActiveRecord::Base
     summary
   end
 
+  def long_label
+    "(#{self.id}) #{self.name}"
+  end
+
   def self.memorialize_todos(for_date = Date.yesterday)
     for_date = for_date.end_of_day
     @families = self.includes(:members => {:todo_schedules => [:my_todos, :schedule_rrules]})

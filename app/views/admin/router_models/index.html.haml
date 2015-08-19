@@ -1,0 +1,21 @@
+%h1 Listing all Router Models
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th Name
+      %th Model Number
+      %th
+      %th
+
+  %tbody
+    - @router_models.each do |router_model|
+      %tr
+        %td= router_model.name
+        %td= router_model.num
+        %td= link_to 'Edit', edit_admin_router_model_path(router_model)
+        %td= link_to 'Destroy', admin_router_model_path(router_model), :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Router model', new_admin_router_model_path

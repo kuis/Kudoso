@@ -1,0 +1,31 @@
+%h1 Listing all Routers
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th ID
+      %th Mac Address
+      %th Model / Firmware
+      %th Registered?
+      %th Last IP
+      %th Last Seen
+      %th Family
+      %th
+      %th
+
+  %tbody
+    - @routers.each do |router|
+      %tr
+        %td= router.id
+        %td= router.mac_address
+        %td= "#{router.router_model.name} / #{router.router_firmware.version}"
+        %td= router.registered?
+        %td= router.last_known_ip
+        %td= router.last_seen
+        %td= link_to router.family.name, admin_family_path(router.family)
+        %td= link_to 'Edit', edit_admin_router_path(router)
+        %td= link_to 'Destroy', admin_router_path(router), :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Router', new_admin_router_path

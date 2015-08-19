@@ -1,4 +1,4 @@
-class RouterModelsController < ApplicationController
+class Admin::RouterModelsController < AdminController
   before_action :set_router_model, only: [:show, :edit, :update, :destroy]
 
   # GET /router_models
@@ -28,7 +28,7 @@ class RouterModelsController < ApplicationController
 
     respond_to do |format|
       if @router_model.save
-        format.html { redirect_to @router_model, notice: 'Router model was successfully created.' }
+        format.html { redirect_to admin_router_models_url, notice: 'Router model was successfully created.' }
         format.json { render :show, status: :created, location: @router_model }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class RouterModelsController < ApplicationController
   def update
     respond_to do |format|
       if @router_model.update(router_model_params)
-        format.html { redirect_to @router_model, notice: 'Router model was successfully updated.' }
+        format.html { redirect_to admin_router_models_url, notice: 'Router model was successfully updated.' }
         format.json { render :show, status: :ok, location: @router_model }
       else
         format.html { render :edit }
@@ -56,7 +56,7 @@ class RouterModelsController < ApplicationController
   def destroy
     @router_model.destroy
     respond_to do |format|
-      format.html { redirect_to router_models_url, notice: 'Router model was successfully destroyed.' }
+      format.html { redirect_to admin_router_models_url, notice: 'Router model was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

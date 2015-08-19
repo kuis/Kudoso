@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :router_firmwares
-  resources :router_models
+
   resources :themes
   apipie
   resources :activity_template_device_types
@@ -76,6 +75,9 @@ Rails.application.routes.draw do
     resources :todo_templates
     resources :activity_templates
     resources :tickets
+    resources :router_firmwares
+    resources :router_models
+    resources :routers
   end
 
   namespace :api, defaults: { format: 'json' } do

@@ -1,4 +1,4 @@
-class RouterFirmwaresController < ApplicationController
+class Admin::RouterFirmwaresController < AdminController
   before_action :set_router_firmware, only: [:show, :edit, :update, :destroy]
 
   # GET /router_firmwares
@@ -28,7 +28,7 @@ class RouterFirmwaresController < ApplicationController
 
     respond_to do |format|
       if @router_firmware.save
-        format.html { redirect_to @router_firmware, notice: 'Router firmware was successfully created.' }
+        format.html { redirect_to admin_router_firmwares_url, notice: 'Router firmware was successfully created.' }
         format.json { render :show, status: :created, location: @router_firmware }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class RouterFirmwaresController < ApplicationController
   def update
     respond_to do |format|
       if @router_firmware.update(router_firmware_params)
-        format.html { redirect_to @router_firmware, notice: 'Router firmware was successfully updated.' }
+        format.html { redirect_to admin_router_firmwares_url, notice: 'Router firmware was successfully updated.' }
         format.json { render :show, status: :ok, location: @router_firmware }
       else
         format.html { render :edit }
@@ -56,7 +56,7 @@ class RouterFirmwaresController < ApplicationController
   def destroy
     @router_firmware.destroy
     respond_to do |format|
-      format.html { redirect_to router_firmwares_url, notice: 'Router firmware was successfully destroyed.' }
+      format.html { redirect_to admin_router_firmwares_url, notice: 'Router firmware was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
@@ -69,6 +69,6 @@ class RouterFirmwaresController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def router_firmware_params
-      params.require(:router_firmware).permit(:router_model_id, :version, :url, :notes)
+      params.require(:router_firmware).permit(:router_model_id, :version, :url, :checksum, :notes)
     end
 end

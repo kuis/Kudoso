@@ -1,0 +1,12 @@
+= simple_form_for([:admin, @router_firmware]) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :router_model_id, collection: RouterModel.all, label_method: :name
+    = f.input :version
+    = f.input :url
+    = f.input :checksum
+    = f.input :notes
+
+  .form-actions
+    = f.button :submit
