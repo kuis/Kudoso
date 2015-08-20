@@ -71,7 +71,7 @@ module Api
             @family.name = params["name"] if params["name"]
             if params[ "device_categories" ].present? &&  params[ "device_categories" ].is_a?(Hash)
               params[ "device_categories" ].each do |key, value|
-                unless key.ends_with?('_other')
+                unless key.ends_with?('_other') || !value.is_a?(Hash)
                   id = "#{key}"
                   id.slice!('device_category_')
                   id = id.to_i

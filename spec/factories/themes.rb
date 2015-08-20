@@ -1,10 +1,10 @@
 FactoryGirl.define do
   factory :theme do
-    name "MyString"
-primary_color "MyString"
-secondary_color "MyString"
-primary_bg_color "MyString"
-secondard_bg_color "MyString"
+    name "Kudoso Theme"
+    primary_color "#159aef"
+    secondary_color "#123456"
+    primary_bg_color "#abcdef"
+    secondary_bg_color "#ff11aa"
   end
 
 end

@@ -49,7 +49,8 @@ describe 'Families API', type: :request do
     device_categories = FactoryGirl.create_list(:device_category, 4)
     postHash = Hash.new
     device_categories.each do |cat|
-      postHash[cat.id] = rand(1..5)
+      postHash[cat.id] ||= Hash.new
+      postHash[cat.id]["amount"] = rand(1..5)
     end
     patch "/api/v1/families/#{@user.member.family.id}", { device_categories: postHash}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
     expect(response.status).to eq(200)
@@ -65,7 +66,7 @@ describe 'Families API', type: :request do
     end
 
 
-    patch "/api/v1/families/#{@user.member.family.id}", { time_zone: timezone}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    patch "/api/v1/families/#{@user.member.family.id}", { timezone: timezone}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
     expect(response.status).to eq(200)
     @user.family.reload
     expect(@user.family.timezone).to eq(timezone)

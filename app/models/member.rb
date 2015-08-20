@@ -21,7 +21,7 @@ class Member < ActiveRecord::Base
   # ensure we have a secure password even if the user has no password
   before_save :secure_password
   before_create do
-    self.theme_id ||= Theme.first.id
+    self.theme_id ||= Theme.first.try(:id)
   end
 
 

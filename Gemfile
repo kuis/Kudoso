@@ -48,7 +48,7 @@ gem 'apipie-rails', github: 'Apipie/apipie-rails', ref: '928bd858fd14ec67eeb9483
 # User management
 gem 'devise'
 gem 'omniauth'
-gem 'cancan'
+gem 'cancancan'
 gem 'chronic'
 gem 'recurring_select' # for schedules
 gem 'agilecrm-wrapper' #for AgileCRM

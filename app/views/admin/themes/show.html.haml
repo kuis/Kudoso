@@ -10,12 +10,12 @@
   %b Secondary color:
   = @theme.secondary_color
 %p
-  %b Primary bg color:
+  %b Primary Background color:
   = @theme.primary_bg_color
 %p
-  %b Secondard bg color:
-  = @theme.secondard_bg_color
+  %b Secondary Background color:
+  = @theme.secondary_bg_color
 
-= link_to 'Edit', edit_theme_path(@theme)
+= link_to 'Edit', edit_admin_theme_path(@theme)
 \|
-= link_to 'Back', themes_path
+= link_to 'Back', admin_themes_path

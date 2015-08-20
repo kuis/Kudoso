@@ -1,6 +1,7 @@
 class TodosController < ApplicationController
   load_and_authorize_resource :family
-  load_and_authorize_resource :todo, through: :family
+  load_and_authorize_resource :todo, through: :family , except: :create
+  authorize_resource :todo, through: :family, only: :create
 
   respond_to :html
 
