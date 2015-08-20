@@ -1,28 +1,28 @@
 class Admin::RouterModelsController < AdminController
   before_action :set_router_model, only: [:show, :edit, :update, :destroy]
 
-  # GET /router_models
-  # GET /router_models.json
+  # GET /admin/router_firmwares
+  # GET /admin/router_firmwares.json
   def index
     @router_models = RouterModel.all
   end
 
-  # GET /router_models/1
-  # GET /router_models/1.json
+  # GET /admin/router_firmwares/1
+  # GET /admin/router_firmwares/1.json
   def show
   end
 
-  # GET /router_models/new
+  # GET /admin/router_firmwares/new
   def new
     @router_model = RouterModel.new
   end
 
-  # GET /router_models/1/edit
+  # GET /admin/router_firmwares/1/edit
   def edit
   end
 
-  # POST /router_models
-  # POST /router_models.json
+  # POST /admin/router_firmwares
+  # POST /admin/router_firmwares.json
   def create
     @router_model = RouterModel.new(router_model_params)
 
@@ -37,8 +37,8 @@ class Admin::RouterModelsController < AdminController
     end
   end
 
-  # PATCH/PUT /router_models/1
-  # PATCH/PUT /router_models/1.json
+  # PATCH/PUT /admin/router_firmwares/1
+  # PATCH/PUT /admin/router_firmwares/1.json
   def update
     respond_to do |format|
       if @router_model.update(router_model_params)
@@ -51,8 +51,8 @@ class Admin::RouterModelsController < AdminController
     end
   end
 
-  # DELETE /router_models/1
-  # DELETE /router_models/1.json
+  # DELETE /admin/router_firmwares/1
+  # DELETE /admin/router_firmwares/1.json
   def destroy
     @router_model.destroy
     respond_to do |format|

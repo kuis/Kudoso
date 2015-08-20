@@ -31,4 +31,13 @@ class Device < ActiveRecord::Base
 
     return command
   end
+
+  def register_with_mobicip
+    return true if self.udid.present?
+    return false unless self.device_type.try(:os) == "iOS"
+    mobicip = Mobicip.new
+    result = mobicip.login(self.family)
+    result = mobicip.getMDMProfileForHash(self) if result
+    return result #this returns the url for the device to register with the MDM
+  end
 end

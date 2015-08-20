@@ -1,28 +1,28 @@
 class Admin::ThemesController < AdminController
   before_action :set_theme, only: [:show, :edit, :update, :destroy]
 
-  # GET /themes
-  # GET /themes.json
+  # GET /admin/themes
+  # GET /admin/themes.json
   def index
     @themes = Theme.all
   end
 
-  # GET /themes/1
-  # GET /themes/1.json
+  # GET /admin/themes/1
+  # GET /admin/themes/1.json
   def show
   end
 
-  # GET /themes/new
+  # GET /admin/themes/new
   def new
     @theme = Theme.new
   end
 
-  # GET /themes/1/edit
+  # GET /admin/themes/1/edit
   def edit
   end
 
-  # POST /themes
-  # POST /themes.json
+  # POST /admin/themes
+  # POST /admin/themes.json
   def create
     @theme = Theme.new(theme_params)
 
@@ -37,8 +37,8 @@ class Admin::ThemesController < AdminController
     end
   end
 
-  # PATCH/PUT /themes/1
-  # PATCH/PUT /themes/1.json
+  # PATCH/PUT /admin/themes/1
+  # PATCH/PUT /admin/themes/1.json
   def update
     respond_to do |format|
       if @theme.update(theme_params)
@@ -51,8 +51,8 @@ class Admin::ThemesController < AdminController
     end
   end
 
-  # DELETE /themes/1
-  # DELETE /themes/1.json
+  # DELETE /admin/themes/1
+  # DELETE /admin/themes/1.json
   def destroy
     @theme.destroy
     respond_to do |format|

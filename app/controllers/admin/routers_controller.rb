@@ -1,28 +1,28 @@
 class Admin::RoutersController < AdminController
   before_action :set_router, only: [:show, :edit, :update, :destroy]
 
-  # GET /router_models
-  # GET /router_models.json
+  # GET /admin/routers
+  # GET /admin/routers.json
   def index
     @routers = Router.all
   end
 
-  # GET /router_models/1
-  # GET /router_models/1.json
+  # GET /admin/routers/1
+  # GET /admin/routers/1.json
   def show
   end
 
-  # GET /router_models/new
+  # GET /admin/routers/new
   def new
     @router = Router.new
   end
 
-  # GET /router_models/1/edit
+  # GET /admin/routers/1/edit
   def edit
   end
 
-  # POST /router_models
-  # POST /router_models.json
+  # POST /admin/routers
+  # POST /admin/routers.json
   def create
     @router = Router.new(router_params)
 
@@ -37,11 +37,11 @@ class Admin::RoutersController < AdminController
     end
   end
 
-  # PATCH/PUT /router_models/1
-  # PATCH/PUT /router_models/1.json
+  # PATCH/PUT /admin/routers/1
+  # PATCH/PUT /admin/routers/1.json
   def update
     respond_to do |format|
-      if @router_model.update(router_model_params)
+      if @router.update(router_model_params)
         format.html { redirect_to admin_routers_url, notice: 'Router was successfully updated.' }
         format.json { render :show, status: :ok, location: @router }
       else
@@ -51,8 +51,8 @@ class Admin::RoutersController < AdminController
     end
   end
 
-  # DELETE /router_models/1
-  # DELETE /router_models/1.json
+  # DELETE /admin/routers/1
+  # DELETE /admin/routers/1.json
   def destroy
     @router.destroy
     respond_to do |format|

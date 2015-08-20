@@ -1,19 +1,21 @@
 %h1 Listing devices
 
-%table
+%table.table.table-striped
   %tr
+    %th ID
     %th Name
     %th Device type
     %th Managed
     %th Management
     %th Default / Primary user
     %th Manages
-    %th
+    %th UUID / UDID
     %th
     %th
 
   - @devices.each do |device|
     %tr
+      %td= device.id
       %td= device.name
       %td= "#{device.device_type_id} #{device.device_type.name}"
       %td= device.managed
@@ -23,13 +25,12 @@
         - device.managed_devices.each_with_index do |dev, idx|
           - if idx > 1
             %br
-          = dev.name
-      %td= link_to 'Show', [@family, device]
-      %td= link_to 'Edit', edit_family_device_path(@family, device)
-      %td= link_to 'Destroy', [@family,device], :method => :delete, :data => { :confirm => 'Are you sure?' }
+          = link_to "(#{dev.id}) #{dev.name}", admin_device_path(device)
+      %td= "#{device.uuid} / #{device.udid}"
+      %td= link_to 'Edit', edit_admin_device_path(device)
+      %td= link_to 'Destroy', admin_device_path(device), :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 %br
 
-= link_to 'New Device', new_family_device_path(@family)
-%br
-= link_to 'Family Dashboard', @family
+= link_to 'New Device', new_admin_device_path
+

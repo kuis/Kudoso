@@ -17,6 +17,7 @@ class Member < ActiveRecord::Base
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
   validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
   validates_inclusion_of :gender, :in => %w( m f ), allow_blank: :true
+  validates_inclusion_of :mobicip_filter, :in => %w( Monitor Strict Moderate Mature ), allow_blank: :true
 
   # ensure we have a secure password even if the user has no password
   before_save :secure_password
@@ -234,7 +235,36 @@ class Member < ActiveRecord::Base
     key
   end
 
+  def create_mobicip_profile
+    return true if self.mobicip_profile.present?
+    return false if self.family.mobicip_id.blank?
+    mobicip = Mobicip.new
+    result = mobicip.login(self.family)
+    result = mobicip.createProfile(self, filter_level_id) if result
+    return result && self.mobicip_profile.present?
+  end
+
+  def filter_level_id
+
+    # # The default settings for this filter level are: 4) Monitor, 5) Strict, 6) Moderate, 7) Mature
+    case self.mobicip_filter.downcase
+      when "monitor"
+        return 4
+      when "strict"
+        return 5
+      when "moderate"
+        return 6
+      when "mature"
+        return 7
+      else
+        return 4
+    end
+  end
+
   protected
+
+
+
 
   def secure_password
     unless self.password.nil? || self.password_confirmation.nil?

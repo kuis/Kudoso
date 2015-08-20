@@ -20,19 +20,22 @@ class Mobicip
   #
 
   def create_account(family)
-    if family.mobicip_password.nil?
-      family.update_attribute(:mobicip_password, SecureRandom.hex(18))
+    family.mobicip_password = SecureRandom.hex(18) if family.mobicip_password.blank?
+    if family.mobicip_id.blank?
+      family.mobicip_id = "#{Rails.env.production? ? '' : "#{Rails.env}_" }family_#{family.id}@kudoso.com"
     end
+
     @target = "#{@api_base_uri}/user/createUser"
     @xmlstring  = '<?xml version="1.0" encoding="UTF-8"?>' + create_user_xml(family).to_s
     @request = prepare_request
     @result = post_request
     if @result.elements["response/status/code"].try(:text) == '000'
+      family.save
       login(family)
       list_all_profiles
       def_profile_id = @result.elements["response/profiles/profile/id"].first
       if def_profile_id
-        parent = family.members.first
+        parent = family.primary_contact.member
         parent.update_attributes({mobicip_profile: def_profile_id, mobicip_filter: family.default_filter })
         update_profile(parent, filter_id?(family.default_filter) )
       end
@@ -85,6 +88,7 @@ class Mobicip
   end
 
   def createProfile(member, filter_level_id)
+    return true if member.mobicip_profile.present?
     return false if member.nil? || filter_level_id.blank?
     @target = "#{@api_base_uri}/user/createProfile"
     @xmlstring = '<?xml version="1.0" encoding="UTF-8"?>' + create_profile_xml(member.username, filter_level_id).to_s
@@ -157,7 +161,8 @@ class Mobicip
   #  5. Kudoso calls registerDevice with newly obtains UDID to associate device with user account
   #
 
-  def register_device(device)
+  def registerDevice(device)
+    @target = "#{@api_base_uri}/device/registerDevice"
     @xmlstring = '<?xml version="1.0" encoding="UTF-8"?>' + register_device_xml(device).to_s
     @request = prepare_request
     @result = post_request
@@ -444,7 +449,7 @@ class Mobicip
     doc.elements["request"].add_element("account")
     doc.elements["request"].elements["account"].add_element "user"
     doc.elements["request"].elements["account"].elements["user"].add_element "email"
-    doc.elements["request"].elements["account"].elements["user"].elements["email"].add_text "test_family_#{family.id}@kudoso.com"
+    doc.elements["request"].elements["account"].elements["user"].elements["email"].add_text family.mobicip_id
     doc.elements["request"].elements["account"].elements["user"].add_element "password"
     doc.elements["request"].elements["account"].elements["user"].elements["password"].add_text family.mobicip_password
     doc.elements["request"].elements["account"].elements["user"].add_element "passwordConfirmation"
@@ -530,23 +535,26 @@ class Mobicip
 
   def register_device_xml(device)
     doc = create_token_xml
-    doc.elements["request"].add_element("device")
-    doc.elements["request/device"].add_element("signature1")
-    doc.elements["request/device/signature1"].add_text device.udid
-    doc.elements["request/device"].add_element("signature2")
-    doc.elements["request/device/signature2"].add_text device.wifi_mac
-    doc.elements["request/device"].add_element("signature3")
-    doc.elements["request/device/signature3"].add_text device.uuid
-    doc.elements["request/device"].add_element("os_version")
-    doc.elements["request/device/os_version"].add_text device.os_version
-    doc.elements["request/device"].add_element("build_version")
-    doc.elements["request/device/build_version"].add_text device.build_version
-    doc.elements["request/device"].add_element("product_name")
-    doc.elements["request/device/product_name"].add_text device.product_name
-    doc.elements["request/device"].add_element("model_name")
-    doc.elements["request/device/model_name"].add_text device.device_type.name
-    doc.elements["request/device"].add_element("device_name")
-    doc.elements["request/device/device_name"].add_text device.device_name
+    doc.elements["request"].add_element("hash")
+    doc.elements["request/hash"].add_element("profileHash")
+    doc.elements["request/hash/profileHash"].add_text device.uuid
+    # doc.elements["request"].add_element("device")
+    # doc.elements["request/device"].add_element("signature1")
+    # doc.elements["request/device/signature1"].add_text device.udid
+    # doc.elements["request/device"].add_element("signature2")
+    # doc.elements["request/device/signature2"].add_text device.wifi_mac
+    # doc.elements["request/device"].add_element("signature3")
+    # doc.elements["request/device/signature3"].add_text device.uuid
+    # doc.elements["request/device"].add_element("os_version")
+    # doc.elements["request/device/os_version"].add_text device.os_version
+    # doc.elements["request/device"].add_element("build_version")
+    # doc.elements["request/device/build_version"].add_text device.build_version
+    # doc.elements["request/device"].add_element("product_name")
+    # doc.elements["request/device/product_name"].add_text device.product_name
+    # doc.elements["request/device"].add_element("model_name")
+    # doc.elements["request/device/model_name"].add_text device.device_type.name
+    # doc.elements["request/device"].add_element("device_name")
+    # doc.elements["request/device/device_name"].add_text device.device_name
     doc
   end
 
