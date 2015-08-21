@@ -31,7 +31,7 @@ class Mobicip
     @result = post_request
     if @result.elements["response/status/code"].try(:text) == '000'
       family.save
-      login(family)
+      @token = @result.elements["response/session/token"].text
       list_all_profiles
       def_profile_id = @result.elements["response/profiles/profile/id"].first
       if def_profile_id
@@ -472,7 +472,7 @@ class Mobicip
     doc.add_element("request") if doc.elements["request"].nil?
     doc.elements["request"].add_element("user")
     doc.elements["request"].elements["user"].add_element "email"
-    doc.elements["request"].elements["user"].elements["email"].add_text "family_#{family.id}@kudoso.com"
+    doc.elements["request"].elements["user"].elements["email"].add_text family.mobcip_id
     doc.elements["request"].elements["user"].add_element "password"
     doc.elements["request"].elements["user"].elements["password"].add_text family.mobicip_password
     doc.elements["request"].add_element("client")
