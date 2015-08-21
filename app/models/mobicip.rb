@@ -472,7 +472,7 @@ class Mobicip
     doc.add_element("request") if doc.elements["request"].nil?
     doc.elements["request"].add_element("user")
     doc.elements["request"].elements["user"].add_element "email"
-    doc.elements["request"].elements["user"].elements["email"].add_text family.mobcip_id
+    doc.elements["request"].elements["user"].elements["email"].add_text family.mobicip_id
     doc.elements["request"].elements["user"].add_element "password"
     doc.elements["request"].elements["user"].elements["password"].add_text family.mobicip_password
     doc.elements["request"].add_element("client")
