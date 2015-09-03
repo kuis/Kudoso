@@ -26,7 +26,7 @@ module Api
         end
 
         begin
-          @router = Router.find_by_mac_address(params[:mac].downcase)
+          @router = Router.find_or_create_by(mac_address: params[:mac].downcase)
           if @router.family.nil? || !@router.family.active?
             messages[:error] << "Router is not assigned to an active account, please contact Kudoso support."
             router_failure(messages, 400)
@@ -35,13 +35,20 @@ module Api
 
 
           if @router.registered
-            messages[:error] << "Router was previously registered"
-            router_failure(messages, 400)
-            return
+            logger.info "Router #{@router.id} #{@router.mac_address} previously registered, regenerating secure key"
+            messages[:warning] << "Router was previously registered, generating new secure key"
+            @router.generate_secure_key
+
           end
 
-          @router.update_attribute(:registered, true)
-          render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
+          @router.registered = true
+          if @router.save
+            render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
+          else
+            messages[:error] << @router.errors.full_messages
+            render :json => { :messages => messages }, :status => 400
+          end
+
 
         rescue ActiveRecord::RecordNotFound
           messages[:error] << "Unknown router"
