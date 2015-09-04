@@ -79,4 +79,14 @@ Rails.application.configure do
   # For devise:
   config.action_mailer.default_url_options = { host: 'staging.kudoso.com' }
 
+  # for paperclip on s3
+  config.paperclip_defaults = {
+      :storage => :s3,
+      :s3_credentials => {
+          :bucket => 'kudoso-prod',
+          :access_key_id => Settings.s3.access_key_id,
+          :secret_access_key => Settings.s3.secret_access_key
+      }
+  }
+  
 end
