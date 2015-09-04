@@ -303,6 +303,34 @@ module Api
 
       end
 
+      api :POST, "/v1/devices/record", "API Used by Kudoso Routers to record a device seen on the router"
+      param :router_mac_address, 'The mac address of the Kudoso Router reporting the device'
+      param :ip, 'The IP Address of the device being reported'
+      param :mac_address, 'The MAC Address of the device being reported'
+      param :name, 'The hostname of the device being reported'
+      def record
+        messages = init_messages
+        auth = request.headers["Signature"]
+        router = Router.find_by(mac_address: params[:router_mac_address])
+        if router.nil?
+          messages[:error] << "Unknown Router"
+          router_failure(messages)
+          return
+        end
+
+        if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + router.secure_key)
+          messages[:error] << "Invalid Signature"
+          router_failure(messages)
+          return
+        end
+
+        logger.info "A new device was registered: #{params.inspect}"
+
+
+        render :json => { :messages => messages }, :status => 200
+      end
+
+
       def failure(msg)
         logger.error "Devices API failure: #{msg.inspect}"
         render :json => { :messages => msg }, :status => 401

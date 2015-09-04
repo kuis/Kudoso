@@ -17,25 +17,25 @@ class UpdateServer < EventMachine::Connection
     @buffer = ''
     @@rooms ||= {}
     @@router_versions ||= {}
-    puts "Set start max version 0,1,6" unless defined? @@max_version
-    @@max_version ||= [0,1,6]
+    # puts "Set start max version 0,1,6" unless defined? @@max_version
+    # @@max_version ||= [0,1,6]
 
     # Timeout after 100 seconds (ping/pong happens every 30)
     self.comm_inactivity_timeout = 100.0
   end
 
-  def set_max_version(version)
-    if version && version.strip != ''
-      version = version.strip.split('.').map(&:to_i)
-
-      # Only update if we're at a newer version
-      puts "Compare: #{@@max_version} <=> #{version} -- #{@@max_version <=> version}"
-      if (@@max_version <=> version) == -1
-        @@max_version = version
-        puts "Set Max Version: #{version}"
-      end
-    end
-  end
+  # def set_max_version(version)
+  #   if version && version.strip != ''
+  #     version = version.strip.split('.').map(&:to_i)
+  #
+  #     # Only update if we're at a newer version
+  #     puts "Compare: #{@@max_version} <=> #{version} -- #{@@max_version <=> version}"
+  #     if (@@max_version <=> version) == -1
+  #       @@max_version = version
+  #       puts "Set Max Version: #{version}"
+  #     end
+  #   end
+  # end
 
   def receive_data(data)
     @buffer << data
@@ -70,7 +70,7 @@ class UpdateServer < EventMachine::Connection
           router_mac_address, version = args.split('|')
           puts "VERSION: #{version}"
 
-          set_max_version(version)
+          # set_max_version(version)
 
           @@rooms ||= {}
           @@rooms[router_mac_address] ||= []
@@ -80,12 +80,12 @@ class UpdateServer < EventMachine::Connection
 
           @@router_versions[router_mac_address] = version
 
-          puts "Check version: #{version} <=> #{@@max_version}"
-          if @@max_version && (@@max_version <=> version.strip.split('.').map(&:to_i)) == 1
-            puts "Upgrade router: #{router_mac_address}"
-            # Auto update if needed
-            message_user(router_mac_address, 'upgrade')
-          end
+          # puts "Check version: #{version} <=> #{@@max_version}"
+          # if @@max_version && (@@max_version <=> version.strip.split('.').map(&:to_i)) == 1
+          #   puts "Upgrade router: #{router_mac_address}"
+          #   # Auto update if needed
+          #   message_user(router_mac_address, 'upgrade')
+          # end
         elsif command == 'send'
           user, args = parse(args)
 
@@ -108,6 +108,7 @@ class UpdateServer < EventMachine::Connection
   end
 
   def parse(str)
+    puts "Parsing string: #{str}"
     index = str.index('|')
     command = str[0...index]
     args = str[(index+1)..-1]
@@ -131,18 +132,18 @@ class StatusServer < EventMachine::HttpServer::Server
     if UpdateServer.class_variables.include?(:@@rooms)
       rooms = UpdateServer.class_variable_get('@@rooms')
       router_versions = UpdateServer.class_variable_get('@@router_versions')
-      max_version = UpdateServer.class_variable_get('@@max_version')
+      # max_version = UpdateServer.class_variable_get('@@max_version')
     else
       rooms = {}
       router_versions = {}
-      max_version = 0
+      # max_version = 0
     end
 
 
     finished = Proc.new do
 
       html = []
-      html << "<h1>#{rooms.size} Routers Connected, #{max_version}</h1>"
+      html << "<h1>#{rooms.size} Routers Connected</h1>"
 
       html << '<table>'
       html << "<tr><td>Owner</td><td>Mac Address</td><td>Software Version</td></tr>"
@@ -161,22 +162,22 @@ class StatusServer < EventMachine::HttpServer::Server
     end
 
     # Load all of the owners
-    rooms.keys.each do |mac_address|
-      unless @owners[mac_address]
-        outstanding += 1
-        http = EventMachine::HttpRequest.new("http://www.kudoso.com/internal_apis/#{mac_address}").get
-        http.errback do
-          outstanding -= 1
-          finished.call if outstanding == 0
-        end
-        http.callback do
-          @owners[mac_address] = http.response
-
-          outstanding -= 1
-          finished.call if outstanding == 0
-        end
-      end
-    end
+    # rooms.keys.each do |mac_address|
+    #   unless @owners[mac_address]
+    #     outstanding += 1
+    #     http = EventMachine::HttpRequest.new("http://www.kudoso.com/internal_apis/#{mac_address}").get
+    #     http.errback do
+    #       outstanding -= 1
+    #       finished.call if outstanding == 0
+    #     end
+    #     http.callback do
+    #       @owners[mac_address] = http.response
+    #
+    #       outstanding -= 1
+    #       finished.call if outstanding == 0
+    #     end
+    #   end
+    # end
 
     # Incase none ran
     outstanding -= 1

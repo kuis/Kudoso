@@ -109,6 +109,7 @@ Rails.application.routes.draw do
       resources :timezones
       post "/devices/:uuid/deviceDidRegister", to: 'devices#deviceDidRegister'
       patch "/devices/:udid/status", to: 'devices#status'
+      post "/devices/record", to: 'devices#record'
     end
   end
 
