@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150817150005) do
+ActiveRecord::Schema.define(version: 20150904152200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -347,11 +347,15 @@ ActiveRecord::Schema.define(version: 20150817150005) do
   create_table "router_firmwares", force: :cascade do |t|
     t.integer  "router_model_id"
     t.string   "version"
-    t.string   "url"
     t.text     "notes"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.string   "checksum"
+    t.string   "firmware_file_name"
+    t.string   "firmware_content_type"
+    t.integer  "firmware_file_size"
+    t.datetime "firmware_updated_at"
+    t.string   "firmware_fingerprint"
   end
 
   create_table "router_models", force: :cascade do |t|
@@ -444,15 +448,6 @@ ActiveRecord::Schema.define(version: 20150817150005) do
     t.datetime "date_openned"
     t.datetime "date_closed"
     t.string   "status"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "todo_groups", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "rec_min_age"
-    t.integer  "rec_max_age"
-    t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

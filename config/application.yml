@@ -2,8 +2,11 @@ defaults: &defaults
   rotten_tomoatoes:
     key: ys5mave4hz6nw9d8ub6vac4u
   facebook:
-   id: abcd1234
-   secret: abcd1234
+   id: ENV['FACEBOOK_ID']
+   secret: ENV['FACEBOOK_SECRET']
+  s3:
+   access_key_id: AKIAJPLRKC2UNCXX2RSQ
+   secret_access_key: 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
 
 development:
   <<: *defaults

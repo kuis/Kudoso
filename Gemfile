@@ -30,6 +30,7 @@ gem 'best_in_place' #adds in place editing features
 gem 'kaminari'
 gem 'modernizr-rails'
 gem 'paperclip', "~> 4.3"
+gem 'aws-sdk'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 

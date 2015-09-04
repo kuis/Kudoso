@@ -69,6 +69,6 @@ class Admin::RouterFirmwaresController < AdminController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def router_firmware_params
-      params.require(:router_firmware).permit(:router_model_id, :version, :url, :checksum, :notes)
+      params.require(:router_firmware).permit(:router_model_id, :version, :checksum, :notes, :firmware)
     end
 end
