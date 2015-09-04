@@ -40,4 +40,14 @@ Rails.application.configure do
 
   config.middleware.insert_after(ActionDispatch::Static, Rack::LiveReload)
 
+  #For testing S3 on your dev box:
+  # config.paperclip_defaults = {
+  #     :storage => :s3,
+  #     :s3_credentials => {
+  #         :bucket => 'kudoso-stage',
+  #         :access_key_id => Settings.s3.access_key_id,
+  #         :secret_access_key => Settings.s3.secret_access_key,
+  #         :s3_region => 'us-standard'
+  #     }
+  # }
 end

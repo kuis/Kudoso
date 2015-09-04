@@ -83,10 +83,10 @@ Rails.application.configure do
   config.paperclip_defaults = {
       :storage => :s3,
       :s3_credentials => {
-          :bucket => 'kudoso-prod',
+          :bucket => 'kudoso-stage',
           :access_key_id => Settings.s3.access_key_id,
           :secret_access_key => Settings.s3.secret_access_key
       }
   }
-  
+
 end
