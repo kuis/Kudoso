@@ -3,6 +3,14 @@
 # message the routers.  (This is similar to a chat room, where there is a
 # room for each router)
 
+##########
+#
+# TODO for app
+#
+# 1. Secure communictions between clients and servers
+# 2. Require join on open within X seconds or disconnect
+# 3. Logging
+
 require 'eventmachine'
 
 $LOAD_PATH << File.expand_path('../lib', File.dirname(__FILE__))

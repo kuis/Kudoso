@@ -119,7 +119,7 @@ class Family < ActiveRecord::Base
     rec = Set.new
 
     devices.each do |device|
-      device.device_type.activity_templates.each { |activity_template| rec << activity_template }
+      device.device_type.activity_templates.each { |activity_template| rec << activity_template } if device.device_type
     end
 
     rec.to_a
