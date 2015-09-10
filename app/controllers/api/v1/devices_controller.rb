@@ -211,15 +211,16 @@ module Api
 
       end
 
-      api :POST, "/v1/families/:family_id/devices", "Create a new device for this family (authenticated user must be a parent)"
+      api :POST, "/v1/families/:family_id/devices", "Create a new device for this family (authenticated user must be a parent), will check for a matching device and return it or create a new one"
       param_group :device
       def create
         messages = init_messages
         begin
           @family = Family.find(params[:family_id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
-            @device = Device.new(device_create_params.merge(family_id: @family.id))
-            if @device.save
+            @device = Device.where(device_create_params.slice(:mac_address).merge(family_id: @family.id)).first
+            @device ||= Device.create(device_create_params.merge(family_id: @family.id))
+            if @device.valid?
               render :json => { :device => @device, :messages => messages }, :status => 200
             else
               messages[:error] << @device.errors.full_messages
@@ -304,10 +305,10 @@ module Api
       end
 
       api :POST, "/v1/devices/record", "API Used by Kudoso Routers to record a device seen on the router"
-      param :router_mac_address, 'The mac address of the Kudoso Router reporting the device'
-      param :ip, 'The IP Address of the device being reported'
-      param :mac_address, 'The MAC Address of the device being reported'
-      param :name, 'The hostname of the device being reported'
+      param :router_mac_address, String, desc: 'The mac address of the Kudoso Router reporting the device', required: true
+      param :ip, String, desc: 'The IP Address of the device being reported', required: true
+      param :mac_address, String, desc: 'The MAC Address of the device being reported', required: true
+      param :name, String, desc: 'The hostname of the device being reported', required: false
       def record
         messages = init_messages
         auth = request.headers["Signature"]
@@ -341,7 +342,7 @@ module Api
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def device_create_params
-        params.require(:device).permit(:name, :device_type_id, :primary_member_id, :os_version, :wifi_mac, :build_version, :product_name, :model_name)
+        params.require(:device).permit(:name, :device_type_id, :primary_member_id, :os_version, :wifi_mac, :build_version, :product_name, :model_name, :mac_address)
       end
 
 

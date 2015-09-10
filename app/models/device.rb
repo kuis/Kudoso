@@ -10,20 +10,22 @@ class Device < ActiveRecord::Base
   has_many :screen_times
   has_many :commands
 
-  validates :name, uniqueness: { scope: :family_id }, presence: true
-  validates_uniqueness_of :uuid
-  # validates_presence_of :device_type_id, :device_type
-  validates_presence_of :family_id
-
   before_create { self.uuid = SecureRandom.uuid }
 
   before_validation do
+    self.name ||= self.mac_address
+    self.name ||= self.wifi_mac
     if wifi_mac.present? && mac_address.nil?
       mac_address = wifi_mac
     end
   end
 
   attr_readonly :uuid
+
+  validates :name, uniqueness: { scope: :family_id }, presence: true
+  validates_uniqueness_of :uuid
+  # validates_presence_of :device_type_id, :device_type
+  validates_presence_of :family_id
 
   def current_member
     current_activity.try(:member)
