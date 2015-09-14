@@ -41,7 +41,7 @@ module Api
       param :apps, Array, desc: "Array of app objects"
       def create
         messages = init_messages
-        # begin
+        begin
           @family = Family.find(params[:family_id])
           @member = @family.members.find(params[:member_id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent )
@@ -63,13 +63,13 @@ module Api
             render :json => { :messages => messages }, :status => 403
           end
 
-        # rescue ActiveRecord::RecordNotFound
-        #   messages[:error] << 'Family or Member not found.'
-        #   render :json => { :messages => messages }, :status => 404
-        # rescue
-        #   messages[:error] << 'A server error occurred.'
-        #   render :json => { :messages => messages }, :status => 500
-        # end
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Family or Member not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
+        end
       end
 
       private
