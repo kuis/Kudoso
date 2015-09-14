@@ -13,7 +13,7 @@ class Member < ActiveRecord::Base
   belongs_to :theme
   has_many :api_keys
   has_many :app_members
-  # has_many :apps, through: :app_members
+  has_many :apps, through: :app_members
 
 
 
@@ -264,10 +264,6 @@ class Member < ActiveRecord::Base
     end
   end
 
-  def apps
-    apps = []
-
-  end
 
   protected
 

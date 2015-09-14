@@ -15,13 +15,21 @@ module Api
       end
 
       api :GET, "/v1/family/<family_id>/members/<member_id>/apps", "Get list of app restrctions for the member"
+      api :GET, "/v1/family/<family_id>/devices/<device_id>/members/<member_id>/apps", "Get list of apps & restrictions on device for the member."
+
       def index
         messages = init_messages
         begin
           @family = Family.find(params[:family_id])
           @member = @family.members.find(params[:member_id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent )
-            render :json => { apps: @member.app_members, :messages => messages }, :status => 200
+            if params[:device_id]
+              @device = @family.devices.find(params[:device_id])
+              @apps = @member.app_members.includes(:devices).where('app_devices.device_id' => @device.id)
+            else
+              @apps = @member.app_members
+            end
+            render :json => { apps: @apps, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403
