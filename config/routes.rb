@@ -100,6 +100,9 @@ Rails.application.routes.draw do
         resources :todos
         resources :devices do
           resources :apps_devices, path: :apps
+          resources :members do
+            resources :apps_members, path: :apps
+          end
         end
         resources :members do
           resources :apps_members, path: :apps
@@ -113,9 +116,6 @@ Rails.application.routes.draw do
               post :assign
               delete :unassign
             end
-          end
-          resources :devices do
-            resources :apps_devices, path: :apps
           end
         end
       end
