@@ -114,6 +114,9 @@ Rails.application.routes.draw do
               delete :unassign
             end
           end
+          resources :devices do
+            resources :apps_devices, path: :apps
+          end
         end
       end
       resources :timezones
