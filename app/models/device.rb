@@ -9,6 +9,8 @@ class Device < ActiveRecord::Base
   has_many :managed_devices, class_name: 'Device', foreign_key: 'management_id'
   has_many :screen_times
   has_many :commands
+  has_many :app_devices
+  has_many :apps, through: :app_devices
 
   before_create { self.uuid = SecureRandom.uuid }
 

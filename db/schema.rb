@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150909190114) do
+ActiveRecord::Schema.define(version: 20150914201919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,6 +97,36 @@ ActiveRecord::Schema.define(version: 20150909190114) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "app_devices", force: :cascade do |t|
+    t.integer  "app_id"
+    t.integer  "device_id"
+    t.string   "version"
+    t.datetime "installed_at"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "app_members", force: :cascade do |t|
+    t.integer  "app_id"
+    t.integer  "member_id"
+    t.boolean  "restricted"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "apps", force: :cascade do |t|
+    t.string   "name"
+    t.string   "bundle_identifier"
+    t.string   "publisher"
+    t.string   "url"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "icon_file_name"
+    t.string   "icon_content_type"
+    t.integer  "icon_file_size"
+    t.datetime "icon_updated_at"
   end
 
   create_table "commands", force: :cascade do |t|

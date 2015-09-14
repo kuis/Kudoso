@@ -12,6 +12,9 @@ class Member < ActiveRecord::Base
   has_one :screen_time_schedule
   belongs_to :theme
   has_many :api_keys
+  has_many :apps_members
+  has_many :apps, through: :apps_members
+
 
 
   has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
