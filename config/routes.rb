@@ -102,6 +102,7 @@ Rails.application.routes.draw do
           resources :apps_devices, path: :apps
         end
         resources :members do
+          resources :apps_members, path: :apps
           resources :my_todos do
             member do
               post :verify

@@ -12,8 +12,8 @@ class Member < ActiveRecord::Base
   has_one :screen_time_schedule
   belongs_to :theme
   has_many :api_keys
-  has_many :apps_members
-  has_many :apps, through: :apps_members
+  has_many :app_members
+  # has_many :apps, through: :app_members
 
 
 
@@ -262,6 +262,11 @@ class Member < ActiveRecord::Base
       else
         return 4
     end
+  end
+
+  def apps
+    apps = []
+
   end
 
   protected
