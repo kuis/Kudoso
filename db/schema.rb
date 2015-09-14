@@ -118,7 +118,7 @@ ActiveRecord::Schema.define(version: 20150914201919) do
 
   create_table "apps", force: :cascade do |t|
     t.string   "name"
-    t.string   "bundle_identifier"
+    t.string   "uuid"
     t.string   "publisher"
     t.string   "url"
     t.datetime "created_at",        null: false
