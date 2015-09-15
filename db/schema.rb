@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150914201919) do
+ActiveRecord::Schema.define(version: 20150915140655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -254,6 +254,7 @@ ActiveRecord::Schema.define(version: 20150914201919) do
     t.string   "last_ip"
     t.string   "mac_address"
     t.integer  "router_id"
+    t.string   "secure_key"
   end
 
   add_index "devices", ["device_type_id"], name: "index_devices_on_device_type_id", using: :btree

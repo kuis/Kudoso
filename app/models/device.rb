@@ -20,7 +20,10 @@ class Device < ActiveRecord::Base
   validates_presence_of :family_id, :family
 
 
-  before_create { self.uuid = SecureRandom.uuid }
+  before_create do
+    self.uuid = SecureRandom.uuid
+    self.secure_key = SecureRandom.hex(32)
+  end
 
   before_validation do
     self.name ||= self.mac_address

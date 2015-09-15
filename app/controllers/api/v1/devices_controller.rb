@@ -2,7 +2,7 @@ module Api
   module V1
     class DevicesController < ApiController
 
-      skip_before_filter :restrict_api_access, only: [:deviceDidRegister, :status]
+      skip_before_filter :restrict_api_access, only: [:deviceDidRegister, :status, :get_apps, :post_apps]
 
       resource_description do
         short 'API Devices'
@@ -332,12 +332,88 @@ module Api
       end
 
 
-      def failure(msg)
-        logger.error "Devices API failure: #{msg.inspect}"
-        render :json => { :messages => msg }, :status => 401
+      api :GET, "/v1/devices/:id/apps", "Get apps installed on a device"
+      def get_apps
+        messages = init_messages
+        # begin
+          @device = Device.find(params[:id])
+          auth = request.headers["Signature"]
+          if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @device.secure_key)
+            messages[:error] << "Invalid Signature"
+            failure(messages)
+            return
+          end
+          time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
+          if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
+            messages[:error] << "Invalid Timestamp"
+            failure(messages)
+            return
+          end
+          render :json => { apps: @device.apps, :messages => messages }, :status => 200
+
+
+        # rescue ActiveRecord::RecordNotFound
+        #   messages[:error] << 'Device not found.'
+        #   render :json => { :messages => messages }, :status => 404
+        # rescue
+        #   messages[:error] << 'A server error occurred.'
+        #   render :json => { :messages => messages }, :status => 500
+        # end
       end
 
+      api :POST, "/v1/devices/:id/apps", "Register an app for device"
+      param :app, Hash, desc: "App object consisting of (uuid is required): { 'app' : { 'name' : 'app_name', 'uuid' : 'com.kudoso.Kudoso', installed_at: 1442262846, 'url' : 'http://app_url', 'publisher' : 'Publisher Name', icon' : { 'content-type' : 'image/png', 'content' : 'base64 string' } } } "
+      param :apps, Array, desc: "Array of app objects"
+      def post_apps
+        messages = init_messages
+        begin
+          @device = Device.find(params[:id])
+          auth = request.headers["Signature"]
+          if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @device.secure_key)
+            messages[:error] << "Invalid Signature"
+            failure(messages)
+            return
+          end
+          time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
+          if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
+            messages[:error] << "Invalid Timestamp"
+            failure(messages)
+            return
+          end
+
+
+          good = true
+          if params[:apps] && params[:apps].is_a?(Array)
+            params[:apps].each { |app| good = add_app(app, @device) && good }
+          else
+            good = add_app(params[:app], @device) && good
+          end
+          if good
+            render :json => { apps: @device.apps, :messages => messages }, :status => 200
+          else
+            messages[:error] << 'Unable to add application record'
+            render :json => { :messages => messages }, :status => 400
+          end
+
+
+
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Device not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
+        end
+      end
+
+
       private
+
+
+      def failure(msg, status = 401)
+        logger.error "DEIVCES API failure: #{msg.inspect}"
+        render :json => { :messages => msg }, :status => status
+      end
 
 
       # Never trust parameters from the scary internet, only allow the white list through.
@@ -345,6 +421,22 @@ module Api
         params.require(:device).permit(:name, :device_type_id, :primary_member_id, :os_version, :wifi_mac, :build_version, :product_name, :model_name, :mac_address)
       end
 
+      def add_app(new_app, device)
+        return false if device.nil? || !new_app.is_a?(Hash)
+        app = App.find_or_create_by(uuid: new_app[:uuid])
+        app.name ||= new_app[:name]
+        app.publisher ||= new_app[:publisher]
+        app.url ||= new_app[:url]
+        app.icon = parse_image_data(params[:icon]) if params[:icon]
+        if app.save
+          app_device = AppDevice.find_or_create_by(app_id: app.id, device_id: device.id)
+          if app_device.valid? && new_app[:installed_at]
+            app_device.update_attribute(:installed_at, Time.at(new_app[:installed_at]))
+          end
+          return true if app_device.valid?
+        end
+        return false
+      end
 
     end
   end

@@ -103,14 +103,20 @@ module Api
             messages[:error] << "Invalid Signature"
             router_failure(messages)
             return
-          else
-            if !@router.registered
-              messages[:error] << "Router is not registered, register first"
-              router_failure(messages, 403)
-              return
-            end
-            @router.touch(request.remote_ip.to_s)
           end
+          time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
+          if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
+            messages[:error] << "Invalid Timestamp"
+            failure(messages)
+            return
+          end
+          if !@router.registered
+            messages[:error] << "Router is not registered, register first"
+            router_failure(messages, 403)
+            return
+          end
+          @router.touch(request.remote_ip.to_s)
+
           @devices = @router.family.devices
           render :json => { devices: @devices.as_json(methods: :activity_end_time), :messages => messages }, :status => 200
         rescue
@@ -126,7 +132,7 @@ module Api
       param :name, String, desc: 'The Nmae of the device (192.168.2.3)', required: false
       def device
         messages = init_messages
-        # begin
+        begin
           @router = Router.find(params[:id])
           #binding.pry
           auth = request.headers["Signature"]
@@ -134,14 +140,19 @@ module Api
             messages[:error] << "Invalid Signature"
             router_failure(messages)
             return
-          else
-            if !@router.registered
-              messages[:error] << "Router is not registered, register first"
-              router_failure(messages, 403)
-              return
-            end
-            @router.touch(request.remote_ip.to_s)
           end
+          time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
+          if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
+            messages[:error] << "Invalid Timestamp"
+            failure(messages)
+            return
+          end
+          if !@router.registered
+            messages[:error] << "Router is not registered, register first"
+            router_failure(messages, 403)
+            return
+          end
+          @router.touch(request.remote_ip.to_s)
           @device = Device.find_or_create_by(mac_address: params[:mac].downcase)
           @device.family_id = @router.family_id
           @device.router_id = @router.id
@@ -158,11 +169,11 @@ module Api
             render :json => { device: @device.as_json(methods: :activity_end_time), :messages => messages }, :status => 400
           end
 
-        # rescue
-        #   messages[:error] << "Unknown error"
-        #   router_failure(messages, 500)
-        #   return
-        # end
+        rescue
+          messages[:error] << "Unknown error"
+          router_failure(messages, 500)
+          return
+        end
       end   # devices
 
 

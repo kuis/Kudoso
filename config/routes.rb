@@ -123,6 +123,8 @@ Rails.application.routes.draw do
       post "/devices/:uuid/deviceDidRegister", to: 'devices#deviceDidRegister'
       patch "/devices/:udid/status", to: 'devices#status'
       post "/devices/record", to: 'devices#record'
+      post "/devices/:id/apps", to: 'devices#post_apps'
+      get "/devices/:id/apps", to: 'devices#get_apps'
     end
   end
 
