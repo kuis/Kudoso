@@ -139,10 +139,10 @@ RSpec.describe DevicesController, :type => :controller do
           expect(assigns(:device)).to eq(device)
         end
 
-        it "re-renders the 'edit' template" do
+        pending "re-renders the 'edit' template" do
           device = FactoryGirl.create(:device, family_id: @user.member.family.id)
           put :update, {family_id: @user.member.family.id, :id => device.to_param, :device => invalid_attributes}, valid_session
-          expect(response).to render_template("edit")
+          expect(response).to render_template("edit")  #this is wrong
         end
       end
     end

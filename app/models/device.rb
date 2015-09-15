@@ -14,8 +14,8 @@ class Device < ActiveRecord::Base
   has_many :apps, through: :app_devices
 
   validates :name, uniqueness: { scope: :family_id }
-  validates_presence_of :uuid
-  validates_uniqueness_of :uuid
+  # validates_presence_of :uuid
+  validates_uniqueness_of :uuid, blank: true
   # validates_presence_of :device_type_id, :device_type
   validates_presence_of :family_id, :family
 

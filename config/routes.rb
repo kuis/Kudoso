@@ -1,11 +1,6 @@
 Rails.application.routes.draw do
-
-<<<<<<< HEAD
-  resources :plugs
-=======
-  resources :apps
->>>>>>> master
   apipie
+
   resources :activity_template_device_types
   resources :partners
   resources :contacts
