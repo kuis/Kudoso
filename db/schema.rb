@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915140655) do
+ActiveRecord::Schema.define(version: 20150915171715) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,6 +127,18 @@ ActiveRecord::Schema.define(version: 20150915140655) do
     t.string   "icon_content_type"
     t.integer  "icon_file_size"
     t.datetime "icon_updated_at"
+  end
+
+  create_table "avatars", force: :cascade do |t|
+    t.string   "name"
+    t.string   "gender"
+    t.integer  "theme_id"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   create_table "commands", force: :cascade do |t|
@@ -494,15 +506,6 @@ ActiveRecord::Schema.define(version: 20150915140655) do
     t.datetime "date_openned"
     t.datetime "date_closed"
     t.string   "status"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "todo_groups", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "rec_min_age"
-    t.integer  "rec_max_age"
-    t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @avatar.name
+%p
+  %b Gender:
+  = @avatar.gender
+%p
+  %b Theme:
+  = @avatar.theme_id
+
+= link_to 'Edit', edit_avatar_path(@avatar)
+\|
+= link_to 'Back', avatars_path

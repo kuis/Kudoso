@@ -1,0 +1,11 @@
+= simple_form_for([:admin, @avatar]) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :image
+    = f.input :name
+    = f.input :gender,  collection: %w( m f )
+    = f.input :theme_id,  collection: Theme.all
+
+  .form-actions
+    = f.button :submit

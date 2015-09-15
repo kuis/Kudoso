@@ -17,7 +17,7 @@ class Member < ActiveRecord::Base
 
 
 
-  has_attached_file :avatar, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
+  has_attached_file :avatar, :styles => { :large => "300x300#", :medium => "200x200#", :small => "100x100#", :thumb => "60x60#" }, :default_url => "/images/:style/missing.png"
   validates_attachment_content_type :avatar, :content_type => /\Aimage\/.*\Z/
   validates_inclusion_of :gender, :in => %w( m f ), allow_blank: :true
   validates_inclusion_of :mobicip_filter, :in => %w( Monitor Strict Moderate Mature ), allow_blank: :true
@@ -69,7 +69,9 @@ class Member < ActiveRecord::Base
   def avatar_urls
     urls = Hash.new
     if self.avatar.exists?
+      urls[:large] = self.avatar.url(:large)
       urls[:medium] = self.avatar.url(:medium)
+      urls[:small] = self.avatar.url(:small)
       urls[:thumb] = self.avatar.url(:thumb)
     end
     return urls

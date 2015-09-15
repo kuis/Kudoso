@@ -1,0 +1,27 @@
+%h1 Listing avatars
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th Image
+      %th Name
+      %th Gender
+      %th Theme
+      %th
+      %th
+      %th
+
+  %tbody
+    - @avatars.each do |avatar|
+      %tr
+        %td= image_tag avatar.image.url(:thumb)
+        %td= avatar.name
+        %td= avatar.gender
+        %td= avatar.theme_id
+        %td= link_to 'Show', avatar
+        %td= link_to 'Edit', edit_avatar_path(avatar)
+        %td= link_to 'Destroy', avatar, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Avatar', new_avatar_path

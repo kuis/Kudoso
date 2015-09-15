@@ -1,0 +1,17 @@
+%p#notice= notice
+%p
+  %b Image:
+  = image_tag @avatar.image.url(:large)
+%p
+  %b Name:
+  = @avatar.name
+%p
+  %b Gender:
+  = @avatar.gender
+%p
+  %b Theme:
+  = @avatar.theme_id
+
+= link_to 'Edit', edit_admin_avatar_path(@avatar)
+\|
+= link_to 'Back', admin_avatars_path
