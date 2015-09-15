@@ -9,7 +9,6 @@ class CreateThemes < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    Theme.create({ name: 'Kudoso', primary_color: '#1E387E', secondary_color: '#FDB941', primary_bg_color: '#4F9CF6', secondary_bg_color: '#A5CFFF'})
   end
   def self.down
     drop_table :themes

@@ -117,6 +117,21 @@ activity_templates = ActivityTemplate.create([
                                          { name: 'Play outside', time_block: 30, activity_type: ActivityType.find_by_name('Health') }
                                      ])
 
+# Themes and Avatars
+Theme.create({ name: 'Kudoso', primary_color: '#1E387E', secondary_color: '#FDB941', primary_bg_color: '#4F9CF6', secondary_bg_color: '#A5CFFF'})
+Dir.glob("#{::Rails.root}/lib/assets/Avatars/Boy*.png").each do |file|
+  name = file.split("/").last.split(".").first.gsub("Boy",'')
+  avatar = Avatar.new(name: name, gender: 'm', theme_id: 1)
+  avatar.image = File.open(file)
+  avatar.save
+end
+Dir.glob("#{::Rails.root}/lib/assets/Avatars/Girl*.png").each do |file|
+  name = file.split("/").last.split(".").first.gsub("Girl",'')
+  avatar = Avatar.new(name: name, gender: 'f', theme_id: 1)
+  avatar.image = File.open(file)
+  avatar.save
+end
+
 
 # Device Catagories:
 
