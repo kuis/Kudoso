@@ -26,7 +26,7 @@ module Api
         end
 
         begin
-          @router = Router.find_by_mac_address(params[:mac].downcase)
+          @router = Router.find_or_create_by(mac_address: params[:mac].downcase)
           if @router.family.nil? || !@router.family.active?
             messages[:error] << "Router is not assigned to an active account, please contact Kudoso support."
             router_failure(messages, 400)
@@ -35,13 +35,20 @@ module Api
 
 
           if @router.registered
-            messages[:error] << "Router was previously registered"
-            router_failure(messages, 400)
-            return
+            logger.info "Router #{@router.id} #{@router.mac_address} previously registered, regenerating secure key"
+            messages[:warning] << "Router was previously registered, generating new secure key"
+            @router.generate_secure_key
+
           end
 
-          @router.update_attribute(:registered, true)
-          render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
+          @router.registered = true
+          if @router.save
+            render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
+          else
+            messages[:error] << @router.errors.full_messages
+            render :json => { :messages => messages }, :status => 400
+          end
+
 
         rescue ActiveRecord::RecordNotFound
           messages[:error] << "Unknown router"
@@ -80,11 +87,83 @@ module Api
           render :json => { router: @router.as_json({except: :secure_key}), latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
         rescue
           messages[:error] << "Unknown error"
-          router_failure(messages, 400)
+          router_failure(messages, 500)
           return
         end
       end   #show
 
+      api :GET, "/v1/routers/:id/devices", "Returns all devices and their status"
+      def devices
+        messages = init_messages
+        begin
+          @router = Router.find(params[:id])
+          #binding.pry
+          auth = request.headers["Signature"]
+          if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @router.secure_key)
+            messages[:error] << "Invalid Signature"
+            router_failure(messages)
+            return
+          else
+            if !@router.registered
+              messages[:error] << "Router is not registered, register first"
+              router_failure(messages, 403)
+              return
+            end
+            @router.touch(request.remote_ip.to_s)
+          end
+          @devices = @router.family.devices
+          render :json => { devices: @devices.as_json(methods: :activity_end_time), :messages => messages }, :status => 200
+        rescue
+          messages[:error] << "Unknown error"
+          router_failure(messages, 500)
+          return
+        end
+      end   # devices
+
+      api :POST, "/v1/routers/:id/device", "Register a device"
+      param :mac, String, desc: 'The MAC Address of the device (12:34:56:ab:cd:ef)', required: true
+      param :ip, String, desc: 'The IP Address of the device (192.168.2.3)', required: false
+      param :name, String, desc: 'The Nmae of the device (192.168.2.3)', required: false
+      def device
+        messages = init_messages
+        # begin
+          @router = Router.find(params[:id])
+          #binding.pry
+          auth = request.headers["Signature"]
+          if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @router.secure_key)
+            messages[:error] << "Invalid Signature"
+            router_failure(messages)
+            return
+          else
+            if !@router.registered
+              messages[:error] << "Router is not registered, register first"
+              router_failure(messages, 403)
+              return
+            end
+            @router.touch(request.remote_ip.to_s)
+          end
+          @device = Device.find_or_create_by(mac_address: params[:mac].downcase)
+          @device.family_id = @router.family_id
+          @device.router_id = @router.id
+          @device.last_ip = params[:ip]
+          if @device.name.nil? && @device.mac_address.present?
+            @device.name = @device.mac_address
+          end
+          # intentionally ignoring params[:name] for now
+          if @device.save
+            render :json => { device: @device.as_json(methods: :activity_end_time), :messages => messages }, :status => 200
+          else
+            logger.info @device.errors.full_messages
+            messages[:error] << @device.errors.full_messages
+            render :json => { device: @device.as_json(methods: :activity_end_time), :messages => messages }, :status => 400
+          end
+
+        # rescue
+        #   messages[:error] << "Unknown error"
+        #   router_failure(messages, 500)
+        #   return
+        # end
+      end   # devices
 
 
       def router_failure(msg, status = 401)

@@ -13,6 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20150825170032) do
 
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -97,6 +98,36 @@ ActiveRecord::Schema.define(version: 20150825170032) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "app_devices", force: :cascade do |t|
+    t.integer  "app_id"
+    t.integer  "device_id"
+    t.string   "version"
+    t.datetime "installed_at"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "app_members", force: :cascade do |t|
+    t.integer  "app_id"
+    t.integer  "member_id"
+    t.boolean  "restricted"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "apps", force: :cascade do |t|
+    t.string   "name"
+    t.string   "uuid"
+    t.string   "publisher"
+    t.string   "url"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.string   "icon_file_name"
+    t.string   "icon_content_type"
+    t.integer  "icon_file_size"
+    t.datetime "icon_updated_at"
   end
 
   create_table "commands", force: :cascade do |t|
@@ -221,6 +252,9 @@ ActiveRecord::Schema.define(version: 20150825170032) do
     t.string   "product_name"
     t.string   "mobicip_device_id"
     t.string   "device_name"
+    t.string   "last_ip"
+    t.string   "mac_address"
+    t.integer  "router_id"
   end
 
   add_index "devices", ["device_type_id"], name: "index_devices_on_device_type_id", using: :btree
@@ -359,11 +393,15 @@ ActiveRecord::Schema.define(version: 20150825170032) do
   create_table "router_firmwares", force: :cascade do |t|
     t.integer  "router_model_id"
     t.string   "version"
-    t.string   "url"
     t.text     "notes"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
     t.string   "checksum"
+    t.string   "firmware_file_name"
+    t.string   "firmware_content_type"
+    t.integer  "firmware_file_size"
+    t.datetime "firmware_updated_at"
+    t.string   "firmware_fingerprint"
   end
 
   create_table "router_models", force: :cascade do |t|
@@ -456,15 +494,6 @@ ActiveRecord::Schema.define(version: 20150825170032) do
     t.datetime "date_openned"
     t.datetime "date_closed"
     t.string   "status"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "todo_groups", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "rec_min_age"
-    t.integer  "rec_max_age"
-    t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

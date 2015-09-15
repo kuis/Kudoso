@@ -8,7 +8,7 @@ class CreateRouterFirmwares < ActiveRecord::Migration
 
       t.timestamps null: false
     end
-    firmware = RouterFirmware.create({router_model_id: 0, version: '1.0.0.d2b80a7', url: 'http://www.kudoso.com/'})
+    # firmware = RouterFirmware.create({router_model_id: 0, version: '1.0.0.d2b80a7', url: 'http://www.kudoso.com/'})
   end
   def self.down
     drop_table :router_firmwares

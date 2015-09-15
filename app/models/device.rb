@@ -10,18 +10,45 @@ class Device < ActiveRecord::Base
   has_many :screen_times
   has_many :commands
   has_one :plug
+  has_many :app_devices
+  has_many :apps, through: :app_devices
 
   validates :name, uniqueness: { scope: :family_id }
+  validates_presence_of :uuid
   validates_uniqueness_of :uuid
-  validates_presence_of :device_type_id, :device_type
-  validates_presence_of :family_id
+  # validates_presence_of :device_type_id, :device_type
+  validates_presence_of :family_id, :family
+
 
   before_create { self.uuid = SecureRandom.uuid }
 
+  before_validation do
+    self.name ||= self.mac_address
+    self.name ||= self.wifi_mac
+    if wifi_mac.present? && mac_address.nil?
+      mac_address = wifi_mac
+    end
+  end
+
   attr_readonly :uuid
+
+  validates :name, uniqueness: { scope: :family_id }, presence: true
+  validates_uniqueness_of :uuid
+  # validates_presence_of :device_type_id, :device_type
+  validates_presence_of :family_id
 
   def current_member
     current_activity.try(:member)
+  end
+
+  def activity_end_time
+    return nil if current_activity && current_activity.end_time
+    if current_activity && current_activity.start_time
+      current_activity.start_time.to_i + current_activity.allowed_time
+    else
+      nil
+    end
+
   end
 
   def last_command(command_name)

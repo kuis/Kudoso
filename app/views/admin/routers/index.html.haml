@@ -18,11 +18,11 @@
       %tr
         %td= router.id
         %td= router.mac_address
-        %td= "#{router.router_model.name} / #{router.router_firmware.version}"
+        %td= "#{router.router_model.present? ? router.router_model.name : "Unknown"} / #{router.router_firmware.present? ? router.router_firmware.version : "Unknown"}"
         %td= router.registered?
         %td= router.last_known_ip
         %td= router.last_seen
-        %td= link_to router.family.name, admin_family_path(router.family)
+        %td= link_to router.family.name, admin_family_path(router.family) if router.family.present?
         %td= link_to 'Edit', edit_admin_router_path(router)
         %td= link_to 'Destroy', admin_router_path(router), :method => :delete, :data => { :confirm => 'Are you sure?' }
 

@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
 
+<<<<<<< HEAD
   resources :plugs
+=======
+  resources :apps
+>>>>>>> master
   apipie
   resources :activity_template_device_types
   resources :partners
@@ -85,7 +89,12 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :sessions
       resources :plugs
-      resources :routers
+      resources :routers do
+        member do
+          get :devices
+          post :device
+        end
+      end
       resources :users do
         collection do
           post :reset_password
@@ -94,8 +103,14 @@ Rails.application.routes.draw do
       resources :todo_templates
       resources :families do
         resources :todos
-        resources :devices
+        resources :devices do
+          resources :apps_devices, path: :apps
+          resources :members do
+            resources :apps_members, path: :apps
+          end
+        end
         resources :members do
+          resources :apps_members, path: :apps
           resources :my_todos do
             member do
               post :verify
@@ -112,6 +127,7 @@ Rails.application.routes.draw do
       resources :timezones
       post "/devices/:uuid/deviceDidRegister", to: 'devices#deviceDidRegister'
       patch "/devices/:udid/status", to: 'devices#status'
+      post "/devices/record", to: 'devices#record'
     end
   end
 
