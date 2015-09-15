@@ -1,0 +1,29 @@
+%h1 Listing Plugs
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th Mac address
+      %th Serial
+      %th Registered
+      %th Last seen
+      %th Last known ip
+      %th Device
+      %th
+      %th
+
+  %tbody
+    - @plugs.each do |plug|
+      %tr
+        %td= plug.mac_address
+        %td= plug.serial
+        %td= plug.registered
+        %td= plug.last_seen
+        %td= plug.last_known_ip
+        %td= plug.device.try(:long_label)
+        %td= link_to 'Edit', edit_admin_plug_path(plug)
+        %td= link_to 'Destroy', admin_plug_path(plug), :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Plug', new_admin_plug_path

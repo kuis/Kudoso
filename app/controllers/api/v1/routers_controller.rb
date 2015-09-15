@@ -77,7 +77,7 @@ module Api
             @router.touch(request.remote_ip.to_s)
           end
 
-          render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
+          render :json => { router: @router.as_json({except: :secure_key}), latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
         rescue
           messages[:error] << "Unknown error"
           router_failure(messages, 400)

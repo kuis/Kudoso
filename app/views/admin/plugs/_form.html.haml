@@ -1,0 +1,13 @@
+= simple_form_for([:admin, @plug]) do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :mac_address, placeholder: '12:34:90:ab:cd:ef'
+    = f.input :serial
+    = f.input :registered
+    = f.input :last_seen
+    = f.input :last_known_ip
+    = f.input :device_id, collection: Device.all, label_method: :long_label
+
+  .form-actions
+    = f.button :submit

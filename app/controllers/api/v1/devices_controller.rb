@@ -253,7 +253,7 @@ module Api
             if @device.update_attributes(device_create_params.merge(family_id: @family.id))
               render :json => { :device => @device, :messages => messages }, :status => 200
             else
-              messages[:error] << @member.errors.full_messages
+              messages[:error] << @device.errors.full_messages
               render :json => { :device => @device, :messages => messages }, :status => 400
             end
 
@@ -284,7 +284,7 @@ module Api
             if @device.destroy
               render :json => { :device => @device, :messages => messages }, :status => 200
             else
-              messages[:error] << @member.errors.full_messages
+              messages[:error] << @device.errors.full_messages
               render :json => { :device => @device, :messages => messages }, :status => 400
             end
 

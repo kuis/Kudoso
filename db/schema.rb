@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150817150005) do
+ActiveRecord::Schema.define(version: 20150825170032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -342,6 +342,18 @@ ActiveRecord::Schema.define(version: 20150817150005) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "plugs", force: :cascade do |t|
+    t.string   "mac_address"
+    t.string   "serial"
+    t.string   "secure_key"
+    t.datetime "last_seen"
+    t.string   "last_known_ip"
+    t.boolean  "registered"
+    t.integer  "device_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "router_firmwares", force: :cascade do |t|

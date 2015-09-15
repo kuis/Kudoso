@@ -1,0 +1,24 @@
+%p#notice= notice
+
+%p
+  %b Mac address:
+  = @plug.mac_address
+%p
+  %b Serial:
+  = @plug.serial
+%p
+  %b Registered:
+  = @plug.registered
+%p
+  %b Last seen:
+  = @plug.last_seen
+%p
+  %b Last known ip:
+  = @plug.last_known_ip
+%p
+  %b Deivce:
+  = @plug.device.try(:long_label)
+
+= link_to 'Edit', edit_admin_plug_path(@plug)
+\|
+= link_to 'Back', plugs_path

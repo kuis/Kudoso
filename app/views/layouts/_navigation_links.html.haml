@@ -67,6 +67,7 @@
           %li= link_to('Router Firmwares', admin_router_firmwares_path)
           %li= link_to('Themes', admin_themes_path)
           %li= link_to('All Routers', admin_routers_path)
+          %li= link_to('All Plugs', admin_plugs_path)
 
     %li= link_to('My Family', family_path(current_user.family)) if current_user.member.try(:parent?)
 
