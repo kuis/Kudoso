@@ -28,5 +28,37 @@ describe 'Devices API', type: :request do
     expect(@device.last_contact.to_i).to eq(last_seen.to_i)
   end
 
+  context 'authenticated user' do
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+      #@member = FactoryGirl.create(:member, family_id: @user.member.family.id)
+      @member = Member.create(username: 'thetest', password: 'password', password_confirmation: 'password', birth_date: 10.years.ago, family_id: @user.family_id)
+      post '/api/v1/sessions', { device_token: @api_device.device_token, email: @user.email, password: 'password'}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      @token = json["token"]
+    end
+    it 'creates a new device' do
+      query_str = { device: { mac_address: 'aa:11:bb:22:ef', name: 'aa:11:bb:22:ef'} }
+      post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      expect(response.status).to eq(200)
+    end
+
+    it 'finds a device with the same mac_address instead of creates' do
+      query_str = { device: { mac_address: 'aa:11:bb:22:ef', name: 'aa:11:bb:22:ef'} }
+      post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      device_id = json["device"]["id"]
+      expect(device_id).to_not be_nil
+      query_str = { device: { mac_address: 'aa:11:bb:22:ef', name: 'Differnet Name'} }
+      post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json["device"]["id"]).to eq(device_id)
+    end
+  end
+
+
 
 end

@@ -4,9 +4,14 @@
   .form-inputs
     = f.input :router_model_id, collection: RouterModel.all, label_method: :name
     = f.input :version
-    = f.input :url
     = f.input :checksum
+    - if @router_firmware.firmware.exists?
+      %fieldset
+        %legend Current Firmware File:
+        Firmware: #{@router_firmware.firmware.url}
+        %br
+        Checksum: #{@router_firmware.firmware_fingerprint}
     = f.input :notes
-
+    = f.input :firmware, as: :file, label: 'Upload new firmware:'
   .form-actions
     = f.button :submit

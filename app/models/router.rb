@@ -22,8 +22,6 @@ class Router < ActiveRecord::Base
     RouterFirmware.where(router_model_id: self.router_model_id).order('version desc').limit(3)
   end
 
-  private
-
   def generate_secure_key
     self.secure_key = SecureRandom.hex(32)
   end

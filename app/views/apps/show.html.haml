@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @app.name
+%p
+  %b Bundle identifier:
+  = @app.bundle_identifier
+%p
+  %b Publisher:
+  = @app.publisher
+%p
+  %b Url:
+  = @app.url
+
+= link_to 'Edit', edit_app_path(@app)
+\|
+= link_to 'Back', apps_path
