@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   resources :device_types
 
   resources :todo_templates
+  resources :themes
 
 
 

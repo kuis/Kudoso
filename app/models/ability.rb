@@ -15,6 +15,7 @@ class Ability
     can :create, User
     can :create, MyTodo
     can :read, Avatar
+    can :read, Theme
 
     if user.admin?
       can :manage, :all
