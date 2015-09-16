@@ -1,5 +1,5 @@
 class Ticket < ActiveRecord::Base
-  belongs_to :assigned_to, class: User, foreign_key: 'assigned_to_id'
+  belongs_to :assigned_to, class_name: User, foreign_key: 'assigned_to_id'
   belongs_to :user
   belongs_to :contact
   belongs_to :ticket_type

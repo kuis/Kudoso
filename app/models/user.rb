@@ -4,7 +4,7 @@ class User < ActiveRecord::Base
   belongs_to :member
 
   has_many :tickets, dependent: :destroy
-  has_many :assigned_tickets, class: Ticket, foreign_key: 'assigned_to_id', dependent: :nullify
+  has_many :assigned_tickets, class_name: Ticket, foreign_key: 'assigned_to_id', dependent: :nullify
   has_many :api_keys
 
   scope :admins, -> { where(admin: true) }

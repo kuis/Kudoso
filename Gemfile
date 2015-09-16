@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 
 # Core
-gem 'rails', '4.2.1'
+gem 'rails', '4.2.4'
 gem 'pg'
 gem 'responders', '~> 2.0'
 gem 'railties'

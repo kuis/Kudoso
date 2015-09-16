@@ -1,6 +1,6 @@
 class StOverride < ActiveRecord::Base
   belongs_to :member
-  belongs_to :created_by, class: Member, foreign_key: 'created_by_id'
+  belongs_to :created_by, class_name: Member, foreign_key: 'created_by_id'
 
   scope :today, -> { where(date: Date.today.beginning_of_day..Date.today.end_of_day) }
 

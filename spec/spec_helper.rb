@@ -48,7 +48,7 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles = true
   end
 
-  if Rails.env.test?
+  if ENV["RAILS_ENV"] == 'test'
     config.before(:suite) do
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with(:truncation)
