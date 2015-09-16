@@ -10,7 +10,7 @@ class Device < ActiveRecord::Base
   has_many :screen_times
   has_many :commands
   has_one :plug
-  has_many :app_devices
+  has_many :app_devices, depepent: :destroy
   has_many :apps, through: :app_devices
 
   validates :name, uniqueness: { scope: :family_id }
