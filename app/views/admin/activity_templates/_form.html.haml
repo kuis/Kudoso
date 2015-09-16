@@ -1,34 +1,19 @@
-= form_for @activity_template do |f|
-  - if @activity_template.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@activity_template.errors.count, "error")} prohibited this activity_template from being saved:"
-      %ul
-        - @activity_template.errors.full_messages.each do |msg|
-          %li= msg
+= simple_form_for [:admin, @activity_template] do |f|
+  = f.error_notification
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :description
-    = f.text_field :description
-  .field
-    = f.label :rec_min_age
-    = f.number_field :rec_min_age
-  .field
-    = f.label :rec_max_age
-    = f.number_field :rec_max_age
-  .field
-    = f.label :cost
-    = f.number_field :cost
-  .field
-    = f.label :reward
-    = f.number_field :reward
-  .field
-    = f.label :time_block
-    = f.number_field :time_block
-  .field
-    = f.label :restricted
-    = f.check_box :restricted
-  .actions
-    = f.submit 'Save'
+  .form-inputs
+    = f.input :name
+    = f.input :description
+    = f.input :activity_type_id,  collection: ActivityType.all
+    = f.input :rec_min_age
+    = f.input :rec_max_age
+    %fieldset
+      %legend Kudos
+      = f.input :cost
+      = f.input :reward
+      = f.input :time_block
+      = f.hint 'Enter the time (in MINUTES) associated with the COST or REWARD Kudos'
+    = f.input :restricted
+    = f.hint 'A Restricted activity template means that a child cannot do the activity until their required Tasks are complete.'
+  .form-actions
+    = f.button :submit

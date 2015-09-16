@@ -2,7 +2,6 @@ Rails.application.routes.draw do
   resources :avatars
   apipie
 
-  resources :activity_template_device_types
   resources :partners
   resources :contacts
 
@@ -66,6 +65,9 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
+    resources :activity_templates
+    resources :activity_template_device_types
+    resources :activity_types
     resources :api_devices
     resources :avatars
     resources :contacts
@@ -74,7 +76,6 @@ Rails.application.routes.draw do
     resources :devices
     resources :device_types
     resources :todo_templates
-    resources :activity_templates
     resources :tickets
     resources :plugs
     resources :router_firmwares

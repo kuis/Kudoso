@@ -2,12 +2,12 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :activity_template_id
-    = f.input :device_type_id
+    = f.input :activity_template_id, collection: ActivityTemplate.all
+    = f.input :device_type_id, collection: DeviceType.all
     = f.input :type
     = f.input :launch_url
     = f.input :app_name
-    = f.input :app_id
+    = f.input :app_id, collection: App.all
     = f.input :app_store_url
 
   .form-actions

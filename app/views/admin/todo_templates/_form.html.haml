@@ -16,7 +16,7 @@
     = f.label :schedule
     = f.select_recurring :rule, nil, :allow_blank => true
   .field
-    = f.label :active
-    = f.check_box :active
+    = f.label :disabled
+    = f.check_box :disabled
   .actions
     = f.submit 'Save'

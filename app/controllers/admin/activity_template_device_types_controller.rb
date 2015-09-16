@@ -1,5 +1,6 @@
-class ActivityTemplateDeviceTypesController < ApplicationController
-  before_action :set_activity_template_device_type, only: [:show, :edit, :update, :destroy]
+class Admin::ActivityTemplateDeviceTypesController < AdminController
+
+  load_and_authorize_resource
 
   # GET /activity_template_device_types
   # GET /activity_template_device_types.json
@@ -28,7 +29,7 @@ class ActivityTemplateDeviceTypesController < ApplicationController
 
     respond_to do |format|
       if @activity_template_device_type.save
-        format.html { redirect_to @activity_template_device_type, notice: 'Activity template device type was successfully created.' }
+        format.html { redirect_to admin_activity_template_device_types_url, notice: 'Activity template device type was successfully created.' }
         format.json { render :show, status: :created, location: @activity_template_device_type }
       else
         format.html { render :new }
@@ -42,7 +43,7 @@ class ActivityTemplateDeviceTypesController < ApplicationController
   def update
     respond_to do |format|
       if @activity_template_device_type.update(activity_template_device_type_params)
-        format.html { redirect_to @activity_template_device_type, notice: 'Activity template device type was successfully updated.' }
+        format.html { redirect_to admin_activity_template_device_types_url, notice: 'Activity template device type was successfully updated.' }
         format.json { render :show, status: :ok, location: @activity_template_device_type }
       else
         format.html { render :edit }
@@ -56,16 +57,13 @@ class ActivityTemplateDeviceTypesController < ApplicationController
   def destroy
     @activity_template_device_type.destroy
     respond_to do |format|
-      format.html { redirect_to activity_template_device_types_url, notice: 'Activity template device type was successfully destroyed.' }
+      format.html { redirect_to admin_activity_template_device_types_url, notice: 'Activity template device type was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_activity_template_device_type
-      @activity_template_device_type = ActivityTemplateDeviceType.find(params[:id])
-    end
+
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def activity_template_device_type_params

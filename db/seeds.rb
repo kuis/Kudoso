@@ -111,7 +111,7 @@ activity_types = ActivityType.create([
                                          ])
 
 activity_templates = ActivityTemplate.create([
-                                         { name: 'Play on my device', time_block: 30, activity_type: ActivityType.find_by_name('Entertainment') },
+                                         { name: 'Screen Time', time_block: 30, activity_type: ActivityType.find_by_name('Entertainment') },
                                          { name: 'Read a book', time_block: 30, activity_type: ActivityType.find_by_name('Education') },
                                          { name: 'Stream Media', time_block: 30, activity_type: ActivityType.find_by_name('Entertainment') },
                                          { name: 'Play outside', time_block: 30, activity_type: ActivityType.find_by_name('Health') }
