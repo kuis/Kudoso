@@ -21,6 +21,7 @@ class App < ActiveRecord::Base
       urls[:large] = icon.url(:large)
       urls[:medium] = icon.url(:medium)
       urls[:small] = icon.url(:small)
+      urls[:thumb] = icon.url(:thumb)
     end
     return urls
   end
