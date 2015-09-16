@@ -69,6 +69,7 @@ Rails.application.routes.draw do
     resources :activity_template_device_types
     resources :activity_types
     resources :api_devices
+    resources :apps
     resources :avatars
     resources :contacts
     resources :families

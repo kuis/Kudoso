@@ -1,0 +1,15 @@
+= simple_form_for([:admin,@app]) do |f|
+  = f.error_notification
+
+  .form-inputs
+    - if @app.icon.exists?
+      = f.label 'Current icon:'
+      = image_tag @app.icon.url(:thumb)
+    = f.input :icon
+    = f.input :name
+    = f.input :uuid
+    = f.input :publisher
+    = f.input :url
+
+  .form-actions
+    = f.button :submit

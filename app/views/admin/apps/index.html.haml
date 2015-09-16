@@ -1,0 +1,27 @@
+%h1 Listing apps
+
+%table.table.table-striped
+  %thead
+    %tr
+      %th Icon
+      %th Name
+      %th UUID
+      %th Publisher
+      %th Url
+      %th
+      %th
+
+  %tbody
+    - @apps.each do |app|
+      %tr
+        %td= image_tag app.icon.url(:thumb)
+        %td= app.name
+        %td= app.uuid
+        %td= app.publisher
+        %td= app.url
+        %td= link_to 'Edit', edit_admin_app_path(app)
+        %td= link_to 'Destroy', [:admin, app], :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New App', new_admin_app_path

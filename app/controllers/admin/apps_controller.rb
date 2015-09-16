@@ -1,5 +1,5 @@
-class AppsController < ApplicationController
-  before_action :set_app, only: [:show, :edit, :update, :destroy]
+class Admin::AppsController < AdminController
+  load_and_authorize_resource
 
   # GET /apps
   # GET /apps.json
@@ -28,7 +28,7 @@ class AppsController < ApplicationController
 
     respond_to do |format|
       if @app.save
-        format.html { redirect_to @app, notice: 'App was successfully created.' }
+        format.html { redirect_to admin_apps_url, notice: 'App was successfully created.' }
         format.json { render :show, status: :created, location: @app }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class AppsController < ApplicationController
   def update
     respond_to do |format|
       if @app.update(app_params)
-        format.html { redirect_to @app, notice: 'App was successfully updated.' }
+        format.html { redirect_to admin_apps_url, notice: 'App was successfully updated.' }
         format.json { render :show, status: :ok, location: @app }
       else
         format.html { render :edit }
@@ -56,19 +56,16 @@ class AppsController < ApplicationController
   def destroy
     @app.destroy
     respond_to do |format|
-      format.html { redirect_to apps_url, notice: 'App was successfully destroyed.' }
+      format.html { redirect_to admin_apps_url, notice: 'App was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_app
-      @app = App.find(params[:id])
-    end
+
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def app_params
-      params.require(:app).permit(:name, :bundle_identifier, :publisher, :url)
+      params.require(:app).permit(:name, :uuid, :publisher, :url, :icon)
     end
 end
