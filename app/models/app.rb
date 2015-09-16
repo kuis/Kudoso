@@ -1,6 +1,6 @@
 class App < ActiveRecord::Base
-  has_many :app_devices, depepent: :destroy
-  has_many :app_members, depepent: :destroy
+  has_many :app_devices, dependent: :destroy
+  has_many :app_members, dependent: :destroy
 
   has_many :devices, through: :app_devices
   has_many :members, through: :app_members
