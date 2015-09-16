@@ -7,12 +7,12 @@ class Member < ActiveRecord::Base
   has_many :primary_devices, class_name: 'Device', foreign_key: 'primary_member_id', dependent: :nullify
   has_many :activities, dependent: :destroy, inverse_of: :member
   has_many :authorized_activities, class_name: 'Activity', foreign_key: :created_by_id, dependent: :nullify, inverse_of: :created_by
-  has_many :screen_times, depepent: :destroy
-  has_many :st_overrides, depepent: :destroy
-  has_one :screen_time_schedule, depepent: :destroy
+  has_many :screen_times, dependent: :destroy
+  has_many :st_overrides, dependent: :destroy
+  has_one :screen_time_schedule, dependent: :destroy
   belongs_to :theme
-  has_many :api_keys, depepent: :destroy
-  has_many :app_members, depepent: :destroy
+  has_many :api_keys, dependent: :destroy
+  has_many :app_members, dependent: :destroy
   has_many :apps, through: :app_members
 
 
