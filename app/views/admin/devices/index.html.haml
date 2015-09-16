@@ -12,6 +12,7 @@
     %th UUID / UDID
     %th
     %th
+    %th
 
   - @devices.each do |device|
     %tr
@@ -25,8 +26,9 @@
         - device.managed_devices.each_with_index do |dev, idx|
           - if idx > 1
             %br
-          = link_to "(#{dev.id}) #{dev.name}", admin_device_path(device)
+          = link_to "(#{dev.id}) #{dev.name}", admin_device_path(dev)
       %td= "#{device.uuid} / #{device.udid}"
+      %td= link_to 'Show', admin_device_path(device)
       %td= link_to 'Edit', edit_admin_device_path(device)
       %td= link_to 'Destroy', admin_device_path(device), :method => :delete, :data => { :confirm => 'Are you sure?' }
 

@@ -21,8 +21,6 @@ Rails.application.routes.draw do
 
   resources :activity_templates
 
-  resources :device_types
-
   resources :todo_templates
   resources :themes
 
@@ -88,6 +86,7 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: 'json' } do
     namespace :v1 do
       resources :avatars
+      resources :device_types
       resources :themes
       resources :sessions
       resources :plugs

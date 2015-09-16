@@ -15,7 +15,23 @@
       %br
       Managed by:
       = device.management_device.name
-  - if can?(:manage, device)
+  - if can?(:manage, device) && !@admin_controller
     .device_admin
       = link_to 'Edit', edit_family_device_path(device.family, device)
       = link_to 'Delete', [device.family, device], method: :delete, data: { confirm: 'Are you sure you want to delete this device?  This cannot be undone!' }
+  - if @admin_controller
+    .device_admin
+      %ul
+        %li UUID: #{device.uuid}
+        %li UDID: #{device.udid}
+        %li WiFi Mac: #{device.wifi_mac}
+        %li Mac Address: #{device.mac_address}
+        %li OS Version: #{device.os_version}
+        %li Build Version: #{device.build_version}
+        %li Mobicip Device ID: #{device.mobicip_device_id}
+        %li Product Name: #{device.product_name}
+        %li Device Name: #{device.device_name}
+        %li Last IP: #{device.last_ip}
+        %li
+          Router ID:
+          = link_to admin_router_path(device.router_id) if device.router_id

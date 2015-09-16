@@ -1,6 +1,6 @@
 %h1 Listing device_types
 
-%table
+%table.table.table-striped
   %tr
     %th Name
     %th Description
@@ -16,10 +16,10 @@
       %td= device_type.description
       %td= device_type.os
       %td= device_type.version
-      %td= link_to 'Show', device_type
-      %td= link_to 'Edit', edit_device_type_path(device_type)
-      %td= link_to 'Destroy', device_type, :method => :delete, :data => { :confirm => 'Are you sure?' }
+      %td= link_to 'Show', admin_device_type_path(device_type)
+      %td= link_to 'Edit', edit_admin_device_type_path(device_type)
+      %td= link_to 'Destroy', [:admin, device_type], :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 %br
 
-= link_to 'New Device type', new_device_type_path
+= link_to 'New Device type', new_admin_device_type_path
