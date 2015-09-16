@@ -80,7 +80,7 @@ module Api
         app.name ||= new_app[:name]
         app.publisher ||= new_app[:publisher]
         app.url ||= new_app[:url]
-        app.icon = parse_image_data(params[:icon]) if params[:icon]
+        app.icon = parse_image_data(new_app[:icon]) if new_app[:icon]
         if app.save
           app_device = AppDevice.find_or_create_by(app_id: app.id, device_id: device.id)
           if app_device.valid? && new_app[:installed_at]
@@ -92,7 +92,7 @@ module Api
       end
 
       def parse_image_data(image_data)
-        data = StringIO.new(Base64.decode64(image_data[:content]))
+        data = StringIO.new(Base64.decode64(image_data["content"]))
         data.class.class_eval {attr_accessor :original_filename, :content_type}
         data.original_filename = Time.now.to_i.to_s + "." + image_data['content-type'].split('/')[1]
         data.content_type = image_data['content-type']
