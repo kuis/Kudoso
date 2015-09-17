@@ -25,7 +25,7 @@ class Admin::TodoTemplatesController < AdminController
 
     respond_to do |format|
       if @todo_template.save
-        format.html { redirect_to todo_templates_path, notice: 'ToDo Template was successfully created.' }
+        format.html { redirect_to admin_todo_templates_path, notice: 'ToDo Template was successfully created.' }
         format.json { render :show, status: :created, location: @todo_template }
       else
         format.html { render :new }
@@ -37,7 +37,7 @@ class Admin::TodoTemplatesController < AdminController
   def update
     respond_to do |format|
       if @todo_template.update(todo_template_params)
-        format.html { redirect_to todo_templates_path, notice: 'ToDo Template was successfully updated.' }
+        format.html { redirect_to admin_todo_templates_path, notice: 'ToDo Template was successfully updated.' }
         format.json { render :show, status: :created, location: @todo_template }
       else
         format.html { render :edit }
@@ -48,7 +48,7 @@ class Admin::TodoTemplatesController < AdminController
 
   def destroy
     @todo_template.destroy
-    respond_with(@todo_template)
+    redirect_to admin_todo_templates_path, notice: 'ToDo Template was successfully destroyed.'
   end
 
   private

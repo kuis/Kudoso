@@ -2,8 +2,8 @@
 
 
 - @todo_templates.each do |todo_template|
-  = render todo_template
+  = render partial: 'admin/todo_templates/todo_template', object: todo_template
 
 %br
 
-= link_to 'New Todo template', new_todo_template_path, class: 'button right'
+= link_to 'New Todo template', new_admin_todo_template_path, class: 'button right'

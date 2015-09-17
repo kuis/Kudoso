@@ -1,22 +1,12 @@
-= form_for @todo_template do |f|
-  - if @todo_template.errors.any?
-    #error_explanation
-      %h2= "#{pluralize(@todo_template.errors.count, "error")} prohibited this todo_template from being saved:"
-      %ul
-        - @todo_template.errors.full_messages.each do |msg|
-          %li= msg
+= simple_form_for [:admin, @todo_template] do |f|
+  = f.error_notification
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :description
-    = f.text_field :description
-  .field
+  .form-inputs
+    = f.input :name
+    = f.input :description
     = f.label :schedule
     = f.select_recurring :rule, nil, :allow_blank => true
-  .field
-    = f.label :disabled
-    = f.check_box :disabled
-  .actions
+    = f.input :disabled
+
+  .form-actions
     = f.submit 'Save'

@@ -10,8 +10,8 @@
   %b Default Schedule:
   = IceCube::Rule.from_yaml(@todo_template.schedule)
 %p
-  %b Active:
-  = @todo_template.active?
+  %b Disabled:
+  = @todo_template.disabled?
 
 = link_to 'Edit', edit_todo_template_path(@todo_template)
 \|
