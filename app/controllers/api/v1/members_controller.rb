@@ -183,13 +183,6 @@ module Api
         params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :gender, :email, :theme_id, avatar: %w(content-type content))
       end
 
-      def parse_image_data(image_data)
-        data = StringIO.new(Base64.decode64(image_data[:content]))
-        data.class.class_eval {attr_accessor :original_filename, :content_type}
-        data.original_filename = Time.now.to_i.to_s + "." + image_data['content-type'].split('/')[1]
-        data.content_type = image_data['content-type']
-        return data
-      end
 
 
 

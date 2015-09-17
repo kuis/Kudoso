@@ -427,7 +427,7 @@ module Api
         app.name ||= new_app[:name]
         app.publisher ||= new_app[:publisher]
         app.url ||= new_app[:url]
-        app.icon = parse_image_data(params[:icon]) if params[:icon]
+        app.icon = parse_image_data(new_app[:icon]) if new_app[:icon]
         if app.save
           app_device = AppDevice.find_or_create_by(app_id: app.id, device_id: device.id)
           if app_device.valid? && new_app[:installed_at]
