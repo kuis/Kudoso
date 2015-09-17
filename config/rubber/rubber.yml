@@ -267,7 +267,7 @@ private_networks: [10.0.0.0/8]
 # OPTIONAL: The packages to install on all instances
 # You can install a specific version of a package by using a sub-array of pkg, version
 # For example, packages: [[rake, 0.7.1], irb]
-packages: [postfix, build-essential, git-core, libxslt-dev, ntp]
+packages: [postfix, build-essential, git-core, libxslt-dev, ntp, imagemagick]
 
 # OPTIONAL: The package manager mirror to use for installation of primary packages (i.e., those not explicitly
 # sourced from a different repository).  If not specified, whatever mirror configured by your server image

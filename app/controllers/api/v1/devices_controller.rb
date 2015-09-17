@@ -335,7 +335,7 @@ module Api
       api :GET, "/v1/devices/:id/apps", "Get apps installed on a device"
       def get_apps
         messages = init_messages
-        # begin
+        begin
           @device = Device.find(params[:id])
           auth = request.headers["Signature"]
           if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @device.secure_key)
@@ -352,13 +352,13 @@ module Api
           render :json => { apps: @device.apps, :messages => messages }, :status => 200
 
 
-        # rescue ActiveRecord::RecordNotFound
-        #   messages[:error] << 'Device not found.'
-        #   render :json => { :messages => messages }, :status => 404
-        # rescue
-        #   messages[:error] << 'A server error occurred.'
-        #   render :json => { :messages => messages }, :status => 500
-        # end
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Device not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
+        end
       end
 
       api :POST, "/v1/devices/:id/apps", "Register an app for device"
