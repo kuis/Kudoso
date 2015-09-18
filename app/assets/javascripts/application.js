@@ -15,16 +15,11 @@
 //= require jquery_ujs
 //= require jquery.ui.all
 //= require jquery-rangeSelector
-//= require scrolling_nav
 //= require best_in_place
-//= require jquery.purr
-//= require best_in_place.purr
 //= require turbolinks
 //= require recurring_select
 //= require highcharts/highcharts
 //= require cocoon
-//= require bootstrap-sprockets
-//= require bootstrap-datepicker
 //= require analytics
 //= require_tree .
 
@@ -32,25 +27,7 @@
 
 
 function ready() {
-    $('.header').stickyNavbar({
-        activeClass: 'active', // Class to be added to highlight nav elements
-        sectionSelector: 'scrollto', // Class of the section that is interconnected with nav links
-        animDuration: 350, // Duration of jQuery animation as well as jQuery scrolling duration
-        navOffset: 50,
-        startAt: 80, // Stick the menu at XXXpx from the top of the this() (nav container)
-        easing: 'swing', // Easing type if jqueryEffects = true, use jQuery Easing plugin to extend easing types - gsgd.co.uk/sandbox/jquery/easing
-        animateCSS: false, // AnimateCSS effect on/off
-        animateCSSRepeat: false, // Repeat animation everytime user scrolls
-        cssAnimation: 'fadeInDown', // AnimateCSS class that will be added to selector
-        jqueryEffects: false, // jQuery animation on/off
-        jqueryAnim: 'slideDown', // jQuery animation type: fadeIn, show or slideDown
-        selector: 'li', // Selector to which activeClass will be added, either 'a' or 'li'
-        mobile: false, // If false, nav will not stick under viewport width of 480px (default) or user defined mobileWidth
-        mobileWidth: 480, // The viewport width (without scrollbar) under which stickyNavbar will not be applied (due user usability on mobile)
-        zindex: 9999, // The zindex value to apply to the element: default 9999, other option is 'auto'
-        stickyModeClass: 'sticky', // Class that will be applied to 'this' in sticky mode
-        unstickyModeClass: 'unsticky' // Class that will be applied to 'this' in non-sticky mode
-    });
+
     $(document).ajaxError(function (e, xhr, settings) {
         if (xhr.status == 401) {
             location.reload();
@@ -58,6 +35,8 @@ function ready() {
     });
     if (typeof(setupRangeSelector) == 'function')
         setupRangeSelector();
+
+    $('.k-page-header').attr("data-uk-sticky", "{top:-" + window.screen.height/2 +  ", animation: 'uk-animation-slide-top'}");
 
 }
 $(function() {
@@ -68,11 +47,7 @@ $(function() {
     $('a.close').click(function(){
        $(this.parentNode).hide(500);
     });
-    $('#nav').affix({
-        offset: {
-            top: $('header').height()
-        }
-    });
+
     $(".signup").keyup(function (e) {
         if (e.keyCode == 13) {
             signup();

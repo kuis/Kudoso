@@ -1,0 +1,40 @@
+%section.k-footer.uk-clearfix
+  .uk-container.uk-container-center
+    .uk-grid
+      .k-footer-details.uk-width-medium-6-10.uk-width-large-6-10
+        .uk-grid
+          .uk-width-small-1-1.uk-width-medium-2-4.uk-width-large-2-4.uk-text-center-small.uk-margin-large-top
+            .uk-text-center
+              = image_tag 'k-logo-footer.svg'
+              %br/
+              %small © 2014–2015 Kudoso
+              %br/
+              %a.k-social-link{:href => "https://twitter.com/kudosokids"}
+                %i.uk-icon-twitter.uk-icon-small
+              %a.k-social-link{:href => "https://www.facebook.com/Kudoso"}
+                %i.uk-icon-facebook.uk-icon-small
+          .uk-width-small-1-1.uk-width-medium-2-4.uk-width-large-2-4.uk-text-center-small.uk-margin-large-top
+            %ul.uk-list
+              %li
+                %a{:href => ""} Contact Us
+              %li
+                %a{:href => ""} Press Inquiries
+              %li
+                %a{:href => "/privacy"} Privacy Policy
+          .uk-width-small-1-1.uk-width-medium-4-4.uk-width-large-4-4.uk-text-center-small.uk-margin-large-top
+            #legal.uk-list
+              %li * Khan Academy® and FitBit® are registered trademarks of their respective services.
+              %li Kudoso® is a registered trademark. Patents pending.
+      .k-footer-newsletter.uk-container-center.uk-width-small-1-1.uk-width-medium-4-10.uk-width-large-4-10
+        %div
+          / <h3><strong>Newsletter</strong></h3>
+          %p
+            %strong Sign Up Now
+            for the latest Kudoso news on how to protect your family from the dangers of technology, tips on raising healthier kids and be one of the first to be able to try Kudoso, even before the public release!
+          %form
+            .uk-form
+              .uk-form-row
+                %input.uk-form-large.uk-width-1-1.uk-text-center{:name => "name", :placeholder => "Your Email Address", :type => "email", :value => ""}/
+                %small We don’t spam you or share your email address.
+              .uk-form-row
+                %button.uk-button.uk-button-primary.uk-button-large.uk-width-1-1{:name => "button", :type => "submit"} Sign Up
