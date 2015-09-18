@@ -21,8 +21,11 @@
       for the latest Kudoso news on how to protect your family from the dangers of technology, tips on raising healthier kids and be one of the first to be able to try Kudoso, even before the public release!
     %form
       .uk-form
+        .uk-form-row.uk-grid
+          %input.uk-form-large.uk-width-1-2{:name => "first_name", :placeholder => "Your First Name", :type => "text", :value => "", :id => 'index-first-name'}/
+          %input.uk-form-large.uk-width-1-2{:name => "last_name", :placeholder => "Your Last Name", :type => "text", :value => "", :id => 'index-last-name'}/
         .uk-form-row
-          %input.uk-form-large.uk-width-1-1.uk-text-center{:name => "name", :placeholder => "Your Email Address", :type => "email", :value => ""}/
+          %input.uk-form-large.uk-width-1-1.uk-text-center{:name => "email", :placeholder => "Your Email Address", :type => "email", :value => "", :id => "index-email", :onclick => "index_signup();"}/
           %small We don’t spam you or share your email address.
         .uk-form-row
           %button.uk-button.uk-button-primary.uk-button-large.uk-width-1-1{:name => "button", :type => "submit"} Sign Up
@@ -164,3 +167,71 @@
           %p Lorem ipsum dolor sit amet.
         %a.uk-position-cover{:href => "/reward.html"}
 = render 'home/news'
+:javascript
+  function index_signup() {
+    var email = $.trim($('#index-email').val());
+    var valid = (email.length > 5 && validateEmail(email));
+
+    if ( !valid ) {
+      alert("We're sorry, it doesn't appear that you have input a valid email address, please try again");
+      return;
+    }
+
+    var first_name = $.trim($('#index-first-name').val());
+    var last_name = $.trim($('#index-last-name').val());
+
+    valid = (valid && first_name.length > 2);
+    valid = (valid && last_name.length > 2);
+
+    if ( !valid ) {
+      alert("Both the first and last name fields are required, please try again...");
+      return;
+    }
+
+    if ( valid ) {
+      $.ajax({
+         url: '/contacts',
+         dataType: 'json',
+         method: 'POST',
+         data: {
+          contact: {
+            emails_attributes: [ { address: email } ],
+            first_name: first_name,
+            last_name: last_name,
+            contact_type_id: #{ ContactType.find_or_create_by(name: 'Beta Applicant').id }
+          }
+         },
+         statusCode: {
+          200: function(e) {
+            $('#thankyou').modal();
+            var contact = {};
+            contact.email = email;
+            contact.first_name = first_name;
+            contact.last_name = last_name;
+            _agile.create_contact(contact, {
+              success: function (data) {
+                  console.log("create contact success");
+              },
+              error: function (data) {
+                  console.log("error creating contact");
+              }
+            });
+            _agile.add_score(10);
+            ga('send','pageview','/landing_singup_thankyou');
+          },
+          400: function(e) {
+            alert("We're sorry, the server did not receive your email address, please try again.");
+          },
+          409: function(e) {
+            _agile.set_email(email);
+            _agile.add_score(10);
+            alert("We're sorry, this email address is already registered.");
+          },
+          500: function(e) {
+            alert("We're sorry, the server had an error processing your registration, please try again later.");
+          }
+        }
+      });
+    }
+  }
+
