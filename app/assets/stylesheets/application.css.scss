@@ -1,19 +1,35 @@
+// Mixins
+@mixin base-fontstack {
+    font-family: proxima-nova, "Helvetica Neue", verdana, sans-serif;
+}
+// Colors
+$white: #fff;
+$black: #111;
+$pale-sky: #97C1F5;
+$sky: #1D80FA;
+$dark-sky: #165FB8;
+$night-sky: #0B315F;
+$apricot: #FDB941;
+$orange: #F76F20;
+
+
+// Base Styles
 * {
     box-sizing: border-box; }
 
 html, body {
-    font-family: proxima-nova, "Helvetica Neue", verdana, sans-serif;
-    background: #1D80FA; }
+    @include base-fontstack;
+    background: $sky; }
 
 body {
     font-size: 1.3rem;
     line-height: 1.5em;
-    color: #111; }
+    color: $black; }
 
 h1, h2, h3, h4 {
-    font-family: proxima-nova, "Helvetica Neue", verdana, sans-serif;
+    @include base-fontstack;
     font-weight: bold;
-    color: #111;
+    color: $black;
     font-weight: 200; }
 
 h2 {
@@ -23,9 +39,10 @@ h3 {
     font-size: 1.4em;
     margin: 1.8em 0 1.3em; }
 
+// Header Styles
 .uk-sticky-placeholder header {
-    background: #1D80FA;
-    color: #fff;
+    background: $sky;
+    color: $white;
     padding: 1.2em !important;
     z-index: 100; }
 
@@ -37,14 +54,15 @@ h3 {
     margin-top: 1.1em;
     font-weight: 200; }
 .k-nav .uk-subnav-pill > .uk-active > * {
-    background: #fff;
-    color: #1D80FA; }
+    background: $white;
+    color: $sky; }
 .k-nav a {
-    color: #fff; }
+    color: $white; }
 .k-nav a:hover {
     background: rgba(255, 255, 255, 0.8);
-    color: #1D80FA; }
+    color: $sky; }
 
+// Section Styles
 main > section {
     position: relative;
     text-align: center;
@@ -66,11 +84,11 @@ section p.first {
     margin-bottom: 1.5em; }
 
 section.k-intro {
-    background: #1D80FA;
-    color: #fff; }
+    background: $sky;
+    color: $white; }
 
 section.k-info {
-    background: #FDB941;
+    background: $apricot;
     color: #141414; }
 section.k-info h2 {
     text-align: center; }
@@ -196,7 +214,7 @@ section.k-info figure {
     color: #ccc; }
 
 .k-features {
-    background: #fff; }
+    background: $white; }
 .k-features .k-feature {
     text-align: left;
     position: relative;
@@ -243,7 +261,7 @@ main > section.k-fundamentals .k-teach {
 
 .k-news {
     min-height: 50vh;
-    background: #111; }
+    background: $black; }
 .k-news article {
     position: absolute;
     left: 50%;
