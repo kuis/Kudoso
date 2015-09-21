@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915171715) do
+ActiveRecord::Schema.define(version: 20150921130407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,20 @@ ActiveRecord::Schema.define(version: 20150915171715) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "applogs", force: :cascade do |t|
+    t.integer  "app_id"
+    t.integer  "device_id"
+    t.integer  "member_id"
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "applogs", ["app_id"], name: "index_applogs_on_app_id", using: :btree
+  add_index "applogs", ["device_id"], name: "index_applogs_on_device_id", using: :btree
+  add_index "applogs", ["member_id"], name: "index_applogs_on_member_id", using: :btree
 
   create_table "apps", force: :cascade do |t|
     t.string   "name"
@@ -596,4 +610,7 @@ ActiveRecord::Schema.define(version: 20150915171715) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
+  add_foreign_key "applogs", "apps"
+  add_foreign_key "applogs", "devices"
+  add_foreign_key "applogs", "members"
 end

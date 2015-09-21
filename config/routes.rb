@@ -130,6 +130,7 @@ Rails.application.routes.draw do
       patch "/devices/:udid/status", to: 'devices#status'
       post "/devices/record", to: 'devices#record'
       post "/devices/:id/apps", to: 'devices#post_apps'
+      post "/devices/:id/apps/log", to: 'devices#post_applog'
       get "/devices/:id/apps", to: 'devices#get_apps'
     end
   end

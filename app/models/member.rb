@@ -14,6 +14,7 @@ class Member < ActiveRecord::Base
   has_many :api_keys, dependent: :destroy
   has_many :app_members, dependent: :destroy
   has_many :apps, through: :app_members
+  has_many :applogs, dependent: :nullify
 
 
 
