@@ -29,11 +29,12 @@
     %meta{:content => 'http://www.kudoso.com/Kudoso_Facebook_Cover.png', :property => "og:image"}/
     %link{:charset => "utf-8", :href => "https://cdnjs.cloudflare.com/ajax/libs/uikit/2.22.0/css/uikit.almost-flat.min.css", :media => "screen", :rel => "stylesheet"}/
     / <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.21.0/css/components/sticky.almost-flat.min.css" media="screen" charset="utf-8">
-    = stylesheet_link_tag 'reset', media: 'all', 'data-turbolinks-track' => true
+    = #stylesheet_link_tag 'reset', media: 'all', 'data-turbolinks-track' => true
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
     = stylesheet_link_tag 'ss-glyphish-outlined', media: 'all', 'data-turbolinks-track' => true
     = stylesheet_link_tag 'ss-social-circle', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag :modernizr
+    = csrf_meta_tags
     %script{:src => "//use.typekit.net/cbr8hdy.js"}
     :javascript
       try{Typekit.load({ async: true });}catch(e){}

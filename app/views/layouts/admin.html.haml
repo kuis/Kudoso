@@ -1,24 +1,55 @@
 !!!
 %html
   %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %meta{:charset => "UTF-8"}/
     %meta{:content => "width=device-width, initial-scale=1.0", :name => "viewport"}/
-    %title= content_for?(:title) ? yield(:title) : "Kudoso"
-    %meta{:content => content_for?(:description) ? yield(:description) : "Kudoso", :name => "description"}/
+    %link{:href => "/apple-icon-57x57.png", :rel => "apple-touch-icon", :sizes => "57x57"}/
+    %link{:href => "/apple-icon-60x60.png", :rel => "apple-touch-icon", :sizes => "60x60"}/
+    %link{:href => "/apple-icon-72x72.png", :rel => "apple-touch-icon", :sizes => "72x72"}/
+    %link{:href => "/apple-icon-76x76.png", :rel => "apple-touch-icon", :sizes => "76x76"}/
+    %link{:href => "/apple-icon-114x114.png", :rel => "apple-touch-icon", :sizes => "114x114"}/
+    %link{:href => "/apple-icon-120x120.png", :rel => "apple-touch-icon", :sizes => "120x120"}/
+    %link{:href => "/apple-icon-144x144.png", :rel => "apple-touch-icon", :sizes => "144x144"}/
+    %link{:href => "/apple-icon-152x152.png", :rel => "apple-touch-icon", :sizes => "152x152"}/
+    %link{:href => "/apple-icon-180x180.png", :rel => "apple-touch-icon", :sizes => "180x180"}/
+    %link{:href => "/android-icon-192x192.png", :rel => "icon", :sizes => "192x192", :type => "image/png"}/
+    %link{:href => "/favicon-96.png", :rel => "icon", :sizes => "96x96", :type => "image/png"}/
+    %link{:href => "/favicon-32.png", :rel => "icon", :sizes => "32x32", :type => "image/png"}/
+    %link{:href => "/favicon-16.png", :rel => "icon", :sizes => "16x16", :type => "image/png"}/
+    %link{:href => "/manifest.json", :rel => "manifest"}/
+    %meta{:content => "#ffffff", :name => "msapplication-TileColor"}/
+    %meta{:content => "/ms-icon-144x144.png", :name => "msapplication-TileImage"}/
+    %meta{:content => "#ffffff", :name => "theme-color"}/
+    %title= content_for?(:title) ? yield(:title) : "Kudoso helps families manage the influence of technology"
+    %meta{:content => content_for?(:description) ? yield(:description) : "Kudoso helps parents manage screen time across all technology in the house, filter internet content and provide positive rewards for children.", :name => "description"}/
+    %meta{:content => content_for?(:keywords) ? yield(:keywords) : "Kudoso, kids, children, screentime, screen time, parental controls, content filtering, internet filter, game console, mobile, limit internet access, block applications, monitor usage", :name => "keywords"}/
+    %meta{:content => content_for?(:title) ? yield(:title) : "Kudoso helps families manage the influence of technology", :property => "og:title"}/
+    %meta{:content => content_for?(:description) ? yield(:description) : "Kudoso provides the leading solution for managing technology your kids are using. Kudoso teaches life skills and rewards positive behavior while protecting your children from unsavory internet content and obsessive device usage. ", :property => "og:description"}/
+    %meta{:content => 'http://www.kudoso.com/Kudoso_Facebook_Cover.png', :property => "og:image"}/
+    %link{:charset => "utf-8", :href => "https://cdnjs.cloudflare.com/ajax/libs/uikit/2.22.0/css/uikit.almost-flat.min.css", :media => "screen", :rel => "stylesheet"}/
+    / <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/2.21.0/css/components/sticky.almost-flat.min.css" media="screen" charset="utf-8">
+    = #stylesheet_link_tag 'reset', media: 'all', 'data-turbolinks-track' => true
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true
-    = javascript_include_tag 'vendor/modernizr'
-    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'ss-glyphish-outlined', media: 'all', 'data-turbolinks-track' => true
+    = stylesheet_link_tag 'ss-social-circle', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag :modernizr
     = csrf_meta_tags
-  %body
-    .blur
-      %header
-        = render 'layouts/navigation'
-      %main{:role => "main"}
-        .container
-          = render 'layouts/messages'
-          .row
-            .small-12.columns
-              %h1
-                ADMIN SECTION
-          .row
-            .small-12.columns
-              = yield
+    %script{:src => "//use.typekit.net/cbr8hdy.js"}
+    :javascript
+      try{Typekit.load({ async: true });}catch(e){}
+  %body.k-site.k-home
+    #top.k-page
+      %header.k-page-header.uk-clearfix
+        = render 'layouts/admin_navigation'
+      %main.k-main-admin
+        .uk-container-center.uk-width-4-5
+          = yield
+      %footer
+        = #render 'layouts/footer'
+    %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"}
+    %script{:charset => "utf-8", :src => "https://cdnjs.cloudflare.com/ajax/libs/uikit/2.22.0/js/uikit.js"}
+    %script{:charset => "utf-8", :src => "https://cdnjs.cloudflare.com/ajax/libs/uikit/2.22.0/js/components/sticky.min.js"}
+
+    = javascript_include_tag :application, media: :all, 'data-turbolinks-track' => true
+

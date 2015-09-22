@@ -11,6 +11,7 @@ $dark-sky: #165FB8;
 $night-sky: #0B315F;
 $apricot: #FDB941;
 $orange: #F76F20;
+$eggshell: #eee;
 
 
 // Base Styles
@@ -19,7 +20,9 @@ $orange: #F76F20;
 
 html, body {
     @include base-fontstack;
-    background: $sky; }
+    background: $sky;
+    min-height: 100%;
+}
 
 body {
     font-size: 1.3rem;
@@ -53,6 +56,9 @@ h3 {
     float: right;
     margin-top: 1.1em;
     font-weight: 200; }
+.k-nav .uk-nav-sub {
+  background: $sky;
+}
 .k-nav .uk-subnav-pill > .uk-active > * {
     background: $white;
     color: $sky; }
@@ -74,6 +80,11 @@ main > section h2 {
     line-height: 1em;
     margin-bottom: 0.5em;
     font-weight: 200; }
+
+.k-main-admin {
+  background: $eggshell;
+  min-height: 100vh;
+}
 
 .k-section {
     min-height: 100vh; }
@@ -207,7 +218,7 @@ section.k-info figure {
 .k-footer #k-logo-footer #logo {
     color: red; }
 .k-footer .k-footer-newsletter {
-    border-left: 1px solid #eee; }
+    border-left: 1px solid $eggshell; }
 .k-footer .k-footer-newsletter small {
     display: block;
     text-align: center;

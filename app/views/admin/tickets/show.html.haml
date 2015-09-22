@@ -23,14 +23,14 @@
           Close ticket:
           = check_box_tag 'ticket_close'
         %p
-          = f.button :submit, class: 'btn btn-success'
+          = f.button :submit, class: 'uk-button uk-button-success'
       .panel
         %h2 Ticket Notes
-        = link_to 'Back', admin_tickets_path, class: 'btn btn-default'
-        = link_to_add_association 'Add Note', f, :notes, class: 'btn btn-primary'
+        = link_to 'Back', admin_tickets_path, class: 'uk-button '
+        = link_to_add_association 'Add Note', f, :notes, class: 'uk-button uk-button-primary'
         -#= f.simple_fields_for :notes do |note|
         -#  = render 'note_fields', :f => note
-        %table.table.table-striped
+        %table.uk-table.uk-table-striped
           - @ticket.notes.reverse.each do |note|
             %tr
               %td
