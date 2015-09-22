@@ -170,7 +170,7 @@ section.k-info figure {
 .k-teach.k-intro header p {
     opacity: 0.9; }
 
-.k-reward .k-intro {
+.k-reward.k-intro {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -178,12 +178,12 @@ section.k-info figure {
     padding-top: 7%;
     padding-bottom: 7%;
     background-image: asset-url("kids_sports_1140x500.jpg"); }
-.k-reward .k-intro header {
+.k-reward.k-intro header {
     background: rgba(0, 0, 0, 0.8);
     padding: 2em;
     border-radius: 10px;
     -webkit-backdrop-filter: blur(10px); }
-.k-reward .k-intro header p {
+.k-reward.k-intro header p {
     opacity: 0.9; }
 
 .k-home .k-hero {
