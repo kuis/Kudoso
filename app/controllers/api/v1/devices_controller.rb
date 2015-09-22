@@ -2,7 +2,7 @@ module Api
   module V1
     class DevicesController < ApiController
 
-      skip_before_filter :restrict_api_access, only: [:deviceDidRegister, :status, :get_apps, :post_apps]
+      skip_before_filter :restrict_api_access, only: [:deviceDidRegister, :status, :get_apps, :post_apps, :post_applog]
 
       resource_description do
         short 'API Devices'
@@ -392,6 +392,69 @@ module Api
             render :json => { apps: @device.apps, :messages => messages }, :status => 200
           else
             messages[:error] << 'Unable to add application record'
+            render :json => { :messages => messages }, :status => 400
+          end
+
+
+
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Device not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
+        end
+      end
+
+      api :POST, "/v1/devices/:id/apps/log", "Record the application log for this device, returns the number of records successfully processed"
+      param :logs, Array, desc: "An array of Hashes which contain the params below: uuid, start_time, end_time", required: true
+      param :uuid, String, desc: "The UUID of the application (on OS X this is the Bundle Identifier)"
+      param :start_time, Integer, desc: "The start time of the application (in epoch seconds)"
+      param :end_time, Integer, desc: "The end time of the application (in epoch seconds)"
+      def post_applog
+        messages = init_messages
+        begin
+          @device = Device.find(params[:id])
+          auth = request.headers["Signature"]
+          if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @device.secure_key)
+            messages[:error] << "Invalid Signature"
+            failure(messages)
+            return
+          end
+          time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
+          if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
+            messages[:error] << "Invalid Timestamp"
+            failure(messages)
+            return
+          end
+
+
+          good = true
+          logged = []
+          if params[:logs] && params[:logs].is_a?(Array)
+            params[:logs].each do |record|
+              if record.is_a?(Hash) && record[:uuid] && record[:start_time] && record[:end_time]
+                app = @device.apps.find_by(uuid: record[:uuid] )
+                if app.nil?
+                  logger.warn "App with UUID #{params[:uuid]} is not installed on this device."
+                  messages[:warning] << "App with UUID #{params[:uuid]} is not installed on this device."
+                else
+                  applog = Applog.find_or_create_by(device_id: @device.id, app_id: app.id , start_time: Time.at(record[:start_time]), end_time: Time.at(record[:end_time]) )
+                  logged << applog if applog.valid?
+                end
+              end
+            end
+          else
+            logger.error "The paramater 'logs' was not found or was not an array."
+            messages[:error] << "The paramater 'logs' was not found or was not an array."
+            good = false
+          end
+
+
+          if good
+            render :json => { logged_count: logged.count, :messages => messages }, :status => 200
+          else
+            messages[:error] << 'Unable to add application log'
             render :json => { :messages => messages }, :status => 400
           end
 

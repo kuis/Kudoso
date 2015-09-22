@@ -12,6 +12,7 @@ class Device < ActiveRecord::Base
   has_one :plug
   has_many :app_devices, dependent: :destroy
   has_many :apps, through: :app_devices
+  has_many :applogs, dependent: :destroy
 
   validates :name, uniqueness: { scope: :family_id }
   # validates_presence_of :uuid
