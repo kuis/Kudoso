@@ -1,0 +1,25 @@
+
+%ul.uk-nav.uk-subnav.uk-subnav-pill.uk-nav-parent-icon{'data-uk-nav' => true}
+  %li
+    = link_to("Logout (#{current_user.try(:member).try(:first_name) || 'user'})", destroy_user_session_path, :method => :delete)
+  %li.uk-parent
+    %a{href: '#'}
+      Admin
+      %ul.uk-nav-sub
+        %li
+          = link_to('Apps', admin_apps_path)
+        %li
+          = link_to('All Contacts', admin_contacts_path)
+        %li= link_to('All Families', admin_families_path)
+        %li= link_to('ToDo Templates', admin_todo_templates_path)
+        %li= link_to('Device Types', admin_device_types_path)
+        %li= link_to('All Devices', admin_devices_path)
+        %li= link_to('Activity Templates', admin_activity_templates_path)
+        %li= link_to('Activity Types', admin_activity_types_path)
+        %li= link_to('Router Models', admin_router_models_path)
+        %li= link_to('Router Firmwares', admin_router_firmwares_path)
+        %li= link_to('Themes', admin_themes_path)
+        %li= link_to('Tickets', admin_tickets_path)
+        %li= link_to('All Routers', admin_routers_path)
+        %li= link_to('All Plugs', admin_plugs_path)
+        %li= link_to('All Avatars', admin_avatars_path)

@@ -19,16 +19,16 @@
     %p
       %strong Sign Up Now
       for the latest Kudoso news on how to protect your family from the dangers of technology, tips on raising healthier kids and be one of the first to be able to try Kudoso, even before the public release!
-    %form
-      .uk-form
-        .uk-form-row.uk-grid
-          %input.uk-form-large.uk-width-1-2{:name => "first_name", :placeholder => "Your First Name", :type => "text", :value => "", :id => 'index-first-name'}/
-          %input.uk-form-large.uk-width-1-2{:name => "last_name", :placeholder => "Your Last Name", :type => "text", :value => "", :id => 'index-last-name'}/
-        .uk-form-row
-          %input.uk-form-large.uk-width-1-1.uk-text-center{:name => "email", :placeholder => "Your Email Address", :type => "email", :value => "", :id => "index-email", :onclick => "index_signup();"}/
-          %small We don’t spam you or share your email address.
-        .uk-form-row
-          %button.uk-button.uk-button-primary.uk-button-large.uk-width-1-1{:name => "button", :type => "submit"} Sign Up
+    %form.uk-form
+      .uk-form-row.uk-text-center
+        %input.uk-form-large.uk-width-4-10{:name => "first_name", :placeholder => "Your First Name", :type => "text", :value => "", :id => 'index-first-name'}/
+        %input.uk-form-large.uk-width-4-10{:name => "last_name", :placeholder => "Your Last Name", :type => "text", :value => "", :id => 'index-last-name'}/
+      .uk-form-row.uk-text-center
+        %input.uk-form-large.uk-width-8-10.uk-text-center{:name => "email", :placeholder => "Your Email Address", :type => "email", :value => "", :id => "index-email", :onclick => "index_signup();"}/
+      .uk-form-row.uk-text-center
+        %small We won’t spam you or share your email address.
+      .uk-form-row.uk-text-center
+        %button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "button", :type => "submit"} Sign Up
 %section.k-features.k-section.uk-clearfix.uk-flex.uk-flex-center.uk-flex-middle
   .uk-container.uk-container-center
     %article
@@ -157,7 +157,7 @@
       %figure.k-fundamental.uk-overlay.uk-overlay-hover
         =image_tag 'kids_dishes_570x300.jpg', alt: ''
         .uk-overlay-panel.uk-overlay-fade.uk-overlay-background
-          %h2 teach
+          %h2 Teach
           %p Lorem ipsum dolor sit amet.
         %a.uk-position-cover{:href => "/teach.html"}
       %figure.k-fundamental.uk-overlay.uk-overlay-hover
