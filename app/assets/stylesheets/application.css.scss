@@ -313,8 +313,22 @@ main > section.k-fundamentals .k-teach {
 
 // Phone Portrait
 @media screen and (max-width: 480px) {
+    .k-page-header.uk-active {
+      padding: 0 !important;
+      max-height: 46px;
+      .k-logo {
+        padding-top: 8px;
+        img {
+          max-height: 30px;
+        }
+      }
+    }
     .k-logo {
         float: none;
+        img {
+          max-width: 70%;
+          max-height: 50px;
+        }
     }
     .k-nav > a {
         position: absolute;
@@ -325,8 +339,22 @@ main > section.k-fundamentals .k-teach {
 
 // Phone Landscape
 @media screen and (min-width: 480px)  and (max-width: 767px) {
+  .k-page-header.uk-active {
+    padding: 0 !important;
+    max-height: 46px;
+    .k-logo {
+      padding-top: 8px;
+      img {
+        max-height: 30px;
+      }
+    }
+  }
     .k-logo {
         float: none;
+        img {
+          max-width: 70%;
+          max-height: 50px;
+        }
     }
     .k-nav > a {
         position: absolute;
