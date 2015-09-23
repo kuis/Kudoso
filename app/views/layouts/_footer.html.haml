@@ -40,6 +40,25 @@
               %small We won’t spam you or share your email address.
             .uk-form-row.uk-text-center
               %button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "button", :type => "button", :onclick => "footer_signup(); return false;"} Sign Up
+
+#modal.uk-modal.k-overlay-menu{"aria-hidden" => "true", :style => "display: none; overflow-y: auto;"}
+  .uk-modal-dialog
+    %a.uk-modal-close.uk-close{:href => ""}
+    %h3 MENU
+    %ul.uk-list.uk-list-line
+      %li
+        %a{:href => "/"} Home
+      %li
+        %a{:href => "/protect"} Protect
+      %li
+        %a{:href => "/limit"} Limit
+      %li
+        %a{:href => "/teach"} Teach
+      %li
+        %a{:href => "/reward"} Reward
+      %li
+        %a{:href => "http://blog.kudoso.com"} Blog
+
 :javascript
   function footer_signup() {
     var email = $.trim($('#footer-email').val());
