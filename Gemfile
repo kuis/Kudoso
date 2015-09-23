@@ -31,6 +31,7 @@ gem 'kaminari'
 gem 'modernizr-rails'
 gem 'paperclip'
 gem 'aws-sdk-v1'
+gem 'autoprefixer-rails', '~> 6.0.3'
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer',  platforms: :ruby
 

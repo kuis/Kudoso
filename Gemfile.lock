@@ -75,7 +75,7 @@ GEM
       hashie
       json
     arel (6.0.3)
-    autoprefixer-rails (5.1.8)
+    autoprefixer-rails (6.0.3)
       execjs
       json
     awesome_print (1.6.1)
@@ -168,7 +168,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.0.7)
     excon (0.45.4)
-    execjs (2.4.0)
+    execjs (2.6.0)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
     factory_girl_rails (4.5.0)
@@ -574,6 +574,7 @@ PLATFORMS
 DEPENDENCIES
   agilecrm-wrapper
   apipie-rails!
+  autoprefixer-rails (~> 6.0.3)
   awesome_print
   aws-sdk-v1
   best_in_place
@@ -647,6 +648,3 @@ DEPENDENCIES
   web-console (~> 2.0)
   zeus
   zeus-parallel_tests
-
-BUNDLED WITH
-   1.10.6
