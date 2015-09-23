@@ -310,3 +310,27 @@ main > section.k-fundamentals .k-teach {
     width: 320px;
     a { display: block; }
 }
+
+// Phone Portrait
+@media screen and (max-width: 480px) {
+    .k-logo {
+        float: none;
+    }
+    .k-nav > a {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+}
+
+// Phone Landscape
+@media screen and (min-width: 480px)  and (max-width: 767px) {
+    .k-logo {
+        float: none;
+    }
+    .k-nav > a {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+}
