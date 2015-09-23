@@ -1,0 +1,99 @@
+
+.uk-width-large-6-10.uk-width-medium-8-10.uk-width-small-1-1.uk-container-center.uk-text-center
+  %header.uk-margin-top.uk-margin-bottom
+    %h2.uk-contrast Contact Kudoso
+    %p.first
+      We would LOVE to hear from you!
+%section.k-info.k-contact
+  .uk-width-large-6-10.uk-width-medium-9-10.uk-width-small-1-1.uk-container-center
+    .uk-grid
+      .uk-width-medium-4-10.uk-width-large-4-10
+        #map-container
+          #map-canvas
+            %iframe{:allowfullscreen => "", :frameborder => "0", :height => "100%", :src => "https://www.google.com/maps/embed/v1/place?q=place_id:ChIJR8LqnJVQZlMRYrtaHdq9H68&key=AIzaSyBajsl8YcsJJr0F8ppBU3988GUdf0Ex4qM&zoom=7", :style => "border:0", :width => "100%"}
+        %h3 Proud to be located in Kalispell, Montana  USA
+        %h3
+          %a{href: 'mailto:info@kudoso.com'} info@kudoso.com
+
+      .uk-container-center.uk-width-small-1-1.uk-width-medium-6-10.uk-width-large-6-10
+        %h2 Send us a Message
+        #contact_us_form
+          %form.uk-form
+            .uk-form-row.uk-text-center
+              %input.uk-form-large.uk-width-4-10{:name => "first_name", :placeholder => "Your First Name", :type => "text", :value => "", :id => 'contact-first-name'}/
+              %input.uk-form-large.uk-width-4-10{:name => "last_name", :placeholder => "Your Last Name", :type => "text", :value => "", :id => 'contact-last-name'}/
+            .uk-form-row.uk-text-center
+              %input.uk-form-large.uk-width-8-10{:name => "email", :placeholder => "Your Email Address", :type => "email", :value => "", :id => 'contact-email'}/
+            .uk-form-row.uk-text-center
+              %textarea{rows: 5,
+                        class: 'uk-form-large uk-width-8-10',
+                        :name => "message",
+                        :placeholder => "Your Message",
+                        :type => "email",
+                        :value => "",
+                        :id => 'contact-message'}
+            .uk-form-row.uk-text-center
+              %button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "button", type: 'button', :onclick => "contactus(); return false;"} Send Message
+
+
+:javascript
+  function contactus() {
+    var email = $.trim($('#contact-email').val());
+    var valid = (email.length > 5 && validateEmail(email));
+
+    if ( !valid ) {
+      alert("We're sorry, it doesn't appear that you have input a valid email address, please try again");
+      return;
+    }
+
+    var first_name = $.trim($('#contact-first-name').val());
+    var last_name = $.trim($('#contact-last-name').val());
+
+    valid = (valid && first_name.length > 2);
+    valid = (valid && last_name.length > 2);
+
+    var message = $.trim($('#contact-message').val());
+
+    valid = (valid && message.length > 2);
+
+    if ( !valid ) {
+      alert("All fields are required, please try again...");
+      return;
+    }
+
+    if ( valid ) {
+      $('#contact_us_form').slideUp();
+      $.ajax({
+         url: '/contacts',
+         dataType: 'json',
+         method: 'POST',
+         data: {
+          contact: {
+            emails_attributes: [ { address: email } ],
+            first_name: first_name,
+            last_name: last_name,
+            contact_type_id: #{ ContactType.find_or_create_by(name: 'Beta Applicant').id }
+          },
+          contact_us_message: message
+         },
+         statusCode: {
+          200: function(e) {
+            if (typeof _agile !== 'undefined') {
+              _agile.set_email(email);
+              _agile.add_score(10);
+            }
+            $('#contact_us_form').html('<h3>Thank you!</h3><p>Message received.</p>');
+            $('#contact_us_form').slideDown();
+          },
+          400: function(e) {
+            alert("We're sorry, the server did not receive your email address, please try again.");
+            $('#contact_us_form').slideDown();
+          },
+          500: function(e) {
+            alert("We're sorry, the server had an error processing your message, please try again later.");
+            $('#contact_us_form').slideDown();
+          }
+        }
+      });
+    }
+  }
