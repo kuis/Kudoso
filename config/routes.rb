@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
-  resources :avatars
-  apipie
 
+
+
+  apipie
+  resources :avatars
   resources :partners
   resources :contacts
 
@@ -139,7 +141,7 @@ Rails.application.routes.draw do
 
   get 'tos', to: 'home#tos'
   get 'privacy', to: 'home#privacy'
-  get 'contact', to: 'home#contact'
+  get 'contact_us', to: 'home#contact_us'
   get 'support', to: 'home#support'
   get 'newsletter', to: 'home#newsletter'
   get 'privacy', to: 'home#privacy'

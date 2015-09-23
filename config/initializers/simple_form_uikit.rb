@@ -9,7 +9,7 @@ SimpleForm.setup do |config|
     b.use :html5
     b.use :placeholder
     b.use :label, class: 'uk-form-label'
-    b.use :input, class: 'uk-form-large'
+    b.use :input, class: 'uk-form-large uk-form-width-large'
     b.optional :maxlength
     b.optional :pattern
     b.optional :min_max

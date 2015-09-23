@@ -16,9 +16,9 @@
           .uk-width-small-1-1.uk-width-medium-2-4.uk-width-large-2-4.uk-text-center-small.uk-margin-large-top
             %ul.uk-list
               %li
-                %a{:href => ""} Contact Us
-              %li
-                %a{:href => ""} Press Inquiries
+                %a{:href => "/contact_us"} Contact Us
+              -#%li
+              -#  %a{:href => ""} Press Inquiries
               %li
                 %a{:href => "/privacy"} Privacy Policy
           .uk-width-small-1-1.uk-width-medium-4-4.uk-width-large-4-4.uk-text-center-small.uk-margin-large-top
@@ -39,7 +39,7 @@
               %input.uk-form-large.uk-width-8-10.uk-text-center{:name => "email", :placeholder => "Your Email Address", :type => "email", :value => "", :id => 'footer-email'}/
               %small We won’t spam you or share your email address.
             .uk-form-row.uk-text-center
-              %button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "button", :type => "submit", :onclick => "footer_signup();"} Sign Up
+              %button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "button", :type => "button", :onclick => "footer_signup(); return false;"} Sign Up
 :javascript
   function footer_signup() {
     var email = $.trim($('#footer-email').val());
@@ -76,28 +76,21 @@
          },
          statusCode: {
           200: function(e) {
-            $('#thankyou').modal();
-            var contact = {};
-            contact.email = email;
-            contact.first_name = first_name;
-            contact.last_name = last_name;
-            _agile.create_contact(contact, {
-              success: function (data) {
-                  console.log("create contact success");
-              },
-              error: function (data) {
-                  console.log("error creating contact");
-              }
-            });
-            _agile.add_score(10);
+            alert("Thank you!")
+            if (typeof _agile !== 'undefined') {
+              _agile.set_email(email);
+              _agile.add_score(10);
+            }
             ga('send','pageview','/landing_singup_thankyou');
           },
           400: function(e) {
             alert("We're sorry, the server did not receive your email address, please try again.");
           },
           409: function(e) {
-            _agile.set_email(email);
-            _agile.add_score(10);
+            if (typeof _agile !== 'undefined') {
+              _agile.set_email(email);
+              _agile.add_score(10);
+            }
             alert("We're sorry, this email address is already registered.");
           },
           500: function(e) {

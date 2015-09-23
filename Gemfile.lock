@@ -647,3 +647,6 @@ DEPENDENCIES
   web-console (~> 2.0)
   zeus
   zeus-parallel_tests
+
+BUNDLED WITH
+   1.10.6
