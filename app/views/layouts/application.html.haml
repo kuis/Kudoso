@@ -45,7 +45,7 @@
       %header.k-page-header.uk-clearfix
         = render 'layouts/navigation'
       %main
-        = flash.each do |key, value|
+        - flash.each do |key, value|
           .uk-width-4-5.uk-container-center.uk-alert{ :class => "uk-alert-#{key == 'error' ? 'danger' : 'success'}" }
             %a.uk-alert-close.uk-close{href: ""}
             %p
