@@ -33,6 +33,9 @@ class ContactsController < ApplicationController
         @email.save
       else
         @contact.update_attributes( contact_params )
+        if @contact.primary_email.blank?
+          @email.update_attribute(:is_primary, true)
+        end
       end
     end
 

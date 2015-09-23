@@ -79,11 +79,11 @@ Rails.application.configure do
 
   # For devise:
   config.action_mailer.default_url_options = { host: 'www.kudoso.com', port: 80 }
-
+  config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
       :address              => "smtp.gmail.com",
       :port                 => 587,
-      :domain               => "gmail.com",
+      :domain               => "kudoso.com",
       :user_name            => "support@kudoso.com",
       :password             => "4Kud0s0!",
       :authentication       => :plain,
