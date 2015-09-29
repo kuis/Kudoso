@@ -43,7 +43,7 @@ module Api
 
           @router.registered = true
           if @router.save
-            render :json => { router: @router, latest_firmware: @router.latest_firmware, :messages => messages }, :status => 200
+            render :json => { router: @router, latest_firmware: @router.latest_firmware.as_json(methods: :url), :messages => messages }, :status => 200
           else
             messages[:error] << @router.errors.full_messages
             render :json => { :messages => messages }, :status => 400
