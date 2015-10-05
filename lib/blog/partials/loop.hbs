@@ -1,0 +1,17 @@
+{{#foreach posts}}
+<article class="{{post_class}} uk-width-large-5-10  uk-width-medium-5-10 uk-width-small-1-1 uk-container-center uk-contrast uk-article">
+    <header>
+        <h2 class="k-post-title uk-h1"><a href="{{url}}">{{{title}}}</a></h2>
+    </header>
+    <div class="k-post-description">
+        <p class="uk-lead">{{excerpt words="30"}}...</p>
+    </section>
+
+    <!-- <footer class="post-meta main-content">
+        {{tags prefix=" Tag: "}}
+        <time datetime="{{date format='YYYY-MM-DD'}}">{{date format="DD MMMM YYYY"}}</time>
+    </footer> -->
+</article>
+{{/foreach}}
+
+{{pagination}}

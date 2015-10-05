@@ -1,0 +1,53 @@
+=intro
+    background-size: cover
+    background-repeat: no-repeat
+    background-position: center center
+    min-height: $full-height
+    padding-top: 7%
+    padding-bottom: 7%
+
+=overlay($opacity:.5)
+    header
+        background: rgba(0,0,0,$opacity)
+        padding: 2em
+        border-radius: 10px
+        -webkit-backdrop-filter: blur(10px)
+
+        p
+            opacity: .9
+
+// .k-home .k-hero
+//     +hero
+//     background-image: url('/assets/images/kids-and-devices-blue.png')
+//     min-height: $full-height
+
+.k-intro article
+    h2
+        font-weight: 200
+        line-height: 1.2
+    p.first
+        font-size: 1.2em
+        font-weight: 200
+
+.k-protect .k-hero, .k-limit .k-hero, .k-teach .k-hero, .k-reward .k-hero
+    display: none
+
+.k-protect .k-intro
+    +intro
+    background-image: url('/assets/images/mom_ipad_detail_1140x500-a674dfedc023ea172c042ad3fb0a2680.jpg')
+    +overlay
+
+.k-limit .k-intro
+    +intro
+    background-image: url('/assets/images/kids_gaming_1140x500-5cf67b538da9104d41c23dbca0fa275d.jpg')
+    +overlay(.7)
+
+.k-teach .k-intro
+    +intro
+    +overlay(.7)
+    background-image: url('/assets/images/kids_dishes_1140x500-bb3600110a3c783f8bb9ac333fe0fc5c.jpg')
+
+.k-reward .k-intro
+    +intro
+    +overlay(.8)
+    background-image: url('/assets/images/kids_sports_1140x500-d513d5b8a585821c0944a552404a67f1.jpg')
