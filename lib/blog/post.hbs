@@ -1,0 +1,68 @@
+{{!< default}}
+
+<main class="k-posts">
+{{#post}}
+
+    <section class="k-intro k-section uk-clearfix uk-flex uk-flex-center uk-flex-middle uk-contrast">
+        <div class="uk-container uk-container-center">
+            <article class="{{post_class}} uk-width-large-7-10  uk-width-medium-9-10 uk-width-small-1-1 uk-container-center uk-article">
+                <header>
+                    <h2 class="uk-h1">{{title}}</h2>
+                </header>
+                <div class="k-article-body">
+                    {{content}}
+                    <br>
+
+                    <div class="k-post-footer uk-clearfix">
+                        <time class="k-date-time faded uk-margin-small-bottom" datetime="{{date format='YYYY-MM-DD'}}">{{date format="DD MMMM YYYY"}}</time> {{tags prefix=" on "}}
+                        <div class="k-share-post">
+                            <ul class="k-site-social uk-subnav">
+                                <li class="social-link facebook-link">
+                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{url absolute="true"}}" onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;" class="fa fa-facebook">
+                                        <span class="visually-hidden"><i class="uk-icon-facebook-official uk-icon-small"></i></span>
+                                    </a>
+                                </li>
+                                <li class="k-social-link k-twitter-link">
+                                    <a href="https://twitter.com/share?text={{encode title}}&amp;url={{url absolute="true"}}" onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;" class="fa fa-twitter">
+                                        <span class="visually-hidden"><i class="uk-icon-twitter uk-icon-small"></i></span>
+                                    </a>
+                                </li>
+                                <li class="k-social-link k-google-plus-link">
+                                    <a href="https://plus.google.com/share?url={{url absolute="true"}}" onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;" class="fa fa-google">
+                                        <span class="visually-hidden"><i class="uk-icon-google-plus uk-icon-small"></i></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <footer>
+                    {{#author}}
+                        <div class="author">
+                            {{#if image}}
+                            <figure class="author-image">
+                                <a class="img" href="{{url}}" style="background-image: url({{image}})"><span class="hidden">{{name}}'s Picture</span></a>
+                            </figure>
+                            {{/if}}
+
+                            <div class="author-description">
+                                <h4><a href="{{url}}">{{name}}</a></h4>
+                                {{#if bio}}
+                                    <p>{{bio}}</p>
+                                {{else}}
+                                    <p>Read <a href="{{url}}">more posts</a> by this author.</p>
+                                {{/if}}
+                                <div class="author-meta">
+                                    {{#if location}}<p>I'm based in the {{location}}</p>{{/if}}
+                                    {{#if website}}<p><a href="{{website}}">{{website}}</a></p>{{/if}}
+                                </div>
+                            </div>
+                        </div>
+                    {{/author}}
+                </footer>
+            </article>
+        </div>
+    </section>
+{{/post}}
+</main>

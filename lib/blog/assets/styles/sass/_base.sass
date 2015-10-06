@@ -1,0 +1,50 @@
+*
+    box-sizing: border-box
+
+html, body
+    font-family: $fontstack
+    background: $blue
+
+body
+    font-size: 1.3rem
+    line-height: 1.5em
+    color: #111
+    font-weight: lighter
+
+h1, h2, h3, h4
+    font-family: $fontstack
+    font-weight: bold
+    color: #111
+    font-weight: 200
+
+h2
+    font-size: 44px
+    a
+        text-decoration: none
+
+h3
+    font-size: 1.4em
+    margin: 1.8em 0 1.3em
+
+section a
+    padding: 0 3px
+    border-bottom: 1px solid rgba(255,255,255, .2)
+    &:hover
+        background: rgba(255,255,255,.1)
+        text-decoration: none
+        border-bottom: none
+
+section article ul li,
+section article ol li
+    margin-bottom: 1em
+
+section article h2 a
+    color: #fff
+
+section em
+    color: inherit
+
+.faded
+    opacity: .7
+    &:hover
+        opacity: 1

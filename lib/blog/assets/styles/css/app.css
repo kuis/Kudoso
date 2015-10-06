@@ -1,0 +1,142 @@
+/*-- config --*/
+/*-- third-party --*/
+/*-- components --*/
+* {
+  box-sizing: border-box; }
+
+html, body {
+  font-family: proxima-nova, "Helvetica Neue", verdana, sans-serif;
+  background: #0072F4; }
+
+body {
+  font-size: 1.3rem;
+  line-height: 1.5em;
+  color: #111; }
+
+h1, h2, h3, h4 {
+  font-family: proxima-nova, "Helvetica Neue", verdana, sans-serif;
+  font-weight: bold;
+  color: #111; }
+
+h2 {
+  font-size: 44px; }
+
+.uk-sticky-placeholder header {
+  background: #0072F4;
+  color: #fff;
+  padding: 10px;
+  z-index: 100; }
+
+.k-logo {
+  float: left; }
+
+.k-nav {
+  position: absolute;
+  top: calc(50%);
+  right: 0;
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
+  font-weight: 200;
+  margin-top: 5px; }
+  .k-nav .uk-subnav-pill > .uk-active > * {
+    background: #fff;
+    color: #0072F4; }
+  .k-nav a {
+    color: #fff; }
+    .k-nav a:hover {
+      color: red !important; }
+
+main > section {
+  position: relative;
+  text-align: center;
+  padding-top: 7%;
+  padding-bottom: 7%;
+  clear: both; }
+  main > section h2 {
+    font-size: 44px;
+    line-height: 44px;
+    margin-bottom: .5em; }
+
+.k-hero {
+  min-height: 100vh;
+  background: url("/assets/images/kids-and-devices-blue.png") no-repeat center bottom;
+  background-size: cover;
+  padding-top: 7%;
+  padding-bottom: 7%; }
+
+.k-page > footer {
+  background: red; }
+
+/*-- pages --*/
+.k-section {
+  min-height: 100vh; }
+
+section p.first {
+  font-size: 26px;
+  line-height: 32px;
+  margin-bottom: 1.5em; }
+
+section.k-intro {
+  background: #0072F4;
+  color: #fff; }
+
+.k-features {
+  background: #fff; }
+  .k-features .k-feature {
+    text-align: left;
+    position: relative;
+    padding-left: 100px; }
+  .k-features .k-feature-icon {
+    position: absolute;
+    left: 25px;
+    top: 20px; }
+
+main > section.k-fundamentals {
+  background: #ccc;
+  min-height: inherit !important;
+  padding: 0; }
+  main > section.k-fundamentals ul {
+    list-style: none;
+    margin: 0;
+    padding: 0; }
+  main > section.k-fundamentals .k-fundamental {
+    background: blue;
+    padding: 0;
+    margin: 0; }
+    main > section.k-fundamentals .k-fundamental img {
+      width: 100%; }
+  main > section.k-fundamentals .k-protect {
+    background: green; }
+  main > section.k-fundamentals .k-limit {
+    background: red; }
+  main > section.k-fundamentals .k-teach {
+    background: orange; }
+
+.k-newsletter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translateY(-50%) translateX(-50%);
+      -ms-transform: translateY(-50%) translateX(-50%);
+          transform: translateY(-50%) translateX(-50%);
+  background: rgba(255, 255, 255, 0.9);
+  padding: 3%;
+  border-radius: 10px; }
+  .k-newsletter small {
+    color: #777;
+    font-size: .9rem; }
+
+.k-news {
+  min-height: 50vh;
+  background: #111; }
+  .k-news article {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translateX(-50%) translateY(-50%);
+        -ms-transform: translateX(-50%) translateY(-50%);
+            transform: translateX(-50%) translateY(-50%); }
+
+.k-footer {
+  background-color: #eee; }

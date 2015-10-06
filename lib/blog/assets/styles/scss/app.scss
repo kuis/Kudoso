@@ -1,0 +1,15 @@
+/*-- config --*/
+@import "config";
+
+/*-- third-party --*/
+@import "vendor";
+
+/*-- components --*/
+@import "base";
+@import "header";
+@import "section";
+@import "hero";
+@import "footer";
+
+/*-- pages --*/
+@import "home";
