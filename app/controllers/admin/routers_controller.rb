@@ -41,7 +41,7 @@ class Admin::RoutersController < AdminController
   # PATCH/PUT /admin/routers/1.json
   def update
     respond_to do |format|
-      if @router.update(router_model_params)
+      if @router.update(router_params)
         format.html { redirect_to admin_routers_url, notice: 'Router was successfully updated.' }
         format.json { render :show, status: :ok, location: @router }
       else
