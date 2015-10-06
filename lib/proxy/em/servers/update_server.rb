@@ -250,6 +250,15 @@ end
 EventMachine.run do
   puts "Starting Update Server"
 
+  Signal.trap("INT")  do
+    @cache_server.stop if @cache_server
+    EM::stop
+  end
+  Signal.trap("TERM") do
+    @cache_server.stop if @cache_server
+    EM::stop
+  end
+
   # Listen for cache clear requests
   EM.start_server '0.0.0.0', 54283, UpdateServer
   EM.start_server '0.0.0.0', 22848, StatusServer

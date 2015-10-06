@@ -7,7 +7,7 @@ require File.dirname(__FILE__) + '/../certificate'
 
 class CertServer < GServer
   def initialize
-    super(2000, nil, 10)
+    super(54281, nil, 10)
   end
 
   def serve(client)

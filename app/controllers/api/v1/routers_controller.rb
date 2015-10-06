@@ -144,7 +144,7 @@ module Api
           time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
           if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
             messages[:error] << "Invalid Timestamp"
-            failure(messages)
+            router_failure(messages)
             return
           end
           if !@router.registered
