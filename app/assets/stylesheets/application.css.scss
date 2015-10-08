@@ -47,7 +47,13 @@ h3 {
     background: $sky;
     color: $white;
     padding: 1.2em !important;
-    z-index: 100; }
+    z-index: 100;
+    background: -webkit-linear-gradient(180deg, $sky 10%, darken($sky, 10%) 90%); /* Chrome 10+, Saf5.1+ */
+    background:    -moz-linear-gradient(180deg, $sky 10%, darken($sky, 10%) 90%); /* FF3.6+ */
+    background:     -ms-linear-gradient(180deg, $sky 10%, darken($sky, 10%) 90%); /* IE10 */
+    background:      -o-linear-gradient(180deg, $sky 10%, darken($sky, 10%) 90%); /* Opera 11.10+ */
+    background:         linear-gradient(180deg, $sky 10%, darken($sky, 10%) 90%); /* W3C */
+}
 
 .k-logo {
     float: left; }
@@ -100,7 +106,9 @@ section p.first {
 
 section.k-intro {
     background: $sky;
-    color: $white; }
+    color: $white;
+    min-height: 70vh;
+}
 
 section.k-info {
     background: $apricot;
@@ -126,11 +134,30 @@ section.k-info figure {
 .k-protect .k-hero, .k-limit .k-hero, .k-teach .k-hero, .k-reward .k-hero {
     display: none; }
 
+.k-home .k-intro {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    padding-top: 7%;
+    padding-bottom: 7%;
+    //background-image: url(https://images.unsplash.com/reserve/m6rT4MYFQ7CT8j9m2AEC_JakeGivens%20-%20Sunset%20in%20the%20Park.JPG?q=80&fm=jpg&s=a8c0ccdc8b018bc32f848533bc1348ac); }
+    // background-image: url(https://images.unsplash.com/reserve/RONyPwknRQOO3ag4xf3R_Kinsey.jpg?q=80&fm=jpg&s=04b191d88d2ab0f8c66a46d1e33a902d);
+    background-image: asset-url("kids-and-devices-blue.png");
+
+}
+
+.k-home .k-intro header {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 2em;
+    border-radius: 10px;
+    -webkit-backdrop-filter: blur(10px); }
+.k-home .k-intro header p {
+    opacity: 0.9; }
+
 .k-protect.k-intro {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    min-height: 100vh;
     padding-top: 7%;
     padding-bottom: 7%;
     background-image: asset-url("mom_ipad_detail_1140x500.jpg"); }
@@ -146,7 +173,6 @@ section.k-info figure {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    min-height: 100vh;
     padding-top: 7%;
     padding-bottom: 7%;
     background-image: asset-url("kids_gaming_1140x500.jpg"); }
@@ -162,7 +188,6 @@ section.k-info figure {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    min-height: 100vh;
     padding-top: 7%;
     padding-bottom: 7%;
     background-image: asset-url("kids_dishes_1140x500.jpg"); }
@@ -178,7 +203,6 @@ section.k-info figure {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    min-height: 100vh;
     padding-top: 7%;
     padding-bottom: 7%;
     background-image: asset-url("kids_sports_1140x500.jpg"); }
@@ -197,8 +221,8 @@ section.k-info figure {
     min-height: 100vh;
     padding-top: 7%;
     padding-bottom: 7%;
-    background-image: asset-url("kids-and-devices-blue.png");
-    min-height: 100vh; }
+    background-image: url(https://images.unsplash.com/reserve/RONyPwknRQOO3ag4xf3R_Kinsey.jpg?q=80&fm=jpg&s=04b191d88d2ab0f8c66a46d1e33a902d);
+}
 
 .k-footer {
     background: white;
