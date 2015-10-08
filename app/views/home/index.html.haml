@@ -150,34 +150,34 @@
     -#<li class="k-fundamental k-teach"><a href=""><img src="/assets/images/kids_dishes_570x300.jpg" alt=""></a></li>
     -#<li class="k-fundamental k-reward"><a href=""><img src="/assets/images/kids_sports_570x300.jpg" alt=""></a></li>
     -#</ul>
-    .uk-grid.uk-grid-width-medium-1-2.uk-grid-large
+    .uk-grid.uk-grid-width-large-1-2.uk-grid-large.k-grid-nomargin
       %figure.k-fundamental.uk-overlay
         =image_tag 'mom_ipad_detail_570x300.jpg', alt: ''
         .uk-overlay-panel.uk-overlay-background
           %h2 Protect
-          %p= render partial: 'home/protect_paragraph'
-          %p Learn more >
+          %p.k-normal= render partial: 'home/protect_paragraph'
+          %h3 Learn more >
         %a.uk-position-cover{:href => "/protect#features"}
       %figure.k-fundamental.uk-overlay
         =image_tag 'kids_gaming_570x300.jpg', alt: ''
         .uk-overlay-panel.uk-overlay-background
           %h2 Limit
-          %p= render partial: 'home/limit_paragraph'
-          %p Learn more >
+          %p.k-normal= render partial: 'home/limit_paragraph'
+          %h3 Learn more >
         %a.uk-position-cover{:href => "/limit#features"}
       %figure.k-fundamental.uk-overlay
         =image_tag 'kids_dishes_570x300.jpg', alt: ''
         .uk-overlay-panel.uk-overlay-background
           %h2 Teach
-          %p= render partial: 'home/teach_paragraph'
-          %p Learn more >
+          %p.k-normal= render partial: 'home/teach_paragraph'
+          %h3 Learn more >
         %a.uk-position-cover{:href => "/teach#features"}
       %figure.k-fundamental.uk-overlay
         =image_tag 'kids_sports_570x300.jpg', alt: ''
         .uk-overlay-panel.uk-overlay-background
           %h2 Reward
-          %p= render partial: 'home/reward_paragraph'
-          %p Learn more >
+          %p.k-normal= render partial: 'home/reward_paragraph'
+          %h3 Learn more >
         %a.uk-position-cover{:href => "/reward#features"}
 = render 'home/news'
 :javascript
