@@ -151,30 +151,34 @@
     -#<li class="k-fundamental k-reward"><a href=""><img src="/assets/images/kids_sports_570x300.jpg" alt=""></a></li>
     -#</ul>
     .uk-grid.uk-grid-width-medium-1-2.uk-grid-large
-      %figure.k-fundamental.uk-overlay.uk-overlay-hover
+      %figure.k-fundamental.uk-overlay
         =image_tag 'mom_ipad_detail_570x300.jpg', alt: ''
-        .uk-overlay-panel.uk-overlay-fade.uk-overlay-background
+        .uk-overlay-panel.uk-overlay-background
           %h2 Protect
-          %p Protect your child with Advanced Content Filtering by Kudoso
-        %a.uk-position-cover{:href => "/protect.html"}
-      %figure.k-fundamental.uk-overlay.uk-overlay-hover
+          %p= render partial: 'home/protect_paragraph'
+          %p Learn more >
+        %a.uk-position-cover{:href => "/protect#features"}
+      %figure.k-fundamental.uk-overlay
         =image_tag 'kids_gaming_570x300.jpg', alt: ''
-        .uk-overlay-panel.uk-overlay-fade.uk-overlay-background
+        .uk-overlay-panel.uk-overlay-background
           %h2 Limit
-          %p Control Obsessions by limiting Screen Time with Kudoso
-        %a.uk-position-cover{:href => "/limit.html"}
-      %figure.k-fundamental.uk-overlay.uk-overlay-hover
+          %p= render partial: 'home/limit_paragraph'
+          %p Learn more >
+        %a.uk-position-cover{:href => "/limit#features"}
+      %figure.k-fundamental.uk-overlay
         =image_tag 'kids_dishes_570x300.jpg', alt: ''
-        .uk-overlay-panel.uk-overlay-fade.uk-overlay-background
+        .uk-overlay-panel.uk-overlay-background
           %h2 Teach
-          %p Children learn Life Skills and Academics with Kudoso
-        %a.uk-position-cover{:href => "/teach.html"}
-      %figure.k-fundamental.uk-overlay.uk-overlay-hover
+          %p= render partial: 'home/teach_paragraph'
+          %p Learn more >
+        %a.uk-position-cover{:href => "/teach#features"}
+      %figure.k-fundamental.uk-overlay
         =image_tag 'kids_sports_570x300.jpg', alt: ''
-        .uk-overlay-panel.uk-overlay-fade.uk-overlay-background
+        .uk-overlay-panel.uk-overlay-background
           %h2 Reward
-          %p Kids love the Rewards and Positive Enforcement from Kudoso
-        %a.uk-position-cover{:href => "/reward.html"}
+          %p= render partial: 'home/reward_paragraph'
+          %p Learn more >
+        %a.uk-position-cover{:href => "/reward#features"}
 = render 'home/news'
 :javascript
   function index_signup() {

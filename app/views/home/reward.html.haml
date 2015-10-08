@@ -4,13 +4,9 @@
       %header
         %h2.uk-contrast Kudoso is Fun &amp; Rewarding
         %p.first
-          We know that if your kids don't love it, they won't do it! That's why Kudoso works very hard to be
-          %strong fun
-          and
-          %strong rewarding
-          for your kids. With Kudoso, kids get to reap the rewards of hard work by cashing in their Kudos, accessing great content, and building a series of accomplishments that lead to the recognition they all crave which allows you to be a positive parent and less of a disciplinarian.  It’s a win - win!
+          =render partial: 'home/reward_paragraph'
       .k-intro-video
-%section.k-features.k-section.uk-clearfix.uk-flex.uk-flex-center.uk-flex-middle
+%section#features.k-features.k-section.uk-clearfix.uk-flex.uk-flex-center.uk-flex-middle
   .uk-container.uk-container-center
     %article
       %h2
@@ -36,18 +32,6 @@
           %i.k-feature-icon
             %svg.nc-icon.outline{:height => "48px", :viewbox => "0 0 48 48", :width => "48px", :x => "0px", :xmlns => "http://www.w3.org/2000/svg", "xmlns:xlink" => "http://www.w3.org/1999/xlink", :y => "0px"}
               %g{:transform => "translate(0, 0)"}
-                %line{"data-color" => "color-2", :fill => "none", :stroke => "#fdb941", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2", :x1 => "40", :x2 => "16", :y1 => "40", :y2 => "40"}
-                %polyline{"data-color" => "color-2", :fill => "none", :points => " 32,2 32,16 26,12 20,16 20,2 ", :stroke => "#fdb941", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2"}
-                %path{:d => "M40,34V6c0-2.2-1.8-4-4-4H8 C5.8,2,4,3.8,4,6v34", "data-cap" => "butt", :fill => "none", :stroke => "#0072f4", "stroke-linecap" => "butt", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2"}
-                %path{:d => "M40,46V34H10 c-3.3,0-6,2.7-6,6v0c0,3.3,2.7,6,6,6H40z", :fill => "none", :stroke => "#0072f4", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2"}
-                %line{:fill => "none", :stroke => "#0072f4", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2", :x1 => "10", :x2 => "10", :y1 => "34", :y2 => "10"}
-          %p.k-feature-desc
-            %strong Exploration &amp; Discovery
-            is encouraged as kids use Kudos to unlock new content (applications, games, and more) or additional screen time as they choose.
-        %li.k-feature
-          %i.k-feature-icon
-            %svg.nc-icon.outline{:height => "48px", :viewbox => "0 0 48 48", :width => "48px", :x => "0px", :xmlns => "http://www.w3.org/2000/svg", "xmlns:xlink" => "http://www.w3.org/1999/xlink", :y => "0px"}
-              %g{:transform => "translate(0, 0)"}
                 %path{:d => "M10,12V8c0-1.7,1.3-3,3-3h0 c1.7,0,3,1.3,3,3v4", :fill => "none", :stroke => "#0072f4", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2"}
                 %path{:d => "M16,12V7c0-1.7,1.3-3,3-3h0 c1.7,0,3,1.3,3,3v5", :fill => "none", :stroke => "#0072f4", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2"}
                 %path{:d => "M28,12V7c0-1.7,1.3-3,3-3h0 c1.7,0,3,1.3,3,3v5", :fill => "none", :stroke => "#0072f4", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2"}
@@ -59,6 +43,18 @@
           %p.k-feature-desc
             %strong Learning to Bank
             just like in the real world as kids are presented with a checkbook style ledger for their Kudos to learn the value of “saving” for something large, planning ahead for a rainy day where extra screen time might be needed, and even the instant gratification of working hard to earn and spend their Kudos on something they want now.
+        %li.k-feature
+          %i.k-feature-icon
+            %svg.nc-icon.outline{:height => "48px", :viewbox => "0 0 48 48", :width => "48px", :x => "0px", :xmlns => "http://www.w3.org/2000/svg", "xmlns:xlink" => "http://www.w3.org/1999/xlink", :y => "0px"}
+              %g{:transform => "translate(0, 0)"}
+                %line{"data-color" => "color-2", :fill => "none", :stroke => "#fdb941", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2", :x1 => "40", :x2 => "16", :y1 => "40", :y2 => "40"}
+                %polyline{"data-color" => "color-2", :fill => "none", :points => " 32,2 32,16 26,12 20,16 20,2 ", :stroke => "#fdb941", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2"}
+                %path{:d => "M40,34V6c0-2.2-1.8-4-4-4H8 C5.8,2,4,3.8,4,6v34", "data-cap" => "butt", :fill => "none", :stroke => "#0072f4", "stroke-linecap" => "butt", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2"}
+                %path{:d => "M40,46V34H10 c-3.3,0-6,2.7-6,6v0c0,3.3,2.7,6,6,6H40z", :fill => "none", :stroke => "#0072f4", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2"}
+                %line{:fill => "none", :stroke => "#0072f4", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2", :x1 => "10", :x2 => "10", :y1 => "34", :y2 => "10"}
+          %p.k-feature-desc
+            %strong Exploration &amp; Discovery
+            is encouraged as kids use Kudos to unlock new content (applications, games, and more) or additional screen time as they choose.
         %li.k-feature
           %i.k-feature-icon
             %svg.nc-icon.outline{:height => "48px", :viewbox => "0 0 48 48", :width => "48px", :x => "0px", :xmlns => "http://www.w3.org/2000/svg", "xmlns:xlink" => "http://www.w3.org/1999/xlink", :y => "0px"}
