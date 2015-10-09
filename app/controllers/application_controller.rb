@@ -82,7 +82,7 @@ class ApplicationController < ActionController::Base
 
   rescue_from ActionController::RoutingError do |ex|
     messages = init_messages
-    messages[:error] << error
+    messages[:error] << 'ActionController::RoutingError'
     respond_to do |format|
       format.json { render :json => { messages: messages }, :status => :not_found }
       format.html { render file: 'public/404.html' }
