@@ -1,6 +1,46 @@
 class ContactsController < ApplicationController
 
-  skip_before_filter :verify_authenticity_token, :only => [ :create ]
+  def show
+    @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], "0").try(:[],:address)
+    params[:contact].delete(:emails_attributes)
+    if @primary_email.blank?
+      respond_to do |format|
+        format.html { redirect_to pre_signup_path, alert: 'All information is required!' }
+        format.json { render json: {error: 'All information is required'}, :status => 400 }
+      end
+    else
+      begin
+        agile_contact = AgileCRMWrapper::Contact.search_by_email( @primary_email )
+        if @agile_contact.nil?
+          agile_contact = AgileCRMWrapper::Contact.create( email: @primary_email,
+                                                           first_name: params[:contact][:first_name],
+                                                           last_name: params[:contact][:last_name] )
+        else
+          if params[:contact] &&  params[:contact][:first_name] && params[:contact][:last_name]
+            agile_contact.update(first_name: params[:contact][:first_name], last_name: params[:contact][:last_name])
+          end
+        end
+      rescue AgileCRMWrapper::BadRequest
+        logger.debug "AgileCRMWrapper: BadRequest for email: #{@primary_email}"
+      end
+      @email = Email.find_by(address: @primary_email)
+      @email ||= Email.create(address: @primary_email, is_primary: true)
+      @contact = @email.try(:contact)
+      if @contact.nil?
+        @contact = Contact.create( contact_params )
+        @email.contact_id = @contact.id
+        @email.save
+      else
+        @contact.update_attributes( contact_params )
+        if @contact.primary_email.blank?
+          @email.update_attribute(:is_primary, true)
+        end
+      end
+    end
+
+    format.json { render json: {}, :callback => params[:callback], :status => 200 }
+
+  end
 
   def create
     @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], "0").try(:[],:address)
