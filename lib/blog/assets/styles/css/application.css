@@ -286,6 +286,9 @@ main > section.k-fundamentals {
         display: inline-block;
         margin: 1em; }
 
+.k-posts .k-section {
+  min-height: 70vh; }
+
 .k-posts .k-intro article {
   margin-bottom: 2.5em;
   text-align: left; }

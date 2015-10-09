@@ -3,13 +3,23 @@
 <main class="k-posts">
 {{#post}}
 
+    <!-- <section class="k-section" style="background-image: url({{image}}); background-size: cover; background-position: center;">
+        <div class="uk-contrast uk-flex uk-flex-center uk-flex-middle uk-text-center">
+            <h2 class="uk-h1">{{title}}</h2>
+        </div>
+    </section> -->
+
+    <section class="k-section uk-cover-background uk-position-relative" style="background-image: url({{image}}); background-size: cover; background-position: center;">
+        <div class="uk-position-cover uk-flex uk-flex-center uk-flex-middle uk-contrast">
+            <h1 class="uk-hidden">{{title}}</h1>
+        </div>
+    </section>
+
     <section class="k-intro k-section uk-clearfix uk-flex uk-flex-center uk-flex-middle uk-contrast">
         <div class="uk-container uk-container-center">
             <article class="{{post_class}} uk-width-large-7-10  uk-width-medium-9-10 uk-width-small-1-1 uk-container-center uk-article">
-                <header>
-                    <h2 class="uk-h1">{{title}}</h2>
-                </header>
                 <div class="k-article-body">
+                    <h1>{{title}}</h1>
                     {{content}}
                     <br>
 

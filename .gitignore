@@ -32,3 +32,4 @@ nbproject/*
 public/system
 coverage
 rails_best_practices_output.html
+config.codekit
