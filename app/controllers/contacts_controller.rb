@@ -38,7 +38,7 @@ class ContactsController < ApplicationController
       end
     end
 
-    format.json { render json: {}, :callback => params[:callback], :status => 200 }
+    render json: {}, :callback => params[:callback], :status => 200 
 
   end
 
