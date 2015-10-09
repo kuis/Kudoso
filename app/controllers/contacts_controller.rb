@@ -5,8 +5,7 @@ class ContactsController < ApplicationController
     params[:contact].delete(:emails_attributes)
     if @primary_email.blank?
       respond_to do |format|
-        format.html { redirect_to pre_signup_path, alert: 'All information is required!' }
-        format.json { render json: {error: 'All information is required'}, :status => 400 }
+        render json: {error: 'All information is required'}, :callback => params[:callback], :status => 400
       end
     else
       begin
@@ -36,9 +35,10 @@ class ContactsController < ApplicationController
           @email.update_attribute(:is_primary, true)
         end
       end
+      render json: {}, :callback => params[:callback], :status => 200
     end
 
-    render json: {}, :callback => params[:callback], :status => 200 
+
 
   end
 
