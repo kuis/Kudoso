@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
-  resources :avatars
-  apipie
 
+
+
+  apipie
+  resources :avatars
   resources :partners
   resources :contacts
 
@@ -139,19 +141,18 @@ Rails.application.routes.draw do
 
   get 'tos', to: 'home#tos'
   get 'privacy', to: 'home#privacy'
-  get 'contact', to: 'home#contact'
+  get 'contact_us', to: 'home#contact_us'
   get 'support', to: 'home#support'
   get 'newsletter', to: 'home#newsletter'
-  get 'landing', to: 'home#landing'
   get 'privacy', to: 'home#privacy'
-  get 'screen_time_limits', to: 'home#screen_time_limits'
-  get 'content_filtering', to: 'home#content_filtering'
-  get 'kudos', to: 'home#kudos'
-  get 'rewards', to: 'home#rewards'
+  get 'limit', to: 'home#limit'
+  get 'protect', to: 'home#protect'
+  get 'teach', to: 'home#teach'
+  get 'reward', to: 'home#reward'
   get 'wizard', to: 'wizard#index'
   put 'wizard', to: 'wizard#update'
   post 'wizard', to: 'wizard#create'
-  root to: 'home#landing'
+  root to: 'home#index'
 
   match "*path", to: "errors#catch_404", via: :all
 

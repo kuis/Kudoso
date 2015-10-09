@@ -1,12 +1,6 @@
-%nav#nav.navbar.navbar-default.navbar-fixed-top{role: "navigation"}
-  .navbar-header.page-scroll
-    %button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
-      %span.sr-only Toggle navigation
-      %span.icon-bar
-      %span.icon-bar
-      %span.icon-bar
-    = link_to root_path, class: 'navbar-brand page-scroll', :href => "#page-top", title: 'Kudoso' do
-      =image_tag 'kudoso_logo_52.png'
-  .navbar-collapse.collapse
-    %ul.nav.navbar-nav.pull-right
-      = render 'layouts/navigation_links'
+.uk-container.uk-container-center.uk-position-relative.uk-text-center-small
+  .k-logo
+    %a{:href => "/"}
+      = image_tag 'k-logo.svg', alt: 'Kudoso', class: 'uk-container-center'
+  .k-nav
+    = render 'layouts/navigation_links'

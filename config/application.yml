@@ -7,6 +7,8 @@ defaults: &defaults
   s3:
    access_key_id: AKIAJPLRKC2UNCXX2RSQ
    secret_access_key: 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
+  google:
+   api_key: AIzaSyBajsl8YcsJJr0F8ppBU3988GUdf0Ex4qM
 
 development:
   <<: *defaults

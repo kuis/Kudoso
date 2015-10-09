@@ -1,82 +1,23 @@
--#
--#  %li.active
--#    %a{:href => "#"} Home
--#  %li.divider
--#  %li
--#    %a{:href => "#"} Link
--#  %li
--#    %a{:href => "#"} Link
--#  %ul.nav.pull-right.navbar-nav
--#    %li
--#      %form.navbar-form
--#        %input.form-control{:placeholder => "Search", :type => "text"}/
--#        %button.btn.btn-default{:type => "submit"}
--#          %i.glyphicon.glyphicon-search
--#    %li
--#      %a{:href => "#"}
--#        %i.glyphicon.glyphicon-flag
--#        %span.badge 2
-
-- if controller_name == 'home'
-  -if action_name == 'index'
-    -#  Hidden li included to remove active class from about link when scrolled up past about section
-    %li.hidden
-      %a.page-scroll{href: '#page-top'} body
-    %li
-      %a.page-scroll{href: '#home'} home
-    %li
-      %a.page-scroll{href: '#features'} features
-    %li
-      %a.page-scroll{href: '#how'} how it works
-    %li
-      %a.page-scroll{href: '#pricing'} pricing
-    %li
-      %a.page-scroll{href: '#about'} about us
-    %li
-      %a{href: '/pre_signup'} sign up
-  - else
-    %li
-      %a.page-scroll{href: '/'} home
-    %li
-      %a.page-scroll{href: '/#features'} features
-    %li
-      %a.page-scroll{href: '/#how'} how it works
-    %li
-      %a.page-scroll{href: '/#pricing'} pricing
-    %li
-      %a.page-scroll{href: '/#about'} about us
-    %li
-      %a{href: '/pre_signup'} sign up
-- if member_signed_in? || user_signed_in?
-
-  - if user_signed_in?
-    - if current_user.admin?
-      %li.dropdown
-        %a#dropdownAdminMenu.dropdown-toggle{ href: '#', 'data-toggle' => "dropdown", 'aria-expanded' => "true"}
-          Admin
-          %span.caret
-        %ul.dropdown-menu{role: 'menu', 'aria-labelledby' => "dropdownAdminMenu"}
-          %li= link_to('Apps', admin_apps_path)
-          %li= link_to('All Contacts', admin_contacts_path)
-          %li= link_to('All Families', admin_families_path)
-          %li= link_to('ToDo Templates', admin_todo_templates_path)
-          %li= link_to('Device Types', admin_device_types_path)
-          %li= link_to('All Devices', admin_devices_path)
-          %li= link_to('Activity Templates', admin_activity_templates_path)
-          %li= link_to('Activity Types', admin_activity_types_path)
-          %li= link_to('Router Models', admin_router_models_path)
-          %li= link_to('Router Firmwares', admin_router_firmwares_path)
-          %li= link_to('Themes', admin_themes_path)
-          %li= link_to('Tickets', admin_tickets_path)
-          %li= link_to('All Routers', admin_routers_path)
-          %li= link_to('All Plugs', admin_plugs_path)
-          %li= link_to('All Avatars', admin_avatars_path)
-
-    %li= link_to('My Family', family_path(current_user.family)) if current_user.member.try(:parent?)
-
-    %li= link_to("Logout (#{current_user.try(:member).try(:first_name) || 'user'})", destroy_user_session_path, :method => :delete)
-  - else
-    %li= link_to 'My Dashboard', [current_member.family, current_member]  if current_member
-    %li= link_to("Logout (#{current_member.first_name})", destroy_member_session_path(id: current_member.family_id), :method => :delete)
-
-
+%ul.uk-subnav.uk-subnav-pill.uk-hidden-small
+  %li{ class: "#{ action_name == 'index' ? 'uk-active' : ''}"}
+    %a{:href => "/"} Home
+  %li{ class: "#{ action_name == 'protect' ? 'uk-active' : ''}"}
+    %a{:href => "/protect"} Protect
+  %li{ class: "#{ action_name == 'limit' ? 'uk-active' : ''}"}
+    %a{:href => "/limit"} Limit
+  %li{ class: "#{ action_name == 'teach' ? 'uk-active' : ''}"}
+    %a{:href => "/teach"} Teach
+  %li{ class: "#{ action_name == 'reward' ? 'uk-active' : ''}"}
+    %a{:href => "/reward"} Reward
+  %li
+    %a{:href => "http://blog.kudoso.com"} Blog
+  -#%li{ class: "#{ controller_name == 'devise' ? 'uk-active' : ''}"}
+  -#  -if user_signed_in? || member_signed_in?
+  -#    - if user_signed_in?
+  -#      = link_to("Logout (#{current_user.try(:member).try(:first_name) || 'user'})", destroy_user_session_path, :method => :delete)
+  -#    - if member_signed_in?
+  -#      = link_to("Logout (#{current_member.try(:member).try(:first_name) || 'member'})", destroy_member_session_path, :method => :delete)
+  -#  -else
+  -#    = link_to("Log in", new_user_session_path)
+%a.uk-visible-small{"data-uk-modal" => "", :href => "#modal"}
+  %i.k-menu-icon.uk-icon-navicon.uk-icon-small

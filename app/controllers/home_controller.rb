@@ -12,23 +12,23 @@ class HomeController < ApplicationController
 
   end
 
-  def landing
+  def limit
 
   end
 
-  def screen_time_limits
+  def protect
 
   end
 
-  def content_filtering
+  def teach
 
   end
 
-  def kudos
+  def reward
 
   end
 
-  def rewards
+  def contact_us
 
   end
 

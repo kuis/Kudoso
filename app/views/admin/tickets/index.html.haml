@@ -35,7 +35,7 @@
 
   .simple-wrap
     = paginate @tickets
-    %table.table.table-striped
+    %table.uk-table.uk-table-striped
       %tr
         %th Assigned to
         %th User
@@ -64,4 +64,4 @@
     %br
     = paginate @tickets
     %br
-    = link_to 'New Ticket', new_admin_ticket_path, class: 'btn btn-primary'
+    = link_to 'New Ticket', new_admin_ticket_path, class: 'uk-button uk-button-primary'
