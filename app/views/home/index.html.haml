@@ -26,7 +26,7 @@
       %h2
         %strong Platform
         Features
-      %p.uk-width-medium-4-5.uk-container-center Our mission is to help parents control the influence of technology on their children through mutual cooperation and the positive reinforcement of family values and life skills.
+      %p.uk-width-medium-4-5.uk-container-center.uk-margin-bottom Our mission is to help parents control the influence of technology on their children through mutual cooperation and the positive reinforcement of family values and life skills.
       %ul.k-feature-set.uk-grid.uk-grid-width-1-1.uk-grid-width-medium-1-2.uk-grid-large
         %li.k-feature
           %i.k-feature-icon
@@ -153,32 +153,44 @@
     .uk-grid.uk-grid-width-medium-1-2.uk-grid-large
       %figure.k-fundamental.uk-overlay
         =image_tag 'mom_ipad_detail_570x300.jpg', alt: ''
-        .uk-overlay-panel.uk-overlay-background
-          %h2 Protect
-          %p= render partial: 'home/protect_paragraph'
-          %p Learn more >
-        %a.uk-position-cover{:href => "/protect#features"}
+        .uk-overlay-panel.uk-overlay-background.uk-flex.uk-flex-center.uk-flex-middle.uk-text-center
+          %div
+            %h2 Protect
+            //%p= render partial: 'home/protect_paragraph'
+            %span
+              Learn More
+              %i.uk-icon-arrow-circle-right
+        %a.uk-position-cover{:href => "/protect"}
       %figure.k-fundamental.uk-overlay
         =image_tag 'kids_gaming_570x300.jpg', alt: ''
-        .uk-overlay-panel.uk-overlay-background
-          %h2 Limit
-          %p= render partial: 'home/limit_paragraph'
-          %p Learn more >
-        %a.uk-position-cover{:href => "/limit#features"}
+        .uk-overlay-panel.uk-overlay-background.uk-flex.uk-flex-center.uk-flex-middle.uk-text-center
+          %div
+            %h2 Limit
+            //%p= render partial: 'home/limit_paragraph'
+            %span
+              Learn More
+              %i.uk-icon-arrow-circle-right
+        %a.uk-position-cover{:href => "/limit"}
       %figure.k-fundamental.uk-overlay
         =image_tag 'kids_dishes_570x300.jpg', alt: ''
-        .uk-overlay-panel.uk-overlay-background
-          %h2 Teach
-          %p= render partial: 'home/teach_paragraph'
-          %p Learn more >
-        %a.uk-position-cover{:href => "/teach#features"}
+        .uk-overlay-panel.uk-overlay-background.uk-flex.uk-flex-center.uk-flex-middle.uk-text-center
+          %div
+            %h2 Teach
+            //%p= render partial: 'home/teach_paragraph'
+            %span
+              Learn More
+              %i.uk-icon-arrow-circle-right
+        %a.uk-position-cover{:href => "/teach"}
       %figure.k-fundamental.uk-overlay
         =image_tag 'kids_sports_570x300.jpg', alt: ''
-        .uk-overlay-panel.uk-overlay-background
-          %h2 Reward
-          %p= render partial: 'home/reward_paragraph'
-          %p Learn more >
-        %a.uk-position-cover{:href => "/reward#features"}
+        .uk-overlay-panel.uk-overlay-background.uk-flex.uk-flex-center.uk-flex-middle.uk-text-center
+          %div
+            %h2 Reward
+            //%p= render partial: 'home/reward_paragraph'
+            %span
+              Learn More
+              %i.uk-icon-arrow-circle-right
+        %a.uk-position-cover{:href => "/reward"}
 = render 'home/news'
 :javascript
   function index_signup() {
