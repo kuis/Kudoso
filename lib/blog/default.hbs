@@ -97,15 +97,15 @@
                         <form>
                             <div class="uk-form">
                                 <div class="uk-form-row uk-text-center">
-                                <input class="uk-form-large uk-width-4-10" id="footer-first-name" name="first_name" placeholder="Your First Name" type="text" value="">
-                                <input class="uk-form-large uk-width-4-10" id="footer-last-name" name="last_name" placeholder="Your Last Name" type="text" value="">
+                                <input class="uk-form-large uk-width-4-10" id="first-name" name="first_name" placeholder="Your First Name" type="text" value="">
+                                <input class="uk-form-large uk-width-4-10" id="last-name" name="last_name" placeholder="Your Last Name" type="text" value="">
                                 </div>
                                 <div class="uk-form-row uk-text-center">
-                                    <input class="uk-form-large uk-width-8-10 uk-text-center" type="email" name="name" value="" placeholder="Your Email Address">
+                                    <input class="uk-form-large uk-width-8-10 uk-text-center" type="email" name="email" id="email" value="" placeholder="Your Email Address">
                                     <small>We don’t spam you or share your email address.</small>
                                 </div>
                                 <div class="uk-form-row uk-text-center">
-                                    <button class="uk-button uk-button-primary uk-button-large uk-width-8-10" type="submit" name="button">Sign Up</button>
+                                    <button class="uk-button uk-button-primary uk-button-large uk-width-8-10" type="button" name="button" onclick="footer_signup(); return false;">Sign Up</button>
                                 </div>
                             </div>
                         </form>
@@ -115,6 +115,72 @@
             </div>
         </div>
     </section>
+    <script>
+      function validateEmail(email) {
+          var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+          return re.test(email);
+      }
+
+      function footer_signup() {
+        var email = $.trim($('#email').val());
+        var valid = (email.length > 5 && validateEmail(email));
+
+        if ( !valid ) {
+          alert("We're sorry, it doesn't appear that you have input a valid email address, please try again");
+          return;
+        }
+
+        var first_name = $.trim($('#first-name').val());
+        var last_name = $.trim($('#last-name').val());
+
+        valid = (valid && first_name.length > 2);
+        valid = (valid && last_name.length > 2);
+
+        if ( !valid ) {
+          alert("Both the first and last name fields are required, please try again...");
+          return;
+        }
+
+        if ( valid ) {
+          $.ajax({
+             url: 'http://www.kudoso.com/contacts',
+             dataType: 'json',
+             method: 'POST',
+             data: {
+              contact: {
+                emails_attributes: [ { address: email } ],
+                first_name: first_name,
+                last_name: last_name,
+                contact_type_id: 2 // Hard coded from the Kudoso backend
+              }
+             },
+             statusCode: {
+              200: function(e) {
+                alert("Thank you!")
+                if (typeof _agile !== 'undefined') {
+                  _agile.set_email(email);
+                  _agile.add_score(10);
+                }
+                ga('send','pageview','/landing_singup_thankyou');
+              },
+              400: function(e) {
+                alert("We're sorry, the server did not receive your email address, please try again.");
+              },
+              409: function(e) {
+                if (typeof _agile !== 'undefined') {
+                  _agile.set_email(email);
+                  _agile.add_score(10);
+                }
+                alert("Thank you, again!");
+              },
+              500: function(e) {
+                alert("We're sorry, the server had an error processing your registration, please try again later.");
+              }
+            }
+          });
+        }
+      }
+    </script>
 </footer>
 
 {{ghost_foot}}
@@ -127,6 +193,20 @@
     $(function() {
         $('.k-page-header').attr("data-uk-sticky", "{top:-" + window.screen.height / 2 +  ", animation: 'uk-animation-slide-top'}");
     });
+</script>
+<script type="text/javascript" src="https://kudoso.agilecrm.com/stats/min/agile-min.js"></script>
+<script type="text/javascript">
+  _agile.set_account('82ghss8tfga7868eu5td7mk712', 'kudoso');
+  _agile.track_page_view();
+  _agile_execute_web_rules();
+</script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-62781113-1', 'auto');
+    ga('send', 'pageview');
 </script>
 </body>
 </html>

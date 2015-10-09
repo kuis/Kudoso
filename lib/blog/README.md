@@ -50,8 +50,16 @@ The kudoso blog theme is based on the kudoso site design with elements pulled fr
 
 ## Modifying the Theme
 
-The current workflow makes use of [CodeKit](http://incident57.com/codekit/), a mac app for compiling and managing front-end projects. Each [.kit](http://incident57.com/codekit/help.html#kit) file gets compiled to another file type of file. In this case CodeKit is generating .hbs (handle bar source) files in the root folder. All of the sass files compile to the `application.css` file.
+The majority of the theme is contained in *.hbs files.  Edit these like an HTML file.
 
+## Upload the theme
+
+From the `/lib` directory, create a theme ZIP file:
+
+`zip -r kudoso_theme.zip blog/*`
+
+Login in to the ghost backend: https://ghost.org/blogs/kudoso/
+Upload the zip ;)
 
 ## Ghost Cheat Sheet
 
