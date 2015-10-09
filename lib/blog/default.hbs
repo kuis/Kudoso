@@ -144,7 +144,8 @@
         if ( valid ) {
           $.ajax({
              url: 'http://www.kudoso.com/contacts',
-             dataType: 'json',
+             dataType: 'application/json',
+             contentType: 'application/json',
              method: 'POST',
              data: {
               contact: {

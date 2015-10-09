@@ -216,7 +216,8 @@
     if ( valid ) {
       $.ajax({
          url: '/contacts',
-         dataType: 'json',
+         dataType: 'application/json',
+         contentType: 'application/json',
          method: 'POST',
          data: {
           contact: {
