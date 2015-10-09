@@ -1,6 +1,6 @@
 class ContactsController < ApplicationController
 
-  skip_before_filter :verify_authenticity_token, :only => [:create]
+  skip_before_filter :verify_authenticity_token, :only => [ :create ]
 
   def create
     @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], "0").try(:[],:address)
