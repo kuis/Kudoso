@@ -1,5 +1,7 @@
 class ContactsController < ApplicationController
 
+  skip_before_action :verify_authenticity_token, only: :index # for JSONP ajax from blog.kudoso.com
+
   def index
     @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], "0").try(:[],:address)
     params[:contact].delete(:emails_attributes)
