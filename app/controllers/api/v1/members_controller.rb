@@ -26,18 +26,17 @@ module Api
         param :gender, ['m', 'f'], desc: "Gender of member as (m)ale or (f)emale"
       end
 
-      api :GET, "/v1/families/:family_id/members", "Retrieve all family members (authenticated user must be a parent)"
+      api :GET, "/v1/families/:family_id/members", "Retrieve all family members (authenticated user must be a parent to retreive all info)"
       example '  [{"id"=>3, "username"=>"suzy", "birth_date"=>Thu, 02 Jul 2009, "parent"=>nil, "family_id"=>1, "contact_id"=>nil, "created_at"=>Thu, 02 Jul 2015 10:15:52 MDT -06:00, "updated_at"=>Thu, 02 Jul 2015 10:16:02 MDT -06:00, "kudos"=>1200, "authentication_token"=>nil, "first_name"=>"Suzy", "last_name"=>"Test", "email"=>nil, "mobicip_profile"=>nil}, {"id"=>1, "username"=>"parent@kudoso.com", "birth_date"=>nil, "parent"=>true, "family_id"=>1, "contact_id"=>nil, "created_at"=>Thu, 02 Jul 2015 10:15:52 MDT -06:00, "updated_at"=>Thu, 02 Jul 2015 10:22:08 MDT -06:00, "kudos"=>0, "authentication_token"=>nil, "first_name"=>"Parent", "last_name"=>"Test", "email"=>"parent@kudoso.com", "mobicip_profile"=>nil}, {"id"=>4, "username"=>"timmy", "birth_date"=>Sat, 08 Mar 2003, "parent"=>false, "family_id"=>1, "contact_id"=>nil, "created_at"=>Thu, 02 Jul 2015 10:22:45 MDT -06:00, "updated_at"=>Thu, 02 Jul 2015 10:22:45 MDT -06:00, "kudos"=>0, "authentication_token"=>nil, "first_name"=>"Timmy", "last_name"=>"Test", "email"=>nil, "mobicip_profile"=>nil}, {"id"=>2, "username"=>"johnny", "birth_date"=>Sat, 02 Jul 2005, "parent"=>nil, "family_id"=>1, "contact_id"=>nil, "created_at"=>Thu, 02 Jul 2015 10:15:52 MDT -06:00, "updated_at"=>Thu, 02 Jul 2015 10:16:01 MDT -06:00, "kudos"=>1420, "authentication_token"=>nil, "first_name"=>"Johnny", "last_name"=>"Test", "email"=>nil, "mobicip_profile"=>nil}]  '
       def index
         messages = init_messages
         begin
           @family = Family.find(params[:family_id])
+          @members = @family.members
           if @current_user && ( @current_user.admin? || @current_user.family == @family)
-            @members = @family.members
             render :json => { :members => @members, :messages => messages }, :status => 200
           else
-            messages[:error] << 'You are not authorized to do this.'
-            render :json => { :messages => messages }, :status => 403
+            render :json => { :members => @members.as_json(only: [:username, :parent, :first_name], include: :theme), :messages => messages }, :status => 200
           end
 
         rescue ActiveRecord::RecordNotFound
