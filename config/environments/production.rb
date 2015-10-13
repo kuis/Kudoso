@@ -41,6 +41,8 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
+  config.ssl_options = { exclude: proc { |env| env['PATH_INFO'].start_with?('/kudoso.txt') } } # The kudoso load balancer looks for this file
+  config.force_ssl = true
 
   # Set to :debug to see everything in the log.
   config.log_level = :info
