@@ -22,9 +22,6 @@
     name: web
     options: {}
   - !ruby/object:Rubber::Configuration::RoleItem
-    name: haproxy
-    options: {}
-  - !ruby/object:Rubber::Configuration::RoleItem
     name: web_tools
     options: {}
   - !ruby/object:Rubber::Configuration::RoleItem
