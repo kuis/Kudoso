@@ -77,7 +77,83 @@ $(document).ready ($) ->
   #switch from monthly to annual pricing tables
   bouncy_filter $('.cd-pricing-container')
 
+  $('#payment-form').submit (event)->
+    $form = $(this)
+    # Disable the submit button to prevent repeated clicks
+    $form.find('button').prop('disabled', true)
+
+    email = $.trim($('#signup-email').val());
+    valid = (email.length > 5 && validateEmail(email));
+
+    first_name = $.trim($('#signup-first-name').val());
+    last_name = $.trim($('#signup-last-name').val());
+    address = $.trim($('#signup-address').val());
+    city = $.trim($('#signup-city').val());
+    state = $.trim($('#signup-state').val());
+    zip = $.trim($('#signup-zip').val());
+    ccnumber = $('#signup-cc').val()
+    cvc = $('#signup-cc-cvc').val()
+    exp_month = $('#signup-cc-exp-month').val()
+    exp_year = $('#signup-cc-exp-year').val()
+
+    if first_name.length < 2
+      valid = false
+      $('#signup-first-name').addClass('error')
+    if last_name.length < 2
+      valid = false
+      $('#signup-last-name').addClass('error')
+    if address.length < 2
+      valid = false
+      $('#signup-address').addClass('error')
+    if city.length < 2
+      valid = false
+      $('#signup-city').addClass('error')
+    if state.length < 2
+      valid = false
+      $('#signup-state').addClass('error')
+    valid = (valid && zip.length > 2)
+    valid = (valid && ccnumber.length > 2)
+    valid = (valid && cvc.length > 2)
+    valid = (valid && exp_month.length >= 1)
+    valid = (valid && exp_year.length >= 2)
+    if valid
+      Stripe.card.createToken({
+          number: ccnumber,
+          cvc: cvc,
+          exp_month: exp_month,
+          exp_year: exp_year,
+          name: (first_name + ' ' + last_name),
+          address_line1: address,
+          address_state: state,
+          address_zip: zip,
+          address_country: 'US'
+      }, stripeResponseHandler)
+    else
+      alert 'All fields are required'
+      $form.find('button').prop('disabled', false)
+
+    # Prevent the form from submitting with the default action
+    return false
+
+
 
 
 
   return
+
+stripeResponseHandler(status, response) ->
+  $form = $('#payment-form');
+
+  if (response.error)
+    # Show the errors on the form
+    $form.find('.payment-errors').text(response.error.message);
+    $form.find('button').prop('disabled', false);
+  else
+    # response contains id and card, which contains additional card details
+    token = response.id;
+    # Insert the token into the form so it gets submitted to the server
+    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+    # and submit
+    # $form.get(0).submit();
+    alert 'Got token, submitting'
+
