@@ -25,7 +25,7 @@ class ChargesController < ApplicationController
                 :source => token,
                 :description => "#{user.email}"
             )
-            user.update_attribute(:stripe_customer_id, customer.id)
+            user.update_attributes({stripe_customer_id: customer.id, plan: plan.id.to_s})
             begin
               charge = Stripe::Charge.create(
                   :amount => plan.amount, # in cents

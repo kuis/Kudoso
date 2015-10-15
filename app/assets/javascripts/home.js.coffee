@@ -77,6 +77,10 @@ $(document).ready ($) ->
   #switch from monthly to annual pricing tables
   bouncy_filter $('.cd-pricing-container')
 
+  setTimeout ()->
+    $('#ohanaCount').countTo({speed: 2500})
+  , 2000
+
   $('#payment-form').submit (event)->
     $form = $(this)
     # Disable the submit button to prevent repeated clicks
@@ -184,6 +188,7 @@ stripeResponseHandler = (status, response)->
       success: ()->
         $('#payment-form').slideUp ()->
           $('#payment-form').html "<h2>Thank you!</h2><p>You are all set, we'll contact you as soon as Kudoso Ohana is ready!</p>"
+          $('#payment-form').slideDown
       ,
       error: (data)->
         alert "Sorry, there was an error processing your signup.  Please try again."

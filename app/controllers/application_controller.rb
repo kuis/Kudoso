@@ -105,6 +105,10 @@ class ApplicationController < ActionController::Base
     return messages
   end
 
+  def cities
+    render json: CS.cities(params[:state], :us).to_json
+  end
+
   protected
 
   def configure_permitted_parameters

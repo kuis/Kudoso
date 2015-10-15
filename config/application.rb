@@ -10,6 +10,7 @@ Bundler.require(*Rails.groups)
 
 module Kudoso
   class Application < Rails::Application
+    config.stripe.auto_mount = false
     config.middleware.insert_before ActionDispatch::ParamsParser, "CatchJsonParseErrors"
     config.assets.precompile += %w( vendor/modernizr )
     config.time_zone = "Mountain Time (US & Canada)"

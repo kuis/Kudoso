@@ -121,6 +121,8 @@ GEM
     childprocess (0.5.5)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
+    city-state (0.0.13)
+      rubyzip (~> 1.1)
     clamp (0.6.4)
     climate_control (0.0.3)
       activesupport (>= 3.0)
@@ -595,6 +597,7 @@ DEPENDENCIES
   capybara
   capybara-webkit!
   chronic
+  city-state
   cocoon
   coffee-rails (~> 4.0.0)
   cucumber-rails

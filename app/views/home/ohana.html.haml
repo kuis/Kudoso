@@ -5,8 +5,8 @@
         %h2.uk-contrast Join our Family
         %p.first
           %b
-            Be family member
-            %span#ohanaCount #1
+            Be family member #
+            %span#ohanaCount{ "data-from": 1, "data-to": (User.where(plan: 'ohana_annual').count+100) } 1
         %p
           It takes a villiage to raise a child, and it takes a family to launch Kudoso.  We'd like
           to invite you join our family:
@@ -98,7 +98,10 @@
             %input.uk-form-large.uk-width-8-10{:name => "address", :placeholder => "Shipping Address", :type => "text", :value => "", :id => 'signup-address'}/
           .uk-form-row.uk-text-center
             %input.uk-form-large.uk-width-4-10{:name => "city", :placeholder => "City", :type => "text", :value => "", :id => 'signup-city'}/
-            %input.uk-form-large.uk-width-2-10{:name => "state", :placeholder => "State", :type => "text", :value => "", :id => 'signup-state'}/
+            %select.uk-form-large.uk-width-2-10{:name => "state", :value => "", :id => 'signup-state'}
+              - CS.states(:us).each do |key, value|
+                %option{value: "#{key}"}
+                  #{value}
             %input.uk-form-large.uk-width-2-10{:name => "zip", :placeholder => "Zip Code", :type => "text", :value => "", :id => 'signup-zip'}/
           .uk-form-row.uk-text-center
             %input.uk-form-large.uk-width-8-10{:name => "cc", :placeholder => "Your Credit Card Numnber", :type => "text", :value => "", :id => 'signup-cc'}/

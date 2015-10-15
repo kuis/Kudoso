@@ -140,7 +140,8 @@ Rails.application.routes.draw do
   end
 
 
-
+  mount Stripe::Engine => "/stripe"
+  get 'cities/:state', to: 'application#cities'
   get 'tos', to: 'home#tos'
   get 'privacy', to: 'home#privacy'
   get 'contact_us', to: 'home#contact_us'
