@@ -9,7 +9,17 @@
           way to
           %b Limit Screen Time &amp; Protect
           your children across
-          all devices: Computers, Mobile, Televisions &amp; Game Consoles
+          all devices: Computers, Mobile, Televisions &amp; Game Consoles.
+        %p
+          %a.k-video-button.uk-button.uk-button-large{:data => {"uk-modal" => "{center:true}"}, :href => "#video"}
+            Watch Video
+
+#video.uk-modal
+  .uk-modal-dialog.uk-modal-dialog-lightbox
+    %a.uk-modal-close.uk-close.uk-close-alt
+    %iframe.wistia_embed{:allowfullscreen => "allowfullscreen", :allowtransparency => "true", :frameborder => "0", :height => "169", :mozallowfullscreen => "mozallowfullscreen", :msallowfullscreen => "msallowfullscreen", :name => "wistia_embed", :oallowfullscreen => "oallowfullscreen", :scrolling => "no", :src => "//fast.wistia.net/embed/iframe/3hbt5e8rum?videoFoam=true", :webkitallowfullscreen => "webkitallowfullscreen", :width => "600", :height => "337"}
+
+
     -#   .k-intro-video
     -#     .uk-hidden-medium.uk-hidden-large
     -#       %a{:class => "wistia-popover[height=388,playerColor=00528c,width=640]", :href => "//fast.wistia.net/embed/iframe/3hbt5e8rum?popover=true"}

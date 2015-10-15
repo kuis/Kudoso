@@ -345,6 +345,20 @@ main > section.k-fundamentals .k-teach {
     a { display: block; }
 }
 
+.k-video-button {
+    background: none;
+    border: 2px solid white;
+    color: white;
+    padding: 5px 30px;
+
+    &:hover {
+        background: white !important;
+        color: black;
+    }
+}
+
+
+
 // Phone Portrait
 @media screen and (max-width: 480px) {
     .k-page-header.uk-active {
