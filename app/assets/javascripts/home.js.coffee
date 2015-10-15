@@ -81,9 +81,26 @@ $(document).ready ($) ->
     $form = $(this)
     # Disable the submit button to prevent repeated clicks
     $form.find('button').prop('disabled', true)
+    valid = true
+
+
 
     email = $.trim($('#signup-email').val());
-    valid = (email.length > 5 && validateEmail(email));
+    if email.length > 5 && validateEmail(email)
+      $('#signup-email').removeClass('uk-form-danger')
+    else
+      $('#signup-email').addClass('uk-form-danger')
+      valid = false
+
+    $("form#payment-form :input").each ()->
+      input = $(this)
+      console.log 'Name: ' + input.attr('name')
+      if input.val().length < 2
+        input.addClass('uk-form-danger')
+        valid = false
+      else
+        input.removeClass('uk-form-danger')
+
 
     first_name = $.trim($('#signup-first-name').val());
     last_name = $.trim($('#signup-last-name').val());
@@ -96,26 +113,7 @@ $(document).ready ($) ->
     exp_month = $('#signup-cc-exp-month').val()
     exp_year = $('#signup-cc-exp-year').val()
 
-    if first_name.length < 2
-      valid = false
-      $('#signup-first-name').addClass('error')
-    if last_name.length < 2
-      valid = false
-      $('#signup-last-name').addClass('error')
-    if address.length < 2
-      valid = false
-      $('#signup-address').addClass('error')
-    if city.length < 2
-      valid = false
-      $('#signup-city').addClass('error')
-    if state.length < 2
-      valid = false
-      $('#signup-state').addClass('error')
-    valid = (valid && zip.length > 2)
-    valid = (valid && ccnumber.length > 2)
-    valid = (valid && cvc.length > 2)
-    valid = (valid && exp_month.length >= 1)
-    valid = (valid && exp_year.length >= 2)
+
     if valid
       Stripe.card.createToken({
           number: ccnumber,
@@ -141,7 +139,9 @@ $(document).ready ($) ->
 
   return
 
-stripeResponseHandler(status, response) ->
+
+
+stripeResponseHandler = (status, response)->
   $form = $('#payment-form');
 
   if (response.error)
@@ -155,5 +155,5 @@ stripeResponseHandler(status, response) ->
     $form.append($('<input type="hidden" name="stripeToken" />').val(token));
     # and submit
     # $form.get(0).submit();
-    alert 'Got token, submitting'
+    alert 'Got token: ' + response.id + ', submitting'
 
