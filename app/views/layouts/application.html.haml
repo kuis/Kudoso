@@ -54,8 +54,9 @@
       %footer
         =render 'layouts/footer'
     %script{:src => "https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"}
-    %script{:charset => "utf-8", :src => "https://cdnjs.cloudflare.com/ajax/libs/uikit/2.22.0/js/uikit.js"}
-    %script{:charset => "utf-8", :src => "https://cdnjs.cloudflare.com/ajax/libs/uikit/2.22.0/js/components/sticky.min.js"}
+    %script{:charset => "utf-8", :src => "https://cdnjs.cloudflare.com/ajax/libs/uikit/2.23.0/js/uikit.js"}
+    %script{:charset => "utf-8", :src => "https://cdnjs.cloudflare.com/ajax/libs/uikit/2.23.0/js/components/lightbox.min.js"}
+    %script{:charset => "utf-8", :src => "https://cdnjs.cloudflare.com/ajax/libs/uikit/2.23.0/js/components/sticky.min.js"}
 
     = javascript_include_tag :application, media: :all, 'data-turbolinks-track' => true
     - if Rails.env.production?
