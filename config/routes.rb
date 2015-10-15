@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   resources :activity_types
 
+  resources :charges
+
   resources :content_ratings
 
   resources :contents

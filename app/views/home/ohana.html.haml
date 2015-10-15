@@ -2,7 +2,7 @@
   .uk-container.uk-container-center
     %article.uk-width-large-6-10.uk-width-medium-9-10.uk-width-small-1-1.uk-container-center
       %header
-        %h2.uk-contrast Kudoso Ohana
+        %h2.uk-contrast Join our Family
         %p.first
           %b
             Be family member
@@ -19,7 +19,7 @@
         %strong Ohana Benefits
       %p.uk-width-medium-4-5.uk-container-center
         Kudosos wants to make ALL families stronger by helping to manage the technology in the home.
-        By joining Ohana, you are not only commiting to strengthing your family, you're helping Kudoso
+        By joining Ohana, you are not only committing to strengthening your family, you're helping Kudoso
         reach all families.
       %p
         %b Thank You!
@@ -88,13 +88,18 @@
             %input.uk-form-large.uk-width-4-10{:name => "first_name", :placeholder => "Your First Name", :type => "text", :value => "", :id => 'signup-first-name'}/
             %input.uk-form-large.uk-width-4-10{:name => "last_name", :placeholder => "Your Last Name", :type => "text", :value => "", :id => 'signup-last-name'}/
           .uk-form-row.uk-text-center
+            %input.uk-form-large.uk-width-8-10{:name => "email", :placeholder => "Your Email Address", :type => "email", :value => "", :id => 'signup-email'}/
+          .uk-form-row.uk-text-center
+            %input.uk-form-large.uk-width-4-10{:name => "password", :placeholder => "Enter a Password", :type => "password", :value => "", :id => 'signup-password'}/
+            %input.uk-form-large.uk-width-4-10{:name => "password_confirmation", :placeholder => "Confirm Password", :type => "password", :value => "", :id => 'signup-password-confirmation'}/
+          .uk-form-row.uk-text-center
+            %hr
+          .uk-form-row.uk-text-center
             %input.uk-form-large.uk-width-8-10{:name => "address", :placeholder => "Shipping Address", :type => "text", :value => "", :id => 'signup-address'}/
           .uk-form-row.uk-text-center
             %input.uk-form-large.uk-width-4-10{:name => "city", :placeholder => "City", :type => "text", :value => "", :id => 'signup-city'}/
             %input.uk-form-large.uk-width-2-10{:name => "state", :placeholder => "State", :type => "text", :value => "", :id => 'signup-state'}/
             %input.uk-form-large.uk-width-2-10{:name => "zip", :placeholder => "Zip Code", :type => "text", :value => "", :id => 'signup-zip'}/
-          .uk-form-row.uk-text-center
-            %input.uk-form-large.uk-width-8-10{:name => "email", :placeholder => "Your Email Address", :type => "email", :value => "", :id => 'signup-email'}/
           .uk-form-row.uk-text-center
             %input.uk-form-large.uk-width-8-10{:name => "cc", :placeholder => "Your Credit Card Numnber", :type => "text", :value => "", :id => 'signup-cc'}/
           .uk-form-row.uk-text-center
@@ -102,7 +107,7 @@
             %input.uk-form-large.uk-width-2-10{:name => "cc-exp-year", :placeholder => "Exp Year", :type => "text", :value => "", :id => 'signup-cc-exp-year'}/
             %input.uk-form-large.uk-width-4-10{:name => "cc-cvc", :placeholder => "Security Code", :type => "text", :value => "", :id => 'signup-cc-cvc'}/
           .uk-form-row.uk-text-center
-            %button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "submit", type: 'submit'} $149/yr | Sign Up for Ohana
-%script{ type: "text/javascript", src: "https://js.stripe.com/v2/"}
-:javascript
-  Stripe.setPublishableKey('#{Settings.stripe.publishable}');
+            .payment-errors.uk-form-danger
+          .uk-form-row.uk-text-center
+            %button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "submit", type: 'submit'} Sign Up for Ohana @ $149/yr
+= stripe_javascript_tag

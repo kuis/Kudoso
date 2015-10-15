@@ -92,7 +92,7 @@ $(document).ready ($) ->
       $('#signup-email').addClass('uk-form-danger')
       valid = false
 
-    $("form#payment-form :input").each ()->
+    $("form#payment-form input[type=\"text\"]").each ()->
       input = $(this)
       console.log 'Name: ' + input.attr('name')
       if input.val().length < 2
@@ -101,6 +101,13 @@ $(document).ready ($) ->
       else
         input.removeClass('uk-form-danger')
 
+    if $.trim($('#signup-password').val()).length < 8 || $.trim($('#signup-password-confirmation').val())  < 8
+      alert 'Password must be at least 8 characters'
+      valid = false
+
+    if $.trim($('#signup-password').val()) != $.trim($('#signup-password-confirmation').val())
+      alert 'Passwords do not match'
+      valid = false
 
     first_name = $.trim($('#signup-first-name').val());
     last_name = $.trim($('#signup-last-name').val());
@@ -152,8 +159,36 @@ stripeResponseHandler = (status, response)->
     # response contains id and card, which contains additional card details
     token = response.id;
     # Insert the token into the form so it gets submitted to the server
-    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+#    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
     # and submit
     # $form.get(0).submit();
-    alert 'Got token: ' + response.id + ', submitting'
+    console.log 'Got token: ' + response.id + ', submitting'
+
+    data = {}
+    data.stripeToken = token
+    data.user = {}
+    data.user.first_name = $.trim($('#signup-first-name').val());
+    data.user.last_name = $.trim($('#signup-last-name').val());
+    data.user.address = $.trim($('#signup-address').val());
+    data.user.city = $.trim($('#signup-city').val());
+    data.user.state = $.trim($('#signup-state').val());
+    data.user.zip = $.trim($('#signup-zip').val());
+    data.user.password = $.trim($('#signup-password').val());
+    data.user.password_confirmation = $.trim($('#signup-password-confirmation').val());
+    data.plan = 'ohana_annual'
+
+    $.ajax({
+      url: '/charges',
+      method: 'POST',
+      data: data,
+      success: ()->
+        $('#payment-form').slideUp ()->
+          $('#payment-form').html "<h2>Thank you!</h2><p>You are all set, we'll contact you as soon as Kudoso Ohana is ready!</p>"
+      ,
+      error: (data)->
+        alert "Sorry, there was an error processing your signup.  Please try again."
+        console.log data
+        $form.find('button').prop('disabled', false)
+    })
+
 

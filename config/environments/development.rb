@@ -50,4 +50,8 @@ Rails.application.configure do
   #         :s3_region => 'us-standard'
   #     }
   # }
+
+  # for Stripe
+  config.stripe.secret_key = "sk_test_h7sjEuwspGRVUS3AsFwsM58x"
+  config.stripe.publishable_key = "pk_test_7ObtQE0A3TITnUXi0weTYxZ1"
 end

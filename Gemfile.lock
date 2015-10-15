@@ -531,6 +531,12 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
+    stripe (1.30.2)
+      json (~> 1.8.1)
+      rest-client (~> 1.4)
+    stripe-rails (0.3.1)
+      rails (>= 3)
+      stripe
     terminal-notifier-guard (1.6.4)
     therubyracer (0.12.1)
       libv8 (~> 3.16.14.0)
@@ -641,6 +647,7 @@ DEPENDENCIES
   simple_form
   simplecov
   sprockets-rails
+  stripe-rails
   terminal-notifier-guard
   therubyracer
   turbolinks
@@ -648,3 +655,6 @@ DEPENDENCIES
   web-console (~> 2.0)
   zeus
   zeus-parallel_tests
+
+BUNDLED WITH
+   1.10.6

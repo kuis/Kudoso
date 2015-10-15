@@ -1,11 +1,15 @@
 class User < ActiveRecord::Base
 
+  include Stripe::Callbacks
+
   belongs_to :family
   belongs_to :member
 
   has_many :tickets, dependent: :destroy
   has_many :assigned_tickets, class_name: Ticket, foreign_key: 'assigned_to_id', dependent: :nullify
   has_many :api_keys
+  has_many :invoices, dependent: :nullify
+  has_many :payments, through: :invoices
 
   scope :admins, -> { where(admin: true) }
   scope :accounts, -> { where.not(admin: true) }
@@ -44,6 +48,14 @@ class User < ActiveRecord::Base
       key.update_expiration!
     end
     key
+  end
+
+  after_customer_updated! do |customer, event|
+    user = User.find_by_stripe_customer_id(customer.id)
+    if customer.delinquent
+      user.is_account_current = false
+      user.save!
+    end
   end
 
   private
