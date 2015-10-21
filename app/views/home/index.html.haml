@@ -225,19 +225,20 @@
     }
 
     if ( valid ) {
-      $.ajax({
-         url: '/contacts',
-         dataType: 'json',
-         contentType: 'application/json',
-         method: 'POST',
-         data: {
+      var data = {
           contact: {
             emails_attributes: [ { address: email } ],
             first_name: first_name,
             last_name: last_name,
             contact_type_id: #{ ContactType.find_or_create_by(name: 'Beta Applicant').id }
           }
-         },
+         };
+      $.ajax({
+         url: '/contacts',
+         dataType: 'json',
+         contentType: 'application/json',
+         method: 'POST',
+         data: JSON.stringify(data),
          statusCode: {
           200: function(e) {
             alert("Thank you!");
