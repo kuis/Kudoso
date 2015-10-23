@@ -45,7 +45,7 @@ class ContactsController < ApplicationController
   end
 
   def create
-    @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], "0").try(:[],:address)
+    @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], 0).try(:[],:address)
     params[:contact].delete(:emails_attributes)
     if @primary_email.blank?
       respond_to do |format|
@@ -55,7 +55,7 @@ class ContactsController < ApplicationController
     else
       begin
         agile_contact = AgileCRMWrapper::Contact.search_by_email( @primary_email )
-        if @agile_contact.nil?
+        if agile_contact.nil?
           agile_contact = AgileCRMWrapper::Contact.create( email: @primary_email,
                                                            first_name: params[:contact][:first_name],
                                                            last_name: params[:contact][:last_name] )

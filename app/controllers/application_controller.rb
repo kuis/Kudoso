@@ -105,6 +105,10 @@ class ApplicationController < ActionController::Base
     return messages
   end
 
+  def cities
+    render json: CS.cities(params[:state], :us).to_json
+  end
+
   protected
 
   def configure_permitted_parameters
@@ -121,8 +125,8 @@ class ApplicationController < ActionController::Base
   end
 
   def restrict_access
-    logger.info 'Restricting access!'
-    if Rails.env.staging?
+    logger.info "Restricting access: #{request.path}"
+    if Rails.env.staging? && !request.path.starts_with?('/stripe/events')
       authenticate_or_request_with_http_basic do |username, password|
         username == "kudoso" && password == "Launching2015!"
       end

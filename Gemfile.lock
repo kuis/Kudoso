@@ -121,6 +121,8 @@ GEM
     childprocess (0.5.5)
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.10.2)
+    city-state (0.0.13)
+      rubyzip (~> 1.1)
     clamp (0.6.4)
     climate_control (0.0.3)
       activesupport (>= 3.0)
@@ -531,6 +533,12 @@ GEM
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       sprockets (>= 2.8, < 4.0)
+    stripe (1.30.2)
+      json (~> 1.8.1)
+      rest-client (~> 1.4)
+    stripe-rails (0.3.1)
+      rails (>= 3)
+      stripe
     terminal-notifier-guard (1.6.4)
     therubyracer (0.12.1)
       libv8 (~> 3.16.14.0)
@@ -589,6 +597,7 @@ DEPENDENCIES
   capybara
   capybara-webkit!
   chronic
+  city-state
   cocoon
   coffee-rails (~> 4.0.0)
   cucumber-rails
@@ -641,6 +650,7 @@ DEPENDENCIES
   simple_form
   simplecov
   sprockets-rails
+  stripe-rails
   terminal-notifier-guard
   therubyracer
   turbolinks
@@ -648,3 +658,6 @@ DEPENDENCIES
   web-console (~> 2.0)
   zeus
   zeus-parallel_tests
+
+BUNDLED WITH
+   1.10.6

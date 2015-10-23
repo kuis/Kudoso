@@ -77,7 +77,123 @@ $(document).ready ($) ->
   #switch from monthly to annual pricing tables
   bouncy_filter $('.cd-pricing-container')
 
+  setTimeout ()->
+    $('#ohanaCount').countTo({speed: 2500})
+  , 2000
+
+  $('#payment-form').submit (event)->
+    $form = $(this)
+    # Disable the submit button to prevent repeated clicks
+    $form.find('button').prop('disabled', true)
+    valid = true
+
+
+
+    email = $.trim($('#signup-email').val());
+    if email.length > 5 && validateEmail(email)
+      $('#signup-email').removeClass('uk-form-danger')
+    else
+      $('#signup-email').addClass('uk-form-danger')
+      valid = false
+
+    $("form#payment-form input[type=\"text\"]").each ()->
+      input = $(this)
+      console.log 'Name: ' + input.attr('name')
+      if input.val().length < 2
+        input.addClass('uk-form-danger')
+        valid = false
+      else
+        input.removeClass('uk-form-danger')
+
+    if $.trim($('#signup-password').val()).length < 8 || $.trim($('#signup-password-confirmation').val())  < 8
+      alert 'Password must be at least 8 characters'
+      valid = false
+
+    if $.trim($('#signup-password').val()) != $.trim($('#signup-password-confirmation').val())
+      alert 'Passwords do not match'
+      valid = false
+
+    first_name = $.trim($('#signup-first-name').val());
+    last_name = $.trim($('#signup-last-name').val());
+    address = $.trim($('#signup-address').val());
+    city = $.trim($('#signup-city').val());
+    state = $.trim($('#signup-state').val());
+    zip = $.trim($('#signup-zip').val());
+    ccnumber = $('#signup-cc').val()
+    cvc = $('#signup-cc-cvc').val()
+    exp_month = $('#signup-cc-exp-month').val()
+    exp_year = $('#signup-cc-exp-year').val()
+
+
+    if valid
+      Stripe.card.createToken({
+          number: ccnumber,
+          cvc: cvc,
+          exp_month: exp_month,
+          exp_year: exp_year,
+          name: (first_name + ' ' + last_name),
+          address_line1: address,
+          address_state: state,
+          address_zip: zip,
+          address_country: 'US'
+      }, stripeResponseHandler)
+    else
+      alert 'All fields are required'
+      $form.find('button').prop('disabled', false)
+
+    # Prevent the form from submitting with the default action
+    return false
+
+
 
 
 
   return
+
+
+
+stripeResponseHandler = (status, response)->
+  $form = $('#payment-form');
+
+  if (response.error)
+    # Show the errors on the form
+    $form.find('.payment-errors').text(response.error.message);
+    $form.find('button').prop('disabled', false);
+  else
+    # response contains id and card, which contains additional card details
+    token = response.id;
+    # Insert the token into the form so it gets submitted to the server
+#    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+    # and submit
+    # $form.get(0).submit();
+    console.log 'Got token: ' + response.id + ', submitting'
+
+    data = {}
+    data.stripeToken = token
+    data.user = {}
+    data.user.first_name = $.trim($('#signup-first-name').val());
+    data.user.last_name = $.trim($('#signup-last-name').val());
+    data.user.address = $.trim($('#signup-address').val());
+    data.user.city = $.trim($('#signup-city').val());
+    data.user.state = $.trim($('#signup-state').val());
+    data.user.zip = $.trim($('#signup-zip').val());
+    data.user.password = $.trim($('#signup-password').val());
+    data.user.password_confirmation = $.trim($('#signup-password-confirmation').val());
+    data.plan = 'ohana_annual'
+
+    $.ajax({
+      url: '/charges',
+      method: 'POST',
+      data: data,
+      success: ()->
+        $('#payment-form').slideUp ()->
+          $('#payment-form').html "<h2>Thank you!</h2><p>You are all set, we'll contact you as soon as Kudoso Ohana is ready!</p>"
+          $('#payment-form').slideDown
+      ,
+      error: (data)->
+        alert "Sorry, there was an error processing your signup.  Please try again."
+        console.log data
+        $form.find('button').prop('disabled', false)
+    })
+
+

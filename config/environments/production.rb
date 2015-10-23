@@ -102,4 +102,7 @@ Rails.application.configure do
       }
   }
 
+  # for Stripe
+  config.stripe.publishable_key = "pk_live_h2RDeUTxUvEQ57uiQTjNYR0p"
+
 end

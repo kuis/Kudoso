@@ -4,11 +4,7 @@ class HomeController < ApplicationController
 
   end
 
-  def pre_signup
-
-  end
-
-  def pre_signup_thank_you
+  def ohana
 
   end
 

@@ -13,6 +13,8 @@ Rails.application.routes.draw do
 
   resources :activity_types
 
+  resources :charges
+
   resources :content_ratings
 
   resources :contents
@@ -138,7 +140,8 @@ Rails.application.routes.draw do
   end
 
 
-
+  mount Stripe::Engine => "/stripe"
+  get 'cities/:state', to: 'application#cities'
   get 'tos', to: 'home#tos'
   get 'privacy', to: 'home#privacy'
   get 'contact_us', to: 'home#contact_us'
@@ -149,6 +152,7 @@ Rails.application.routes.draw do
   get 'protect', to: 'home#protect'
   get 'teach', to: 'home#teach'
   get 'reward', to: 'home#reward'
+  get 'ohana', to: 'home#ohana'
   get 'wizard', to: 'wizard#index'
   put 'wizard', to: 'wizard#update'
   post 'wizard', to: 'wizard#create'
