@@ -24,6 +24,8 @@ module Api
         param :email, String, desc: "Optionally define an email address for this member (useful for notifications and updates)"
         param :parent, [true, false], desc: "Set to true if this member is a parent in the family (default: false)"
         param :gender, ['m', 'f'], desc: "Gender of member as (m)ale or (f)emale"
+        param :password, String, desc: "Member's password"
+        param :password_confirmation, String, desc: "Member's password, confirmed"
       end
 
       api :GET, "/v1/families/:family_id/members", "Retrieve all family members (authenticated user must be a parent to retreive all info)"
@@ -82,7 +84,9 @@ module Api
           if @current_user.try(:admin) || (@current_member.try(:family) == @family )
             local_params = member_create_params.merge(family_id: @family.id)
             local_params[:birth_date] = Chronic.parse(local_params[:birth_date]).to_date.to_s(:db) if local_params[:birth_date]
-            @member = Member.new(local_params)
+            @member = Member.create(local_params)
+            @member.password = local_params[:password] if local_params[:password]
+            @member.password_confirmation = local_params[:password_confirmation] if local_params[:password_confirmation]
             if @member.save
               render :json => { :member => @member, :messages => messages }, :status => 200
             else
