@@ -42,5 +42,20 @@ describe 'Todo Templates API', type: :request do
     expect(member.todo_schedules.count).to eq(0)
   end
 
+  it 'returns a list of todo templates specific to a member' do
+    member = FactoryGirl.create(:member, family_id: @user.member.family.id)
+    get "/api/v1/families/#{@user.family.id}/members/#{member.id}/todo_templates", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(200)
+    json = JSON.parse(response.body)
+    expect(json["todo_templates"].length).to eq(0)
+    @todo_template = @todo_templates.sample
+    post "/api/v1/families/#{@user.family.id}/members/#{member.id}/todo_templates/#{@todo_template.id}/assign", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(200)
+    get "/api/v1/families/#{@user.family.id}/members/#{member.id}/todo_templates", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(200)
+    json = JSON.parse(response.body)
+    expect(json["todo_templates"].length).to eq(1)
+  end
+
 
 end

@@ -34,11 +34,11 @@ module Api
       api :GET, "/v1/todo_templates", "Retrieve all task templates"
       def index
         messages = init_messages
-        if params[:family_id] && params[:id]
+        if params[:family_id] && params[:member_id]
           begin
             @family = Family.find(params[:family_id])
             if @current_user.try(:admin) || (@current_member.try(:family) == @family )
-              @member = @family.members.find(params[:id])
+              @member = @family.members.find(params[:member_id])
               render :json => { :todo_templates => @member.todo_templates, :messages => messages }, :status => 200
             else
               messages[:error] << 'You are not authorized to do this.'
