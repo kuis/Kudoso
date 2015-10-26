@@ -18,6 +18,7 @@ describe 'Users API', type: :request do
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)
     expect(json["user"]).to be_present
+    expect(json["user"]["email"]).to eq("john@example.com")
   end
 
   it 'reports error on create without last name' do
