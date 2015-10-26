@@ -24,7 +24,7 @@ module Api
         begin
           @user = User.find(params[:id])
           if @current_user.try(:admin) || (@current_user == @user )
-            render :json => { :user => @user, :messages => messages }, :status => 200
+            render :json => { :user => @user.as_json, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403
@@ -64,14 +64,14 @@ module Api
 
               @user = User.new(user_create_params)
               if @user.save
-                render :json => { user:      @user,
-                                  member:    @user.member,
-                                  family:    @user.family,
+                render :json => { user:      @user.as_json,
+                                  member:    @user.member.as_json,
+                                  family:    @user.family.as_json,
                                   token:     @user.get_api_key.access_token,
                                   :messages => messages }, :status => 200
               else
                 messages[:error] << @user.errors.full_messages
-                render :json => { :user => @user, :messages => messages }, :status => 400
+                render :json => { :user => @user.as_json, :messages => messages }, :status => 400
               end
             end
           end
@@ -97,7 +97,7 @@ module Api
                               :messages => messages }, :status => 200
           else
             messages[:error] << @user.errors.full_messages
-            render :json => { :user => @user, :messages => messages }, :status => 400
+            render :json => { :user => @user.as_json, :messages => messages }, :status => 400
           end
 
         rescue

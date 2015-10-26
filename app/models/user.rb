@@ -59,7 +59,7 @@ class User < ActiveRecord::Base
   end
 
   def as_json( options = {})
-    options.merge(email: self.email.present? ? self.email : self.unconfirmed_email)
+    options.merge!({"email" => self.email.present? ? self.email : self.unconfirmed_email})
     super(except: :email).merge(options)
   end
 
