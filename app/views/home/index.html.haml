@@ -151,7 +151,7 @@
       .uk-form-row.uk-text-center
         %small We won’t spam you or share your email address.
       .uk-form-row.uk-text-center
-        %button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "button", :type => "button", onclick: "index_signup(); return false;"} Sign Up
+        %button.newsletter-button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "button", :type => "button", onclick: "index_signup(); return false;"} Sign Up
 
 %section.k-fundamentals.k-section.uk-clearfix
   %article
@@ -205,11 +205,13 @@
 = render 'home/news'
 :javascript
   function index_signup() {
+    $('.newsletter-button').prop("disabled",true);
     var email = $.trim($('#index-email').val());
     var valid = (email.length > 5 && validateEmail(email));
 
     if ( !valid ) {
       alert("We're sorry, it doesn't appear that you have input a valid email address, please try again");
+      $('.newsletter-button').prop("disabled",false);
       return;
     }
 
@@ -221,6 +223,7 @@
 
     if ( !valid ) {
       alert("Both the first and last name fields are required, please try again...");
+      $('.newsletter-button').prop("disabled",false);
       return;
     }
 
@@ -246,19 +249,22 @@
               _agile.add_score(10);
             }
             ga('send','pageview','/landing_singup_thankyou');
+            alert("Thank you!");
           },
           400: function(e) {
             alert("We're sorry, the server did not receive your email address, please try again.");
+            $('.newsletter-button').prop("disabled",false);
           },
           409: function(e) {
             if (typeof _agile !== 'undefined') {
               _agile.set_email(email);
               _agile.add_score(10);
             }
-            alert("We're sorry, this email address is already registered.");
+            alert("Thank you!");
           },
           500: function(e) {
             alert("We're sorry, the server had an error processing your registration, please try again later.");
+            $('.newsletter-button').prop("disabled",false);
           }
         }
       });
