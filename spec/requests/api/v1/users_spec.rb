@@ -36,15 +36,7 @@ describe 'Users API', type: :request do
     expect(json["messages"]["error"].length).to be >= 1
   end
 
-  it 'can retrieve user details' do
-    post '/api/v1/users', { device_token: @device.device_token, user: { email: "john@example.com", password: 'password', password_confirmation: 'password', first_name: 'John', last_name: 'Depp'} }.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
-    expect(response.status).to eq(200)
-    json = JSON.parse(response.body)
-    get "/api/v1/users/#{json["user"]["id"]}", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{json["token"]}\"" }
-    expect(response.status).to eq(200)
-    json2 = JSON.parse(response.body)
-    expect(json2["user"]).to be_present
-  end
+
 
   it 'can reset user password for a valid user' do
     @user = FactoryGirl.create(:user)
@@ -65,6 +57,33 @@ describe 'Users API', type: :request do
     expect(response.status).to eq(401)
     json = JSON.parse(response.body)
     expect(json["messages"]["error"].length).to be >= 1
+  end
+
+  describe 'with an authenticated user' do
+    before(:each) do
+      @user = FactoryGirl.create(:user)
+      # Authenticate
+      post '/api/v1/sessions', { device_token: @device.device_token, email: @user.email, password: 'password'}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      @token = json["token"]
+    end
+
+    it 'can retrieve user details' do
+      get "/api/v1/users/#{@user.id}", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+      expect(response.status).to eq(200)
+      json2 = JSON.parse(response.body)
+      expect(json2["user"]).to be_present
+    end
+
+    it 'updates the users wizard step' do
+      current_step = @user.wizard_step
+      put "/api/v1/users/#{@user.id}", { user: { wizard_step: (current_step + 1) } }.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json["user"]).to be_present
+      expect(json["user"]["wizard_step"]).to eq(current_step+1)
+    end
   end
 
 
