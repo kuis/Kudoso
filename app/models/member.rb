@@ -30,7 +30,11 @@ class Member < ActiveRecord::Base
   # ensure we have a secure password even if the user has no password
   before_save :secure_password
   before_create :secure_password
-
+  before_create do
+      self.first_name = self.first_name.slice(0,1).capitalize + self.first_name.slice(1..-1)
+      self.last_name = self.last_name.slice(0,1).capitalize + self.last_name.slice(1..-1)
+      self.email = self.email.downcase
+  end
 
   after_create do
     unless self.avatar.exists?

@@ -16,6 +16,11 @@ class User < ActiveRecord::Base
 
   attr_accessor :gender
 
+  before_create do
+    self.first_name = self.first_name.slice(0,1).capitalize + self.first_name.slice(1..-1)
+    self.last_name = self.last_name.slice(0,1).capitalize + self.last_name.slice(1..-1)
+    self.email = self.email.downcase
+  end
   after_create :build_family
 
 
