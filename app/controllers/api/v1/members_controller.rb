@@ -38,7 +38,7 @@ module Api
           @family = Family.find(params[:family_id])
           @members = @family.members
           if @current_user && ( @current_user.admin? || @current_user.family == @family)
-            render :json => { :members => @members, :messages => messages }, :status => 200
+            render :json => { :members => @members.as_json, :messages => messages }, :status => 200
           else
             if params[:secure_key] == @family.secure_key
               render :json => { :members => @members.as_json(only: [:username, :parent, :first_name], include: :theme, methods: :avatar_urls), :messages => messages }, :status => 200
@@ -66,7 +66,7 @@ module Api
           @family = Family.find(params[:family_id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family )
             @member = @family.members.find(params[:id])
-            render :json => { :member => @member, :messages => messages }, :status => 200
+            render :json => { :member => @member.as_json, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403
@@ -96,7 +96,7 @@ module Api
             @member.password = local_params[:password] if local_params[:password]
             @member.password_confirmation = local_params[:password_confirmation] if local_params[:password_confirmation]
             if @member.save
-              render :json => { :member => @member, :messages => messages }, :status => 200
+              render :json => { :member => @member.as_json, :messages => messages }, :status => 200
             else
               messages[:error] << @member.errors.full_messages
               render :json => { :member => @member, :messages => messages }, :status => 400
@@ -134,10 +134,10 @@ module Api
             end
 
             if @member.update_attributes(local_params)
-              render :json => { :member => @member, :messages => messages }, :status => 200
+              render :json => { :member => @member.as_json, :messages => messages }, :status => 200
             else
               messages[:error] << @member.errors.full_messages
-              render :json => { :member => @member, :messages => messages }, :status => 400
+              render :json => { :member => @member.as_json, :messages => messages }, :status => 400
             end
 
           else
@@ -165,10 +165,10 @@ module Api
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent )
             @member = @family.members.find(params[:id])
             if @member.destroy
-              render :json => { :member => @member, :messages => messages }, :status => 200
+              render :json => { :member => @member.as_json, :messages => messages }, :status => 200
             else
               messages[:error] << @member.errors.full_messages
-              render :json => { :member => @member, :messages => messages }, :status => 400
+              render :json => { :member => @member.as_json, :messages => messages }, :status => 400
             end
 
           else

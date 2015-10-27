@@ -72,9 +72,9 @@ module Api
                     if member
                       logger.info "\n\nPassword: [#{params[:password]}]\n\n"
                       if member.valid_password?( params[:password] )
-                        render :json => { member:    member,
+                        render :json => { member:    member.as_json,
                                           token:     member.get_api_key.access_token,
-                                          family:    member.family,
+                                          family:    member.family.as_json,
                                           messages:  messages }, :status => 200
                         return
                       else
@@ -101,8 +101,8 @@ module Api
                   if user
                     if user.valid_password?(params[:password])
                       render :json => { user:      user,
-                                        member:    user.member,
-                                        family:    user.family,
+                                        member:    user.member.as_json,
+                                        family:    user.family.as_json,
                                         token:     user.get_api_key.access_token,
                                         messages:  messages }, :status => 200
                       return
