@@ -65,6 +65,8 @@ class User < ActiveRecord::Base
     super(except: :email).merge(options)
   end
 
+
+
   private
 
   def build_family
