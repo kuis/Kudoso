@@ -14,6 +14,8 @@ class User < ActiveRecord::Base
   scope :admins, -> { where(admin: true) }
   scope :accounts, -> { where.not(admin: true) }
 
+  attr_accessor :gender
+
   after_create :build_family
 
 
@@ -69,7 +71,7 @@ class User < ActiveRecord::Base
     if !self.admin? && self.family_id.nil?
       self.create_family(name: "#{self.last_name} Family", primary_contact_id: self.id)
       self.wizard_step = 1
-      self.member = self.family.members.create({username: self.email, parent: true, first_name: self.first_name, last_name: self.last_name, email: self.email })
+      self.member = self.family.members.create({username: self.email, parent: true, first_name: self.first_name, last_name: self.last_name, email: self.email, gender: self.gender })
       self.save
       self.member.save
     end
