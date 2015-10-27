@@ -32,13 +32,27 @@ describe 'Members API', type: :request do
     expect(json["members"].length).to eq(@members.count + 1) #the original user is a member as well
   end
 
-  it 'returns limited member info for other users family' do
+  it 'denies access to info for other users family' do
     other_user = FactoryGirl.create(:user)
     other_members = FactoryGirl.create_list(:member, 3, family_id: other_user.member.family.id)
     get "/api/v1/families/#{other_user.member.family.id}/members", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(403)
+  end
+
+  it 'returns limited member info for family if not authenticated' do
+    other_user = FactoryGirl.create(:user)
+    other_members = FactoryGirl.create_list(:member, 3, family_id: other_user.member.family.id)
+    get "/api/v1/families/#{other_user.member.family.id}/members", { secure_key: other_user.family.secure_key },  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)
-    expect(json["members"].first.has_key?(["birth_date"])).to be_falsey
+    expect(json["members"].first.has_key?("username")).to be_truthy
+    expect(json["members"].first.has_key?("first_name")).to be_truthy
+    expect(json["members"].first.has_key?("parent")).to be_truthy
+    expect(json["members"].first.has_key?("theme")).to be_truthy
+    expect(json["members"].first.has_key?("avatar_urls")).to be_truthy
+    expect(json["members"].first.has_key?("birth_date")).to be_falsey
+    expect(json["members"].first.has_key?("last_name")).to be_falsey
+    expect(json["members"].first.has_key?("age")).to be_falsey
   end
 
   it 'creates a new family member' do

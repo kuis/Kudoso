@@ -2,6 +2,8 @@ module Api
   module V1
     class MembersController < ApiController
 
+      skip_before_filter :restrict_api_access,  if: :check_for_auth
+
       resource_description do
         short 'API Members'
         formats ['json']
@@ -38,7 +40,13 @@ module Api
           if @current_user && ( @current_user.admin? || @current_user.family == @family)
             render :json => { :members => @members, :messages => messages }, :status => 200
           else
-            render :json => { :members => @members.as_json(only: [:username, :parent, :first_name], include: :theme), :messages => messages }, :status => 200
+            if params[:secure_key] == @family.secure_key
+              render :json => { :members => @members.as_json(only: [:username, :parent, :first_name], include: :theme, methods: :avatar_urls), :messages => messages }, :status => 200
+            else
+              messages[:error] << 'Authorization failed'
+              render :json => { :messages => messages }, :status => 403
+            end
+
           end
 
         rescue ActiveRecord::RecordNotFound
@@ -186,7 +194,9 @@ module Api
         params.require(:member).permit(:username, :parent, :password, :password_confirmation, :birth_date, :first_name, :last_name, :gender, :email, :theme_id, avatar: %w(content-type content))
       end
 
-
+      def check_for_auth
+        action_name == "index" && request.headers["HTTP_AUTHORIZATION"].nil?
+      end
 
 
     end
