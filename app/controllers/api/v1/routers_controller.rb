@@ -45,7 +45,7 @@ module Api
           if @router.save
             render :json => { router: @router, latest_firmware: @router.latest_firmware.as_json(methods: :url), :messages => messages }, :status => 200
           else
-            messages[:error] << @router.errors.full_messages
+            messages[:error].concat @router.errors.full_messages
             render :json => { :messages => messages }, :status => 400
           end
 
@@ -165,7 +165,7 @@ module Api
             render :json => { device: @device.as_json(methods: :activity_end_time), :messages => messages }, :status => 200
           else
             logger.info @device.errors.full_messages
-            messages[:error] << @device.errors.full_messages
+            messages[:error].concat @device.errors.full_messages
             render :json => { device: @device.as_json(methods: :activity_end_time), :messages => messages }, :status => 400
           end
 

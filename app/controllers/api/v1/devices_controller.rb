@@ -78,7 +78,7 @@ module Api
 
                 render :json => { :device => @device, :messages => messages }, :status => 200
               else
-                messages[:error] << @device.errors.full_messages
+                messages[:error].concat @device.errors.full_messages
                 render :json => { :device => @device, :messages => messages }, :status => 400
               end
 
@@ -133,7 +133,7 @@ module Api
                 if @device.update_attribute( :last_contact, Time.at(params[:lastReachedAt].to_i) )
                   messages[:info] << "Device last contacted at #{@device.last_contact}"
                 else
-                  messages[:error] << @device.errors.full_messages
+                  messages[:error].concat @device.errors.full_messages
                 end
               end
 
@@ -146,7 +146,7 @@ module Api
                   messages[:info] << "Saved command to ID: #{@command.id}"
                 else
 
-                  messages[:error] << @command.errors.full_messages
+                  messages[:error].concat @command.errors.full_messages
                 end
 
               end
@@ -223,7 +223,7 @@ module Api
             if @device.valid?
               render :json => { :device => @device, :messages => messages }, :status => 200
             else
-              messages[:error] << @device.errors.full_messages
+              messages[:error].concat @device.errors.full_messages
               render :json => { :device => @device, :messages => messages }, :status => 400
             end
 
@@ -254,7 +254,7 @@ module Api
             if @device.update_attributes(device_create_params.merge(family_id: @family.id))
               render :json => { :device => @device, :messages => messages }, :status => 200
             else
-              messages[:error] << @device.errors.full_messages
+              messages[:error].concat @device.errors.full_messages
               render :json => { :device => @device, :messages => messages }, :status => 400
             end
 
@@ -285,7 +285,7 @@ module Api
             if @device.destroy
               render :json => { :device => @device, :messages => messages }, :status => 200
             else
-              messages[:error] << @device.errors.full_messages
+              messages[:error].concat @device.errors.full_messages
               render :json => { :device => @device, :messages => messages }, :status => 400
             end
 

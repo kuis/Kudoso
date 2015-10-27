@@ -88,7 +88,7 @@ module Api
             if @my_todo.valid?
               render :json => { :my_todo => @my_todo, :messages => messages }, :status => 200
             else
-              messages[:error] << @my_todo.errors.full_messages
+              messages[:error].concat @my_todo.errors.full_messages
               render :json => { :my_todo => @my_todo, :messages => messages }, :status => 400
             end
 
@@ -119,7 +119,7 @@ module Api
             if @my_todo.update_attributes(my_todo_create_params)
               render :json => { :my_todo => @my_todo, :messages => messages }, :status => 200
             else
-              messages[:error] << @my_todo.errors.full_messages
+              messages[:error].concat @my_todo.errors.full_messages
               render :json => { :my_todo => @my_todo, :messages => messages }, :status => 400
             end
 
@@ -149,7 +149,7 @@ module Api
             if @my_todo.verify!(@current_member)
               render :json => { :my_todo => @my_todo, :messages => messages }, :status => 200
             else
-              messages[:error] << @my_todo.errors.full_messages
+              messages[:error].concat @my_todo.errors.full_messages
               render :json => { :my_todo => @my_todo, :messages => messages }, :status => 400
             end
 

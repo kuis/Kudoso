@@ -91,7 +91,7 @@ module Api
             if @todo.valid?
               render :json => { :todo => @todo, :messages => messages }, :status => 200
             else
-              messages[:error] << @todo.errors.full_messages
+              messages[:error].concat @todo.errors.full_messages
               render :json => { :todo => @todo, :messages => messages }, :status => 400
             end
 
@@ -121,7 +121,7 @@ module Api
             if @todo.update_attributes(todo_create_params)
               render :json => { :todo => @todo, :messages => messages }, :status => 200
             else
-              messages[:error] << @todo.errors.full_messages
+              messages[:error].concat @todo.errors.full_messages
               render :json => { :todo => @todo, :messages => messages }, :status => 400
             end
 
@@ -150,7 +150,7 @@ module Api
             if @todo.destroy
               render :json => { :todo => @todo, :messages => messages }, :status => 200
             else
-              messages[:error] << @todo.errors.full_messages
+              messages[:error].concat @todo.errors.full_messages
               render :json => { :todo => @todo, :messages => messages }, :status => 400
             end
 

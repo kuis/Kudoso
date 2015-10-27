@@ -98,7 +98,7 @@ module Api
             if @member.save
               render :json => { :member => @member.as_json, :messages => messages }, :status => 200
             else
-              messages[:error] << @member.errors.full_messages
+              messages[:error].concat @member.errors.full_messages
               render :json => { :member => @member, :messages => messages }, :status => 400
             end
 
@@ -136,7 +136,7 @@ module Api
             if @member.update_attributes(local_params)
               render :json => { :member => @member.as_json, :messages => messages }, :status => 200
             else
-              messages[:error] << @member.errors.full_messages
+              messages[:error].concat @member.errors.full_messages
               render :json => { :member => @member.as_json, :messages => messages }, :status => 400
             end
 
@@ -167,7 +167,7 @@ module Api
             if @member.destroy
               render :json => { :member => @member.as_json, :messages => messages }, :status => 200
             else
-              messages[:error] << @member.errors.full_messages
+              messages[:error].concat @member.errors.full_messages
               render :json => { :member => @member.as_json, :messages => messages }, :status => 400
             end
 

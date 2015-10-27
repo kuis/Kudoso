@@ -70,7 +70,7 @@ module Api
                                   token:     @user.get_api_key.access_token,
                                   :messages => messages }, :status => 200
               else
-                messages[:error] << @user.errors.full_messages
+                messages[:error].concat @user.errors.full_messages
                 render :json => { :user => @user.as_json, :messages => messages }, :status => 400
               end
             end
@@ -96,7 +96,7 @@ module Api
             render :json => { user:      @user,
                               :messages => messages }, :status => 200
           else
-            messages[:error] << @user.errors.full_messages
+            messages[:error].concat @user.errors.full_messages
             render :json => { :user => @user.as_json, :messages => messages }, :status => 400
           end
 
