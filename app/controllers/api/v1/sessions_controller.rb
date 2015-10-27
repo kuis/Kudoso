@@ -68,7 +68,7 @@ module Api
                 if params[:family_id].present? && params[:username].present?
                   family = Family.find(params[:family_id])
                   if family
-                    member = family.members.where(username: params[:username]).first
+                    member = family.members.where(username: params[:username].downcase).first
                     if member
                       logger.info "\n\nPassword: [#{params[:password]}]\n\n"
                       if member.valid_password?( params[:password] )

@@ -23,8 +23,15 @@ class Member < ActiveRecord::Base
   validates_inclusion_of :gender, :in => %w( m f ), allow_blank: :true
   validates_inclusion_of :mobicip_filter, :in => %w( Monitor Strict Moderate Mature ), allow_blank: :true
 
+  before_save do
+    self.username = self.username.downcase
+  end
+
   # ensure we have a secure password even if the user has no password
   before_save :secure_password
+  before_create :secure_password
+
+
   after_create do
     unless self.avatar.exists?
       if self.gender.present?
@@ -58,7 +65,7 @@ class Member < ActiveRecord::Base
   end
 
 
-  def as_json(options)
+  def as_json(options = nil)
     options ||= {methods: [ :age, :avatar_urls, :screen_time, :used_screen_time], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at], include: [ {theme: {except: [:created_at, :updated_at] } }]}
     super(options)
   end
