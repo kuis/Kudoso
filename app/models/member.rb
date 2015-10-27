@@ -34,15 +34,14 @@ class Member < ActiveRecord::Base
 
   after_create do
     unless self.avatar.exists?
-      if self.gender.present?
-        suggested_avatar = Avatar.where(gender: self.gender).all.sample
-        suggested_avatar ||= Avatar.all.sample
-        unless suggested_avatar.nil?
-          self.avatar = suggested_avatar.image
-          self.theme_id = suggested_avatar.theme_id
-        end
+      suggested_avatar = Avatar.where(gender: self.gender).all.sample  if self.gender.present?
+      suggested_avatar ||= Avatar.all.sample
+      unless suggested_avatar.nil?
+        self.avatar = suggested_avatar.image
+        self.theme_id = suggested_avatar.theme_id
       end
     end
+
     self.theme_id ||= Theme.first.try(:id)
     self.save
   end
