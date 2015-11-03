@@ -2,6 +2,7 @@ class TodoTemplate < ActiveRecord::Base
   include NotDeleteable
 
   has_many :todos, dependent: :nullify
+  has_one :step, as: :stepable, dependent: :destroy
 
   validates_presence_of :name
   validates_uniqueness_of :name
@@ -28,6 +29,10 @@ class TodoTemplate < ActiveRecord::Base
       new_rule = nil
     end
 
+  end
+
+  def steps
+    step.present? ? step.steps : []
   end
 
   def label

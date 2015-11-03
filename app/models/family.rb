@@ -60,6 +60,7 @@ class Family < ActiveRecord::Base
       todo = self.todos.build({name: todo_template.name, description: todo_template.description, schedule: todo_template.schedule, todo_template_id: todo_template.id, kudos: todo_template.kudos})
       todo.active = true; #can't mass assign this
       todo.save
+      todo.create_step(steps: todo_template.steps)
       # add the todo to each family member
     end
 

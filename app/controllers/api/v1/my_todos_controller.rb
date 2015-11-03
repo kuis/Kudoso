@@ -23,7 +23,44 @@ module Api
       api :GET, "/v1/families/:family_id/members/:member_id/my_todos", "Retrieve all tasks for a member (default: today's tasks)"
       param :start_date, Date, desc: "Optionnaly specify a start date"
       param :end_date, Date, desc: "Optionnaly specify an end date"
-      example ' [{"id"=>nil, "todo_schedule_id"=>1, "member_id"=>2, "due_date"=>Sun, 05 Jul 2015 00:00:00 MDT -06:00, "due_time"=>nil, "complete"=>nil, "verify"=>nil, "verified_at"=>nil, "verified_by"=>nil, "created_at"=>nil, "updated_at"=>nil}, {"id"=>nil, "todo_schedule_id"=>3, "member_id"=>2, "due_date"=>Sun, 05 Jul 2015 00:00:00 MDT -06:00, "due_time"=>nil, "complete"=>nil, "verify"=>nil, "verified_at"=>nil, "verified_by"=>nil, "created_at"=>nil, "updated_at"=>nil}, {"id"=>nil, "todo_schedule_id"=>5, "member_id"=>2, "due_date"=>Sun, 05 Jul 2015 00:00:00 MDT -06:00, "due_time"=>nil, "complete"=>nil, "verify"=>nil, "verified_at"=>nil, "verified_by"=>nil, "created_at"=>nil, "updated_at"=>nil}]  '
+      example <<END
+{"id"=>368,
+ "todo_schedule_id"=>4,
+ "member_id"=>3,
+ "due_date"=>Sat, 19 Sep 2015 23:59:59 MDT -06:00,
+ "due_time"=>nil,
+ "complete"=>true,
+ "verify"=>nil,
+ "verified_at"=>nil,
+ "verified_by"=>nil,
+ "created_at"=>Tue, 22 Sep 2015 06:31:55 MDT -06:00,
+ "updated_at"=>Tue, 22 Sep 2015 06:32:03 MDT -06:00,
+ "required?"=>nil,
+ "todo_schedule"=>
+  {"id"=>4,
+   "todo_id"=>2,
+   "member_id"=>3,
+   "start_date"=>Sat, 08 Aug 2015 00:00:00 MDT -06:00,
+   "end_date"=>nil,
+   "active"=>true,
+   "notes"=>nil,
+   "created_at"=>Tue, 22 Sep 2015 06:31:34 MDT -06:00,
+   "updated_at"=>Tue, 22 Sep 2015 06:31:34 MDT -06:00,
+   "todo"=>
+    {"id"=>2,
+     "name"=>"Brush hair",
+     "description"=>"Look your best and get rid of that bed hed!",
+     "required"=>nil,
+     "kudos"=>20,
+     "todo_template_id"=>2,
+     "family_id"=>1,
+     "active"=>true,
+     "schedule"=>"---\n:validations: {}\n:rule_type: IceCube::DailyRule\n:interval: 1\n",
+     "created_at"=>Tue, 22 Sep 2015 06:31:33 MDT -06:00,
+     "updated_at"=>Tue, 22 Sep 2015 06:31:33 MDT -06:00,
+     "steps"=>["one", "two"]}}}
+END
+
       def index
         messages = init_messages
         begin
@@ -33,7 +70,7 @@ module Api
             params[:start_date] ||= Date.today
             params[:end_date] ||= Date.today
             logger.debug "Returning JSON: #{@member.todos(params[:start_date], params[:end_date]).as_json}"
-            render :json => { my_todos: @member.todos(params[:start_date], params[:end_date]), :messages => messages }, :status => 200
+            render :json => { my_todos: @member.todos(params[:start_date], params[:end_date]).as_json, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403
@@ -57,7 +94,7 @@ module Api
           @member = @family.members.find(params[:member_id])
           @my_todo = @member.my_todos.find(params[:id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @current_member.id == @my_todo.member_id
-            render :json => { :my_todo => @my_todo, :messages => messages }, :status => 200
+            render :json => { :my_todo => @my_todo.as_json, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403
@@ -86,10 +123,10 @@ module Api
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @member == @current_member
             @my_todo = @member.my_todos.create(my_todo_create_params)
             if @my_todo.valid?
-              render :json => { :my_todo => @my_todo, :messages => messages }, :status => 200
+              render :json => { :my_todo => @my_todo.as_json, :messages => messages }, :status => 200
             else
               messages[:error].concat @my_todo.errors.full_messages
-              render :json => { :my_todo => @my_todo, :messages => messages }, :status => 400
+              render :json => { :my_todo => @my_todo.as_json, :messages => messages }, :status => 400
             end
 
           else
@@ -117,10 +154,10 @@ module Api
           @my_todo = @member.my_todos.find(params[:id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @member == @current_member
             if @my_todo.update_attributes(my_todo_create_params)
-              render :json => { :my_todo => @my_todo, :messages => messages }, :status => 200
+              render :json => { :my_todo => @my_todo.as_json, :messages => messages }, :status => 200
             else
               messages[:error].concat @my_todo.errors.full_messages
-              render :json => { :my_todo => @my_todo, :messages => messages }, :status => 400
+              render :json => { :my_todo => @my_todo.as_json, :messages => messages }, :status => 400
             end
 
           else
@@ -147,10 +184,10 @@ module Api
           @my_todo = @member.my_todos.find(params[:id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
             if @my_todo.verify!(@current_member)
-              render :json => { :my_todo => @my_todo, :messages => messages }, :status => 200
+              render :json => { :my_todo => @my_todo.as_json, :messages => messages }, :status => 200
             else
               messages[:error].concat @my_todo.errors.full_messages
-              render :json => { :my_todo => @my_todo, :messages => messages }, :status => 400
+              render :json => { :my_todo => @my_todo.as_json, :messages => messages }, :status => 400
             end
 
           else

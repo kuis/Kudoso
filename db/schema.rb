@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151015194320) do
+ActiveRecord::Schema.define(version: 20151103143031) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -516,6 +516,16 @@ ActiveRecord::Schema.define(version: 20151015194320) do
 
   add_index "st_overrides", ["member_id", "date"], name: "index_st_overrides_on_member_id_and_date", using: :btree
   add_index "st_overrides", ["member_id"], name: "index_st_overrides_on_member_id", using: :btree
+
+  create_table "steps", force: :cascade do |t|
+    t.integer  "stepable_id"
+    t.string   "stepable_type"
+    t.text     "steps"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
+  end
+
+  add_index "steps", ["stepable_type", "stepable_id"], name: "index_steps_on_stepable_type_and_stepable_id", using: :btree
 
   create_table "themes", force: :cascade do |t|
     t.string   "name"
