@@ -65,7 +65,7 @@ END
         messages = init_messages
         begin
           @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @current_member.id == params[:id]
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @current_member.id == params[:member_id]
             @member = @family.members.find(params[:member_id])
             params[:start_date] ||= Date.today
             params[:end_date] ||= Date.today

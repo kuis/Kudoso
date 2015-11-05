@@ -56,6 +56,6 @@ class TodoTemplatesController < ApplicationController
 
 
     def todo_template_params
-      params.require(:todo_template).permit(:name, :description, :rule, :active, :kudos, :required)
+      params.require(:todo_template).permit(:name, :description, :rule, :active, :kudos, :required, step_attributes: { steps})
     end
 end

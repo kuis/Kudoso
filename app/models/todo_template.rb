@@ -4,6 +4,8 @@ class TodoTemplate < ActiveRecord::Base
   has_many :todos, dependent: :nullify
   has_one :step, as: :stepable, dependent: :destroy
 
+  accepts_nested_attributes_for :step, allow_destroy: false
+
   validates_presence_of :name
   validates_uniqueness_of :name
 
