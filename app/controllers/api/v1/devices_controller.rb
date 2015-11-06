@@ -171,7 +171,7 @@ module Api
         messages = init_messages
         begin
           @family = Family.find(params[:family_id])
-          if @current_user && ( @current_user.admin? || @current_user.family == @family)
+          if @current_user.try(:admin) || @current_member.try(:family) == @family
             @devices = @family.devices
             render :json => { :devices => @devices, :messages => messages }, :status => 200
           else
@@ -193,7 +193,7 @@ module Api
         messages = init_messages
         begin
           @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family )
+          if @current_user.try(:admin) || @current_member.try(:family) == @family
             @device = @family.devices.find(params[:id])
             render :json => { :device => @device, :messages => messages }, :status => 200
           else
