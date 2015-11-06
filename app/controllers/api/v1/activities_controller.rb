@@ -82,7 +82,7 @@ module Api
           @member = @family.members.find(params[:member_id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @member == @current_member
             @activity_template = ActivityTemplate.find(params[:activity_template_id])
-            
+
             @devices = Device.where(id:  params[:devices] )
             @activity = @member.new_activity(@activity_template, @devices)
             if @activity.valid?

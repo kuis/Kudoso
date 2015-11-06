@@ -121,7 +121,7 @@ class Member < ActiveRecord::Base
           ts.schedule_rrules.each do |rule|
             schedule.add_recurrence_rule(IceCube::Rule.from_yaml(rule.rrule))
           end
-          local_todos << self.my_todos.build(todo_schedule_id: ts.id, due_date: date ) if schedule.occurs_on?(date)
+          local_todos << self.my_todos.create(todo_schedule_id: ts.id, due_date: date ) if schedule.occurs_on?(date)
         end
       end
       todos.concat(local_todos)
