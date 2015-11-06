@@ -28,7 +28,7 @@ describe 'Activities API', type: :request do
 
   it 'creates a new activity' do
     post "/api/v1/families/#{@user.family.id}/members/#{@member.id}/activities",
-         { device_id: @devices.sample.id, activity_template_id: @activity_template.id}.to_json,
+         { devices: [ @devices.sample.id ], activity_template_id: @activity_template.id}.to_json,
          { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)
@@ -37,7 +37,7 @@ describe 'Activities API', type: :request do
 
   it 'starts an activity' do
     post "/api/v1/families/#{@user.family.id}/members/#{@member.id}/activities",
-         { device_id: @devices.sample.id, activity_template_id: @activity_template.id}.to_json,
+         { devices: [ @devices.sample.id ], activity_template_id: @activity_template.id}.to_json,
          { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)
@@ -53,7 +53,7 @@ describe 'Activities API', type: :request do
 
   it 'starts and stops an activity' do
     post "/api/v1/families/#{@user.family.id}/members/#{@member.id}/activities",
-         { device_id: @devices.sample.id, activity_template_id: @activity_template.id}.to_json,
+         { ddevices: [ @devices.sample.id ], activity_template_id: @activity_template.id}.to_json,
          { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)

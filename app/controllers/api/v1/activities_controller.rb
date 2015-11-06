@@ -73,7 +73,7 @@ module Api
 
       api :POST, "/v1/families/:family_id/members/:member_id/activities", "Create a new activity"
       param :activity_template_id, Integer, desc: "The ID for the activity template associated with this activity", required: true
-      param :device_id, Integer, desc: "The ID for the device used with this activity", required: true
+      param :devices, Array, desc: "An array of the IDs for the device(s) used with this activity", required: true
       param :content_id, Integer, desc: "The ID for the content associated with this activity (if applicable)", required: false
       def create
         messages = init_messages
@@ -82,8 +82,9 @@ module Api
           @member = @family.members.find(params[:member_id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @member == @current_member
             @activity_template = ActivityTemplate.find(params[:activity_template_id])
-            @device = Device.find(params[:device_id])
-            @activity = @member.new_activity(@activity_template, @device)
+            
+            @devices = Device.where(id:  params[:devices] )
+            @activity = @member.new_activity(@activity_template, @devices)
             if @activity.valid?
               render :json => { :activity => @activity.as_json, :messages => messages }, :status => 200
             else
