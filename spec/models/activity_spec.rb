@@ -6,21 +6,33 @@ RSpec.describe Activity, :type => :model do
     expect(act.valid?).to be_truthy
   end
 
-  it 'should not allow an activity if out of screen time' do
+  it 'should not allow an activity to start if out of screen time' do
     @member = FactoryGirl.create(:member)
     device = FactoryGirl.create(:device, family_id: @member.family.id )
-    @member.set_screen_time!(Date.today.wday, 0, device.id)
     activity_template = FactoryGirl.create(:activity_template )
     act = @member.new_activity(activity_template, device)
 
-    expect(act.valid?).to be_falsey
-    expect(act.errors[:device].any?).to be_truthy
 
-    @member.set_screen_time!(Date.today.wday, 3600, 4800, device.id)
-    @member.set_screen_time!(Date.today.wday, 0, 3600, nil)
+    @member.set_screen_time!(Date.today.wday, 3600, 4800, device.id) #device has time
+    @member.set_screen_time!(Date.today.wday, 0, 3600, nil) # member does not
 
-    act = @member.new_activity(activity_template, device)
-    expect(act.valid?).to be_falsey
+    act.start!
+
+    expect(act.start_time).to be_nil
+    expect(act.errors[:member].any?).to be_truthy
+    expect(act.errors[:device].any?).to be_falsey
+
+    act.reload
+    act.valid? # resets errors...
+
+
+    @member.set_screen_time!(Date.today.wday, 0, 4800, device.id) #device does not have time
+    @member.set_screen_time!(Date.today.wday, 3600, 3600, nil) # member has time
+
+    act.start!
+
+
+    expect(act.start_time).to be_nil
     expect(act.errors[:member].any?).to be_falsey
     expect(act.errors[:device].any?).to be_truthy
   end

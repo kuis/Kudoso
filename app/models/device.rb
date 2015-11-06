@@ -3,7 +3,8 @@ class Device < ActiveRecord::Base
   has_one :device_category, through: :device_type
   belongs_to :family
   belongs_to :primary_member, class_name: 'Member'
-  has_many :activities, dependent: :nullify
+  has_many :activity_devices, dependent: :destroy
+  has_many :activities, through: :activity_devices
   has_one :current_activity, class_name: 'Activity'
   belongs_to :management_device, class_name: 'Device', foreign_key: 'management_id', counter_cache: :managed_devices_count
   has_many :managed_devices, class_name: 'Device', foreign_key: 'management_id'

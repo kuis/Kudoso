@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151103143031) do
+ActiveRecord::Schema.define(version: 20151106152037) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,14 @@ ActiveRecord::Schema.define(version: 20151103143031) do
   end
 
   add_index "activities", ["member_id"], name: "index_activities_on_member_id", using: :btree
+
+  create_table "activities_devices", id: false, force: :cascade do |t|
+    t.integer "activity_id", null: false
+    t.integer "device_id",   null: false
+  end
+
+  add_index "activities_devices", ["activity_id", "device_id"], name: "index_activities_devices_on_activity_id_and_device_id", using: :btree
+  add_index "activities_devices", ["device_id", "activity_id"], name: "index_activities_devices_on_device_id_and_activity_id", using: :btree
 
   create_table "activity_details", force: :cascade do |t|
     t.integer  "activity_id"
@@ -551,15 +559,6 @@ ActiveRecord::Schema.define(version: 20151103143031) do
     t.datetime "date_openned"
     t.datetime "date_closed"
     t.string   "status"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "todo_groups", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "rec_min_age"
-    t.integer  "rec_max_age"
-    t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

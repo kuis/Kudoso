@@ -13,6 +13,10 @@ RSpec.describe Member, :type => :model do
   it 'secures the members password' do
     pwd = 'thepassword'
     new_member = Member.create(username: 'thetest', password: pwd, password_confirmation: pwd, birth_date: 10.years.ago, family_id: @member.family_id)
+    #FIXME: why do we need to do this???
+    new_member.password = pwd
+    new_member.password_confirmation = pwd
+    new_member.save
     expect(new_member.valid_password?(pwd)).to be_falsey
     expect(new_member.valid_password?(Digest::MD5.hexdigest(pwd + @member.family.secure_key))).to be_truthy
   end
@@ -32,19 +36,19 @@ RSpec.describe Member, :type => :model do
     device = FactoryGirl.create(:device, family_id: @member.family.id )
     @member.set_screen_time!(Date.today.wday, 1800, 3600, device.id)
     expect(@member.available_screen_time).to eq(3600)
-    expect(@member.available_screen_time(Date.today, device.id)).to eq(1800)
+    expect(@member.available_screen_time(Date.today, device)).to eq(1800)
   end
 
   it 'should record activities as screen time' do
     device = FactoryGirl.create(:device, family_id: @member.family.id )
-    start_time = @member.available_screen_time(Date.today, device.id)
+    start_time = @member.available_screen_time(Date.today, device)
     activity_template = FactoryGirl.create(:activity_template)
     act = @member.new_activity(activity_template, device)
     act.start!
     sleep(3)
     act.stop!
-    end_time = @member.available_screen_time(Date.today, device.id)
-    used_time = @member.used_screen_time(Date.today, device.id)
+    end_time = @member.available_screen_time(Date.today, device)
+    used_time = @member.used_screen_time(Date.today, device)
     expect(used_time).to eq(act.duration)
     expect(used_time).to eq(start_time-end_time)
   end

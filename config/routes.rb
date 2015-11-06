@@ -115,6 +115,7 @@ Rails.application.routes.draw do
           end
         end
         resources :members do
+          resources :activities
           resources :apps_members, path: :apps
           resources :my_todos do
             member do

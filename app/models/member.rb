@@ -144,9 +144,18 @@ class Member < ActiveRecord::Base
 
 
 
-  def used_screen_time(date = Date.today, device_id = nil, activity_id=nil)
-    if device_id.present?
-      activities.where('device_id = ? AND end_time BETWEEN ? AND ?', device_id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)').ceil
+  def used_screen_time(date = Date.today, devices = nil, activity_id=nil)
+    if devices.present?
+      device_limits = []
+      case devices.class.to_s
+        when "Array"
+          devices.each do |device|
+            device_limits << activities.joins(:activity_devices).where('activities_devices.device_id = ? AND activities.end_time BETWEEN ? AND ?', device.id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from activities.end_time - activities.start_time)').ceil
+          end
+        when "Device"
+          device_limits << activities.joins(:activity_devices).where('activities_devices.device_id = ? AND activities.end_time BETWEEN ? AND ?', devices.id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from activities.end_time - activities.start_time)').ceil
+      end
+      device_limits.max
     elsif activity_id.present?
       activities.where('activity_id = ? AND end_time BETWEEN ? AND ?', activity_id, date.beginning_of_day, date.end_of_day).sum('extract(epoch from end_time - start_time)').ceil
     else
@@ -154,51 +163,19 @@ class Member < ActiveRecord::Base
     end
   end
 
-  def screen_time(date = Date.today, device_id = nil, activity_id = nil)
-    rec = screen_times.where(dow: date.wday).last
-
-    if device_id.nil? && activity_id.nil?
-      result = rec.try(:default_time) || 60*60*24 # Return unlimited if not set
-
-    else
-      if rec.nil?
-        result = 60*60*24
-      else
-        device_limit = rec.restrictions[:devices].try(:[], :device_id).try(:[],:default_time)  || rec.default_time || 60*60*24
-        activity_limit = rec.restrictions[:activities].try(:[], :activity_id).try(:[],:default_time) || rec.default_time || 60*60*24
-        result = ( device_limit < activity_limit ? device_limit : activity_limit)
-      end
-
-    end
-    result += screen_time_overrides
-
-    result = 60*60*24 if result > 60*60*24
-
-    result
+  def screen_time(date = Date.today, devices = nil, activity_id = nil)
+    get_limit(:default_time, date, devices, activity_id)
   end
 
-  def max_screen_time(date = Date.today, device_id = nil, activity_id = nil)
-    rec = screen_times.where(dow: date.wday).last
-
-    if device_id.nil? && activity_id.nil?
-      result = rec.try(:max_time) || 60*60*24 # Return unlimited if not set
-
-    else
-      if rec.nil?
-        result = 60*60*24
-      else
-        device_limit = rec.restrictions[:devices].try(:[], :device_id).try(:[], :max_time)  || rec.max_time || 60*60*24
-        activity_limit = rec.restrictions[:activities].try(:[], :activity_id).try(:[], :max_time) || rec.max_time || 60*60*24
-        result = ( device_limit < activity_limit ? device_limit : activity_limit)
-      end
-
-    end
-
-    result
+  def max_screen_time(date = Date.today, devices = nil, activity_id = nil)
+    get_limit(:max_time, date, devices, activity_id)
   end
 
-  def available_screen_time(date = Date.today, device_id = nil, activity_id = nil)
-    (screen_time(date, device_id, activity_id) - used_screen_time(date, device_id, activity_id)).to_i
+  def available_screen_time(date = Date.today, devices = nil, activity_id = nil)
+    if devices.is_a?(Array)
+      devices = nil if devices.length == 0
+    end
+    (screen_time(date, devices, activity_id) - used_screen_time(date, devices, activity_id)).to_i
   end
 
 
@@ -211,7 +188,7 @@ class Member < ActiveRecord::Base
     else
       my_time.max_time ||= max_time
       my_time.default_time ||= default_time
-      my_time.restrictions[:devices][:device_id] = { default_time: default_time, max_time: max_time} if device_id
+      my_time.restrictions[:devices][device_id] = { default_time: default_time, max_time: max_time} if device_id
       my_time.restrictions[:activities][:activity_id] = { default_time: default_time, max_time: max_time} if activity_id
     end
 
@@ -219,16 +196,28 @@ class Member < ActiveRecord::Base
     my_time.save
   end
 
-  def new_activity(activity_template, device)
+  def new_activity(activity_template, devices = nil)
     # TODO: Check cost of activity before creating
-    act = self.activities.create(activity_template_id: activity_template.id, device_id: device.try(:id), created_by_id: self.id)
+    act = self.activities.create(activity_template_id: activity_template.id, created_by_id: self.id)
+    if devices
+      case devices.class.to_s
+        when "Array"
+          devices.each do |device|
+             act.devices << device
+          end
+
+        when "Device"
+          act.devices << devices
+      end
+    end
+    act
   end
 
   def current_activity
     activities.where(end_time: nil).last
   end
 
-  def can_do_activity?(activity_template, device = nil)
+  def can_do_activity?(activity_template, devices = nil)
     #TODO: Implement device logic
     ret = false
 
@@ -249,7 +238,13 @@ class Member < ActiveRecord::Base
       # Check member specific restrictions
       ret = false if self.screen_time_schedule.try(:occurring_at?, Time.now)
     end
-
+    #check if devices are available
+    case devices.class
+      when Array
+        devices.each { |device| ret = false unless device.current_activity.nil? }
+      when Device
+        ret = false unless devices.current_activity.nil?
+    end
     ret
   end
 
@@ -302,4 +297,44 @@ class Member < ActiveRecord::Base
       end
     end
   end
+
+  def get_limit(limit, date , devices, activity_id)
+    rec = screen_times.where(dow: date.wday).last
+    result = nil
+    if devices.nil? && activity_id.nil?
+      result = rec.try(limit) || 60*60*24 # Return unlimited if not set
+
+    else
+      if rec.nil?
+        result = 60*60*24
+      else
+        device_limit = nil
+        if devices.nil?
+          result = ( rec.restrictions[:activities].try(:[], activity_id).try(:[], limit) || rec.try(limit) || 60*60*24 )
+        else
+          if devices
+            device_limits = []
+            case devices.class.to_s
+              when "Array"
+                devices.each do |device|
+                  device_limits << (rec.restrictions[:devices].try(:[], device.id).try(:[],limit)  || rec.try(limit) || 60*60*24)
+                end
+              when "Device"
+                device_limits << (rec.restrictions[:devices].try(:[], devices.id).try(:[],limit)  || rec.try(limit) || 60*60*24)
+            end
+            device_limit = device_limits.min
+          end
+          if !activity_id.nil?
+            activity_limit = rec.restrictions[:activities].try(:[], activity_id).try(:[], limit) || rec.try(limit) || 60*60*24
+            result = device_limit.nil? ? activity_limit :  ( device_limit < activity_limit ? device_limit : activity_limit)
+          else
+            result = device_limit
+          end
+        end
+      end
+
+    end
+    result
+  end
+
 end

@@ -13,6 +13,9 @@ describe 'Members API', type: :request do
       res = @member.family.assign_template(todo, [ @member.id ])
     end
     @member.reload
+    @member.password = 'password'
+    @member.password_confirmation = 'password'
+    @member.save
     post '/api/v1/sessions', { device_token: @device.device_token, email: @user.email, password: 'password'}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)

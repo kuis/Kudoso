@@ -115,5 +115,6 @@ strip functionality, but we MUST present it in a way that is easy to use while b
 
     Production:
         RUBBER_ENV=production ALIAS=app-e1a-01 ROLES=app,nginx,unicorn,web,web_tools,db:primary=true cap rubber:create
+        RUBBER_ENV=production ALIAS=app-e1b-02 ROLES=app,nginx,unicorn,web,web_tools,db cap rubber:create
         RUBBER_ENV=production cap rubber:bootstrap
         RUBBER_ENV=production cap deploy
