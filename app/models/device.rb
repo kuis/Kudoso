@@ -5,7 +5,7 @@ class Device < ActiveRecord::Base
   belongs_to :primary_member, class_name: 'Member'
   has_many :activity_devices, dependent: :destroy
   has_many :activities, through: :activity_devices
-  has_one :current_activity, class_name: 'Activity'
+  # has_one :current_activity, class_name: 'Activity'
   belongs_to :management_device, class_name: 'Device', foreign_key: 'management_id', counter_cache: :managed_devices_count
   has_many :managed_devices, class_name: 'Device', foreign_key: 'management_id'
   has_many :screen_times
@@ -42,6 +42,18 @@ class Device < ActiveRecord::Base
   # validates_presence_of :device_type_id, :device_type
   validates_presence_of :family_id
 
+  def as_json(options = nil)
+    options ||= { methods: [ :current_member ],
+                  include: [ :current_activity,
+                      {device_type: {
+                          except: [:icon_file_name, :icon_content_type, :icon_file_size, :icon_updated_at],
+                          methods: [ :icon_url ]
+                      } }
+                  ]
+                }
+    super(options)
+  end
+
   def current_member
     current_activity.try(:member)
   end
@@ -76,5 +88,9 @@ class Device < ActiveRecord::Base
 
   def long_label
     "(#{self.id}) #{self.device_type.try(:name)} #{self.name}"
+  end
+
+  def current_activity
+    self.activities.where('start_time IS NOT NULL AND end_time IS NULL').first
   end
 end

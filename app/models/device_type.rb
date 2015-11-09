@@ -10,4 +10,8 @@ class DeviceType < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :name
   validates :version, :uniqueness => {:scope => :name}, allow_blank: true
+
+  def icon_url
+    self.icon.url(:original)
+  end
 end
