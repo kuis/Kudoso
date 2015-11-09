@@ -12,7 +12,9 @@
 
   - @device_types.each do |device_type|
     %tr
-      %td= device_type.name
+      %td
+        = image_tag device_type.icon.url(:original) if device_type.icon.present?
+        = device_type.name
       %td= device_type.description
       %td= device_type.os
       %td= device_type.version

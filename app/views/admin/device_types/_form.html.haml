@@ -1,4 +1,4 @@
-= simple_form_for [:admin,@device_type] do |f|
+= simple_form_for [:admin,@device_type], wrapper: :form_stacked, html: { class: 'uk-form uk-form-stacked' } do |f|
   = f.error_notification
 
   .form-inputs
@@ -6,8 +6,9 @@
     = f.input :description
     = f.input :os
     = f.input :version
+    = f.input :icon
 
   .form-actions
-    = f.button :submit
+    = f.button :submit, class: 'uk-button'
 
 

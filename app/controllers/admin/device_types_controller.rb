@@ -57,6 +57,6 @@ class Admin::DeviceTypesController < AdminController
   private
 
     def device_type_params
-      params.require(:device_type).permit(:name, :description, :os, :version)
+      params.require(:device_type).permit(:name, :description, :os, :version, :icon)
     end
 end
