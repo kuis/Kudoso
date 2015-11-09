@@ -31,8 +31,18 @@ module Api
             @member = @family.members.find(params[:member_id])
             params[:start_date] ||= Date.today
             params[:end_date] ||= Date.today
-            logger.debug "Returning JSON: #{@member.activities(params[:start_date], params[:end_date]).as_json}"
-            render :json => { activities: @member.activities(params[:start_date], params[:end_date]).as_json, :messages => messages }, :status => 200
+            @activities = @member.activities
+            if params[:start_date] && params[:end_date]
+              begin
+                start_time = Chronic.parse(params[:start_date])
+                end_time =  Chronic.parse(params[:end_date])
+                @activities = @member.activities.where(created_at: start_time..end_time)
+              rescue
+                logger.error "Invalid start or end time for activities"
+              end
+            end
+            logger.debug "Returning JSON: #{@activities.as_json}"
+            render :json => { activities: @activities.as_json, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403
