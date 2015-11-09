@@ -233,10 +233,18 @@ class Member < ActiveRecord::Base
 
       # Check family wide restrictions
 
-      ret = false if self.family.screen_time_schedule.try(:occurring_at?, Time.now)
-
+      if self.family.screen_time_schedule.try(:occurring_at?, Time.now)
+        ret = false
+        errors.add(:family, 'screen time schedule is restricted')
+      end
       # Check member specific restrictions
-      ret = false if self.screen_time_schedule.try(:occurring_at?, Time.now)
+      if self.screen_time_schedule.try(:occurring_at?, Time.now)
+        ret = false
+        errors.add(:member, 'screen time schedule is restricted')
+      end
+
+    else
+      errors.add(:member, 'available screen time for today exceeded.')
     end
     #check if devices are available
     case devices.class

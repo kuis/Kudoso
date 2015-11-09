@@ -173,7 +173,7 @@ module Api
           @family = Family.find(params[:family_id])
           if @current_user.try(:admin) || @current_member.try(:family) == @family
             @devices = @family.devices
-            render :json => { :devices => @devices, :messages => messages }, :status => 200
+            render :json => { :devices => @devices.as_json, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403
@@ -195,7 +195,7 @@ module Api
           @family = Family.find(params[:family_id])
           if @current_user.try(:admin) || @current_member.try(:family) == @family
             @device = @family.devices.find(params[:id])
-            render :json => { :device => @device, :messages => messages }, :status => 200
+            render :json => { :device => @device.as_json, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403
@@ -224,7 +224,7 @@ module Api
               render :json => { :device => @device, :messages => messages }, :status => 200
             else
               messages[:error].concat @device.errors.full_messages
-              render :json => { :device => @device, :messages => messages }, :status => 400
+              render :json => { :device => @device.as_json, :messages => messages }, :status => 400
             end
 
           else
@@ -252,10 +252,10 @@ module Api
             @device = @family.devices.find(params[:id])
 
             if @device.update_attributes(device_create_params.merge(family_id: @family.id))
-              render :json => { :device => @device, :messages => messages }, :status => 200
+              render :json => { :device => @device.as_json, :messages => messages }, :status => 200
             else
               messages[:error].concat @device.errors.full_messages
-              render :json => { :device => @device, :messages => messages }, :status => 400
+              render :json => { :device => @device.as_json, :messages => messages }, :status => 400
             end
 
           else
@@ -283,10 +283,10 @@ module Api
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
             @device = @family.devices.find(params[:id])
             if @device.destroy
-              render :json => { :device => @device, :messages => messages }, :status => 200
+              render :json => { :device => @device.as_json, :messages => messages }, :status => 200
             else
               messages[:error].concat @device.errors.full_messages
-              render :json => { :device => @device, :messages => messages }, :status => 400
+              render :json => { :device => @device.as_json, :messages => messages }, :status => 400
             end
 
           else

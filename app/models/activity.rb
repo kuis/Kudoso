@@ -1,3 +1,5 @@
+require_relative "lib/kudoso_auth"
+
 class Activity < ActiveRecord::Base
   belongs_to :member                            # Family member who PERFORMED the activity, may be nil
   belongs_to :created_by, class_name: 'Member', foreign_key: 'created_by_id'  # Family member who CREATED the activity, required, allows tracking of anonymous access
@@ -14,14 +16,25 @@ class Activity < ActiveRecord::Base
   end
 
   def start!
-    if check_screen_time
+    if tasks_complete && check_screen_time
       if self.start_time.blank?
         transaction do
           self.start_time = Time.now.localtime
           self.allowed_time = self.member.available_screen_time(self.start_time.to_date, self.devices.to_a )
           self.save
+          update_devices = []
           self.devices.each do |device|
             device.update_attribute(:current_activity_id, self.id)
+            if device.managed && device.mac_address
+                update_devices << device.as_json
+            end
+          end
+          if update_devices.length > 0
+            member.family.routers.each do |router|
+              msg = "send|#{router.mac_address}|update|#{update_devices.to_json}"
+              logger.debug "Sending to router #{router.id}(#{router.mac_address}) : #{msg}"
+              KudosoAuth.send_to_router(msg)
+            end
           end
 
         end
@@ -57,6 +70,10 @@ class Activity < ActiveRecord::Base
 
 
   private
+
+  def tasks_complete
+    member.can_do_activity?(self.activity_template, self.devices)
+  end
 
   def check_screen_time
     max_time = member.available_screen_time
