@@ -1,4 +1,4 @@
-require_relative "lib/kudoso_auth"
+require "#{::Rails.root}/lib/kudoso_auth"
 
 class Activity < ActiveRecord::Base
   belongs_to :member                            # Family member who PERFORMED the activity, may be nil
@@ -26,7 +26,7 @@ class Activity < ActiveRecord::Base
           self.devices.each do |device|
             device.update_attribute(:current_activity_id, self.id)
             if device.managed && device.mac_address
-                update_devices << device.as_json
+                update_devices << device.to_router_update
             end
           end
           if update_devices.length > 0
@@ -51,8 +51,20 @@ class Activity < ActiveRecord::Base
     if self.end_time.blank?
       transaction do
         self.update_attribute(:end_time, Time.now.localtime)
+        update_devices = []
         self.devices.each do |device|
           device.update_attribute(:current_activity_id, nil)
+          if device.managed && device.mac_address
+            update_devices << device.to_router_update
+          end
+        end
+
+        if update_devices.length > 0
+          member.family.routers.each do |router|
+            msg = "send|#{router.mac_address}|update|#{update_devices.to_json}"
+            logger.debug "Sending to router #{router.id}(#{router.mac_address}) : #{msg}"
+            KudosoAuth.send_to_router(msg)
+          end
         end
         # TODO: calc cost/reward and assign
       end

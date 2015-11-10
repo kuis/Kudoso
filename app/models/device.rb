@@ -93,4 +93,8 @@ class Device < ActiveRecord::Base
   def current_activity
     self.activities.where('start_time IS NOT NULL AND end_time IS NULL').first
   end
+
+  def to_router_update
+    { mac_address: self.mac_address, device_id: self.id, member_id: self.current_activity.try(:member_id), mobicip_id: self.mobicip_device_id, activity_id: self.current_activity.try(:id), activity_end_time: self.activity_end_time }
+  end
 end
