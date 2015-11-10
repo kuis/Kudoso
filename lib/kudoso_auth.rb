@@ -18,6 +18,7 @@ class KudosoAuth
   def self.send_to_router(msg)
     #todo put a timeout on this
 
+    result = false
     # join
     mac = $1 if `ifconfig` =~ /en1.*?(([A-F0-9]{2}:){5}[A-F0-9]{2})/im
     router = TCPSocket.new 'router.kudoso.com', 54283
@@ -33,14 +34,12 @@ class KudosoAuth
       response = router.gets
       id, cmd, args = response.split("|")
       if cmd &&  cmd.strip == 'ok'
-        return true
-      else
-        return false
+        result = true
       end
-    else
-      return false
     end
 
+    router.close
+    return result
 
   end
 
