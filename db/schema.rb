@@ -564,15 +564,6 @@ ActiveRecord::Schema.define(version: 20151111023151) do
     t.datetime "updated_at"
   end
 
-  create_table "todo_groups", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "rec_min_age"
-    t.integer  "rec_max_age"
-    t.boolean  "active"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "todo_groups_todo_templates", id: false, force: :cascade do |t|
     t.integer "todo_group_id"
     t.integer "todo_template_id"
