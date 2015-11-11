@@ -1,7 +1,6 @@
 FactoryGirl.define do
   factory :activity do
-    member_id nil
-    created_by_id { FactoryGirl.create(:member).id }
+    member_id { FactoryGirl.create(:member).id }
     start_time { 1.hour.ago }
     end_time { 10.minutes.ago }
     content_id nil
@@ -11,7 +10,7 @@ FactoryGirl.define do
     reward 0
 
     after(:build) {  |act|
-      act.member_id = act.created_by_id
+       act.created_by_id = act.member_id
     }
 
   end

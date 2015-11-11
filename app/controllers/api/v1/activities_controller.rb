@@ -36,7 +36,7 @@ module Api
               begin
                 start_time = Chronic.parse(params["start_date"])
                 end_time =  Chronic.parse(params["end_date"])
-                @activities = @member.activities.where(created_at: start_time..end_time)
+                @activities = @member.activities.where(created_at: start_time.beginning_of_day..end_time.end_of_day)
               rescue
                 logger.error "Invalid start or end time for activities"
               end
