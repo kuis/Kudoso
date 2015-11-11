@@ -4,7 +4,7 @@
     </div>
     <div class="panel-body">
       <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: 'form-horizontal' },
-                          wrapper: :horizontal_input_group ) do |f| %>
+                          wrapper: :form_stacked ) do |f| %>
           <%= f.error_notification %>
 
           <div class="form-inputs">
