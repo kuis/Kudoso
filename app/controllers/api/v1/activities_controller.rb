@@ -32,10 +32,10 @@ module Api
             params[:start_date] ||= Date.today
             params[:end_date] ||= Date.today
             @activities = @member.activities
-            if params[:start_date] && params[:end_date]
+            if params["start_date"] && params["end_date"]
               begin
-                start_time = Chronic.parse(params[:start_date])
-                end_time =  Chronic.parse(params[:end_date])
+                start_time = Chronic.parse(params["start_date"])
+                end_time =  Chronic.parse(params["end_date"])
                 @activities = @member.activities.where(created_at: start_time..end_time)
               rescue
                 logger.error "Invalid start or end time for activities"
@@ -91,9 +91,9 @@ module Api
           @family = Family.find(params[:family_id])
           @member = @family.members.find(params[:member_id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @member == @current_member
-            @activity_template = ActivityTemplate.find(params[:activity_template_id])
+            @activity_template = ActivityTemplate.find(params["activity_template_id"])
 
-            @devices = Device.where(id:  params[:devices] )
+            @devices = Device.where(id:  params["devices"] )
             @activity = @member.new_activity(@activity_template, @devices)
             if @activity.valid?
               render :json => { :activity => @activity.as_json, :messages => messages }, :status => 200
