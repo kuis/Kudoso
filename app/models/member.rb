@@ -200,6 +200,9 @@ class Member < ActiveRecord::Base
     # TODO: Check cost of activity before creating
     act = self.activities.create(activity_template_id: activity_template.id, created_by_id: self.id)
     if devices
+
+      devices = devices.to_a  if devices.is_a?(Device::ActiveRecord_Relation)
+
       case devices.class.to_s
         when "Array"
           devices.each do |device|

@@ -27,12 +27,15 @@ describe 'Activities API', type: :request do
   end
 
   it 'creates a new activity' do
+    device =  @devices.sample
     post "/api/v1/families/#{@user.family.id}/members/#{@member.id}/activities",
-         { devices: [ @devices.sample.id ], activity_template_id: @activity_template.id}.to_json,
+         { devices: [ device.id ], activity_template_id: @activity_template.id}.to_json,
          { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)
     expect(json["activity"].present?).to be_truthy
+    act= Activity.find(json["activity"]["id"])
+    expect(act.devices).to match_array([ device ])
   end
 
   it 'starts an activity' do
