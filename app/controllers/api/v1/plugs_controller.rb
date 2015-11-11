@@ -20,6 +20,12 @@ module Api
           return
         end
 
+        if request.headers["Timestamp"].to_i < 5.minutes.ago.utc.to_i ||  request.headers["Timestamp"].to_i > Time.now.utc.to_i
+          messages[:error] << "Invalid Timestamp"
+          plug_failure(messages)
+          return
+        end
+
         if params[:mac].blank?
           messages[:error] << "Invalid Params, must send MAC Address"
           plug_failure(messages)
