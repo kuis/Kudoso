@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151109205157) do
+ActiveRecord::Schema.define(version: 20151111023151) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -541,12 +541,9 @@ ActiveRecord::Schema.define(version: 20151109205157) do
 
   create_table "themes", force: :cascade do |t|
     t.string   "name"
-    t.string   "primary_color",      limit: 7
-    t.string   "secondary_color",    limit: 7
-    t.string   "primary_bg_color",   limit: 7
-    t.string   "secondary_bg_color", limit: 7
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text     "json"
   end
 
   create_table "ticket_types", force: :cascade do |t|
@@ -563,6 +560,15 @@ ActiveRecord::Schema.define(version: 20151109205157) do
     t.datetime "date_openned"
     t.datetime "date_closed"
     t.string   "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "todo_groups", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "rec_min_age"
+    t.integer  "rec_max_age"
+    t.boolean  "active"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
