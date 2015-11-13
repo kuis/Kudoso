@@ -13,7 +13,13 @@ class Activity < ActiveRecord::Base
 
   def as_json(options = nil)
     options ||= { include: [
-                    devices: { include: [ :device_type ] }
+                    devices: { include: [
+                        { device_type: {
+                            except: [:icon_file_name, :icon_content_type, :icon_file_size, :icon_updated_at],
+                            methods: [ :icon_url ]
+                          }
+                        }
+                    ] }
                   ]
                 }
     super(options)
