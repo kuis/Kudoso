@@ -36,4 +36,21 @@ RSpec.describe Activity, :type => :model do
     expect(act.errors[:member].any?).to be_falsey
     expect(act.errors[:device].any?).to be_truthy
   end
+
+  it 'should allow devices to be associated with activity' do
+    @member = FactoryGirl.create(:member)
+    devices = FactoryGirl.create_list(:device, 3, family_id: @member.family.id)
+    activity_template = FactoryGirl.create(:activity_template )
+    act = @member.new_activity(activity_template, devices)
+    expect(act.devices).to match_array(devices)
+  end
+
+  it 'should allow deletion' do
+    @member = FactoryGirl.create(:member)
+    devices = FactoryGirl.create_list(:device, 3, family_id: @member.family.id)
+    activity_template = FactoryGirl.create(:activity_template )
+    act = @member.new_activity(activity_template, devices)
+    expect(act.devices).to match_array(devices)
+    act.destroy
+  end
 end
