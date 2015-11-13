@@ -12,7 +12,10 @@ class Activity < ActiveRecord::Base
   validates_presence_of :created_by, :activity_template
 
   def as_json(options = nil)
-    options ||= { include: [ :devices ] }
+    options ||= { include: [
+                    devices: { include: [ :device_type ] }
+                  ]
+                }
     super(options)
   end
 
