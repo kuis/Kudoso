@@ -11,6 +11,11 @@ class Activity < ActiveRecord::Base
 
   validates_presence_of :created_by, :activity_template
 
+  def as_json(options = nil)
+    options ||= { include: [ :devices ] }
+    super(options)
+  end
+
   def anonymous?
     member.blank?
   end

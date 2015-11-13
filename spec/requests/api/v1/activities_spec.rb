@@ -94,6 +94,19 @@ describe 'Activities API', type: :request do
     expect(json["activities"].length).to eq(3)
   end
 
+  it 'includes devices with acticity' do
+    act = FactoryGirl.create(:activity, member_id: @member.id, activity_template_id: @activity_template.id )
+    @devices.each{ |device| act.devices << device}
+    @member.reload
+    expect(act.devices.count).to eq(@devices.count)
+    get "/api/v1/families/#{@user.family.id}/members/#{@member.id}/activities",
+        nil,
+        { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
+    expect(response.status).to eq(200)
+    json = JSON.parse(response.body)
+    expect(json["activities"][0]["devices"].length).to eq(@devices.count)
+  end
+
 
 
 
