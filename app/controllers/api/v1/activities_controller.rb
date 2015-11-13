@@ -120,7 +120,6 @@ module Api
       api :PATCH, "/v1/families/:family_id/members/:member_id/activities/:activity_id", "Start or Stop an activity, or change the associations"
       param :start, [true], desc: 'Include the start param to start the activity', required: false
       param :stop, [true], desc: 'Include the stop param to stop the activity', required: false
-      param :device_id, Integer, desc: "The ID for the device used with this activity (if applicable)", required: false
       param :content_id, Integer, desc: "The ID for the content associated with this activity (if applicable)", required: false
       def update
         messages = init_messages
@@ -130,14 +129,26 @@ module Api
           @activity = @member.activities.find(params[:id])
           if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @member == @current_member
 
-            @activity.device_id = params[:device_id].to_i if params[:device_id]
             @activity.content_id = params[:content_id].to_i if params[:content_id]
             @activity.save if @activity.changed?
+            valid = @activity.valid?
+            if params[:start]
+              @activity.start!
+              if @activity.start_time.nil?
+                @activity.errors.add(:start, 'failed')
+                valid = false
+              end
+            end
 
-            @activity.start! if params[:start]
-            @activity.stop! if params[:stop]
+            if params[:stop]
+              @activity.stop!
+              if @activity.end_time.nil?
+                @activity.errors.add(:start, 'failed')
+                valid = false
+              end
+            end
 
-            if @activity.valid?
+            if valid
               render :json => { :activity => @activity.as_json, :messages => messages }, :status => 200
             else
               messages[:error].concat @activity.errors.full_messages
