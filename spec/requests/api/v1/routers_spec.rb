@@ -8,8 +8,8 @@ describe 'Routers API', type: :request do
     @api_device =  FactoryGirl.create(:api_device)
   end
 
-  it 'successfully registers an unregistered router' do
-
+  pending 'successfully registers an unregistered router' do
+    skip
   end
 
   pending 'returns an error when a router was previous registered' do

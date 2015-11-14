@@ -107,6 +107,7 @@ Rails.application.routes.draw do
       end
       resources :todo_templates
       resources :families do
+        resources :activity_templates, only: :index
         resources :todos
         resources :devices do
           resources :apps_devices, path: :apps

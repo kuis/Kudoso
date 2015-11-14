@@ -162,6 +162,17 @@ class Family < ActiveRecord::Base
     return at.time_block
   end
 
+  def get_activity_templates
+    ats = []
+    self.family_activity_preferences.each do |ap|
+      ats << { id: ap.activity_template_id, name: ap.activity_template.name, cost: ap.cost, reward: ap.reward, preferred: ap.preferred?, restricted_by_tasks: ap.activity_template.restricted?  } unless ap.restricted?
+    end
+    ActivityTemplate.find_each do |act|
+      ats << { id: act.id, name: act.name, cost: act.cost, reward: act.reward, preferred: false, restricted_by_tasks: act.restricted? } unless self.family_activity_preferences.where(activity_template_id: act.id).first
+    end
+    ats.sort_by!{ |x| x[:id] }
+  end
+
   private
 
   def validate_timezone
