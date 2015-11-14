@@ -49,7 +49,7 @@ RSpec.describe ActivitiesController, :type => :controller do
 
     describe "GET index" do
       it "assigns all activities as @activities" do
-        activity = FactoryGirl.create(:activity, created_by_id: @member.id)
+        activity = FactoryGirl.create(:activity, created_by_id: @member.id, member_id: @member.id)
         get :index, {family_id: @family.id, member_id: @member.id}, valid_session
         expect(assigns(:activities)).to match_array([activity])
       end
@@ -57,7 +57,7 @@ RSpec.describe ActivitiesController, :type => :controller do
 
     describe "GET show" do
       it "assigns the requested activity as @activity" do
-        activity = FactoryGirl.create(:activity, created_by_id: @member.id)
+        activity = FactoryGirl.create(:activity, created_by_id: @member.id, member_id: @member.id)
         get :show, {family_id: @family.id, member_id: @member.id, :id => activity.to_param}, valid_session
         expect(assigns(:activity)).to eq(activity)
       end
@@ -72,7 +72,7 @@ RSpec.describe ActivitiesController, :type => :controller do
 
     describe "GET edit" do
       it "assigns the requested activity as @activity" do
-        activity = FactoryGirl.create(:activity, created_by_id: @member.id)
+        activity = FactoryGirl.create(:activity, created_by_id: @member.id, member_id: @member.id)
         get :edit, {family_id: @family.id, member_id: @member.id, :id => activity.to_param}, valid_session
         expect(assigns(:activity)).to eq(activity)
       end
@@ -96,7 +96,7 @@ RSpec.describe ActivitiesController, :type => :controller do
 
     describe "PUT update" do
       it "stops a previously started activity" do
-        activity = FactoryGirl.create(:activity, created_by_id: @member.id, start_time: 1.hour.ago, end_time: nil)
+        activity = FactoryGirl.create(:activity, created_by_id: @member.id, member_id: @member.id, start_time: 1.hour.ago, end_time: nil)
         put :update, {family_id: @family.id, member_id: @member.id, :id => activity.to_param, stop: true}, valid_session
         expect(response).to redirect_to(family_member_path(@family, @member))
         activity.reload
@@ -106,14 +106,14 @@ RSpec.describe ActivitiesController, :type => :controller do
 
     describe "DELETE destroy" do
       it "does not destroys the requested activity" do
-        activity = FactoryGirl.create(:activity, created_by_id: @member.id)
+        activity = FactoryGirl.create(:activity, created_by_id: @member.id, member_id: @member.id)
         expect {
           delete :destroy, {family_id: @family.id, member_id: @member.id, :id => activity.to_param}, valid_session
         }.to change(Activity, :count).by(0)
       end
 
       it "redirects to the current member dashboard" do
-        activity = FactoryGirl.create(:activity, created_by_id: @member.id)
+        activity = FactoryGirl.create(:activity, created_by_id: @member.id, member_id: @member.id)
         delete :destroy, {family_id: @family.id, member_id: @member.id, :id => activity.to_param}, valid_session
         expect(flash[:error]).to be_present
         expect(response).to redirect_to(family_member_path(@family, @member))
