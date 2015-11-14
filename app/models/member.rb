@@ -320,18 +320,18 @@ class Member < ActiveRecord::Base
     if cost > kudos
       raise Member::NotEnoughKudos, "Not enough kudos, #{cost} required"
     end
-    self.debit_kudos(cost, "Bought #{time} seconds of screen time.")
+    self.credit_kudos(cost, "Bought #{time} seconds of screen time.")
     self.st_overrides.create(created_by_id: self.id, time: time,date: Time.now, comment: "Member bought screen time with #{cost} kudos for (#{activity_template.id}): #{activity_template.name}")
   end
 
-  def debit_kudos(cost, description)
-    self.update_attribute(:kudos, self.kudos - cost)
-    self.ledger_entries.create(debit: cost, description: description)
+  def debit_kudos(amount, description)
+    self.update_attribute(:kudos, self.kudos + amount)
+    self.ledger_entries.create(debit: amount, description: description)
   end
 
-  def credit_kudos(cost, description)
-    self.update_attribute(:kudos, self.kudos + cost)
-    self.ledger_entries.create(credit: cost, description: description)
+  def credit_kudos(amount, description)
+    self.update_attribute(:kudos, self.kudos - amount)
+    self.ledger_entries.create(credit: amount, description: description)
   end
 
 
