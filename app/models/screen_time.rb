@@ -1,4 +1,7 @@
 class ScreenTime < ActiveRecord::Base
+
+  class NoTimeRemaining < StandardError; end
+
   belongs_to :member
 
   validates_presence_of :member_id, :max_time, :default_time

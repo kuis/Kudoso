@@ -79,4 +79,23 @@ describe 'Members API', type: :request do
     expect(member.birth_date).not_to eq(original_birth_date)
   end
 
+  it 'returns member information' do
+    member = @members.sample
+    get "/api/v1/families/#{@user.family.id}/members/#{member.id}",
+          nil,
+          { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
+    expect(response.status).to eq(200)
+    json = JSON.parse(response.body)
+    expect(json["member"]["id"]).to eq(member.id)
+  end
+
+  it 'destroys member information' do
+    member = @members.sample
+    delete "/api/v1/families/#{@user.family.id}/members/#{member.id}",
+        nil,
+        { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
+    expect(response.status).to eq(200)
+    expect(@user.family.members.include?(member)).to be_falsey
+  end
+
 end

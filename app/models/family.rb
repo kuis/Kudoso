@@ -8,6 +8,7 @@ class Family < ActiveRecord::Base
   belongs_to :primary_contact, class_name: 'User'
   has_many :family_device_categories, dependent: :destroy
   has_many :routers
+  has_many :family_activity_preferences
 
   accepts_nested_attributes_for :members, :reject_if => :all_blank, :allow_destroy => true
 
@@ -138,6 +139,28 @@ class Family < ActiveRecord::Base
     true
   end
 
+  def get_cost(activity_template, time=nil)
+    at = self.family_activity_preferences.where(activity_template_id: activity_template.id).first || activity_template
+    if time
+      return (at.cost.to_f * (time/get_time_block(at).to_f)).to_i
+    else
+      return at.cost
+    end
+  end
+
+  def get_reward(activity_template)
+    at = self.family_activity_preferences.where(activity_template_id: activity_template.id).first || activity_template
+    if time
+      return (at.reward.to_f * (time/get_time_block(at).to_f)).to_i
+    else
+      return at.reward
+    end
+  end
+
+  def get_time_block(activity_template)
+    at = self.family_activity_preferences.where(activity_template_id: activity_template.id).first || activity_template
+    return at.time_block
+  end
 
   private
 
