@@ -117,6 +117,7 @@ Rails.application.routes.draw do
         resources :members do
           resources :activities
           resources :apps_members, path: :apps
+          resources :ledger, only: :index
           resources :my_todos do
             member do
               post :verify
