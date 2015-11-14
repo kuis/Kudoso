@@ -16,7 +16,7 @@ RSpec.describe Activity, :type => :model do
     @member.set_screen_time!(Date.today.wday, 3600, 4800, device.id) #device has time
     @member.set_screen_time!(Date.today.wday, 0, 3600, nil) # member does not
 
-    expect{ act.start! }.to raise_error(Activity::ScreenTimeExeceed)
+    expect{ act.start! }.to raise_error(Activity::ScreenTimeExceeded)
 
     expect(act.start_time).to be_nil
 
@@ -27,7 +27,7 @@ RSpec.describe Activity, :type => :model do
     @member.set_screen_time!(Date.today.wday, 0, 4800, device.id) #device does not have time
     @member.set_screen_time!(Date.today.wday, 3600, 3600, nil) # member has time
 
-    expect{ act.start! }.to raise_error(Activity::DeviceScreenTimeExeceed)
+    expect{ act.start! }.to raise_error(Activity::DeviceScreenTimeExceeded)
 
     expect(act.start_time).to be_nil
   end

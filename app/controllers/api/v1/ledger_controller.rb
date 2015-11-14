@@ -18,9 +18,9 @@ module Api
         EOS
       end
 
-      api :GET, "/v1/families/:family_id/members/:member_id/ledger", "Retrieve all ledger entries for a member (default: this month's entries)"
-      param :start_date, Date, desc: "Optionaly specify a start date"
-      param :end_date, Date, desc: "Optionaly specify an end date"
+      api :GET, "/v1/families/:family_id/members/:member_id/ledger", "Retrieve all ledger entries for a member"
+      param :start_date, Date, desc: "Start Date (default: 1.month.ago)"
+      param :end_date, Date, desc: "End Date (default: Today)"
       def index
         messages = init_messages
         begin

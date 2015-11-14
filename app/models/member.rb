@@ -73,7 +73,7 @@ class Member < ActiveRecord::Base
 
 
   def as_json(options = nil)
-    options ||= {methods: [ :age, :avatar_urls, :screen_time, :used_screen_time], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at], include: [ {theme: {except: [:created_at, :updated_at] } }]}
+    options ||= {methods: [ :age, :avatar_urls, :screen_time, :used_screen_time, :max_screen_time], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at], include: [ {theme: {except: [:created_at, :updated_at] } }]}
     super(options)
   end
 

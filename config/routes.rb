@@ -129,6 +129,9 @@ Rails.application.routes.draw do
               delete :unassign
             end
           end
+          member do
+            post :buy_screen_time
+          end
         end
       end
       resources :timezones

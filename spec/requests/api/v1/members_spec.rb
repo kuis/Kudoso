@@ -98,4 +98,27 @@ describe 'Members API', type: :request do
     expect(@user.family.members.include?(member)).to be_falsey
   end
 
+  it 'allows a member to buy screen time' do
+    at = FactoryGirl.create(:activity_template)
+    @member = @members.sample
+    @member.password = 'password'
+    @member.password_confirmation = 'password'
+    @member.kudos = 10000
+    @member.save
+    expect(@member.available_screen_time < @member.max_screen_time).to be_truthy
+    post '/api/v1/sessions',
+         { device_token: @device.device_token, family_id: @member.family_id, username: @member.username, password: Digest::MD5.hexdigest('password' + @member.family.secure_key ).to_s }.to_json,
+         { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
+    expect(response.status).to eq(200)
+    json = JSON.parse(response.body)
+    @token = json["token"]
+    post "/api/v1/families/#{@user.family.id}/members/#{@member.id}/buy_screen_time",
+         nil,
+         { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
+    expect(response.status).to eq(200)
+    json = JSON.parse(response.body)
+    @member.reload
+    expect(json["member"]["screen_time"]).to eq(@member.max_screen_time)
+  end
+
 end

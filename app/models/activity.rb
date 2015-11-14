@@ -7,7 +7,7 @@ class Activity < ActiveRecord::Base
   class TodosIncomplete < StandardError; end
   class AlreadyStarted < StandardError; end
   class ScreenTimeExceeded < StandardError; end
-  class DeviceScreenTimeExeceeded < StandardError; end
+  class DeviceScreenTimeExceeded < StandardError; end
   class ScreenTimeRestricted < StandardError; end
   class DeviceInUse < StandardError; end
 
@@ -63,7 +63,7 @@ class Activity < ActiveRecord::Base
           end
         end
         unless self.activity_template.id == 1 # screen time is always ID 1 and cost is deducted with buying a screen time override
-          cost = member.get_cost(self.activity_template)
+          cost = member.family.get_cost(self.activity_template)
 
         end
       end
@@ -115,13 +115,13 @@ class Activity < ActiveRecord::Base
     max_time = member.available_screen_time
     used_time = member.used_screen_time
     if used_time >= max_time
-      raise Activity::ScreenTimeExeceeded
+      raise Activity::ScreenTimeExceeded
     end
     self.devices.each do |device|
       device_time = member.screen_time(Time.now.localtime, device)
       device_used_time = member.used_screen_time(Time.now.localtime, device)
       if device_time == 0 || device_used_time >= device_time
-        raise Activity::DeviceScreenTimeExeceeded
+        raise Activity::DeviceScreenTimeExceeded
       end
     end
 
