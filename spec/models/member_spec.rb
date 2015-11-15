@@ -56,13 +56,13 @@ RSpec.describe Member, :type => :model do
   it 'should debit kudos' do
     start_kudos = @member.kudos
     @member.debit_kudos(100, 'test')
-    expect(@member.kudos).to eq(start_kudos - 100)
+    expect(@member.kudos).to eq(start_kudos + 100)
   end
 
   it 'should credit kudos' do
     start_kudos = @member.kudos
     @member.credit_kudos(100, 'test')
-    expect(@member.kudos).to eq(start_kudos + 100)
+    expect(@member.kudos).to eq(start_kudos - 100)
   end
 
   it 'should be able to buy screen time' do
