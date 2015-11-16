@@ -112,9 +112,7 @@ class Activity < ActiveRecord::Base
   private
 
   def check_screen_time
-    max_time = member.available_screen_time
-    used_time = member.used_screen_time
-    if used_time >= max_time
+    if member.available_screen_time <= 0
       raise Activity::ScreenTimeExceeded
     end
     self.devices.each do |device|

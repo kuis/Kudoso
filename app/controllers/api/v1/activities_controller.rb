@@ -159,7 +159,21 @@ module Api
             messages[:error] << 'You are not authorized to do this.'
             render :json => { :messages => messages }, :status => 403
           end
-
+        rescue Activity::ScreenTimeExceeded
+          messages[:error] << 'Cannot start activity, allowed screen time exceeded.'
+          render :json => { :messages => messages }, :status => 400
+        rescue Activity::AlreadyStarted
+          messages[:error] << 'Cannot start activity, it was previously started.'
+          render :json => { :messages => messages }, :status => 400
+        rescue Activity::TodosIncomplete
+          messages[:error] << 'Cannot start activity, required tasks are not yet complete.'
+          render :json => { :messages => messages }, :status => 400
+        rescue Activity::ScreenTimeRestricted
+          messages[:error] << 'Cannot start activity, screen time schedule is currently restricted.'
+          render :json => { :messages => messages }, :status => 400
+        rescue Activity::DeviceInUse
+          messages[:error] << 'Cannot start activity, device is currently in use.'
+          render :json => { :messages => messages }, :status => 400
         rescue ActiveRecord::RecordNotFound
           messages[:error] << 'Family not found.'
           render :json => { :messages => messages }, :status => 404
