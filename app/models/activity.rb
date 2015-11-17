@@ -64,7 +64,7 @@ class Activity < ActiveRecord::Base
         end
         unless self.activity_template.id == 1 # screen time is always ID 1 and cost is deducted with buying a screen time override
           cost = member.family.get_cost(self.activity_template)
-
+          self.member.credit_kudos(cost, "Activity: #{self.activity_template.name}")
         end
       end
       return self
