@@ -53,6 +53,11 @@ RSpec.configure do |config|
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with(:truncation)
     end
+
+    # Clean out the db after each describe block
+    config.after(:all) do
+      DatabaseCleaner.clean_with(:truncation)
+    end
   end
 
 
