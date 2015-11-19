@@ -2,7 +2,7 @@ require 'faker'
 
 FactoryGirl.define do
   factory :device do
-    name { SecureRandom.hex(24) }
+    sequence(:name) { |n| "Device#{n}" }
     device_type_id { FactoryGirl.create(:device_type).id }
     family_id { FactoryGirl.create(:family).id }
     managed false

@@ -43,12 +43,14 @@ class Device < ActiveRecord::Base
   validates_presence_of :family_id
 
   def as_json(options = nil)
-    options ||= { methods: [ :current_member ],
-                  include: [ :current_activity,
-                      {device_type: {
-                          except: [:icon_file_name, :icon_content_type, :icon_file_size, :icon_updated_at],
-                          methods: [ :icon_url ]
-                      } }
+    options ||= { methods: [ :current_member, :current_activity ],
+                  include: [
+                             {
+                                 device_type: {
+                                  except: [:icon_file_name, :icon_content_type, :icon_file_size, :icon_updated_at],
+                                  methods: [ :icon_url ]
+                                }
+                             }
                   ]
                 }
     super(options)
@@ -66,6 +68,10 @@ class Device < ActiveRecord::Base
       nil
     end
 
+  end
+
+  def current_activity
+     activities.where('start_time IS NOT NULL AND end_time IS NULL').last
   end
 
   def last_command(command_name)

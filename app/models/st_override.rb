@@ -12,7 +12,7 @@ class StOverride < ActiveRecord::Base
   private
 
   def extend_activities
-    if self.member.current_activity
+    if self.member.current_activity.try(:allowed_time)
       self.member.current_activity.allowed_time += self.time
       self.member.current_activity.save
     end

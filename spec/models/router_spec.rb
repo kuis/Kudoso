@@ -1,5 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Router, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  it 'has a valid factory' do
+    resource = FactoryGirl.create(:router)
+    expect(resource.valid?).to be_truthy
+  end
 end

@@ -8,6 +8,7 @@ class Family < ActiveRecord::Base
   belongs_to :primary_contact, class_name: 'User'
   has_many :family_device_categories, dependent: :destroy
   has_many :routers
+  has_many :family_activity_preferences
 
   accepts_nested_attributes_for :members, :reject_if => :all_blank, :allow_destroy => true
 
@@ -138,6 +139,39 @@ class Family < ActiveRecord::Base
     true
   end
 
+  def get_cost(activity_template, time=nil)
+    at = self.family_activity_preferences.where(activity_template_id: activity_template.id).first || activity_template
+    if time
+      return (at.cost.to_f * (time/get_time_block(at).to_f)).to_i
+    else
+      return at.cost
+    end
+  end
+
+  def get_reward(activity_template)
+    at = self.family_activity_preferences.where(activity_template_id: activity_template.id).first || activity_template
+    if time
+      return (at.reward.to_f * (time/get_time_block(at).to_f)).to_i
+    else
+      return at.reward
+    end
+  end
+
+  def get_time_block(activity_template)
+    at = self.family_activity_preferences.where(activity_template_id: activity_template.id).first || activity_template
+    return at.time_block
+  end
+
+  def get_activity_templates
+    ats = []
+    self.family_activity_preferences.each do |ap|
+      ats << { id: ap.activity_template_id, name: ap.activity_template.name, cost: ap.cost, reward: ap.reward, preferred: ap.preferred?, restricted_by_tasks: ap.activity_template.restricted?  } unless ap.restricted?
+    end
+    ActivityTemplate.find_each do |act|
+      ats << { id: act.id, name: act.name, cost: act.cost, reward: act.reward, preferred: false, restricted_by_tasks: act.restricted? } unless self.family_activity_preferences.where(activity_template_id: act.id).first
+    end
+    ats.sort_by!{ |x| x[:id] }
+  end
 
   private
 

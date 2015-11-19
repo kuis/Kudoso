@@ -1,4 +1,7 @@
 class Member < ActiveRecord::Base
+
+  class NotEnoughKudos < StandardError; end
+
   belongs_to :family
   has_one :user, dependent: :nullify
   has_many :todo_schedules, dependent: :destroy
@@ -15,6 +18,7 @@ class Member < ActiveRecord::Base
   has_many :app_members, dependent: :destroy
   has_many :apps, through: :app_members
   has_many :applogs, dependent: :nullify
+  has_many :ledger_entries, dependent: :destroy
 
 
 
@@ -69,7 +73,7 @@ class Member < ActiveRecord::Base
 
 
   def as_json(options = nil)
-    options ||= {methods: [ :age, :avatar_urls, :screen_time, :used_screen_time], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at], include: [ {theme: {except: [:created_at, :updated_at] } }]}
+    options ||= {methods: [ :age, :avatar_urls, :screen_time, :used_screen_time, :max_screen_time, :available_screen_time], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at], include: [ {theme: {except: [:created_at, :updated_at] } }]}
     super(options)
   end
 
@@ -164,7 +168,7 @@ class Member < ActiveRecord::Base
   end
 
   def screen_time(date = Date.today, devices = nil, activity_id = nil)
-    get_limit(:default_time, date, devices, activity_id)
+    get_limit(:default_time, date, devices, activity_id) + screen_time_overrides(date)
   end
 
   def max_screen_time(date = Date.today, devices = nil, activity_id = nil)
@@ -200,6 +204,9 @@ class Member < ActiveRecord::Base
     # TODO: Check cost of activity before creating
     act = self.activities.create(activity_template_id: activity_template.id, created_by_id: self.id)
     if devices
+
+      devices = devices.to_a  if devices.is_a?(Device::ActiveRecord_Relation)
+
       case devices.class.to_s
         when "Array"
           devices.each do |device|
@@ -218,40 +225,49 @@ class Member < ActiveRecord::Base
   end
 
   def can_do_activity?(activity_template, devices = nil)
-    #TODO: Implement device logic
-    ret = false
-
     # Check if activity is restricted
     if activity_template.restricted?
-      ret = !!available_screen_time if todos_complete?
-    else
-      ret = !!available_screen_time
+      unless todos_complete?
+        raise Activity::TodosIncomplete, "Required todos are not yet complete"
+      end
+      unless !available_screen_time
+        if available_screen_time <= 0
+          raise Activity::ScreenTimeExceeded, "Available screen time exceeded"
+        end
+      end
     end
 
-    if ret
-      # Member has enough screen time, but does the schedule restrict it?
+    # Member has enough screen time, but does the schedule restrict it?
+    # Check family wide restrictions
 
-      # Check family wide restrictions
-
-      if self.family.screen_time_schedule.try(:occurring_at?, Time.now)
-        ret = false
-        errors.add(:family, 'screen time schedule is restricted')
-      end
-      # Check member specific restrictions
-      if self.screen_time_schedule.try(:occurring_at?, Time.now)
-        ret = false
-        errors.add(:member, 'screen time schedule is restricted')
-      end
-
-    else
-      errors.add(:member, 'available screen time for today exceeded.')
+    if self.family.screen_time_schedule.try(:occurring_at?, Time.now)
+      ret = false
+      raise Activity::ScreenTimeRestricted, "Screen time family schedule currently restricted"
     end
+    # Check member specific restrictions
+    if self.screen_time_schedule.try(:occurring_at?, Time.now)
+      ret = false
+      raise Activity::ScreenTimeRestricted, "Screen time member schedule currently restricted"
+    end
+
     #check if devices are available
-    case devices.class
-      when Array
-        devices.each { |device| ret = false unless device.current_activity.nil? }
-      when Device
-        ret = false unless devices.current_activity.nil?
+    if ret
+      case devices.class
+        when Array
+          devices.each do |device|
+            unless device.current_activity.nil?
+              raise Activity::DeviceInUse, "#{device.name} (#{device.id}) Already in use"
+            end
+          end
+        when Device
+          unless devices.current_activity.nil?
+            raise Activity::DeviceInUse, "#{devices.name} (#{devices.id}) Already in use"
+          end
+      end
+    end
+    #check if member has enough kudos
+    if activity_template.id != 1 && activity_template.cost > 0 && self.kudos < activity_template.cost
+      raise Member::NotEnoughKudos, "Activity requires #{activity_template.cost} kudos"
     end
     ret
   end
@@ -290,6 +306,32 @@ class Member < ActiveRecord::Base
       else
         return 4
     end
+  end
+
+  # if time is NIL try to buy maximium available time
+  def buy_screen_time(time=nil)
+    activity_template = ActivityTemplate.first #screen time is always id 1
+    max_time = self.max_screen_time - self.available_screen_time
+    time ||= max_time
+    if time <= 0
+      raise ScreenTime::ScreenTimeExceeded, "Maximum screen time for day already exceeded"
+    end
+    cost = family.get_cost(activity_template, time)
+    if cost > kudos
+      raise Member::NotEnoughKudos, "Not enough kudos, #{cost} required"
+    end
+    self.credit_kudos(cost, "Bought #{time} seconds of screen time.")
+    self.st_overrides.create(created_by_id: self.id, time: time,date: Time.now, comment: "Member bought screen time with #{cost} kudos for (#{activity_template.id}): #{activity_template.name}")
+  end
+
+  def debit_kudos(amount, description)
+    self.update_attribute(:kudos, self.kudos + amount)
+    self.ledger_entries.create(debit: amount, description: description)
+  end
+
+  def credit_kudos(amount, description)
+    self.update_attribute(:kudos, self.kudos - amount)
+    self.ledger_entries.create(credit: amount, description: description)
   end
 
 

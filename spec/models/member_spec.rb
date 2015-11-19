@@ -53,6 +53,46 @@ RSpec.describe Member, :type => :model do
     expect(used_time).to eq(start_time-end_time)
   end
 
+  it 'should debit kudos' do
+    start_kudos = @member.kudos
+    @member.debit_kudos(100, 'test')
+    expect(@member.kudos).to eq(start_kudos + 100)
+  end
+
+  it 'should credit kudos' do
+    start_kudos = @member.kudos
+    @member.credit_kudos(100, 'test')
+    expect(@member.kudos).to eq(start_kudos - 100)
+  end
+
+  it 'should be able to buy screen time' do
+    at = FactoryGirl.create(:activity_template)
+    at.update_attributes({cost: 100, time_block: 4800, restricted: true})
+    @member.set_screen_time!(Date.today.wday, 0, 4800)
+    device = FactoryGirl.create(:device, family_id: @member.family.id )
+    act = @member.new_activity(at, device)
+    expect { act.start! }.to raise_error(Activity::ScreenTimeExceeded)
+    expect { @member.buy_screen_time }.to raise_error(Member::NotEnoughKudos)
+    @member.update_attribute(:kudos, 200)
+    expect { @member.buy_screen_time }.to_not raise_error
+    expect(@member.kudos).to eq(100)
+    expect(@member.available_screen_time).to eq(4800)
+  end
+
+  it 'should be able to buy partial screen time' do
+    at = FactoryGirl.create(:activity_template)
+    at.update_attributes({cost: 100, time_block: 4800, restricted: true})
+    @member.set_screen_time!(Date.today.wday, 0, 4800)
+    device = FactoryGirl.create(:device, family_id: @member.family.id )
+    act = @member.new_activity(at, device)
+    expect { act.start! }.to raise_error(Activity::ScreenTimeExceeded)
+    expect { @member.buy_screen_time }.to raise_error(Member::NotEnoughKudos)
+    @member.update_attribute(:kudos, 200)
+    expect { @member.buy_screen_time(2400) }.to_not raise_error
+    expect(@member.available_screen_time).to eq(2400)
+    expect(@member.kudos).to eq(150)
+  end
+
   context 'with a month of todos' do
 
     before(:each) do

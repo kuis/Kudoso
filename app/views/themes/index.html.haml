@@ -4,19 +4,14 @@
   %thead
     %tr
       %th Name
-      %th Primary color
-      %th Secondary color
-      %th Primary Background color
-      %th Secondary Background color
+      %th JSON
+
 
   %tbody
     - @themes.each do |theme|
       %tr
         %td= theme.name
-        %td= theme.primary_color
-        %td= theme.secondary_color
-        %td= theme.primary_bg_color
-        %td= theme.secondary_bg_color
+        %td= theme.json
 
 %br
 

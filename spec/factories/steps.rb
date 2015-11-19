@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :step do
     stepable ""
-steps "MyText"
+    steps "MyText"
   end
 
 end

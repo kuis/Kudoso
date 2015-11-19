@@ -123,7 +123,7 @@ module Api
         messages = init_messages
         begin
           @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent ) || @current_member.id == params[:id]
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent ) || @current_member.id == params[:id].to_i
             @member = @family.members.find(params[:id])
             local_params = member_create_params.merge(family_id: @family.id)
             local_params[:birth_date] = Chronic.parse(local_params[:birth_date]).to_date.to_s(:db) if local_params[:birth_date]
@@ -184,6 +184,40 @@ module Api
           render :json => { :messages => messages }, :status => 500
         end
 
+      end
+
+
+      api :POST, "/v1/families/:family_id/members/:member_id/buy_screen_time", "Buy additional screen time"
+      param :time, Integer, desc: "Time (in seconds) to buy, if nil will attempt to buy maximum amount", required: false
+      def buy_screen_time
+        messages = init_messages
+        begin
+          @family = Family.find(params[:family_id])
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.id == params[:id].to_i )
+            @member = @family.members.find(params[:id])
+            time = params[:time].try(:to_i)
+            begin
+              @member.buy_screen_time(time)
+            rescue  ScreenTime::ScreenTimeExceeded
+              messages[:error] << 'Sorry, maximum screen time for today already used'
+            rescue  Member::NotEnoughKudos
+              messages[:error] << 'Sorry, you do not have enough kudos to buy this much time'
+            rescue
+              messages[:error] << 'Failed to buy screen time'
+            end
+            render :json => { :member => @member.as_json, :messages => messages }, :status => messages[:error].length > 0 ? 400 : 200
+          else
+            messages[:error] << 'You are not authorized to do this.'
+            render :json => { :messages => messages }, :status => 403
+          end
+
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Family not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
+        end
       end
 
       private

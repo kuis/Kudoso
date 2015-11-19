@@ -107,6 +107,7 @@ Rails.application.routes.draw do
       end
       resources :todo_templates
       resources :families do
+        resources :activity_templates, only: :index
         resources :todos
         resources :devices do
           resources :apps_devices, path: :apps
@@ -117,6 +118,7 @@ Rails.application.routes.draw do
         resources :members do
           resources :activities
           resources :apps_members, path: :apps
+          resources :ledger, only: :index
           resources :my_todos do
             member do
               post :verify
@@ -127,6 +129,9 @@ Rails.application.routes.draw do
               post :assign
               delete :unassign
             end
+          end
+          member do
+            post :buy_screen_time
           end
         end
       end
