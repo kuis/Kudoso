@@ -8,6 +8,7 @@ gem 'responders', '~> 2.0'
 gem 'railties'
 gem 'rest-client'
 gem 'settingslogic'
+gem 'rack-cors', :require => 'rack/cors'
 
 # View and Assets
 gem 'sprockets-rails', :require => 'sprockets/railtie'
