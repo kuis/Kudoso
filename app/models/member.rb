@@ -73,7 +73,7 @@ class Member < ActiveRecord::Base
 
 
   def as_json(options = nil)
-    options ||= {methods: [ :age, :avatar_urls, :screen_time, :used_screen_time, :max_screen_time, :available_screen_time], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at], include: [ {theme: {except: [:created_at, :updated_at] } }]}
+    options ||= {methods: [ :age, :avatar_urls, :screen_time, :used_screen_time, :max_screen_time, :available_screen_time, :todo_summary], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at], include: [ {theme: {except: [:created_at, :updated_at] } }]}
     super(options)
   end
 
@@ -139,6 +139,17 @@ class Member < ActiveRecord::Base
       ret = false if my_todo.todo.required? && !my_todo.complete?
     end
     ret
+  end
+
+  def todo_summary(start_date = Date.today, end_date = Date.today)
+    todo_summary = Hash.new
+    todo_summary[:total] = 0
+    todo_summary[:completed] = 0
+    todos(start_date, end_date).each do |my_todo|
+      todo_summary[:completed] += 1 if my_todo.complete?
+      todo_summary[:total] += 1
+    end
+    todo_summary
   end
 
 
