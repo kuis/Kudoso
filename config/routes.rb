@@ -134,6 +134,9 @@ Rails.application.routes.draw do
             post :buy_screen_time
           end
         end
+        resources :todo_schedules do
+          resources :schedule_rrules
+        end
       end
       resources :timezones
       post "/devices/:uuid/deviceDidRegister", to: 'devices#deviceDidRegister'

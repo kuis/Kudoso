@@ -19,12 +19,16 @@ class TodoSchedule < ActiveRecord::Base
 
   def schedule
     sch = IceCube::Schedule.new
-    sch.start_time = self.start_date.to_time
-    sch.end_time = self.end_date.to_time if self.end_date.present?
+    sch.start_time = self.start_date.beginning_of_day
+    sch.end_time = self.end_date.end_of_day if self.end_date.present?
     self.schedule_rrules.each do |rrule|
       sch.add_recurrence_rule(rrule.rule)
     end
     sch
+  end
+
+  def as_json(options={})
+    super(options).merge({rrules: schedule_rrules.as_json})
   end
 
   private

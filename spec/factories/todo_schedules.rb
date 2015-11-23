@@ -5,7 +5,7 @@ FactoryGirl.define do
     todo_id { FactoryGirl.create(:todo).id }
     member_id { FactoryGirl.create(:member).id }
     start_date { Date.today }
-    end_date nil
+    end_date { nil }
     active true
     notes { Faker::Lorem.sentence }
 

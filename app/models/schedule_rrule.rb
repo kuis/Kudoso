@@ -20,4 +20,12 @@ class ScheduleRrule < ActiveRecord::Base
     end
   end
 
+  def as_json(options={})
+    {
+        id: self.id,
+        todo_schedule_id: self.todo_schedule_id,
+        rule: rule.to_hash
+    }
+  end
+
 end
