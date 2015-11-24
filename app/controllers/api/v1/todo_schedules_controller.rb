@@ -77,7 +77,7 @@ module Api
       api :POST, "/v1/families/:family_id/todos/:todo_id/todo_schedules", "Create a todo_schedule"
       param :member_id, Integer, desc: "The member id to assign the schedule to", required: true
       param :todo_id, Integer, desc: "The todo id associated with this schedule", required: true
-      param :rules, Hash, desc: "The rules array in IceCube::Rule to_hash format", required: false
+      param :rules, Array, desc: "The rules array, an array of rule hashes in IceCube::Rule to_hash format.  EX: [ {\"validations\":{\"day\":[1,2,3,4,5]},\"rule_type\":\"IceCube::WeeklyRule\",\"interval\":1,\"week_start\":0} ]" , required: false
       param :start_date, String, desc: "The start date for this schedule (default: today)", required: false
       param :end_date, String, desc: "The end date for this schedule (default: never)", required: false
       def create
