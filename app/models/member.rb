@@ -337,12 +337,12 @@ class Member < ActiveRecord::Base
 
   def debit_kudos(amount, description)
     self.update_attribute(:kudos, self.kudos - amount)
-    self.ledger_entries.create(debit: amount, description: description)
+    self.ledger_entries.create(debit: amount, description: description, balance: self.kudos)
   end
 
   def credit_kudos(amount, description)
     self.update_attribute(:kudos, self.kudos + amount)
-    self.ledger_entries.create(credit: amount, description: description)
+    self.ledger_entries.create(credit: amount, description: description, balance: self.kudos)
   end
 
 
