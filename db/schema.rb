@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151114173319) do
+ActiveRecord::Schema.define(version: 20151124211654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -337,21 +337,6 @@ ActiveRecord::Schema.define(version: 20151114173319) do
   add_index "family_activity_preferences", ["activity_template_id"], name: "index_family_activity_preferences_on_activity_template_id", using: :btree
   add_index "family_activity_preferences", ["family_id"], name: "index_family_activity_preferences_on_family_id", using: :btree
 
-  create_table "family_activity_prefrences", force: :cascade do |t|
-    t.integer  "activity_template_id"
-    t.integer  "family_id"
-    t.integer  "cost"
-    t.integer  "reward"
-    t.integer  "time_block"
-    t.boolean  "preferred"
-    t.boolean  "restricted"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  add_index "family_activity_prefrences", ["activity_template_id"], name: "index_family_activity_prefrences_on_activity_template_id", using: :btree
-  add_index "family_activity_prefrences", ["family_id"], name: "index_family_activity_prefrences_on_family_id", using: :btree
-
   create_table "family_device_categories", force: :cascade do |t|
     t.integer  "family_id"
     t.integer  "device_category_id"
@@ -359,6 +344,23 @@ ActiveRecord::Schema.define(version: 20151114173319) do
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
   end
+
+  create_table "fc_questionaires", force: :cascade do |t|
+    t.integer  "contact_id"
+    t.integer  "kids_2_6"
+    t.integer  "kids_7_12"
+    t.integer  "kids_13_18"
+    t.integer  "mobile_devices"
+    t.integer  "consumer_electronics"
+    t.integer  "computers"
+    t.string   "favorite_feature"
+    t.boolean  "prefer_buy"
+    t.text     "comments"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
+
+  add_index "fc_questionaires", ["contact_id"], name: "index_fc_questionaires_on_contact_id", using: :btree
 
   create_table "invoices", force: :cascade do |t|
     t.integer  "user_id"
@@ -604,15 +606,6 @@ ActiveRecord::Schema.define(version: 20151114173319) do
     t.datetime "updated_at"
   end
 
-  create_table "todo_groups", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "rec_min_age"
-    t.integer  "rec_max_age"
-    t.boolean  "active"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "todo_groups_todo_templates", id: false, force: :cascade do |t|
     t.integer "todo_group_id"
     t.integer "todo_template_id"
@@ -708,8 +701,7 @@ ActiveRecord::Schema.define(version: 20151114173319) do
   add_foreign_key "applogs", "members"
   add_foreign_key "family_activity_preferences", "activity_templates"
   add_foreign_key "family_activity_preferences", "families"
-  add_foreign_key "family_activity_prefrences", "activity_templates"
-  add_foreign_key "family_activity_prefrences", "families"
+  add_foreign_key "fc_questionaires", "contacts"
   add_foreign_key "invoices", "users"
   add_foreign_key "ledger_entries", "members"
   add_foreign_key "payments", "invoices"
