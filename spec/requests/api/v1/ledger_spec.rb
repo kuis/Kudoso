@@ -14,9 +14,9 @@ describe 'Ledger API', type: :request do
     @member.credit_kudos(1000, 'Initial Balance')
     10.times do |idx|
       if rand(2) == 1
-        @member.credit_kudos(rand(10)*10, "Entry on idx #{idx}")
-      else
         @member.debit_kudos(rand(10)*10, "Entry on idx #{idx}")
+      else
+        @member.credit_kudos(rand(10)*10, "Entry on idx #{idx}")
       end
     end
     @member.password = 'password'

@@ -40,11 +40,11 @@ class MyTodo < ActiveRecord::Base
     if self.complete_changed? &&  self.todo.kudos.present?
       if self.complete?
         logger.debug "Adding #{self.todo.kudos} to #{self.member.full_name}"
-        member.debit_kudos( self.todo.kudos, "Completed Task: #{self.todo.name}")
+        member.credit_kudos( self.todo.kudos, "Completed Task: #{self.todo.name}")
       else
         if self.persisted? # Only deduct kudos if we had previously saved
           logger.debug "Removing #{self.todo.kudos} to #{self.member.full_name}"
-          member.credit_kudos( self.todo.kudos, "Removed Completed Task: #{self.todo.name}")
+          member.debit_kudos( self.todo.kudos, "Removed Completed Task: #{self.todo.name}")
         end
       end
     end
