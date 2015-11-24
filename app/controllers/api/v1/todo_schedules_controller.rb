@@ -15,9 +15,9 @@ module Api
           child(ren) on flexible, recurring schedules.
 
           While the backend system can support nearly any type of recurring schedule, we are going to focus on:
-            - Once
-            - Daily
-            - Weekly
+            - Once (no associated recurring rules, only start and end date set)
+            - Daily {"validations":{},"rule_type":"IceCube::DailyRule","interval":1}
+            - Weekly (on mon-fri) {"validations":{"day":[1,2,3,4,5]},"rule_type":"IceCube::WeeklyRule","interval":1,"week_start":0}
 
         EOS
       end

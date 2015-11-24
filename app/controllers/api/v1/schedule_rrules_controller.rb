@@ -3,7 +3,7 @@ module Api
     class ScheduleRrulesController < ApiController
 
       resource_description do
-        short 'API Schedule Rrules (recurring rules'
+        short 'API Schedule Rrules (recurring rules)'
         formats ['json']
         api_version "v1"
         error code: 401, desc: 'Unauthorized'
@@ -13,9 +13,10 @@ module Api
           == Schedule Recurring Rules
 
           While the backend system can support nearly any type of recurring schedule, we are going to focus on:
-            - Once
-            - Daily
-            - Weekly
+            - Daily {"validations":{},"rule_type":"IceCube::DailyRule","interval":1}
+            - Weekly (on mon-fri) {"validations":{"day":[1,2,3,4,5]},"rule_type":"IceCube::WeeklyRule","interval":1,"week_start":0}
+          Note that the days of week is a zero based index starting with Sunday == 0
+          This object is based on the ruby gem IceCube (https://github.com/seejohnrun/ice_cube)
 
         EOS
       end
