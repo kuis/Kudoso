@@ -18,7 +18,7 @@ describe 'Todo Schedules API', type: :request do
   it 'should allow creating recurring rules ' do
     todo_schedule = @todos.sample.todo_schedule
     rule = IceCube::Rule.weekly.day(:friday)
-    post "/api/v1/families/#{@user.family.id}/todo_schedules/#{todo_schedule.id}/schedule_rrules",
+    post "/api/v1/families/#{@user.family.id}/todos/#{todo_schedule.todo_id}/todo_schedules/#{todo_schedule.id}/schedule_rrules",
           { rule: rule.to_hash}.to_json,
           { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
     expect(response.status).to eq(200)
@@ -34,7 +34,7 @@ describe 'Todo Schedules API', type: :request do
     orig_rule = schedule_rrule.rule.to_hash
     rule = IceCube::Rule.weekly.day(:monday)
     expect(orig_rule).to_not eq(rule.to_hash)
-    patch "/api/v1/families/#{@user.family.id}/todo_schedules/#{todo_schedule.id}/schedule_rrules/#{schedule_rrule.id}",
+    patch "/api/v1/families/#{@user.family.id}/todos/#{todo_schedule.todo_id}/todo_schedules/#{todo_schedule.id}/schedule_rrules/#{schedule_rrule.id}",
           { rule: rule.to_hash}.to_json,
           { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
     expect(response.status).to eq(200)
@@ -46,7 +46,7 @@ describe 'Todo Schedules API', type: :request do
     todo_schedule = @todos.sample.todo_schedule
     schedule_rrule = todo_schedule.schedule_rrules.first
 
-    delete "/api/v1/families/#{@user.family.id}/todo_schedules/#{todo_schedule.id}/schedule_rrules/#{schedule_rrule.id}",
+    delete "/api/v1/families/#{@user.family.id}/todos/#{todo_schedule.todo_id}/todo_schedules/#{todo_schedule.id}/schedule_rrules/#{schedule_rrule.id}",
           nil,
           { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
     expect(response.status).to eq(200)

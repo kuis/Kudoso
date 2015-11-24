@@ -31,6 +31,16 @@ class TodoSchedule < ActiveRecord::Base
     super(options).merge({rrules: schedule_rrules.as_json})
   end
 
+  def destroy
+    if my_todos.count > 0
+      self.active = false
+      self.end_date = Date.today
+      self.save
+    else
+      super
+    end
+  end
+
   private
 
   def valid_dates?

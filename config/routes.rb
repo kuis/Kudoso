@@ -108,7 +108,11 @@ Rails.application.routes.draw do
       resources :todo_templates
       resources :families do
         resources :activity_templates, only: :index
-        resources :todos
+        resources :todos do
+          resources :todo_schedules do
+            resources :schedule_rrules
+          end
+        end
         resources :devices do
           resources :apps_devices, path: :apps
           resources :members do
@@ -133,9 +137,6 @@ Rails.application.routes.draw do
           member do
             post :buy_screen_time
           end
-        end
-        resources :todo_schedules do
-          resources :schedule_rrules
         end
       end
       resources :timezones
