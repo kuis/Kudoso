@@ -66,8 +66,8 @@
                 %path{:d => "M12,24l6-22l0,0 c3.3,0,6,2.7,6,6v12h15c3.7,0,6.5,3.3,5.9,6.9l-2.2,14c-0.5,2.9-3,5.1-5.9,5.1H12V24z", :fill => "none", :stroke => "#0072f4", "stroke-linecap" => "square", "stroke-linejoin" => "miter", "stroke-miterlimit" => "10", "stroke-width" => "2"}
           %p.k-feature-desc.k-large-text
             Protect up to 5 devices in and out of your home
-            %br
-            Add more for a small fee
+            %small
+              (Add more for a small fee)
         %li.k-feature
           %i.k-feature-icon
             %svg.nc-icon.outline{:height => "48px", :viewbox => "0 0 48 48", :width => "48px", :x => "0px", :xmlns => "http://www.w3.org/2000/svg", "xmlns:xlink" => "http://www.w3.org/1999/xlink", :y => "0px"}
@@ -87,112 +87,90 @@
         are selected to be in the founder's circle.  Preference is given to our original Kickstarter backers.  Other members
         selected by demographic information to ensure all aspects of Kudoso are exercised by Founder's Circle members.
       .uk-container-center.uk-width-small-1-1.uk-width-medium-6-10.uk-width-large-6-10
-        %form#founders-form.uk-form
+        = simple_form_for @contact, html: { class: 'uk-form '}, wrapper: :uikit_form, remote: true do |f|
           .uk-form-row.uk-text-center
-            %input.uk-form-large.uk-width-4-10{:name => "first_name", :placeholder => "Your First Name", :type => "text", :value => "", :id => 'signup-first-name'}/
-            %input.uk-form-large.uk-width-4-10{:name => "last_name", :placeholder => "Your Last Name", :type => "text", :value => "", :id => 'signup-last-name'}/
+            = f.input_field :first_name, label: false, placeholder: 'First Name',  class: 'uk-form-large uk-width-4-10'
+            = f.input_field :last_name, label: false, placeholder: 'Last Name',  class: 'uk-form-large uk-width-4-10'
           .uk-form-row.uk-text-center
-            %input.uk-form-large.uk-width-8-10{:name => "email", :placeholder => "Your Email Address", :type => "email", :value => "", :id => 'signup-email'}/
+            = f.simple_fields_for @email do |e|
+              = e.input_field :address, label: false, placeholder: 'Email Address',  class: 'uk-form-large uk-width-8-10'
           .uk-form-row.uk-text-center
-            %input.uk-form-large.uk-width-4-10{:name => "password", :placeholder => "Enter a Password", :type => "password", :value => "", :id => 'signup-password'}/
-            %input.uk-form-large.uk-width-4-10{:name => "password_confirmation", :placeholder => "Confirm Password", :type => "password", :value => "", :id => 'signup-password-confirmation'}/
+            = f.input_field :address1, label: false, placeholder: 'Street Address',  class: 'uk-form-large uk-width-8-10'
           .uk-form-row.uk-text-center
-            %hr
+            = f.input_field :address2, label: false, placeholder: 'Apt/Suite (Optional)',  class: 'uk-form-large uk-width-8-10'
           .uk-form-row.uk-text-center
-            %input.uk-form-large.uk-width-8-10{:name => "address", :placeholder => "Shipping Address", :type => "text", :value => "", :id => 'signup-address'}/
-          .uk-form-row.uk-text-center
-            %input.uk-form-large.uk-width-4-10{:name => "city", :placeholder => "City", :type => "text", :value => "", :id => 'signup-city'}/
-            %select.uk-form-large.uk-width-2-10{:name => "state", :value => "", :id => 'signup-state'}
-              - CS.states(:us).each do |key, value|
-                %option{value: "#{key}", selected: ("#{key}" == "MT" ? true : false) }
-                  #{value}
-            %input.uk-form-large.uk-width-2-10{:name => "zip", :placeholder => "Zip Code", :type => "text", :value => "", :id => 'signup-zip'}/
+            = f.input_field :city, label: false, placeholder: 'City',  class: 'uk-form-large uk-width-4-10'
+            = f.input_field :state, label: false, collection: CS.states(:us), prompt: 'State',  class: 'uk-form-large uk-width-2-10'
+            = f.input_field :zip, label: false, placeholder: 'Zip',  class: 'uk-form-large uk-width-2-10'
           .uk-form-row.uk-text-center
             %hr
-          .uk-form-row.uk-text-center
-            .uk-grid
-              .uk-form-large.uk-width-1-10
-              .uk-form-large.uk-width-6-10
-                How many children ages 2-6 do you have in your home and want to connect to Kudoso?
-              .uk-form-large.uk-width-2-10
-                %select.uk-form-large{:name => "Kids-2-6", :value => "0", :id => 'signup-kids-2-6'}
-                  - 6.times do |ctr|
-                    %option{value: "#{ctr}", selected: ctr == 0}
-                      #{ctr}
-            .uk-grid
-              .uk-form-large.uk-width-1-10
-              .uk-form-large.uk-width-6-10
-                How many children ages 7-12 do you have in your home and want to connect to Kudoso?
-              .uk-form-large.uk-width-2-10
-                %select.uk-form-large{:name => "Kids-7-12", :value => "0", :id => 'signup-kids-7-12'}
-                  - 6.times do |ctr|
-                    %option{value: "#{ctr}", selected: ctr == 0}
-                      #{ctr}
-            .uk-grid
-              .uk-form-large.uk-width-1-10
-              .uk-form-large.uk-width-6-10
-                How many children ages 13-18 do you have in your home and want to connect to Kudoso?
-              .uk-form-large.uk-width-2-10
-                %select.uk-form-large{:name => "Kids-13-18", :value => "0", :id => 'signup-kids-13-18'}
-                  - 6.times do |ctr|
-                    %option{value: "#{ctr}", selected: ctr == 0}
-                      #{ctr}
-            .uk-grid
-              .uk-form-large.uk-width-1-10
-              .uk-form-large.uk-width-6-10
-                How many mobile devices do you have in your home and want to connect to Kudoso?
-              .uk-form-large.uk-width-2-10
-                %select.uk-form-large{:name => "Mobile", :value => "0", :id => 'signup-mobile-devices'}
-                  - 10.times do |ctr|
-                    %option{value: "#{ctr}", selected: ctr == 0}
-                      #{ctr}
-            .uk-grid
-              .uk-form-large.uk-width-1-10
-              .uk-form-large.uk-width-6-10
-                How many televisions, game consoles or other consumer electronics do you have in your home and want to connect to Kudoso?
-              .uk-form-large.uk-width-2-10
-                %select.uk-form-large{:name => "Electronics", :value => "0", :id => 'signup-plug-devices'}
-                  - 10.times do |ctr|
-                    %option{value: "#{ctr}", selected: ctr == 0}
-                      #{ctr}
-            .uk-grid
-              .uk-form-large.uk-width-1-10
-              .uk-form-large.uk-width-6-10
-                How many computers (mac or windows) do you have in your home and want to connect to Kudoso?
-              .uk-form-large.uk-width-2-10
-                %select.uk-form-large{:name => "Computers", :value => "0", :id => 'signup-computer-devices'}
-                  - 10.times do |ctr|
-                    %option{value: "#{ctr}", selected: ctr == 0}
-                      #{ctr}
-          .uk-form-row.uk-text-center
-            .payment-errors.uk-form-danger
-          .uk-form-row.uk-text-center
-            %button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "Register", type: 'button', onclick: "register_founders_circle(); return false;"} Register for Founder's Circle
-          .uk-form-row.uk-text-center
-            %hr
-        .uk-container-center.uk-width-small-1-1.uk-width-medium-6-10.uk-width-large-6-10
-          = simple_form_for @contact, html: { class: 'uk-form '}  do |f|
+          = f.simple_fields_for :fc_questionaire do |q|
             .uk-form-row.uk-text-center
-              = f.input :first_name, label: false, placeholder: 'First Name', class: 'uk-form-large.uk-width-4-10'
-              = f.input :last_name, label: false, placeholder: 'Last Name', class: 'uk-form-large.uk-width-4-10'
-            = f.input :address1
-            = f.input :address2
-            = f.input :city
-            = f.input :state
-            = f.input :zip
-            = f.simple_fields_for :fc_questionaire do |q|
-              = q.input :kids_2_6
-              = q.input :kids_7_12
-              = q.input :kids_13_18
-              = q.input :mobile_devices
-              = q.input :consumer_electronics
-              = q.input :computers
-              = q.input :favorite_feature
-              = q.input :prefer_buy
-              = q.input :comments
-
-:javascript
-  function register_founders_circle() {
-    alert( JSON.stringify($("#founders-form").serializeArray()) );
-    return false;
-  }
+              %h3 How many children do you have?
+              .uk-grid
+                .uk-width-1-6
+                  Ages 2-6
+                .uk-width-1-6
+                  = q.input :kids_2_6, collection: 0..6, value: 0, label: false
+                .uk-width-1-6
+                  Ages 7-12
+                .uk-width-1-6
+                  = q.input :kids_7_12, collection: 0..6, value: 0, label: false
+                .uk-width-1-6
+                  Ages 13-18
+                .uk-width-1-6
+                  = q.input :kids_13_18, collection: 0..6, value: 0, label: false
+            .uk-form-row.uk-text-center
+              %h3 How many devices do you want Kudoso to control?
+              .uk-grid
+                .uk-width-1-6
+                  Mobile Devices (Phones/Tablets)
+                .uk-width-1-6
+                  = q.input :mobile_devices, collection: 0..10, value: 0, label: false
+                .uk-width-1-6
+                  Consumer Electronics (TV/Game Consoles)
+                .uk-width-1-6
+                  = q.input :consumer_electronics, collection: 0..10, value: 0, label: false
+                .uk-width-1-6
+                  Computers (Mac / Windows)
+                .uk-width-1-6
+                  = q.input :computers, collection: 0..10, value: 0, label: false
+            .uk-form-row.uk-text-center
+              %h3 What interests you most about Kudoso?
+              = q.input :favorite_feature, label: false, collection: [ "Content Filtering",
+                                                                       "Screen Time Management",
+                                                                       "Task Management",
+                                                                       "Learning (Academics and Life Skills)",
+                                                                       "Positive Reinforcement / Rewards",
+                                                                       "Simple and Easy to Use",
+                                                                       "Robust reporting on content and apps"]
+            .uk-form-row.uk-text-center
+              %h3 Which would you prefer?
+              %p
+                Founder's Circle members don't have to pay a dime, but if you did have to, which of these
+                options would you prefer:
+              %p
+                .uk-grid
+                  .uk-width-1-2
+                    %b Buy + Subscription
+                    %br
+                    Pay $180 one time for hardware + $10 / Month
+                    %br
+                    %label
+                      = q.input_field :prefer_buy, label: false
+                      I prefer to BUY
+                  .uk-width-1-2
+                    %b Lease
+                    %br
+                    Pay $20 / Month ($10 Subscription + $10 Lease)
+                    %br
+                    %label
+                      = q.input_field 'not_buy', label: false, as: :boolean, checked: false
+                      I prefer to LEASE
+            .uk-form-row.uk-text-center
+              %h3 Any additional comments you have about Kudoso:
+              = q.input :comments, placeholder: 'Comments', label: false
+          .uk-form-row.uk-text-center
+            %hr
+          .uk-form-row.uk-text-center
+            = f.submit "Register for Kudoso's Founder's Circle", class: 'uk-form-large uk-button uk-button-primary'

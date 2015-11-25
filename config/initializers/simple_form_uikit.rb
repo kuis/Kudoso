@@ -18,4 +18,17 @@ SimpleForm.setup do |config|
     b.use :hint,  wrap_with: { tag: 'span', class: 'uk-form-help-inline' }
   end
 
+  config.wrappers :uikit_form, tag: nil, error_class: 'k-has-error' do |b|
+    b.use :html5
+    b.use :placeholder
+    b.use :label, class: 'uk-form-label'
+    b.use :input, class: 'uk-form-large uk-form-width-large'
+    b.optional :maxlength
+    b.optional :pattern
+    b.optional :min_max
+    b.optional :readonly
+    b.use :error, wrap_with: { tag: 'span', class: 'uk-form-danger' }
+    b.use :hint,  wrap_with: { tag: 'span', class: 'uk-form-help-inline' }
+  end
+
 end

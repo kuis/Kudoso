@@ -7,6 +7,7 @@ class HomeController < ApplicationController
   def founders_circle
     @contact = Contact.new
     @contact.fc_questionaire = FcQuestionaire.new
+    @email = Email.new
   end
 
   def limit

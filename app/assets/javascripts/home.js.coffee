@@ -144,6 +144,32 @@ $(document).ready ($) ->
     # Prevent the form from submitting with the default action
     return false
 
+  $('.boolean').change (event)->
+    checked = $(this).is(':checked')
+    $('.boolean').not(this).prop('checked', !checked);
+
+  $('#new-contact').submit (event)->
+    event.preventDefault()
+    $form = $(this)
+    # Disable the submit button to prevent repeated clicks
+    $form.find('button').prop('disabled', true)
+    valid = true
+    email = $.trim($('#contact-email-adress').val());
+    if email.length > 5 && validateEmail(email)
+      $('#contact-email-adress').removeClass('uk-form-danger')
+    else
+      $('#contact-email-adress').addClass('uk-form-danger')
+      valid = false
+    $("form#new-contact input[type=\"text\"]").each ()->
+      input = $(this)
+      console.log 'Name: ' + input.attr('name')
+      if input.val().length < 2
+        input.addClass('uk-form-danger')
+        valid = false
+      else
+        input.removeClass('uk-form-danger')
+    alert('Valid: ' + valid)
+    return false # Prevent the form from submitting with the default action
 
 
 
