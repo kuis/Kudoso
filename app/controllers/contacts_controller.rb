@@ -49,9 +49,11 @@ class ContactsController < ApplicationController
     params[:contact].delete(:emails_attributes)
     if @primary_email.blank?
       respond_to do |format|
+        format.js { render partial: 'home/register_error', locals: { error_msg: 'All information is required'} }
         format.html { redirect_to pre_signup_path, alert: 'All information is required!' }
         format.json { render json: {error: 'All information is required'}, :status => 400 }
       end
+      return
     else
       begin
         agile_contact = AgileCRMWrapper::Contact.search_by_email( @primary_email )
@@ -91,29 +93,61 @@ class ContactsController < ApplicationController
         format.json { render json: {}, :status => 200 }
       end
     else
-      # This is a Newsletter signup
+        if params[:commit] == "Register for Kudoso's Founder's Circle"
 
-        if @email
-          agile_contact.update(tags: ["newsletter"]) unless agile_contact.nil?
-          respond_to do |format|
-            format.html { redirect_to pre_signup_path, alert: 'Sorry, you are already signed up!' }
-            format.json { render json: { error: 'Sorry, this email address is already registered.'}, :status => 409 }
+          valid = true
+
+          [:first_name,
+           :last_name,
+           :address1,
+           :city, :state, :zip].each do |param|
+             valid = false if contact_params[param].blank?
           end
-        else
-          if @contact.valid?
-            respond_to do |format|
-              format.html { redirect_to pre_signup_thank_you_path, notice: 'Information was successfully received!' }
-              format.json { render json: {}, :status => 200 }
-            end
 
-          else
-            logger.info  @contact.errors.full_messages.to_sentence
+          [ :kids_2_6, :kids_7_12, :kids_13_18,
+            :mobile_devices, :consumer_electronics, :computers,
+            :favorite_feature, :prefer_buy ].each do |param|
+
+            valid = false if contact_params[:fc_questionaire_attributes][param].blank?
+
+          end
+          if valid
+            agile_contact.update(tags: ["founders circle applicant"]) unless agile_contact.nil?
             respond_to do |format|
-              format.html { redirect_to pre_signup_path, alert: @contact.errors.full_messages.to_sentence }
-              format.json { render json:  {error: @contact.errors.full_messages }, :status => 500 }
+              format.js { render partial: 'home/register' }
+            end
+          else
+            respond_to do |format|
+              format.js { render partial: 'home/register_error', locals: { error_msg: 'All information is required'} }
+            end
+          end
+
+        else
+          # This is a Newsletter signup
+
+          if @email
+            agile_contact.update(tags: ["newsletter"]) unless agile_contact.nil?
+            respond_to do |format|
+              format.html { redirect_to pre_signup_path, alert: 'Sorry, you are already signed up!' }
+              format.json { render json: { error: 'Sorry, this email address is already registered.'}, :status => 409 }
+            end
+          else
+            if @contact.valid?
+              respond_to do |format|
+                format.html { redirect_to pre_signup_thank_you_path, notice: 'Information was successfully received!' }
+                format.json { render json: {}, :status => 200 }
+              end
+
+            else
+              logger.info  @contact.errors.full_messages.to_sentence
+              respond_to do |format|
+                format.html { redirect_to pre_signup_path, alert: @contact.errors.full_messages.to_sentence }
+                format.json { render json:  {error: @contact.errors.full_messages }, :status => 500 }
+              end
             end
           end
         end
+
 
 
     end
@@ -127,6 +161,23 @@ class ContactsController < ApplicationController
 
 
     def contact_params
-      params.require(:contact).permit(:first_name, :last_name, :company, :primary_email_id, :address1, :address2, :city, :state, :zip, :address_type_id, :phone, :phone_type_id, :last_contact, :do_not_call, :do_not_email, :contact_type_id, emails_attributes: [ :address ])
+      params.require(:contact).permit(:first_name,
+                                      :last_name,
+                                      :company,
+                                      :primary_email_id,
+                                      :address1,
+                                      :address2,
+                                      :city, :state, :zip,
+                                      :address_type_id,
+                                      :phone,
+                                      :phone_type_id,
+                                      :last_contact,
+                                      :do_not_call,
+                                      :do_not_email,
+                                      :contact_type_id,
+                                      fc_questionaire_attributes: [ :kids_2_6, :kids_7_12, :kids_13_18,
+                                                                    :mobile_devices, :consumer_electronics, :computers,
+                                                                    :favorite_feature, :prefer_buy, :comments],
+                                      emails_attributes: [ :address ])
     end
 end

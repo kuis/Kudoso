@@ -5,9 +5,9 @@ class HomeController < ApplicationController
   end
 
   def founders_circle
-    @contact = Contact.new
+    @contact = Contact.new(contact_type_id: ContactType.find_or_create_by(name: 'Founders Circle Applicant').id )
     @contact.fc_questionaire = FcQuestionaire.new
-    @email = Email.new
+    @contact.emails << Email.new
   end
 
   def limit

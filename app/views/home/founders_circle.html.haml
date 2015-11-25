@@ -86,13 +86,14 @@
         Kudoso is currently only available in the United States.  Complete this short questionaire and we let you know if you
         are selected to be in the founder's circle.  Preference is given to our original Kickstarter backers.  Other members
         selected by demographic information to ensure all aspects of Kudoso are exercised by Founder's Circle members.
-      .uk-container-center.uk-width-small-1-1.uk-width-medium-6-10.uk-width-large-6-10
+      #register_form_wrap.uk-container-center.uk-width-small-1-1.uk-width-medium-6-10.uk-width-large-6-10
         = simple_form_for @contact, html: { class: 'uk-form '}, wrapper: :uikit_form, remote: true do |f|
+          = f.input :contact_type_id, as: :hidden
           .uk-form-row.uk-text-center
             = f.input_field :first_name, label: false, placeholder: 'First Name',  class: 'uk-form-large uk-width-4-10'
             = f.input_field :last_name, label: false, placeholder: 'Last Name',  class: 'uk-form-large uk-width-4-10'
           .uk-form-row.uk-text-center
-            = f.simple_fields_for @email do |e|
+            = f.simple_fields_for :emails do |e|
               = e.input_field :address, label: false, placeholder: 'Email Address',  class: 'uk-form-large uk-width-8-10'
           .uk-form-row.uk-text-center
             = f.input_field :address1, label: false, placeholder: 'Street Address',  class: 'uk-form-large uk-width-8-10'
@@ -157,7 +158,7 @@
                     Pay $180 one time for hardware + $10 / Month
                     %br
                     %label
-                      = q.input_field :prefer_buy, label: false
+                      = q.input_field :prefer_buy, label: false, checked: true
                       I prefer to BUY
                   .uk-width-1-2
                     %b Lease
@@ -173,4 +174,4 @@
           .uk-form-row.uk-text-center
             %hr
           .uk-form-row.uk-text-center
-            = f.submit "Register for Kudoso's Founder's Circle", class: 'uk-form-large uk-button uk-button-primary'
+            = f.submit "Register for Kudoso's Founder's Circle", class: 'uk-form-large uk-button uk-button-primary', data: {disable_with: "Submitting..."}
