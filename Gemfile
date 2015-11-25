@@ -57,6 +57,7 @@ gem 'recurring_select' # for schedules
 gem 'agilecrm-wrapper' #for AgileCRM
 gem 'stripe-rails'
 gem 'city-state'
+gem 'rails-alerter', github: 'DaKaZ/alerter', branch: 'master'
 
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'

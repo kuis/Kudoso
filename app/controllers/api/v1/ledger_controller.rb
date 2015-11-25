@@ -29,7 +29,7 @@ module Api
             @member = @family.members.find(params[:member_id])
             params[:start_date] ||= 1.month.ago
             params[:end_date] ||= Date.today
-            @ledger_entries = @member.ledger_entries.where(created_at: params[:start_date].beginning_of_day..params[:end_date].end_of_day)
+            @ledger_entries = @member.ledger_entries.where(created_at: params[:start_date].beginning_of_day..params[:end_date].end_of_day).order('created_at DESC')
             render :json => { ledger_entries: @ledger_entries.as_json, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
