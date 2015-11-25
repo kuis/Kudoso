@@ -112,7 +112,7 @@ class ContactsController < ApplicationController
 
           end
           if valid
-            agile_contact.update(tags: ["founders circle applicant"]) unless agile_contact.nil?
+            agile_contact.update(tags: ["founders circle applicant", "newsletter"]) unless agile_contact.nil?
             respond_to do |format|
               format.js { render partial: 'home/register' }
             end
