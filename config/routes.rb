@@ -163,6 +163,7 @@ Rails.application.routes.draw do
   get 'teach', to: 'home#teach'
   get 'reward', to: 'home#reward'
   get 'founders_circle', to: 'home#founders_circle'
+  get 'founders_cirlce', to: 'home#founders_circle'
   get 'wizard', to: 'wizard#index'
   put 'wizard', to: 'wizard#update'
   post 'wizard', to: 'wizard#create'
