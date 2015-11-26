@@ -7,15 +7,20 @@
           %p
             %strong Sign Up Now
             for the latest Kudoso news on how to protect your family from the dangers of technology, tips on raising healthier kids and be one of the first to get Kudoso, even before the public release!
-          %form.uk-form
-            .uk-form-row.uk-text-center
-              %input.uk-form-large.uk-width-4-10{:name => "first_name", :placeholder => "Your First Name", :type => "text", :value => "", :id => 'footer-first-name'}/
-              %input.uk-form-large.uk-width-4-10{:name => "last_name", :placeholder => "Your Last Name", :type => "text", :value => "", :id => 'footer-last-name'}/
-            .uk-form-row.uk-text-center
-              %input.uk-form-large.uk-width-8-10.uk-text-center{:name => "email", :placeholder => "Your Email Address", :type => "email", :value => "", :id => 'footer-email'}/
-              %small We won’t spam you or share your email address.
-            .uk-form-row.uk-text-center
-              %button.newsletter-button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "button", :type => "button", :onclick => "footer_signup(); return false;"} Sign Up
+          #footer_form
+            - contact_footer = Contact.new(contact_type_id: ContactType.find_or_create_by(name: 'Newsletter').id )
+            - contact_footer.emails << Email.new
+            = simple_form_for contact_footer, html: { class: 'uk-form ', id: 'footer_form_newsletter'}, wrapper: :uikit_form, remote: true do |f|
+              = f.input :contact_type_id, as: :hidden
+              .uk-form-row.uk-text-center
+                = f.input_field :first_name, label: false, placeholder: 'First Name',  class: 'uk-form-large uk-width-4-10'
+                = f.input_field :last_name, label: false, placeholder: 'Last Name',  class: 'uk-form-large uk-width-4-10'
+              .uk-form-row.uk-text-center
+                = f.simple_fields_for :emails do |e|
+                  = e.input_field :address, label: false, placeholder: 'Email Address',  class: 'uk-form-large uk-width-8-10'
+                %small We won’t spam you or share your email address.
+              .uk-form-row.uk-text-center
+                = f.submit "Sign up for Kudoso's Newsletter", class: 'uk-form-large uk-button uk-button-primary', data: {disable_with: "Submitting..."}
       .k-footer-details.uk-width-medium-6-10.uk-width-large-6-10.uk-pull-4-10
         .uk-grid
           .uk-width-small-1-1.uk-width-medium-2-4.uk-width-large-2-4.uk-text-center-small.uk-margin-large-top

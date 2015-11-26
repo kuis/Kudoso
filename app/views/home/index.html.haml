@@ -142,17 +142,21 @@
     %p
       %strong Sign Up Now
       for the latest Kudoso news on how to protect your family from the dangers of technology, tips on raising healthier kids and be one of the first to get Kudoso, even before the public release!
-    %form.uk-form
-      .uk-form-row.uk-text-center
-        %input.uk-form-large.uk-width-4-10{:name => "first_name", :placeholder => "Your First Name", :type => "text", :value => "", :id => 'index-first-name'}/
-        %input.uk-form-large.uk-width-4-10{:name => "last_name", :placeholder => "Your Last Name", :type => "text", :value => "", :id => 'index-last-name'}/
-      .uk-form-row.uk-text-center
-        %input.uk-form-large.uk-width-8-10.uk-text-center{:name => "email", :placeholder => "Your Email Address", :type => "email", :value => "", :id => "index-email", :onclick => "index_signup();"}/
-      .uk-form-row.uk-text-center
-        %small We won’t spam you or share your email address.
-      .uk-form-row.uk-text-center
-        %button.newsletter-button.uk-button.uk-button-primary.uk-button-large.uk-width-8-10{:name => "button", :type => "button", onclick: "index_signup(); return false;"} Sign Up
-
+    #index_form
+      - contact = Contact.new(contact_type_id: ContactType.find_or_create_by(name: 'Newsletter').id )
+      - contact.emails << Email.new
+      = simple_form_for contact, html: { class: 'uk-form ', id: 'index_form_newsletter'}, wrapper: :uikit_form, remote: true do |f|
+        = f.input :contact_type_id, as: :hidden
+        .uk-form-row.uk-text-center
+          = f.input_field :first_name, label: false, placeholder: 'First Name',  class: 'uk-form-large uk-width-4-10'
+          = f.input_field :last_name, label: false, placeholder: 'Last Name',  class: 'uk-form-large uk-width-4-10'
+        .uk-form-row.uk-text-center
+          = f.simple_fields_for :emails do |e|
+            = e.input_field :address, label: false, placeholder: 'Email Address',  class: 'uk-form-large uk-width-8-10'
+          %br
+          %small We won’t spam you or share your email address.
+        .uk-form-row.uk-text-center
+          = f.submit "Sign up for Kudoso's Newsletter", class: 'uk-form-large uk-button uk-button-primary', data: {disable_with: "Submitting..."}
 %section.k-fundamentals.k-section.uk-clearfix
   %article
     -#<ul class="uk-grid uk-grid-width-medium-1-2 uk-grid-large">

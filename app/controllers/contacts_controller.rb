@@ -49,7 +49,7 @@ class ContactsController < ApplicationController
     params[:contact].delete(:emails_attributes)
     if @primary_email.blank?
       respond_to do |format|
-        format.js { render partial: 'home/register_error', locals: { error_msg: 'All information is required'} }
+        format.js { render partial: 'home/register_error', locals: { error_msg: 'Valid Email is required'} }
         format.html { redirect_to pre_signup_path, alert: 'All information is required!' }
         format.json { render json: {error: 'All information is required'}, :status => 400 }
       end
@@ -118,7 +118,7 @@ class ContactsController < ApplicationController
             end
           else
             respond_to do |format|
-              format.js { render partial: 'home/register_error', locals: { error_msg: 'All information is required'} }
+              format.js { render partial: 'home/register_error', locals: { error_msg: 'All information for Founders Circle is required'} }
             end
           end
 
@@ -128,12 +128,14 @@ class ContactsController < ApplicationController
           if @email
             agile_contact.update(tags: ["newsletter"]) unless agile_contact.nil?
             respond_to do |format|
+              format.js { render partial: 'home/register_newsletter' }
               format.html { redirect_to pre_signup_path, alert: 'Sorry, you are already signed up!' }
               format.json { render json: { error: 'Sorry, this email address is already registered.'}, :status => 409 }
             end
           else
             if @contact.valid?
               respond_to do |format|
+                format.js { head 204 }
                 format.html { redirect_to pre_signup_thank_you_path, notice: 'Information was successfully received!' }
                 format.json { render json: {}, :status => 200 }
               end
@@ -141,6 +143,7 @@ class ContactsController < ApplicationController
             else
               logger.info  @contact.errors.full_messages.to_sentence
               respond_to do |format|
+                format.js { render partial: 'home/register_error', locals: { error_msg: @contact.errors.full_messages.to_sentence}}
                 format.html { redirect_to pre_signup_path, alert: @contact.errors.full_messages.to_sentence }
                 format.json { render json:  {error: @contact.errors.full_messages }, :status => 500 }
               end
