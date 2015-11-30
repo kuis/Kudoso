@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-
+ # acts_as_notifiable
   include Stripe::Callbacks
 
   belongs_to :family
