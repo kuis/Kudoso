@@ -107,7 +107,7 @@ Rails.application.routes.draw do
       end
       resources :todo_templates
       resources :families do
-        resources :activity_templates, only: :index
+        resources :activity_templates, only: [:index, :show]
         resources :todos do
           resources :todo_schedules do
             resources :schedule_rrules

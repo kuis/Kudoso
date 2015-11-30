@@ -16,6 +16,7 @@ describe 'Activity Templates API', type: :request do
 
   it 'returns the activity_templates for the family' do
     get "/api/v1/families/#{@user.family.id}/activity_templates", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(200)
     json = JSON.parse(response.body)
     expect(json["activity_templates"].length).to eq(@ats.count)
   end
@@ -24,11 +25,23 @@ describe 'Activity Templates API', type: :request do
 
     @user.family.family_activity_preferences.create(activity_template_id: @ats.first.id, reward: 1234, preferred: true)
     get "/api/v1/families/#{@user.family.id}/activity_templates", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(200)
     json = JSON.parse(response.body)
     expect(json["activity_templates"].length).to eq(@ats.count)
     expect(json["activity_templates"].first["reward"]).to eq(1234)
 
   end
 
+  it 'returns the activity_template for a single template' do
+
+    @user.family.family_activity_preferences.create(activity_template_id: @ats.first.id, reward: 1234, preferred: true)
+    at = @ats.sample
+    get "/api/v1/families/#{@user.family.id}/activity_templates/#{at.id}", nil,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\"" }
+    expect(response.status).to eq(200)
+    json = JSON.parse(response.body)
+    expect(json["activity_template"].present?).to be_truthy
+    expect(json["activity_template"]["name"]).to eq(at.name)
+
+  end
 
 end
