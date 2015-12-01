@@ -20,7 +20,7 @@
       %td= device.name
       %td= "#{device.device_type_id} #{device.device_type.name}"
       %td= device.managed
-      %td= device.management_id ? "#{device.management_device.name}" : 'None'
+      %td= device.management_id ? "#{device.management_device.try(:name)}" : 'None'
       %td= device.primary_member_id ? device.primary_member.full_name : 'None'
       %td
         - device.managed_devices.each_with_index do |dev, idx|
