@@ -178,7 +178,7 @@ Max is the most screen time that a child can have using Kudos.
     -@family.devices.each do |device|
       %tr
         %td{colspan: 8}
-          #{device.name} (#{device.device_type.name})
+          #{device.name} (#{device.device_type.try(:name)})
       %tr
         %td Default
         -( 0 .. 6 ).each do |dow|
