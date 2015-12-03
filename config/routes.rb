@@ -85,6 +85,7 @@ Rails.application.routes.draw do
     resources :router_models
     resources :routers
     resources :themes
+    resources :users
   end
 
   namespace :api, defaults: { format: 'json' } do

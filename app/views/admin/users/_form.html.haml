@@ -1,0 +1,16 @@
+= simple_form_for([:admin, @user], wrapper: :uikit_form_stacked) do |f|
+  - if @user.errors.any?
+    #error_explanation
+      %h2
+        = pluralize(@user.errors.count, "error")
+        prohibited this user from being saved:
+      %ul
+        - @user.errors.full_messages.each do |message|
+          %li= message
+  = f.input :first_name, label: false, placeholder: 'First Name'
+  = f.input :last_name, label: false, placeholder: 'First Name'
+  = f.input :email, label: false, placeholder: 'Email Address'
+  = f.input :password, label: false, placeholder: 'Password (if you want to change)'
+  = f.input :password_confirmation, label: false, placeholder: 'Password Confirmation'
+  .uk-form-row
+    =f.submit class: 'uk-button uk-button-primary'

@@ -5,7 +5,7 @@ SimpleForm.setup do |config|
   config.boolean_label_class = nil
   config.default_form_class = 'uk-form'
 
-  config.wrappers :form_stacked, tag: 'div', class: 'uk-form-row', error_class: 'k-has-error' do |b|
+  config.wrappers :uikit_form_stacked, tag: 'div', class: 'uk-form-row', error_class: 'k-has-error' do |b|
     b.use :html5
     b.use :placeholder
     b.use :label, class: 'uk-form-label'
@@ -27,6 +27,19 @@ SimpleForm.setup do |config|
     b.optional :pattern
     b.optional :min_max
     b.optional :readonly
+    b.use :error, wrap_with: { tag: 'span', class: 'uk-form-danger' }
+    b.use :hint,  wrap_with: { tag: 'span', class: 'uk-form-help-inline' }
+  end
+
+  config.wrappers :uikit_checkbox, tag: 'label', class: 'checkbox', error_class: 'k-has-error' do |b|
+
+    # Form extensions
+    b.use :html5
+
+    # Form components
+    b.use :input
+    b.use :label_text
+
     b.use :error, wrap_with: { tag: 'span', class: 'uk-form-danger' }
     b.use :hint,  wrap_with: { tag: 'span', class: 'uk-form-help-inline' }
   end

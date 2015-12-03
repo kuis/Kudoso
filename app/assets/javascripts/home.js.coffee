@@ -145,8 +145,10 @@ $(document).ready ($) ->
     return false
 
   $('.boolean').change (event)->
-    checked = $(this).is(':checked')
-    $('.boolean').not(this).prop('checked', !checked);
+    if window.location.pathname == "/founders_circle" || window.location.pathname == "/founders_cirlce"
+      console.log 'checkbox uncheck event'
+      checked = $(this).is(':checked')
+      $('.boolean').not(this).prop('checked', !checked);
 
   $('#new-contact').submit (event)->
     event.preventDefault()

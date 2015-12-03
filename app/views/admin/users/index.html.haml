@@ -1,0 +1,18 @@
+%section.k-section.uk-clearfix.uk-flex.uk-flex-center.uk-flex-middle
+  .uk-container-center.uk-text-center.uk-width-5-10
+    %h3 Admin Users
+    .uk-width-8-10
+      %table.uk-table.uk-table-striped
+        %tr
+          %th Name
+          %th Email
+          %th
+          %th
+        - @users.each do |user|
+          %tr
+            %td #{user.full_name}
+            %td #{user.email}
+            %td= link_to 'Edit', edit_admin_user_path(user)
+            %td= link_to 'Destroy', admin_users_path(user), method: :delete, data: { confirm: 'Are you sure?' }
+    .uk-width-8-10
+      =link_to 'New User', new_admin_user_path, class: 'uk-button uk-button-primary'
