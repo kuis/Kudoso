@@ -262,6 +262,9 @@
         header.style.color = 'white';
         header.style.textAlign = 'center';
         header.style.fontSize = '8px';
+        header.style.display = "table-cell";
+        header.style.verticalAlign = 'bottom';
+        header.style.lineHeight = '8px';
 
         $(header).mousedown(function (e) {
           e.stopPropagation();
