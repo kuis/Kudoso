@@ -95,10 +95,10 @@
       })
   end
 
-.row
-  .medium-4.columns
+.uk-grid
+  .uk-width-1-3
     = high_chart("today_pie_chart", @todo_chart[:today])
-  .medium-4.columns
+  .uk-width-1-3
     = high_chart("week_pie_chart", @todo_chart[:week])
-  .medium-4.columns
+  .uk-width-1-3
     = high_chart("month_pie_chart", @todo_chart[:month])

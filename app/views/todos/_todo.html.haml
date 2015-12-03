@@ -31,7 +31,7 @@
       .row
         .col-xs-6.col-xs-offset-2
           .content.collapse{id: "assign_todo_#{todo.id}"}
-            = simple_form_for [@family, todo, ts = TodoSchedule.new], html: { class: 'form-horizontal' }, wrapper: :horizontal_input_group do |f|
+            = simple_form_for [@family, todo, ts = TodoSchedule.new], html: { class: 'uk-form' }, wrapper: :uikit_form do |f|
               .form_group
                 = f.label 'Choose a family member:'
                 = f.collection_select :member_id, @family.kids, :id, :full_name

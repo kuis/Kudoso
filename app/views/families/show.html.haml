@@ -39,7 +39,7 @@
                       = link_to 'Add to Family ToDo List', family_todos_path(@family, todo_template_id: todo.id ), method: :post, class: 'btn btn-primary'
               .todo_wrap
                 Create your own ToDo:
-                = simple_form_for [@family, Todo.new], html: { class: 'form-horizontal' }, wrapper: :horizontal_input_group do |f|
+                = simple_form_for [@family, Todo.new], html: { class: 'uk-form' }, wrapper: :uikit_form do |f|
                   = f.input :name
                   = f.input :description
                   .row

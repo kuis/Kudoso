@@ -1,5 +1,5 @@
 .authform
-  = simple_form_for([@family,@member], html: { class: 'form-horizontal' }, wrapper: :horizontal_input_group) do |f|
+  = simple_form_for([@family,@member], html: { class: 'uk-form' }, wrapper: :uikit_form) do |f|
     - if @member.errors.any?
       #error_explanation
         %h2

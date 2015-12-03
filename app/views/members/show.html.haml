@@ -1,74 +1,79 @@
-%h1= @family.name
-%h2
-  = best_in_place [@family, @member], :first_name
-  = best_in_place [@family, @member], :last_name
-- if @member.avatar.exists?
-  = image_tag @member.avatar.url(:thumb)
-.row
-  .medium-3.columns
-    Kudos:
-    #kudos
-      #{@member.kudos}
-  .medium-3.columns
-    Max Screen Time:
-    .screen_time
-      #{format_counter @member.max_screen_time}
-    %div
-      = link_to 'Adjust Screen Time', family_member_screen_times_path(@family,@member) if can?(:edit, ScreenTime)
-  .medium-3.columns
-    Available Screen Time:
-    .screen_time
-      #{format_counter @member.available_screen_time}
-  .medium-3.columns
-    Screen Time Overrides:
-    %ul
-      - @member.st_overrides.today.each do |sto|
-        %li
-          + #{format_counter_min(sto.time)}
-          = "(#{sto.comment})" unless sto.comment.blank?
-      -if  @member.st_overrides.today.count == 0
-        %li No overrides today
-      - if can?(:create, StOverride)
-        %li= link_to 'Add Screen Time Override', new_family_member_st_override_path(@family, @member)
-%hr
-.row
-  .medium-6.columns
-    .todo_header
-      Todo Schedule (Today):
-    .todo_wrap
-      - @member.todos.each do |my_todo|
-        %div{ id: "todo_wrap_#{my_todo.todo_schedule_id}" }
-          = render my_todo
+.uk-container-center.k-admin-container
+  = link_to 'Back', @member.family
+  %section.k-section.uk-clearfix
+    %h1= @family.name
+    %h3
+      = best_in_place [@family, @member], :first_name
+      = best_in_place [@family, @member], :last_name
+    - if @member.avatar.exists?
+      = image_tag @member.avatar.url(:thumb)
+    %p= link_to 'Edit Member Information', edit_family_member_path(@family, @member)
+    .uk-grid
+      .uk-width-1-3
+        Kudos:
+        #kudos
+          #{@member.kudos}
+      .uk-width-1-3
+        Default Screen Time:
+        .screen_time
+          #{format_counter @member.screen_time}
+        Max Screen Time:
+        .screen_time
+          #{format_counter @member.max_screen_time}
+        %div
+          = link_to 'Adjust Screen Time', family_member_screen_times_path(@family,@member) if can?(:edit, ScreenTime)
+      .uk-width-1-3
+        Available Screen Time Today:
+        .screen_time
+          #{format_counter @member.available_screen_time}
+      .uk-width-1-3
+        Screen Time Overrides:
+        %br
+          - @member.st_overrides.today.each do |sto|
+            %p
+              + #{format_counter_min(sto.time)}
+              = "(#{sto.comment})" unless sto.comment.blank?
+          -if  @member.st_overrides.today.count == 0
+            %p No overrides today
+        - if can?(:create, StOverride)
+          %li= link_to 'Add Screen Time Override', new_family_member_st_override_path(@family, @member)
+  %hr
+  .uk-grid
+    .uk-width-1-2
+      .todo_header
+        Todo Schedule (Today):
+      .todo_wrap
+        - @member.todos.each do |my_todo|
+          %div{ id: "todo_wrap_#{my_todo.todo_schedule_id}" }
+            = render my_todo
 
-  .medium-6.columns
-    .todo_header
-      Todo Schedule (Tomorrow):
-    .todo_wrap
-      = render @member.todos(Date.tomorrow, Date.tomorrow)
+    .uk-width-1-2
+      .todo_header
+        Todo Schedule (Tomorrow):
+      .todo_wrap
+        = render @member.todos(Date.tomorrow, Date.tomorrow)
 
-%hr
-#charts_wrap
-  = render 'charts'
+  %hr
+  #charts_wrap
+    = render 'charts'
 
-%hr
-%dl.accordion{ "data-accordion" => 'TodoHistory' }
-  %dd.accordion-navigation
-    %a{ href: '#todo_history'}
-      Todo Details
-      %span.fa.accordion-icon
-    #todo_history.content
-      = render 'details'
+  %hr
+  %dl.accordion{ "data-accordion" => 'TodoHistory' }
+    %dd.accordion-navigation
+      %a{ href: '#todo_history'}
+        Todo Details
+        %span.fa.accordion-icon
+      #todo_history.content
+        = render 'details'
 
-%hr
-%h2 Activities
-- if @member.current_activity
-  In activity #{@member.current_activity.activity_template.name}
-  = link_to "Stop #{@member.current_activity.activity_template.name}", family_member_activity_path(@family, @member, @member.current_activity, stop: true), method: :put
+  %hr
+  %h2 Activities
+  - if @member.current_activity
+    In activity #{@member.current_activity.activity_template.name}
+    = link_to "Stop #{@member.current_activity.activity_template.name}", family_member_activity_path(@family, @member, @member.current_activity, stop: true), method: :put
 
 
-- else
-  %ul#family_activities_list
-    = # TODO: Update this: render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @family.family_activities }
+  - else
+    %ul#family_activities_list
+      = # TODO: Update this: render partial: 'family_activities/family_activities_list', locals: { member: @member, family_activities: @family.family_activities }
 
-%p= link_to 'Edit Member Information', edit_family_member_path(@family, @member)
-%p= link_to 'Back', @member.family
