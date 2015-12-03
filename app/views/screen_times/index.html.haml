@@ -191,7 +191,7 @@
         -@family.devices.each do |device|
           %tr
             %td{colspan: 8}
-              %h3 #{device.name} (#{device.device_type.name})
+              %h3 #{device.name} (#{device.device_type.try(:name)})
           %tr
             %td.k-rotated
               .k-rotate

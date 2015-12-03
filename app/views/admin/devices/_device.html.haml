@@ -3,7 +3,7 @@
     = device.name
   .device_type
     Device type:
-    = device.device_type.name
+    = device.device_type.try(:name)
   - if device.primary_member.present?
     .device_primary_member
       Default user:
