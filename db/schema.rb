@@ -89,46 +89,6 @@ ActiveRecord::Schema.define(version: 20151124214752) do
     t.datetime "updated_at"
   end
 
-  create_table "alerter_messages", force: :cascade do |t|
-    t.string   "type"
-    t.string   "short_msg",            default: ""
-    t.text     "long_msg",             default: ""
-    t.boolean  "draft",                default: false
-    t.string   "notification_code"
-    t.integer  "notified_object_id"
-    t.string   "notified_object_type"
-    t.integer  "notification_type_id"
-    t.string   "attachment"
-    t.datetime "updated_at",                           null: false
-    t.datetime "created_at",                           null: false
-    t.boolean  "global",               default: false
-    t.datetime "expires"
-  end
-
-  create_table "alerter_notification_types", force: :cascade do |t|
-    t.string "name"
-  end
-
-  create_table "alerter_preferences", force: :cascade do |t|
-    t.integer "notification_type_id"
-    t.integer "notifiable_id"
-    t.string  "notifiable_type"
-    t.text    "alert_methods"
-  end
-
-  create_table "alerter_receipts", force: :cascade do |t|
-    t.integer  "receiver_id"
-    t.string   "receiver_type"
-    t.integer  "message_id",                               null: false
-    t.boolean  "is_read",                  default: false
-    t.boolean  "deleted",                  default: false
-    t.string   "mailbox_type",  limit: 25
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
-  end
-
-  add_index "alerter_receipts", ["message_id"], name: "index_alerter_receipts_on_message_id", using: :btree
-
   create_table "api_devices", force: :cascade do |t|
     t.string   "device_token"
     t.string   "name"
@@ -737,7 +697,6 @@ ActiveRecord::Schema.define(version: 20151124214752) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
 
-  add_foreign_key "alerter_receipts", "alerter_messages", column: "message_id", name: "receipts_on_message_id"
   add_foreign_key "applogs", "apps"
   add_foreign_key "applogs", "devices"
   add_foreign_key "applogs", "members"

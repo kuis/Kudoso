@@ -118,7 +118,7 @@ activity_templates = ActivityTemplate.create([
                                      ])
 
 # Themes and Avatars
-Theme.create({ name: 'Kudoso', primary_color: '#1E387E', secondary_color: '#FDB941', primary_bg_color: '#4F9CF6', secondary_bg_color: '#A5CFFF'})
+Theme.create({ name: 'Kudoso', json: { primary_color: '#1E387E', secondary_color: '#FDB941', primary_bg_color: '#4F9CF6', secondary_bg_color: '#A5CFFF'}.to_json } )
 Dir.glob("#{::Rails.root}/lib/assets/Avatars/Boy*.png").each do |file|
   name = file.split("/").last.split(".").first.gsub("Boy",'')
   avatar = Avatar.new(name: name, gender: 'm', theme_id: 1)
@@ -164,8 +164,8 @@ smartv = DeviceType.create({ name: 'Smart-TV HDTV', description: 'Smart-TV Conne
 appletv = DeviceType.create({ name: 'AppleTV', description: '', os: '', version: '', device_category: video_devices, icon: File.open("#{::Rails.root}/lib/assets/Icons/disc.svg") })
 roku = DeviceType.create({ name: 'Roku', description: '', os: '', version: '', device_category: video_devices, icon: File.open("#{::Rails.root}/lib/assets/Icons/disc.svg") })
 firetv = DeviceType.create({ name: 'Amazon FireTV', description: '', os: '', version: '', device_category: video_devices, icon: File.open("#{::Rails.root}/lib/assets/Icons/disc.svg") })
-pc = DeviceType.create({ name: 'Windows Personal Computer', description: '', os: '', version: '', device_category: computers, icon: File.open("#{::Rails.root}/lib/assets/Icons/computer.svg") })
-mac = DeviceType.create({ name: 'Apple Macintosh Personal Computer', description: '', os: '', version: '', device_category: computers, icon: File.open("#{::Rails.root}/lib/assets/Icons/computer.svg") })
+pc = DeviceType.create({ name: 'Windows Personal Computer', description: '', os: '', version: '', device_category: computers, icon: File.open("#{::Rails.root}/lib/assets/Icons/tablet.svg") })
+mac = DeviceType.create({ name: 'Apple Macintosh Personal Computer', description: '', os: '', version: '', device_category: computers, icon: File.open("#{::Rails.root}/lib/assets/Icons/tablet.svg") })
 
 
 activity_template = ActivityTemplate.create({ name: 'Play a game', description: '', restricted: true, cost: 0, reward: 0, time_block: 10 })
