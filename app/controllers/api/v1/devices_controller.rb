@@ -42,14 +42,12 @@ module Api
       param :device_name, String, desc: "The device name as reported by the device"
       def deviceDidRegister
         messages = init_messages
-        device = ApiDevice.find_by_device_token(params[:device_token])
+        device = ApiDevice.find_by(device_token: params[:device_token])
         if device.nil?
           messages[:error] << 'Invalid Device Token'
           failure (messages)
           return
         else
-
-          #binding.pry
           auth = request.headers["Signature"]
           if auth != Digest::MD5.hexdigest(request.body.read + device.device_token.reverse)
             messages[:error] << "Invalid Signature: #{request.body.read}"
@@ -71,7 +69,7 @@ module Api
               @device.os_version = params[:os_version] if params[:os_version]
               @device.build_version = params[:build_version] if params[:build_version]
               @device.product_name = params[:product_name] if params[:product_name]
-              @device.device_type_id = DeviceType.find_or_create_by(name: params[:model_name]).id          if params[:model_name]
+              @device.device_type_id = DeviceType.find_or_create_by(name: params[:model_name]).id if params[:model_name]
               @device.device_name = params[:device_name] if params[:device_name]
 
               if @device.save
@@ -104,14 +102,12 @@ module Api
       param :commandStatusMessage, String, desc: "Detailed message for the commandStatus"
       def status
         messages = init_messages
-        device = ApiDevice.find_by_device_token(params[:device_token])
+        device = ApiDevice.find_by(device_token: params[:device_token])
         if device.nil?
           messages[:error] << 'Invalid Device Token'
           failure (messages)
           return
         else
-
-          #binding.pry
           auth = request.headers["Signature"]
           if auth != Digest::MD5.hexdigest(request.body.read + device.device_token.reverse)
             messages[:error] << "Invalid Signature: #{request.body.read}"

@@ -8,6 +8,32 @@ describe 'Devices API', type: :request do
     @api_device =  FactoryGirl.create(:api_device)
   end
 
+  it 'handles an invalid device token' do
+    wifi_mac = SecureRandom.hex(12)
+    query_str = { device_token: SecureRandom.hex(24), wifi_mac:wifi_mac, udid: SecureRandom.uuid, product_name: 'yahoo', model_name: @device.device_type.name }
+    post "/api/v1/devices/#{@device.uuid}/deviceDidRegister", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error']).to include('Invalid Device Token')
+  end
+
+  it 'handles an invalid signature' do
+    wifi_mac = SecureRandom.hex(12)
+    query_str = { device_token: @api_device.device_token, wifi_mac:wifi_mac, udid: SecureRandom.uuid, product_name: 'yahoo', model_name: @device.device_type.name }
+    post "/api/v1/devices/#{@device.uuid}/deviceDidRegister", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + SecureRandom.hex(24)) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error'].first).to match(/Invalid Signature/)
+  end
+
+  it 'handles expired api devices' do
+    @api_device.expires_at = Time.now - 1.day
+    @api_device.save
+    wifi_mac = SecureRandom.hex(12)
+    query_str = { device_token: @api_device.device_token, wifi_mac:wifi_mac, udid: SecureRandom.uuid, product_name: 'yahoo', model_name: @device.device_type.name }
+    post "/api/v1/devices/#{@device.uuid}/deviceDidRegister", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error']).to include('Device/application access expired, please update your application code at your app store')
+  end
+
   it 'successfully handles a mobicip deviceDidRegister callback' do
     wifi_mac = SecureRandom.hex(12)
     query_str = { device_token: @api_device.device_token, wifi_mac:wifi_mac, udid: SecureRandom.uuid, product_name: 'yahoo', model_name: @device.device_type.name }
@@ -15,6 +41,35 @@ describe 'Devices API', type: :request do
     expect(response.status).to eq(200)
     @device.reload
     expect(@device.wifi_mac).to eq(wifi_mac)
+  end
+
+  it 'handles an invalid device token' do
+    cmd = Faker::Lorem.sentence(3)
+    last_seen = 5.minutes.ago
+    query_str = { device_token: SecureRandom.hex(24), commandExecuted: cmd, lastReachedAt: last_seen.to_i.to_s }
+    patch "/api/v1/devices/#{@device.uuid}/status", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error']).to include('Invalid Device Token')
+  end
+
+  it 'handles an invalid signature' do
+    cmd = Faker::Lorem.sentence(3)
+    last_seen = 5.minutes.ago
+    query_str = { device_token: @api_device.device_token, commandExecuted: cmd, lastReachedAt: last_seen.to_i.to_s }
+    patch "/api/v1/devices/#{@device.uuid}/status", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + SecureRandom.hex(24)) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error'].first).to match(/Invalid Signature/)
+  end
+
+  it 'handles expired api devices' do
+    @api_device.expires_at = Time.now - 1.day
+    @api_device.save
+    cmd = Faker::Lorem.sentence(3)
+    last_seen = 5.minutes.ago
+    query_str = { device_token: @api_device.device_token, commandExecuted: cmd, lastReachedAt: last_seen.to_i.to_s }
+    patch "/api/v1/devices/#{@device.uuid}/status", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error']).to include('Device/application access expired, please update your application code at your app store')
   end
 
   it 'successfully handles a mobicip stats callback' do
