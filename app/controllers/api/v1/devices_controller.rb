@@ -198,7 +198,7 @@ module Api
           end
 
         rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Family or Member not found.'
+          messages[:error] << 'Family or Device not found.'
           render :json => { :messages => messages }, :status => 404
         rescue
           messages[:error] << 'A server error occurred.'

@@ -93,6 +93,28 @@ describe 'Devices API', type: :request do
       json = JSON.parse(response.body)
       @token = json["token"]
     end
+
+    it 'lists existing family devices to a user' do
+      device1 = FactoryGirl.create(:device, family: @user.family)
+      device2 = FactoryGirl.create(:device, family: @user.family)
+      FactoryGirl.create(:device)
+      get "/api/v1/families/#{@user.family_id}/devices", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+
+      json = JSON.parse(response.body)
+      expect(response.status).to eq(200)
+      expect(json['devices'].count).to eq 2
+      expect(json['devices'].map{|x| x['id']}).to match_array([device1.id, device2.id])
+    end
+
+    it 'listing devices does not allow a user to cross family boundaries' do
+      device = FactoryGirl.create(:device)
+      get "/api/v1/families/#{device.family_id}/devices", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+
+      json = JSON.parse(response.body)
+      expect(response.status).to eq(403)
+      expect(json['messages']['error']).to include('You are not authorized to do this.')
+    end
+
     it 'creates a new device' do
       query_str = { device: { mac_address: 'aa:11:bb:22:ef', name: 'aa:11:bb:22:ef'} }
       post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
@@ -111,6 +133,33 @@ describe 'Devices API', type: :request do
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json["device"]["id"]).to eq(device_id)
+    end
+
+    it 'retrieves an existing family device' do
+      device = FactoryGirl.create(:device, family: @user.family)
+      get "/api/v1/families/#{@user.family_id}/devices/#{device.id}", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+
+      json = JSON.parse(response.body)
+      expect(response.status).to eq(200)
+      expect(json['device']['id']).to eq(device.id)
+    end
+
+    it 'can not retrieve another families device' do
+      device = FactoryGirl.create(:device)
+      get "/api/v1/families/#{device.family_id}/devices/#{device.id}", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+
+      json = JSON.parse(response.body)
+      expect(response.status).to eq(403)
+      expect(json['messages']['error']).to include('You are not authorized to do this.')
+    end
+
+    it 'device must belong to the family' do
+      device = FactoryGirl.create(:device)
+      get "/api/v1/families/#{@user.family_id}/devices/#{device.id}", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+
+      json = JSON.parse(response.body)
+      expect(response.status).to eq(404)
+      expect(json['messages']['error']).to include('Family or Device not found.')
     end
   end
 
