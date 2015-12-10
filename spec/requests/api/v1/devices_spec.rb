@@ -8,6 +8,32 @@ describe 'Devices API', type: :request do
     @api_device =  FactoryGirl.create(:api_device)
   end
 
+  it 'handles an invalid device token' do
+    wifi_mac = SecureRandom.hex(12)
+    query_str = { device_token: SecureRandom.hex(24), wifi_mac:wifi_mac, udid: SecureRandom.uuid, product_name: 'yahoo', model_name: @device.device_type.name }
+    post "/api/v1/devices/#{@device.uuid}/deviceDidRegister", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error']).to include('Invalid Device Token')
+  end
+
+  it 'handles an invalid signature' do
+    wifi_mac = SecureRandom.hex(12)
+    query_str = { device_token: @api_device.device_token, wifi_mac:wifi_mac, udid: SecureRandom.uuid, product_name: 'yahoo', model_name: @device.device_type.name }
+    post "/api/v1/devices/#{@device.uuid}/deviceDidRegister", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + SecureRandom.hex(24)) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error'].first).to match(/Invalid Signature/)
+  end
+
+  it 'handles expired api devices' do
+    @api_device.expires_at = Time.now - 1.day
+    @api_device.save
+    wifi_mac = SecureRandom.hex(12)
+    query_str = { device_token: @api_device.device_token, wifi_mac:wifi_mac, udid: SecureRandom.uuid, product_name: 'yahoo', model_name: @device.device_type.name }
+    post "/api/v1/devices/#{@device.uuid}/deviceDidRegister", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error']).to include('Device/application access expired, please update your application code at your app store')
+  end
+
   it 'successfully handles a mobicip deviceDidRegister callback' do
     wifi_mac = SecureRandom.hex(12)
     query_str = { device_token: @api_device.device_token, wifi_mac:wifi_mac, udid: SecureRandom.uuid, product_name: 'yahoo', model_name: @device.device_type.name }
@@ -15,6 +41,35 @@ describe 'Devices API', type: :request do
     expect(response.status).to eq(200)
     @device.reload
     expect(@device.wifi_mac).to eq(wifi_mac)
+  end
+
+  it 'handles an invalid device token' do
+    cmd = Faker::Lorem.sentence(3)
+    last_seen = 5.minutes.ago
+    query_str = { device_token: SecureRandom.hex(24), commandExecuted: cmd, lastReachedAt: last_seen.to_i.to_s }
+    patch "/api/v1/devices/#{@device.uuid}/status", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error']).to include('Invalid Device Token')
+  end
+
+  it 'handles an invalid signature' do
+    cmd = Faker::Lorem.sentence(3)
+    last_seen = 5.minutes.ago
+    query_str = { device_token: @api_device.device_token, commandExecuted: cmd, lastReachedAt: last_seen.to_i.to_s }
+    patch "/api/v1/devices/#{@device.uuid}/status", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + SecureRandom.hex(24)) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error'].first).to match(/Invalid Signature/)
+  end
+
+  it 'handles expired api devices' do
+    @api_device.expires_at = Time.now - 1.day
+    @api_device.save
+    cmd = Faker::Lorem.sentence(3)
+    last_seen = 5.minutes.ago
+    query_str = { device_token: @api_device.device_token, commandExecuted: cmd, lastReachedAt: last_seen.to_i.to_s }
+    patch "/api/v1/devices/#{@device.uuid}/status", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Signature' => Digest::MD5.hexdigest(ActiveSupport::JSON.encode(query_str) + @api_device.device_token.reverse) }
+    expect(response.status).to eq(401)
+    expect(JSON.parse(response.body)['messages']['error']).to include('Device/application access expired, please update your application code at your app store')
   end
 
   it 'successfully handles a mobicip stats callback' do
@@ -38,6 +93,28 @@ describe 'Devices API', type: :request do
       json = JSON.parse(response.body)
       @token = json["token"]
     end
+
+    it 'lists existing family devices to a user' do
+      device1 = FactoryGirl.create(:device, family: @user.family)
+      device2 = FactoryGirl.create(:device, family: @user.family)
+      FactoryGirl.create(:device)
+      get "/api/v1/families/#{@user.family_id}/devices", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+
+      json = JSON.parse(response.body)
+      expect(response.status).to eq(200)
+      expect(json['devices'].count).to eq 2
+      expect(json['devices'].map{|x| x['id']}).to match_array([device1.id, device2.id])
+    end
+
+    it 'listing devices does not allow a user to cross family boundaries' do
+      device = FactoryGirl.create(:device)
+      get "/api/v1/families/#{device.family_id}/devices", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+
+      json = JSON.parse(response.body)
+      expect(response.status).to eq(403)
+      expect(json['messages']['error']).to include('You are not authorized to do this.')
+    end
+
     it 'creates a new device' do
       query_str = { device: { mac_address: 'aa:11:bb:22:ef', name: 'aa:11:bb:22:ef'} }
       post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
@@ -56,6 +133,33 @@ describe 'Devices API', type: :request do
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json["device"]["id"]).to eq(device_id)
+    end
+
+    it 'retrieves an existing family device' do
+      device = FactoryGirl.create(:device, family: @user.family)
+      get "/api/v1/families/#{@user.family_id}/devices/#{device.id}", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+
+      json = JSON.parse(response.body)
+      expect(response.status).to eq(200)
+      expect(json['device']['id']).to eq(device.id)
+    end
+
+    it 'can not retrieve another families device' do
+      device = FactoryGirl.create(:device)
+      get "/api/v1/families/#{device.family_id}/devices/#{device.id}", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+
+      json = JSON.parse(response.body)
+      expect(response.status).to eq(403)
+      expect(json['messages']['error']).to include('You are not authorized to do this.')
+    end
+
+    it 'device must belong to the family' do
+      device = FactoryGirl.create(:device)
+      get "/api/v1/families/#{@user.family_id}/devices/#{device.id}", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+
+      json = JSON.parse(response.body)
+      expect(response.status).to eq(404)
+      expect(json['messages']['error']).to include('Family or Device not found.')
     end
   end
 
