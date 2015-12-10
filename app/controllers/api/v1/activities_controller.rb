@@ -21,8 +21,9 @@ module Api
 
 
       api :GET, "/v1/families/:family_id/members/:member_id/activities", "Retrieve all activities for a member (default: today's activities)"
-      param :start_date, Date, desc: "Optionnaly specify a start date"
-      param :end_date, Date, desc: "Optionnaly specify an end date"
+      param :start_date, Date, desc: "Optionally specify a start date"
+      param :end_date, Date, desc: "Optionally specify an end date"
+      param :activity_template_id, Date, desc: "Optionally specify an activity_template id"
       def index
         messages = init_messages
         begin
@@ -36,12 +37,12 @@ module Api
               begin
                 start_time = Chronic.parse(params["start_date"])
                 end_time =  Chronic.parse(params["end_date"])
-                @activities = @member.activities.where(created_at: start_time.beginning_of_day..end_time.end_of_day)
+                @activities = @activities.where(created_at: start_time.beginning_of_day..end_time.end_of_day)
               rescue
                 logger.error "Invalid start or end time for activities"
               end
             end
-            logger.debug "Returning JSON: #{@activities.as_json}"
+            @activities = @activities.where(activity_template_id: params[:activity_template_id]) if params[:activity_template_id].present?
             render :json => { activities: @activities.as_json, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'

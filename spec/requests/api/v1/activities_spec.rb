@@ -12,7 +12,7 @@ describe 'Activities API', type: :request do
     @todo_templates.each do |todo|
       res = @member.family.assign_template(todo, [ @member.id ])
     end
-    @devices = FactoryGirl.create_list(:device, 3, family_id: @member.family_id)
+    @devices = FactoryGirl.create_list(:device, 8, family_id: @member.family_id)
     @activity_template = FactoryGirl.create(:activity_template)
     @member.reload
     @member.password = 'password'
@@ -89,6 +89,28 @@ describe 'Activities API', type: :request do
     get "/api/v1/families/#{@user.family.id}/members/#{@member.id}/activities",
          nil,
          { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
+    expect(response.status).to eq(200)
+    json = JSON.parse(response.body)
+    expect(json["activities"].length).to eq(3)
+  end
+
+  it 'gets a list of activities for the day for a specific activity_template' do
+    activities = FactoryGirl.create_list(:activity, 3, member_id: @member.id, activity_template_id: @activity_template.id )
+    activities.each do |act|
+      act.devices << @devices.sample
+    end
+    @activity_template2 = FactoryGirl.create(:activity_template)
+    activities2 = FactoryGirl.create_list(:activity, 3, member_id: @member.id, activity_template_id: @activity_template2.id )
+    activities2.each do |act|
+      act.devices << @devices.sample
+    end
+    yest_act = FactoryGirl.create(:activity, member_id: @member.id, activity_template_id: @activity_template.id )
+    yest_act.update_attribute(:created_at, 1.day.ago)
+    @member.reload
+    expect(@member.activities.count).to eq(7)
+    get "/api/v1/families/#{@user.family.id}/members/#{@member.id}/activities",
+        { activity_template_id: @activity_template.id },
+        { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""  }
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)
     expect(json["activities"].length).to eq(3)

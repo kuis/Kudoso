@@ -17,7 +17,7 @@ module Api
       api :GET, "/v1/device_types", "Get list of device types"
       def index
         messages = init_messages
-        render :json => { device_types: DeviceType.all, messages: messages }, :status => 200
+        render :json => { device_types: DeviceType.all.as_json, messages: messages }, :status => 200
       end
 
     end
