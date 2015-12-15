@@ -121,69 +121,48 @@ module Api
       param_group :member
       def update
         messages = init_messages
-        begin
-          @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent ) || @current_member.id == params[:id].to_i
-            @member = @family.members.find(params[:id])
-            local_params = member_create_params.merge(family_id: @family.id)
-            local_params[:birth_date] = Chronic.parse(local_params[:birth_date]).to_date.to_s(:db) if local_params[:birth_date]
-            if local_params[:avatar]
-              @member.avatar = parse_image_data(local_params[:avatar])
-              @member.save
-              local_params.delete(:avatar)
-            end
-
-            if @member.update_attributes(local_params)
-              render :json => { :member => @member.as_json, :messages => messages }, :status => 200
-            else
-              messages[:error].concat @member.errors.full_messages
-              render :json => { :member => @member.as_json, :messages => messages }, :status => 400
-            end
-
-          else
-            messages[:error] << 'You are not authorized to do this.'
-            render :json => { :messages => messages }, :status => 403
+        @family = Family.find(params[:family_id])
+        if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent ) || @current_member.id == params[:id].to_i
+          @member = @family.members.find(params[:id])
+          local_params = member_create_params.merge(family_id: @family.id)
+          local_params[:birth_date] = Chronic.parse(local_params[:birth_date]).to_date.to_s(:db) if local_params[:birth_date]
+          if local_params[:avatar]
+            @member.avatar = parse_image_data(local_params[:avatar])
+            @member.save
+            local_params.delete(:avatar)
           end
 
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Family not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+          if @member.update_attributes(local_params)
+            render :json => { :member => @member.as_json, :messages => messages }, :status => 200
+          else
+            messages[:error].concat @member.errors.full_messages
+            render :json => { :member => @member.as_json, :messages => messages }, :status => 400
+          end
+
+        else
+          messages[:error] << 'You are not authorized to do this.'
+          render :json => { :messages => messages }, :status => 403
         end
-
-
       end
 
       api :DELETE, "/v1/families/:family_id/members/:member_id", "Delete a family member (authenticated user must be a parent)"
       param_group :member
       def destroy
-        messages = init_messages
-        begin
-          @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent )
-            @member = @family.members.find(params[:id])
-            if @member.destroy
-              render :json => { :member => @member.as_json, :messages => messages }, :status => 200
-            else
-              messages[:error].concat @member.errors.full_messages
-              render :json => { :member => @member.as_json, :messages => messages }, :status => 400
-            end
-
+      messages = init_messages
+        @family = Family.find(params[:family_id])
+        if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent )
+          @member = @family.members.find(params[:id])
+          if @member.destroy
+            render :json => { :member => @member.as_json, :messages => messages }, :status => 200
           else
-            messages[:error] << 'You are not authorized to do this.'
-            render :json => { :messages => messages }, :status => 403
+            messages[:error].concat @member.errors.full_messages
+            render :json => { :member => @member.as_json, :messages => messages }, :status => 400
           end
 
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Family not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        else
+          messages[:error] << 'You are not authorized to do this.'
+          render :json => { :messages => messages }, :status => 403
         end
-
       end
 
 
@@ -191,37 +170,27 @@ module Api
       param :time, Integer, desc: "Time (in seconds) to buy, if nil will attempt to buy maximum amount", required: false
       def buy_screen_time
         messages = init_messages
-        begin
-          @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.id == params[:id].to_i )
-            @member = @family.members.find(params[:id])
-            time = params[:time].try(:to_i)
-            begin
-              @member.buy_screen_time(time)
-            rescue  ScreenTime::ScreenTimeExceeded
-              messages[:error] << 'Sorry, maximum screen time for today already used'
-            rescue  Member::NotEnoughKudos
-              messages[:error] << 'Sorry, you do not have enough kudos to buy this much time'
-            rescue
-              messages[:error] << 'Failed to buy screen time'
-            end
-            render :json => { :member => @member.as_json, :messages => messages }, :status => messages[:error].length > 0 ? 400 : 200
-          else
-            messages[:error] << 'You are not authorized to do this.'
-            render :json => { :messages => messages }, :status => 403
+        @family = Family.find(params[:family_id])
+        if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.id == params[:id].to_i )
+          @member = @family.members.find(params[:id])
+          time = params[:time].try(:to_i)
+          begin
+            @member.buy_screen_time(time)
+          rescue  ScreenTime::ScreenTimeExceeded
+            messages[:error] << 'Sorry, maximum screen time for today already used'
+          rescue  Member::NotEnoughKudos
+            messages[:error] << 'Sorry, you do not have enough kudos to buy this much time'
+          rescue
+            messages[:error] << 'Failed to buy screen time'
           end
-
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Family not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+          render :json => { :member => @member.as_json, :messages => messages }, :status => messages[:error].length > 0 ? 400 : 200
+        else
+          messages[:error] << 'You are not authorized to do this.'
+          render :json => { :messages => messages }, :status => 403
         end
       end
 
       private
-
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def member_create_params
@@ -231,9 +200,6 @@ module Api
       def check_for_auth
         action_name == "index" && request.headers["HTTP_AUTHORIZATION"].nil?
       end
-
-
     end
-
   end
 end
