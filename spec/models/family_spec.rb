@@ -17,39 +17,39 @@ RSpec.describe Family, :type => :model do
       expect(@family.kids.count).to eq(@kids.count)
     end
 
-    it 'should assign a todo template to specific family members' do
-      #   def assign_template(todo_template, assign_members = Array.new)
-      template = FactoryGirl.create(:todo_template)
-      before_todos = @family.todos.count
+    it 'should assign a task template to specific family members' do
+      #   def assign_template(task_template, assign_members = Array.new)
+      template = FactoryGirl.create(:task_template)
+      before_tasks = @family.tasks.count
       kids_array = @kids.sample(2)
       unassigned_child = (@kids - kids_array).sample
       assigned_child = Member.find(kids_array[0].id)
-      before_todo_scehdules_assigned = assigned_child.todo_schedules.count
-      before_todo_scehdules_unassigned = unassigned_child.todo_schedules.count
-      todo = @family.assign_template(template,kids_array )
-      expect(@family.todos.count).to eq(before_todos + 1)
-      expect(@family.todos.last).to eq(todo)
-      expect(assigned_child.todo_schedules.count).to eq(before_todo_scehdules_assigned + 1)
-      expect(unassigned_child.todo_schedules.count).to eq(before_todo_scehdules_unassigned)
+      before_task_scehdules_assigned = assigned_child.task_schedules.count
+      before_task_scehdules_unassigned = unassigned_child.task_schedules.count
+      task = @family.assign_template(template,kids_array )
+      expect(@family.tasks.count).to eq(before_tasks + 1)
+      expect(@family.tasks.last).to eq(task)
+      expect(assigned_child.task_schedules.count).to eq(before_task_scehdules_assigned + 1)
+      expect(unassigned_child.task_schedules.count).to eq(before_task_scehdules_unassigned)
     end
 
-    it 'should memorialize todos from previous days' do
+    it 'should memorialize tasks from previous days' do
 
       kid = @kids[0]
-      template = FactoryGirl.create(:todo_template)
+      template = FactoryGirl.create(:task_template)
       @family.assign_template(template, [kid.id])
 
-      before_my_todos_count = kid.my_todos.count
+      before_my_tasks_count = kid.my_tasks.count
 
       #make schedule start in past
-      kid.todo_schedules.find_each do |ts|
+      kid.task_schedules.find_each do |ts|
         ts.start_date = 45.days.ago.to_date
         ts.save!(validate: false)
       end
 
-      (45.days.ago.to_date .. 1.days.ago.to_date).each { |d| Family.memorialize_todos(d) }
+      (45.days.ago.to_date .. 1.days.ago.to_date).each { |d| Family.memorialize_tasks(d) }
 
-      expect(kid.my_todos.count).to eq(before_my_todos_count + 45)
+      expect(kid.my_tasks.count).to eq(before_my_tasks_count + 45)
     end
   end
 

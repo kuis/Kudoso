@@ -11,7 +11,7 @@ class Admin::FamiliesController < AdminController
   # GET /families/1.json
   def show
     @family = Family.find(params[:id])
-    @todo_templates = TodoTemplate.where('disabled IS NOT TRUE')
+    @task_templates = TaskTemplate.where('disabled IS NOT TRUE')
   end
 
   # GET /families/new

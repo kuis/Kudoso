@@ -1,0 +1,17 @@
+- if my_task.complete?
+  - if my_task.due_date.to_date == Date.today || ( (current_user.try(:admin) || current_member.parent? || current_member.try(:id) == my_task.member_id ) && my_task.due_date <= Date.today )
+    = form_for [my_task.member.family, my_task.task, my_task.task_schedule, my_task.member, my_task], remote: true, html: { id: "complete_task_#{my_task.task_schedule.id}" } do |f|
+      = f.hidden_field :due_date
+      = f.hidden_field :complete, value: false
+      = link_to raw('<i class="fa fa-check-square-o"></i>'), '#', onclick: "$('#complete_task_#{my_task.task_schedule.id}').submit()"
+  - else
+    = raw('<i class="fa fa-check-square-o"></i>')
+- else
+  - if my_task.due_date.to_date == Date.today || ( (current_user.try(:admin) || current_member.try(:parent?) || current_user.try(:member).try(:parent?) || current_member.try(:id) == my_task.member_id) && my_task.due_date <= Date.today.end_of_day )
+    = form_for [my_task.member.family, my_task.task, my_task.task_schedule, my_task.member, my_task], remote: true, html: { id: "complete_task_#{my_task.task_schedule.id}" } do |f|
+      = f.hidden_field :due_date
+      = f.hidden_field :complete, value: true
+      = link_to raw('<i class="fa fa-square-o"></i>'), '#', onclick: "$('#complete_task_#{my_task.task_schedule.id}').submit()"
+  - else
+    -# can't edit the future!
+    = raw('<i class="fa fa-square-o"></i>')

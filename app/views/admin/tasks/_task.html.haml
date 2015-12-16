@@ -1,0 +1,53 @@
+.task_wrap
+  .task_name
+    = task.name
+  .task_description
+    = task.description
+  .task_schedule
+    Default Schedule:
+    = IceCube::Rule.from_yaml(task.schedule)
+  .task_attributes
+    %ul.small-block-grid-3
+      %li
+        Acitve:
+        = task.active?
+      %li
+        Required:
+        = task.required?
+      %li
+        Kudos:
+        = task.kudos
+  .task_assignments
+    Assigned to:
+    %ul
+      - task.members.each do |member|
+        %li=member.full_name
+  .task_assign
+    - if can?(:create, TaskSchedule)
+      %dl.accordion{"data-accordion" =>"myAccordionGroup"}
+        %dd.accordion-navigation
+          %a{href: "#assign_task_#{task.id}"}
+            Assign to child
+          .content{id: "assign_task_#{task.id}"}
+            = form_for [@family, task, ts = TaskSchedule.new] do |f|
+              %br
+              .form_group
+                = f.label 'Choose a family member:'
+                = f.collection_select :member_id, @family.kids, :id, :full_name
+              .form_group
+                = f.label :start_date
+                = f.text_field :start_date, class: 'fdatepicker'
+              .form_group
+                =f.label 'End Date (optional)'
+                = f.text_field :end_date, class: 'fdatepicker'
+              .form_group
+                = f.label :schedule
+                = f.fields_for :schedule_rrules, ts.schedule_rrules.build(rrule: task.schedule) do |builder|
+                  = render 'schedule_rrules/schedule_rrule_fields', f: builder
+                .links
+                  =# link_to_add_association 'Add new recurring schedule', f, :schedule_rrules,  partial: 'schedule_rrules/schedule_rrule_fields'
+              = f.submit
+
+  .task_actions
+    = link_to 'Edit', edit_family_task_path(task.family, task) if can?(:update, task)
+    = link_to 'Destroy', family_task_path(task.family, task), :method => :delete, :data => { :confirm => 'Are you sure?' } if can?(:delete, task)

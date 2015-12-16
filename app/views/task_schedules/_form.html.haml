@@ -1,0 +1,27 @@
+= simple_form_for [@family, @task, @task_schedule], html: { class: 'uk-form uk-form-stacked' }, wrapper: :uikit_form_stacked do |f|
+  - if @task_schedule.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@task_schedule.errors.count, "error")} prohibited this task_schedule from being saved:"
+      %ul
+        - @task_schedule.errors.full_messages.each do |msg|
+          %li= msg
+  = f.hidden_field :member_id
+  = f.input 'member_name', as: :fake, input_html: { value: @task_schedule.member.full_name }, disabled: true
+  = f.input 'task_name', as: :fake, input_html: { value: @task.name }, disabled: true
+  = f.hidden_field :task_id
+  = f.input :kudos, disabled: true
+  .row
+    .col-xs-6.col-xs-offset-3
+      %small Edit the Family Task to change kudos
+  = f.input :start_date, as: :datepicker, disabled: true
+  = f.input :end_date, as: :datepicker, disabled: !( @task_schedule.end_date.blank? || @task_schedule.end_date > Date.today )
+  .uk-form-row
+    = f.input :active, as: :boolean, wrapper: :uikit_checkbox
+  .uk-form-row
+    = f.simple_fields_for :schedule_rrules, label: 'Recurring schedule rules:' do |builder|
+      = render 'schedule_rrules/schedule_rrule_fields', f: builder
+    - # TODO FIXME: the below is throwing an icecube::rule error...
+    = # link_to_add_association 'Add new recurring schedule', f, :schedule_rrules, partial: 'schedule_rrules/schedule_rrule_fields'
+  = f.input :notes
+  .uk-form-row
+    = f.submit class: 'uk-button uk-button-primary'

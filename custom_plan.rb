@@ -4,7 +4,7 @@ require 'zeus/parallel_tests'
 class CustomPlan < Zeus::ParallelTests::Rails
   # Your custom methods go heredef my_custom_command
   #  # see https://github.com/burke/zeus/blob/master/docs/ruby/modifying.md
-  # end
+  # end  
 
   def cucumber_environment
     require 'cucumber/rspec/disable_option_parser'

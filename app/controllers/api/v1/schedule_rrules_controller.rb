@@ -21,18 +21,18 @@ module Api
         EOS
       end
 
-      api :POST, "/v1/families/:family_id/todo_schedules/:todo_schedule_id/schedule_rrules", "Create a schedule_rrule"
+      api :POST, "/v1/families/:family_id/task_schedules/:task_schedule_id/schedule_rrules", "Create a schedule_rrule"
       param :rule, Hash, desc: "The rule in IceCube::Rule to_hash format"
       def create
         messages = init_messages
         begin
-          @todo_schedule = TodoSchedule.find(params[:todo_schedule_id])
+          @task_schedule = TaskSchedule.find(params[:task_schedule_id])
           @family = Family.find(params[:family_id])
 
-          if @family && @todo_schedule && @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent?)
+          if @family && @task_schedule && @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent?)
             begin
               rule = IceCube::Rule.from_hash(params[:rule])
-              @schedule_rrule = @todo_schedule.schedule_rrules.build
+              @schedule_rrule = @task_schedule.schedule_rrules.build
               @schedule_rrule.rule=rule.to_yaml
               @schedule_rrule.save
               render :json => { :schedule_rrule => @schedule_rrule.as_json, :messages => messages }, :status => 200
@@ -54,7 +54,7 @@ module Api
         end
       end
 
-      api :PATCH, "/v1/families/:family_id/todo_schedules/:todo_schedule_id/schedule_rrules/:schedule_rrule_id", "Update a schedule_rrule"
+      api :PATCH, "/v1/families/:family_id/task_schedules/:task_schedule_id/schedule_rrules/:schedule_rrule_id", "Update a schedule_rrule"
       param :rule, Hash, desc: "The rule in IceCube::Rule to_hash format"
       def update
         messages = init_messages
@@ -86,7 +86,7 @@ module Api
         end
       end
 
-      api :DELETE, "/v1/families/:family_id/todo_schedules/:todo_schedule_id/schedule_rrules/:schedule_rrule_id", "Delete a schedule_rrule"
+      api :DELETE, "/v1/families/:family_id/task_schedules/:task_schedule_id/schedule_rrules/:schedule_rrule_id", "Delete a schedule_rrule"
       def destroy
         messages = init_messages
         begin

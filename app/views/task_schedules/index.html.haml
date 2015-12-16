@@ -1,0 +1,28 @@
+%h1 Listing task_schedules
+
+%table
+  %tr
+    %th Task
+    %th Member
+    %th Start date
+    %th End date
+    %th Active
+    %th Schedule
+    %th Notes
+    %th
+    %th
+
+  - @task_schedules.each do |task_schedule|
+    %tr
+      %td= task_schedule.task_id
+      %td= task_schedule.member_id
+      %td= task_schedule.start_date
+      %td= task_schedule.end_date
+      %td= task_schedule.active
+      %td= task_schedule.schedule
+      %td= task_schedule.notes
+      %td= link_to 'Edit', edit_family_task_task_schedule_path(@family, task_schedule.task, task_schedule)
+      %td= link_to 'Destroy', family_task_task_schedule(@family, task_schedule.task), :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+

@@ -25,7 +25,7 @@ Rails.application.routes.draw do
 
   resources :activity_templates
 
-  resources :todo_templates
+  resources :task_templates
   resources :themes
 
 
@@ -41,25 +41,25 @@ Rails.application.routes.draw do
       resources :activities do
         resources :activity_details
       end
-      resources :my_todos
+      resources :my_tasks
       resources :screen_times
       resources :st_overrides
       resources :screen_time_schedules
       member do
-        post '/todo_groups/:todo_group_id/assign', to: "members#assign_todo_group"
-        post '/todo_templates/assign', to: "members#assign_todo_templates"
+        post '/task_groups/:task_group_id/assign', to: "members#assign_task_group"
+        post '/task_templates/assign', to: "members#assign_task_templates"
       end
     end
 
 
 
-    resources :todos do
-      resources :todo_schedules do
+    resources :tasks do
+      resources :task_schedules do
         resources :members do
           resources :activities do
             resources :activity_details
           end
-          resources :my_todos
+          resources :my_tasks
           resources :screen_times
         end
       end
@@ -75,10 +75,10 @@ Rails.application.routes.draw do
     resources :avatars
     resources :contacts
     resources :families
-    resources :todo_templates
+    resources :task_templates
     resources :devices
     resources :device_types
-    resources :todo_templates
+    resources :task_templates
     resources :tickets
     resources :plugs
     resources :router_firmwares
@@ -106,11 +106,11 @@ Rails.application.routes.draw do
           post :reset_password
         end
       end
-      resources :todo_templates
+      resources :task_templates
       resources :families do
         resources :activity_templates, only: [:index, :show]
-        resources :todos do
-          resources :todo_schedules do
+        resources :tasks do
+          resources :task_schedules do
             resources :schedule_rrules
           end
         end
@@ -124,12 +124,12 @@ Rails.application.routes.draw do
           resources :activities
           resources :apps_members, path: :apps
           resources :ledger, only: :index
-          resources :my_todos do
+          resources :my_tasks do
             member do
               post :verify
             end
           end
-          resources :todo_templates do
+          resources :task_templates do
             member do
               post :assign
               delete :unassign

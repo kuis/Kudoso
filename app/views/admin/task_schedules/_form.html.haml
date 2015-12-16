@@ -1,0 +1,41 @@
+= form_for [@family, @task, @task_schedule] do |f|
+  - if @task_schedule.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@task_schedule.errors.count, "error")} prohibited this task_schedule from being saved:"
+      %ul
+        - @task_schedule.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label 'Task'
+    = f.hidden_field :task_id
+    = f.text_field 'task_name', value: @task.name, readonly: true
+  .field
+    = f.label 'Assigned To'
+    = f.hidden_field :member_id
+    = f.text_field 'member_name', value: @task_schedule.member.full_name, readonly: true
+  .field
+    = f.label :start_date
+    = f.text_field :start_date, readonly: true
+  .field
+    = f.label :kudos
+    = f.text_field 'task_kudos', value: @task.kudos, readonly: true
+  .field
+    = f.label :end_date
+    - if @task_schedule.end_date.blank? || @task_schedule.end_date > Date.today
+      = f.text_field :end_date, class: 'fdatepicker'
+    - else
+      = f.text_field :end_date, readonly: true
+  .field
+    = f.label :active
+    = f.check_box :active
+  .field
+    = f.label 'Recurring schedule rules:'
+    = f.fields_for :schedule_rrules do |builder|
+      = render 'schedule_rrules/schedule_rrule_fields', f: builder
+    = link_to_add_association 'Add new recurring schedule', f, :schedule_rrules, partial: 'schedule_rrules/schedule_rrule_fields'
+  .field
+    = f.label :notes
+    = f.text_area :notes
+  .actions
+    = f.submit 'Save'

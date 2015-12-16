@@ -5,17 +5,17 @@
   - @family.kids.each do |member|
     .uk-width-1-3
       = link_to member.full_name, family_member_path(@family, member)
-      %p ToDo schedule:
-      = render member.todo_schedules
+      %p Task schedule:
+      = render member.task_schedules
 %hr
-%h2 Family ToDo List
-%ul#family_todo_list
-  - @family.todos.each do |todo|
+%h2 Family Task List
+%ul#family_task_list
+  - @family.tasks.each do |task|
     %li
-      = render todo
+      = render task
   %li
-    %a{href: '#', data: { "reveal-id" => 'todo_template_modal' }}
-      Add more ToDo's
+    %a{href: '#', data: { "reveal-id" => 'task_template_modal' }}
+      Add more Task's
 
 %hr
 .row
@@ -35,20 +35,20 @@
     %h2 Family Activities
     %ul
       - # TODO: show list of activities
-#todo_template_modal.reveal-modal{data: { reveal: true} }
+#task_template_modal.reveal-modal{data: { reveal: true} }
   %a.close-reveal-modal
     &#215;
-  %h2 ToDo Templates
+  %h2 Task Templates
   %ul
-    - @todo_templates.each do |todo|
-      - if @family.todos.where(todo_template_id: todo.id).count == 0
+    - @task_templates.each do |task|
+      - if @family.tasks.where(task_template_id: task.id).count == 0
         %li
-          = render todo
-          = link_to 'Add to Family ToDo List', family_todos_path(@family, todo_template_id: todo.id ), method: :post
+          = render task
+          = link_to 'Add to Family Task List', family_tasks_path(@family, task_template_id: task.id ), method: :post
     %li
-      .todo_wrap
-        Create your own ToDo:
-        = form_for [@family, Todo.new] do |f|
+      .task_wrap
+        Create your own Task:
+        = form_for [@family, Task.new] do |f|
           .form-group
             = f.label :name
             = f.text_field :name

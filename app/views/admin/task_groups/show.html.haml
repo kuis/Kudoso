@@ -1,0 +1,23 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @task_group.name
+%p
+  %b Rec min age:
+  = @task_group.rec_min_age
+%p
+  %b Rec max age:
+  = @task_group.rec_max_age
+%p
+  %b Active:
+  = @task_group.active
+
+%p
+  %b Task's in this group:
+  - @task_group.task_templates.each do |taskt|
+    %br #{taskt.name}
+
+= link_to 'Edit', edit_task_group_path(@task_group)
+\|
+= link_to 'Back', task_groups_path
