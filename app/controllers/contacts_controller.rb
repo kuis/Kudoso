@@ -4,6 +4,7 @@ class ContactsController < ApplicationController
 
   def index
     @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], "0").try(:[],:address)
+    @primary_email ||= params[:contact].try(:[], :emails_attributes).try(:[], :"0").try(:[],:address)
     params[:contact].delete(:emails_attributes)
     if @primary_email.blank?
       respond_to do |format|
@@ -46,6 +47,7 @@ class ContactsController < ApplicationController
 
   def create
     @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], "0").try(:[],:address)
+    @primary_email ||= params[:contact].try(:[], :emails_attributes).try(:[], :"0").try(:[],:address)
     params[:contact].delete(:emails_attributes)
     if @primary_email.blank?
       respond_to do |format|
@@ -77,10 +79,20 @@ class ContactsController < ApplicationController
         @email.contact_id = @contact.id
         @email.save
       else
-        @contact.update_attributes( contact_params )
-        if @contact.primary_email.blank?
-          @email.update_attribute(:is_primary, true)
+        if @contact.update_attributes( contact_params )
+          if @contact.primary_email.blank?
+            @email.update_attribute(:is_primary, true)
+          end
+        else
+          logger.error "Unable to create contact (#{@primary_email}): #{@contact.errors.full_messages.to_sentence}"
+          respond_to do |format|
+            format.js { render partial: 'home/register_error', locals: { error_msg: @contact.errors.full_messages.to_sentence}}
+            format.html { redirect_to pre_signup_path, alert: @contact.errors.full_messages.to_sentence }
+            format.json { render json:  {error: @contact.errors.full_messages }, :status => 400 }
+          end
+          return nil
         end
+
       end
     end
 
