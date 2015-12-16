@@ -62,32 +62,21 @@ module Api
           else
             messages[:warning] << "This application has been marked for end-of-life at #{device.expires_at.to_formatted_s(:long_ordinal)}.  Please update the application as soon as possible to avoid any problems with access." if  device.expires_at.present?
 
-            begin
-              @device = Device.find_by_uuid(params[:uuid])
-              @device.udid = params[:udid] if params[:udid]
-              @device.wifi_mac = params[:wifi_mac] if params[:wifi_mac]
-              @device.os_version = params[:os_version] if params[:os_version]
-              @device.build_version = params[:build_version] if params[:build_version]
-              @device.product_name = params[:product_name] if params[:product_name]
-              @device.device_type_id = DeviceType.find_or_create_by(name: params[:model_name]).id if params[:model_name]
-              @device.device_name = params[:device_name] if params[:device_name]
+            @device = Device.find_by_uuid(params[:uuid])
+            @device.udid = params[:udid] if params[:udid]
+            @device.wifi_mac = params[:wifi_mac] if params[:wifi_mac]
+            @device.os_version = params[:os_version] if params[:os_version]
+            @device.build_version = params[:build_version] if params[:build_version]
+            @device.product_name = params[:product_name] if params[:product_name]
+            @device.device_type_id = DeviceType.find_or_create_by(name: params[:model_name]).id if params[:model_name]
+            @device.device_name = params[:device_name] if params[:device_name]
 
-              if @device.save
+            if @device.save
 
-                render :json => { :device => @device, :messages => messages }, :status => 200
-              else
-                messages[:error].concat @device.errors.full_messages
-                render :json => { :device => @device, :messages => messages }, :status => 400
-              end
-
-
-
-            rescue ActiveRecord::RecordNotFound
-              messages[:error] << 'Device not found.'
-              render :json => { :messages => messages }, :status => 404
-            rescue
-              messages[:error] << 'A server error occurred.'
-              render :json => { :messages => messages }, :status => 500
+              render :json => { :device => @device, :messages => messages }, :status => 200
+            else
+              messages[:error].concat @device.errors.full_messages
+              render :json => { :device => @device, :messages => messages }, :status => 400
             end
           end
         end
@@ -122,41 +111,32 @@ module Api
           else
             messages[:warning] << "This application has been marked for end-of-life at #{device.expires_at.to_formatted_s(:long_ordinal)}.  Please update the application as soon as possible to avoid any problems with access." if  device.expires_at.present?
 
-            begin
-              @device = Device.find_by_udid(params[:udid])
+            @device = Device.find_by_udid(params[:udid])
 
-              if params[:lastReachedAt]
-                if @device.update_attribute( :last_contact, Time.at(params[:lastReachedAt].to_i) )
-                  messages[:info] << "Device last contacted at #{@device.last_contact}"
-                else
-                  messages[:error].concat @device.errors.full_messages
-                end
+            if params[:lastReachedAt]
+              if @device.update_attribute( :last_contact, Time.at(params[:lastReachedAt].to_i) )
+                messages[:info] << "Device last contacted at #{@device.last_contact}"
+              else
+                messages[:error].concat @device.errors.full_messages
               end
-
-              if params["commandExecuted"]
-                @command = @device.last_command( params["commandExecuted"] )
-                @command.executed = true
-                @command.status = params["commandStatus"] if params["commandStatus"]
-                @command.result = params["commandStatusMessage"] if params["commandStatusMessage"]
-                if @command.save
-                  messages[:info] << "Saved command to ID: #{@command.id}"
-                else
-
-                  messages[:error].concat @command.errors.full_messages
-                end
-
-              end
-
-
-              render :json => { :device => @device, :messages => messages }, :status => (messages[:error].length == 0) ? 200 : 400
-
-            rescue ActiveRecord::RecordNotFound
-              messages[:error] << 'Device not found.'
-              render :json => { :messages => messages }, :status => 404
-            rescue
-              messages[:error] << 'A server error occurred.'
-              render :json => { :messages => messages }, :status => 500
             end
+
+            if params["commandExecuted"]
+              @command = @device.last_command( params["commandExecuted"] )
+              @command.executed = true
+              @command.status = params["commandStatus"] if params["commandStatus"]
+              @command.result = params["commandStatusMessage"] if params["commandStatusMessage"]
+              if @command.save
+                messages[:info] << "Saved command to ID: #{@command.id}"
+              else
+
+                messages[:error].concat @command.errors.full_messages
+              end
+
+            end
+
+
+            render :json => { :device => @device, :messages => messages }, :status => (messages[:error].length == 0) ? 200 : 400
           end
         end
 
@@ -165,139 +145,89 @@ module Api
       api :GET, "/v1/families/:family_id/devices", "Retrieve all family devices"
       def index
         messages = init_messages
-        begin
-          @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || @current_member.try(:family) == @family
-            @devices = @family.devices
-            render :json => { :devices => @devices.as_json, :messages => messages }, :status => 200
-          else
-            messages[:error] << 'You are not authorized to do this.'
-            render :json => { :messages => messages }, :status => 403
-          end
-
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Family not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        @family = Family.find(params[:family_id])
+        if @current_user.try(:admin) || @current_member.try(:family) == @family
+          @devices = @family.devices
+          render :json => { :devices => @devices.as_json, :messages => messages }, :status => 200
+        else
+          messages[:error] << 'You are not authorized to do this.'
+          render :json => { :messages => messages }, :status => 403
         end
       end
 
       api :GET, "/v1/families/:family_id/devices/:device_id", "Retrieve a specific device"
       def show
         messages = init_messages
-        begin
-          @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || @current_member.try(:family) == @family
-            @device = @family.devices.find(params[:id])
-            render :json => { :device => @device.as_json, :messages => messages }, :status => 200
-          else
-            messages[:error] << 'You are not authorized to do this.'
-            render :json => { :messages => messages }, :status => 403
-          end
-
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Family or Device not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        @family = Family.find(params[:family_id])
+        if @current_user.try(:admin) || @current_member.try(:family) == @family
+          @device = @family.devices.find(params[:id])
+          render :json => { :device => @device.as_json, :messages => messages }, :status => 200
+        else
+          messages[:error] << 'You are not authorized to do this.'
+          render :json => { :messages => messages }, :status => 403
         end
-
       end
 
       api :POST, "/v1/families/:family_id/devices", "Create a new device for this family (authenticated user must be a parent), will check for a matching device and return it or create a new one"
       param_group :device
       def create
         messages = init_messages
-        begin
-          @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
-            @device = Device.where(device_create_params.slice(:mac_address).merge(family_id: @family.id)).first
-            @device ||= Device.create(device_create_params.merge(family_id: @family.id))
-            if @device.valid?
-              render :json => { :device => @device, :messages => messages }, :status => 200
-            else
-              messages[:error].concat @device.errors.full_messages
-              render :json => { :device => @device.as_json, :messages => messages }, :status => 400
-            end
-
+        @family = Family.find(params[:family_id])
+        if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
+          @device = Device.where(device_create_params.slice(:mac_address).merge(family_id: @family.id)).first
+          @device ||= Device.create(device_create_params.merge(family_id: @family.id))
+          if @device.valid?
+            render :json => { :device => @device, :messages => messages }, :status => 200
           else
-            messages[:error] << 'You are not authorized to do this.'
-            render :json => { :messages => messages }, :status => 403
+            messages[:error].concat @device.errors.full_messages
+            render :json => { :device => @device.as_json, :messages => messages }, :status => 400
           end
 
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Family not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        else
+          messages[:error] << 'You are not authorized to do this.'
+          render :json => { :messages => messages }, :status => 403
         end
-
       end
 
       api :PATCH, "/v1/families/:family_id/devices/:device_id", "Update a device (authenticated user must be a parent)"
       param_group :device
       def update
         messages = init_messages
-        begin
-          @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
-            @device = @family.devices.find(params[:id])
+        @family = Family.find(params[:family_id])
+        if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
+          @device = @family.devices.find(params[:id])
 
-            if @device.update_attributes(device_create_params.merge(family_id: @family.id))
-              render :json => { :device => @device.as_json, :messages => messages }, :status => 200
-            else
-              messages[:error].concat @device.errors.full_messages
-              render :json => { :device => @device.as_json, :messages => messages }, :status => 400
-            end
-
+          if @device.update_attributes(device_create_params.merge(family_id: @family.id))
+            render :json => { :device => @device.as_json, :messages => messages }, :status => 200
           else
-            messages[:error] << 'You are not authorized to do this.'
-            render :json => { :messages => messages }, :status => 403
+            messages[:error].concat @device.errors.full_messages
+            render :json => { :device => @device.as_json, :messages => messages }, :status => 400
           end
 
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Family not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        else
+          messages[:error] << 'You are not authorized to do this.'
+          render :json => { :messages => messages }, :status => 403
         end
-
-
       end
 
       api :DELETE, "/v1/families/:family_id/devices/:device_id", "Delete a family device (authenticated user must be a parent)"
       param_group :device
       def destroy
         messages = init_messages
-        begin
-          @family = Family.find(params[:family_id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
-            @device = @family.devices.find(params[:id])
-            if @device.destroy
-              render :json => { :device => @device.as_json, :messages => messages }, :status => 200
-            else
-              messages[:error].concat @device.errors.full_messages
-              render :json => { :device => @device.as_json, :messages => messages }, :status => 400
-            end
-
+        @family = Family.find(params[:family_id])
+        if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) )
+          @device = @family.devices.find(params[:id])
+          if @device.destroy
+            render :json => { :device => @device.as_json, :messages => messages }, :status => 200
           else
-            messages[:error] << 'You are not authorized to do this.'
-            render :json => { :messages => messages }, :status => 403
+            messages[:error].concat @device.errors.full_messages
+            render :json => { :device => @device.as_json, :messages => messages }, :status => 400
           end
 
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Family not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        else
+          messages[:error] << 'You are not authorized to do this.'
+          render :json => { :messages => messages }, :status => 403
         end
-
       end
 
       api :POST, "/v1/devices/record", "API Used by Kudoso Routers to record a device seen on the router"
@@ -322,8 +252,6 @@ module Api
         end
 
         logger.info "A new device was registered: #{params.inspect}"
-
-
         render :json => { :messages => messages }, :status => 200
       end
 
@@ -331,30 +259,20 @@ module Api
       api :GET, "/v1/devices/:id/apps", "Get apps installed on a device"
       def get_apps
         messages = init_messages
-        begin
-          @device = Device.find(params[:id])
-          auth = request.headers["Signature"]
-          if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @device.secure_key)
-            messages[:error] << "Invalid Signature"
-            failure(messages)
-            return
-          end
-          time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
-          if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
-            messages[:error] << "Invalid Timestamp"
-            failure(messages)
-            return
-          end
-          render :json => { apps: @device.apps, :messages => messages }, :status => 200
-
-
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Device not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        @device = Device.find(params[:id])
+        auth = request.headers["Signature"]
+        if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @device.secure_key)
+          messages[:error] << "Invalid Signature"
+          failure(messages)
+          return
         end
+        time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
+        if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
+          messages[:error] << "Invalid Timestamp"
+          failure(messages)
+          return
+        end
+        render :json => { apps: @device.apps, :messages => messages }, :status => 200
       end
 
       api :POST, "/v1/devices/:id/apps", "Register an app for device"
@@ -362,43 +280,32 @@ module Api
       param :apps, Array, desc: "Array of app objects"
       def post_apps
         messages = init_messages
-        begin
-          @device = Device.find(params[:id])
-          auth = request.headers["Signature"]
-          if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @device.secure_key)
-            messages[:error] << "Invalid Signature"
-            failure(messages)
-            return
-          end
-          time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
-          if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
-            messages[:error] << "Invalid Timestamp"
-            failure(messages)
-            return
-          end
+        @device = Device.find(params[:id])
+        auth = request.headers["Signature"]
+        if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @device.secure_key)
+          messages[:error] << "Invalid Signature"
+          failure(messages)
+          return
+        end
+        time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
+        if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
+          messages[:error] << "Invalid Timestamp"
+          failure(messages)
+          return
+        end
 
 
-          good = true
-          if params[:apps] && params[:apps].is_a?(Array)
-            params[:apps].each { |app| good = add_app(app, @device) && good }
-          else
-            good = add_app(params[:app], @device) && good
-          end
-          if good
-            render :json => { apps: @device.apps, :messages => messages }, :status => 200
-          else
-            messages[:error] << 'Unable to add application record'
-            render :json => { :messages => messages }, :status => 400
-          end
-
-
-
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Device not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        good = true
+        if params[:apps] && params[:apps].is_a?(Array)
+          params[:apps].each { |app| good = add_app(app, @device) && good }
+        else
+          good = add_app(params[:app], @device) && good
+        end
+        if good
+          render :json => { apps: @device.apps, :messages => messages }, :status => 200
+        else
+          messages[:error] << 'Unable to add application record'
+          render :json => { :messages => messages }, :status => 400
         end
       end
 
@@ -409,71 +316,58 @@ module Api
       param :end_time, Integer, desc: "The end time of the application (in epoch seconds)"
       def post_applog
         messages = init_messages
-        begin
-          @device = Device.find(params[:id])
-          auth = request.headers["Signature"]
-          if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @device.secure_key)
-            messages[:error] << "Invalid Signature"
-            failure(messages)
-            return
-          end
-          time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
-          if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
-            messages[:error] << "Invalid Timestamp"
-            failure(messages)
-            return
-          end
+        @device = Device.find(params[:id])
+        auth = request.headers["Signature"]
+        if auth != Digest::MD5.hexdigest(request.path + request.headers["Timestamp"] + @device.secure_key)
+          messages[:error] << "Invalid Signature"
+          failure(messages)
+          return
+        end
+        time_delta = (Time.now.utc.to_i - request.headers["Timestamp"].to_i )
+        if  time_delta < 0 || time_delta > (60*5)  # within 5 minutes
+          messages[:error] << "Invalid Timestamp"
+          failure(messages)
+          return
+        end
 
 
-          good = true
-          logged = []
-          if params[:logs] && params[:logs].is_a?(Array)
-            params[:logs].each do |record|
-              if record.is_a?(Hash) && record[:uuid] && record[:start_time] && record[:end_time]
-                app = @device.apps.find_by(uuid: record[:uuid] )
-                if app.nil?
-                  logger.warn "App with UUID #{params[:uuid]} is not installed on this device."
-                  messages[:warning] << "App with UUID #{params[:uuid]} is not installed on this device."
-                else
-                  applog = Applog.find_or_create_by(device_id: @device.id, app_id: app.id , start_time: Time.at(record[:start_time]), end_time: Time.at(record[:end_time]) )
-                  logged << applog if applog.valid?
-                end
+        good = true
+        logged = []
+        if params[:logs] && params[:logs].is_a?(Array)
+          params[:logs].each do |record|
+            if record.is_a?(Hash) && record[:uuid] && record[:start_time] && record[:end_time]
+              app = @device.apps.find_by(uuid: record[:uuid] )
+              if app.nil?
+                logger.warn "App with UUID #{params[:uuid]} is not installed on this device."
+                messages[:warning] << "App with UUID #{params[:uuid]} is not installed on this device."
+              else
+                applog = Applog.find_or_create_by(device_id: @device.id, app_id: app.id , start_time: Time.at(record[:start_time]), end_time: Time.at(record[:end_time]) )
+                logged << applog if applog.valid?
               end
             end
-          else
-            logger.error "The paramater 'logs' was not found or was not an array."
-            messages[:error] << "The paramater 'logs' was not found or was not an array."
-            good = false
           end
+        else
+          logger.error "The paramater 'logs' was not found or was not an array."
+          messages[:error] << "The paramater 'logs' was not found or was not an array."
+          good = false
+        end
 
 
-          if good
-            render :json => { logged_count: logged.count, :messages => messages }, :status => 200
-          else
-            messages[:error] << 'Unable to add application log'
-            render :json => { :messages => messages }, :status => 400
-          end
-
-
-
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Device not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        if good
+          render :json => { logged_count: logged.count, :messages => messages }, :status => 200
+        else
+          messages[:error] << 'Unable to add application log'
+          render :json => { :messages => messages }, :status => 400
         end
       end
 
 
       private
 
-
       def failure(msg, status = 401)
         logger.error "DEIVCES API failure: #{msg.inspect}"
         render :json => { :messages => msg }, :status => status
       end
-
 
       # Never trust parameters from the scary internet, only allow the white list through.
       def device_create_params
