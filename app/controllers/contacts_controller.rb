@@ -48,6 +48,7 @@ class ContactsController < ApplicationController
   def create
     @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], "0").try(:[],:address)
     @primary_email ||= params[:contact].try(:[], :emails_attributes).try(:[], :"0").try(:[],:address)
+    @primary_email ||= params[:contact].try(:[], :emails_attributes).try(:[], 0).try(:[],:address)
     params[:contact].delete(:emails_attributes)
     if @primary_email.blank?
       respond_to do |format|
