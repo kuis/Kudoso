@@ -212,11 +212,11 @@ activity_template = ActivityTemplate.create({ name: 'Watch television', descript
 
 
 
-# Populate our Task templates and groups:
+# Populate our Todo templates and groups:
 daily = IceCube::Rule.daily
 weekdays = IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday)
 saturdays = IceCube::Rule.weekly.day(:saturday)
-task_templates = TaskTemplate.create([
+todo_templates = TodoTemplate.create([
                                          { name: 'Brush teeth', description: 'To prevent cavities bush your teeth for at least 60 seconds.', required: true, schedule: "#{daily.to_yaml}", kudos: 20, rec_min_age: 2, rec_max_age: 99, def_min_age: 2, def_max_age: 12 },
                                          { name: 'Brush hair', description: 'Look your best and get rid of that bed hed!', required: true, schedule: "#{daily.to_yaml}", kudos: 20, rec_min_age: 5, rec_max_age: 99, def_min_age: 5, def_max_age: 16 },
                                          { name: 'Make bed', description: 'Your room is a reflection of you. Your neat! So your bed should be made neatly too.', required: true, schedule: "#{daily.to_yaml}", kudos: 20, rec_min_age: 4, rec_max_age: 99, def_min_age: 4, def_max_age: 12 },
