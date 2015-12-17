@@ -49,7 +49,9 @@ class ContactsController < ApplicationController
     @primary_email = params[:contact].try(:[], :emails_attributes).try(:[], "0").try(:[],:address)
     @primary_email ||= params[:contact].try(:[], :emails_attributes).try(:[], :"0").try(:[],:address)
     @primary_email ||= params[:contact].try(:[], :emails_attributes).try(:[], 0).try(:[],:address)
+    @fc_questionaire = params[:contact].try(:[], :fc_questionaire_attributes)
     params[:contact].delete(:emails_attributes)
+    params[:contact].delete(:fc_questionaire_attributes)
     if @primary_email.blank?
       respond_to do |format|
         format.js { render partial: 'home/register_error', locals: { error_msg: 'Valid Email is required'} }
@@ -94,6 +96,9 @@ class ContactsController < ApplicationController
           return nil
         end
 
+      end
+      if @fc_questionaire
+        @contact.create_fc_questionaire(@fc_questionaire)
       end
     end
 
