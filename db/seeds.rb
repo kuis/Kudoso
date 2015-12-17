@@ -212,11 +212,11 @@ activity_template = ActivityTemplate.create({ name: 'Watch television', descript
 
 
 
-# Populate our ToDo templates and groups:
+# Populate our Task templates and groups:
 daily = IceCube::Rule.daily
 weekdays = IceCube::Rule.weekly.day(:monday, :tuesday, :wednesday, :thursday, :friday)
 saturdays = IceCube::Rule.weekly.day(:saturday)
-todo_templates = TodoTemplate.create([
+task_templates = TaskTemplate.create([
                                          { name: 'Brush teeth', description: 'To prevent cavities bush your teeth for at least 60 seconds.', required: true, schedule: "#{daily.to_yaml}", kudos: 20, rec_min_age: 2, rec_max_age: 99, def_min_age: 2, def_max_age: 12 },
                                          { name: 'Brush hair', description: 'Look your best and get rid of that bed hed!', required: true, schedule: "#{daily.to_yaml}", kudos: 20, rec_min_age: 5, rec_max_age: 99, def_min_age: 5, def_max_age: 16 },
                                          { name: 'Make bed', description: 'Your room is a reflection of you. Your neat! So your bed should be made neatly too.', required: true, schedule: "#{daily.to_yaml}", kudos: 20, rec_min_age: 4, rec_max_age: 99, def_min_age: 4, def_max_age: 12 },
@@ -233,7 +233,7 @@ todo_templates = TodoTemplate.create([
 ################################
 #
 # 1. Create family
-# 2. Add Todos by assigning groups to the family
+# 2. Add Tasks by assigning groups to the family
 # 3. Add Devices to family
 # 4. Add Activities to family
 # 5. Setup family member screentime restrictions
@@ -248,27 +248,27 @@ todo_templates = TodoTemplate.create([
 
   suzy = Member.create({username: 'suzy', password: '4321', family_id: parent.member.family_id, first_name: 'Suzy', last_name: 'Test', birth_date: 6.years.ago})
 
-# 2. Add Todos by assigning defaults to the family
-  todo_templates.each do |todo|
+# 2. Add Tasks by assigning defaults to the family
+  task_templates.each do |task|
 
     assign_to = Array.new
-    assign_to << johnny.id if (todo.def_min_age .. todo.def_max_age).include?(johnny.age)
-    assign_to << suzy.id if (todo.def_min_age .. todo.def_max_age).include?(suzy.age)
-    parent.member.family.assign_template(todo, assign_to)
+    assign_to << johnny.id if (task.def_min_age .. task.def_max_age).include?(johnny.age)
+    assign_to << suzy.id if (task.def_min_age .. task.def_max_age).include?(suzy.age)
+    parent.member.family.assign_template(task, assign_to)
   end
-  # reset todo_schedules to the past
-  TodoSchedule.find_each do |ts|
+  # reset task_schedules to the past
+  TaskSchedule.find_each do |ts|
     ts.start_date = 45.days.ago.to_date
     ts.save!(validate: false)
   end
 
-  # create historical my_todos for each child
-  (45.days.ago.to_date .. 1.days.ago.to_date).each { |d| Family.memorialize_todos(d) }
+  # create historical my_tasks for each child
+  (45.days.ago.to_date .. 1.days.ago.to_date).each { |d| Family.memorialize_tasks(d) }
 
-  # randomly mark some todos as complete
+  # randomly mark some tasks as complete
   [johnny, suzy].each do |kid|
-    (kid.my_todos.count / 3).floor.times do
-      kid.my_todos.where('complete IS NOT TRUE').sample.update_attribute(:complete, true)
+    (kid.my_tasks.count / 3).floor.times do
+      kid.my_tasks.where('complete IS NOT TRUE').sample.update_attribute(:complete, true)
     end
   end
 

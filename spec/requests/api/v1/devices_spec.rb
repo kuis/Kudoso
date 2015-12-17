@@ -86,7 +86,6 @@ describe 'Devices API', type: :request do
   context 'authenticated user' do
     before(:each) do
       @user = FactoryGirl.create(:user)
-      #@member = FactoryGirl.create(:member, family_id: @user.member.family.id)
       @member = Member.create(username: 'thetest', password: 'password', password_confirmation: 'password', birth_date: 10.years.ago, family_id: @user.family_id)
       post '/api/v1/sessions', { device_token: @api_device.device_token, email: @user.email, password: 'password'}.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json' }
       expect(response.status).to eq(200)
@@ -94,11 +93,16 @@ describe 'Devices API', type: :request do
       @token = json["token"]
     end
 
+
+    let (:headers) {{'CONTENT_TYPE' => 'application/json',
+                     'ACCEPT' => 'application/json',
+                     'Authorization' => "Token token=\"#{@token}\""}}
+
     it 'lists existing family devices to a user' do
       device1 = FactoryGirl.create(:device, family: @user.family)
       device2 = FactoryGirl.create(:device, family: @user.family)
       FactoryGirl.create(:device)
-      get "/api/v1/families/#{@user.family_id}/devices", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      get "/api/v1/families/#{@user.family_id}/devices", nil, headers
 
       json = JSON.parse(response.body)
       expect(response.status).to eq(200)
@@ -108,7 +112,7 @@ describe 'Devices API', type: :request do
 
     it 'listing devices does not allow a user to cross family boundaries' do
       device = FactoryGirl.create(:device)
-      get "/api/v1/families/#{device.family_id}/devices", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      get "/api/v1/families/#{device.family_id}/devices", nil, headers
 
       json = JSON.parse(response.body)
       expect(response.status).to eq(403)
@@ -117,19 +121,19 @@ describe 'Devices API', type: :request do
 
     it 'creates a new device' do
       query_str = { device: { mac_address: 'aa:11:bb:22:ef', name: 'aa:11:bb:22:ef'} }
-      post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  headers
       expect(response.status).to eq(200)
     end
 
     it 'finds a device with the same mac_address instead of creates' do
       query_str = { device: { mac_address: 'aa:11:bb:22:ef', name: 'aa:11:bb:22:ef'} }
-      post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  headers
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       device_id = json["device"]["id"]
       expect(device_id).to_not be_nil
-      query_str = { device: { mac_address: 'aa:11:bb:22:ef', name: 'Differnet Name'} }
-      post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      query_str = { device: { mac_address: 'aa:11:bb:22:ef', name: 'Different Name'} }
+      post "/api/v1/families/#{@user.family_id}/devices", query_str.to_json,  headers
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json["device"]["id"]).to eq(device_id)
@@ -137,7 +141,7 @@ describe 'Devices API', type: :request do
 
     it 'retrieves an existing family device' do
       device = FactoryGirl.create(:device, family: @user.family)
-      get "/api/v1/families/#{@user.family_id}/devices/#{device.id}", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      get "/api/v1/families/#{@user.family_id}/devices/#{device.id}", nil, headers
 
       json = JSON.parse(response.body)
       expect(response.status).to eq(200)
@@ -146,7 +150,7 @@ describe 'Devices API', type: :request do
 
     it 'can not retrieve another families device' do
       device = FactoryGirl.create(:device)
-      get "/api/v1/families/#{device.family_id}/devices/#{device.id}", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      get "/api/v1/families/#{device.family_id}/devices/#{device.id}", nil, headers
 
       json = JSON.parse(response.body)
       expect(response.status).to eq(403)
@@ -155,11 +159,11 @@ describe 'Devices API', type: :request do
 
     it 'device must belong to the family' do
       device = FactoryGirl.create(:device)
-      get "/api/v1/families/#{@user.family_id}/devices/#{device.id}", nil, { 'CONTENT_TYPE' => 'application/json', 'ACCEPT' => 'application/json', 'Authorization' => "Token token=\"#{@token}\""   }
+      get "/api/v1/families/#{@user.family_id}/devices/#{device.id}", nil, headers
 
       json = JSON.parse(response.body)
       expect(response.status).to eq(404)
-      expect(json['messages']['error']).to include('Family or Device not found.')
+      expect(json['messages']['error']).to include("Device #{device.id} not found.")
     end
   end
 

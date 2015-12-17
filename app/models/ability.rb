@@ -13,7 +13,7 @@ class Ability
 
 
     can :create, User
-    can :create, MyTodo
+    can :create, MyTask
     can :read, Avatar
     can :read, Theme
 
@@ -43,19 +43,19 @@ class Ability
         can :manage, ScreenTimeSchedule do |screen_time_schedule|
           screen_time_schedule.try(:member).try(:family) == user.try(:member).try(:family)
         end
-        #can :manage, MyTodo, :family => user.try(:member).try(:family)
-        can :manage, MyTodo do |todo|
-          todo.member && todo.member.family_id == user.member.family_id
+        #can :manage, MyTask, :family => user.try(:member).try(:family)
+        can :manage, MyTask do |task|
+          task.member && task.member.family_id == user.member.family_id
         end
-        can :manage, Todo,  :family_id => user.try(:member).try(:family_id)
-        can :manage, TodoSchedule do |ts|
-          if ts.present? && ts.todo.present?
-            ts.todo.family == user.try(:member).try(:family)
+        can :manage, Task,  :family_id => user.try(:member).try(:family_id)
+        can :manage, TaskSchedule do |ts|
+          if ts.present? && ts.task.present?
+            ts.task.family == user.try(:member).try(:family)
           else
             false
           end
         end
-        can :read, TodoTemplate, :disabled => false
+        can :read, TaskTemplate, :disabled => false
 
         # CRM Functions
         can [:read, :create], Ticket, :user_id => user.try(:id)
@@ -76,9 +76,9 @@ class Ability
         can :read, Family, :id => user.try(:member).try(:family_id)
         can :read, Member, :id => user.try(:member_id)
         can :read, ScreenTime, member_id: user.try(:member_id)
-        can :read, TodoSchedule, :member_id => user.try(:member_id)
-        can :read, Todo, :family_id => user.try(:member).try(:family_id)
-        can [:create, :read, :update], MyTodo, :member_id => user.try(:member_id)
+        can :read, TaskSchedule, :member_id => user.try(:member_id)
+        can :read, Task, :family_id => user.try(:member).try(:family_id)
+        can [:create, :read, :update], MyTask, :member_id => user.try(:member_id)
       end
 
       # Both children and parents

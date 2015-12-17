@@ -35,21 +35,13 @@ module Api
       def index
         messages = init_messages
         if params[:family_id] && params[:member_id]
-          begin
-            @family = Family.find(params[:family_id])
-            if @current_user.try(:admin) || (@current_member.try(:family) == @family )
-              @member = @family.members.find(params[:member_id])
-              render :json => { :todo_templates => @member.todo_templates, :messages => messages }, :status => 200
-            else
-              messages[:error] << 'You are not authorized to do this.'
-              render :json => { :messages => messages }, :status => 403
-            end
-          rescue ActiveRecord::RecordNotFound
-            messages[:error] << 'Family or Member not found.'
-            render :json => { :messages => messages }, :status => 404
-          rescue
-            messages[:error] << 'A server error occurred.'
-            render :json => { :messages => messages }, :status => 500
+          @family = Family.find(params[:family_id])
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family )
+            @member = @family.members.find(params[:member_id])
+            render :json => { :todo_templates => @member.todo_templates, :messages => messages }, :status => 200
+          else
+            messages[:error] << 'You are not authorized to do this.'
+            render :json => { :messages => messages }, :status => 403
           end
         else
           @todo_templates = TodoTemplate.all
@@ -62,64 +54,33 @@ module Api
       api :GET, "/v1/todo_templates/:todo_template_id", "Retrieve a single task template"
       def show
         messages = init_messages
-        begin
-          @todo_template = TodoTemplate.find(params[:id])
-          render :json => { :todo_template => @todo_template, :messages => messages }, :status => 200
-
-
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Record not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
-        end
-
+        @todo_template = TodoTemplate.find(params[:id])
+        render :json => { :todo_template => @todo_template, :messages => messages }, :status => 200
       end
 
       api :POST, "/v1/families/:family_id/members/:member_id/todo_templates/:todo_template_id/assign", "Assign a todo_template to a member (must be a parent)"
       def assign
         messages = init_messages
-        begin
-          @todo_template = TodoTemplate.find(params[:id])
-          @family = Family.find(params[:family_id])
-          @member = Member.find(params[:member_id])
+        @todo_template = TodoTemplate.find(params[:id])
+        @family = Family.find(params[:family_id])
+        @member = Member.find(params[:member_id])
 
-          if @family && @member && @todo_template && @current_user.try(:admin) || (@current_member.try(:family) == @family)
-            @family.assign_template(@todo_template, [ @member ])
-            render :json => { :messages => messages }, :status => 200
-          end
-
-
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Record not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        if @family && @member && @todo_template && @current_user.try(:admin) || (@current_member.try(:family) == @family)
+          @family.assign_template(@todo_template, [ @member ])
+          render :json => { :messages => messages }, :status => 200
         end
       end
 
       api :DELETE, "/v1/families/:family_id/members/:member_id/todo_templates/:todo_template_id/unassign", "Remove a todo_template from a member (must be a parent)"
       def unassign
         messages = init_messages
-        begin
-          @todo_template = TodoTemplate.find(params[:id])
-          @family = Family.find(params[:family_id])
-          @member = Member.find(params[:member_id])
+        @todo_template = TodoTemplate.find(params[:id])
+        @family = Family.find(params[:family_id])
+        @member = Member.find(params[:member_id])
 
-          if @family && @member && @todo_template && @current_user.try(:admin) || (@current_member.try(:family) == @family)
-            @family.remove_template(@todo_template, [ @member ])
-            render :json => { :messages => messages }, :status => 200
-          end
-
-
-        rescue ActiveRecord::RecordNotFound
-          messages[:error] << 'Record not found.'
-          render :json => { :messages => messages }, :status => 404
-        rescue
-          messages[:error] << 'A server error occurred.'
-          render :json => { :messages => messages }, :status => 500
+        if @family && @member && @todo_template && @current_user.try(:admin) || (@current_member.try(:family) == @family)
+          @family.remove_template(@todo_template, [ @member ])
+          render :json => { :messages => messages }, :status => 200
         end
       end
 

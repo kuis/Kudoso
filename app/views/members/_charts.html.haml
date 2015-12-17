@@ -1,34 +1,34 @@
 :ruby
-  @todo_chart = Hash.new
-  @todos = Hash.new
-  @todos[:today] = Hash.new
-  @todos[:week] = Hash.new
-  @todos[:month] = Hash.new
+  @task_chart = Hash.new
+  @tasks = Hash.new
+  @tasks[:today] = Hash.new
+  @tasks[:week] = Hash.new
+  @tasks[:month] = Hash.new
 
-  t = @member.todos
-  @todos[:today][:total] = t.length
-  @todos[:today][:complete] = t.select {|todo| todo.complete == true }.count
+  t = @member.tasks
+  @tasks[:today][:total] = t.length
+  @tasks[:today][:complete] = t.select {|task| task.complete == true }.count
 
-  t = @member.todos(7.days.ago.to_date)
-  @todos[:week][:total] = t.length
-  @todos[:week][:complete] = t.select {|todo| todo.complete == true }.count
+  t = @member.tasks(7.days.ago.to_date)
+  @tasks[:week][:total] = t.length
+  @tasks[:week][:complete] = t.select {|task| task.complete == true }.count
 
-  t = @member.todos(1.month.ago.to_date)
-  @todos[:month][:total] = t.length
-  @todos[:month][:complete] = t.select {|todo| todo.complete == true }.count
+  t = @member.tasks(1.month.ago.to_date)
+  @tasks[:month][:total] = t.length
+  @tasks[:month][:complete] = t.select {|task| task.complete == true }.count
 
-  @todo_chart[:today] = LazyHighCharts::HighChart.new('pie') do |f|
+  @task_chart[:today] = LazyHighCharts::HighChart.new('pie') do |f|
       f.chart({:defaultSeriesType=>"pie" , :margin=> [5, 0, 5, 0]} )
     series = {
       :type=> 'pie',
-          :name=> "Today's Todos",
+          :name=> "Today's Tasks",
           :data=> [
-              ['Complete', @todos[:today][:complete] ],
-              [ 'Incomplete', ( @todos[:today][:total] - @todos[:today][:complete]) ]
+              ['Complete', @tasks[:today][:complete] ],
+              [ 'Incomplete', ( @tasks[:today][:total] - @tasks[:today][:complete]) ]
           ]
     }
     f.series(series)
-    f.options[:title][:text] = "Today's Todos"
+    f.options[:title][:text] = "Today's Tasks"
     f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'})
     f.plot_options(:pie=>{
       :allowPointSelect=>true,
@@ -43,18 +43,18 @@
       })
   end
 
-  @todo_chart[:week] = LazyHighCharts::HighChart.new('pie') do |f|
+  @task_chart[:week] = LazyHighCharts::HighChart.new('pie') do |f|
       f.chart({:defaultSeriesType=>"pie" , :margin=> [5, 0, 5, 0]} )
     series = {
       :type=> 'pie',
-          :name=> "Last Week's Todos",
+          :name=> "Last Week's Tasks",
           :data=> [
-              ['Complete', @todos[:week][:complete] ],
-              [ 'Incomplete', ( @todos[:week][:total] - @todos[:week][:complete]) ]
+              ['Complete', @tasks[:week][:complete] ],
+              [ 'Incomplete', ( @tasks[:week][:total] - @tasks[:week][:complete]) ]
           ]
     }
     f.series(series)
-    f.options[:title][:text] = "Last Week's Todos"
+    f.options[:title][:text] = "Last Week's Tasks"
     f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'})
     f.plot_options(:pie=>{
       :allowPointSelect=>true,
@@ -69,18 +69,18 @@
       })
   end
 
-  @todo_chart[:month] = LazyHighCharts::HighChart.new('pie') do |f|
+  @task_chart[:month] = LazyHighCharts::HighChart.new('pie') do |f|
       f.chart({:defaultSeriesType=>"pie" , :margin=> [5, 0, 5, 0]} )
     series = {
       :type=> 'pie',
-          :name=> "Last Month's Todos",
+          :name=> "Last Month's Tasks",
           :data=> [
-              ['Complete', @todos[:month][:complete] ],
-              [ 'Incomplete', ( @todos[:month][:total] - @todos[:month][:complete]) ]
+              ['Complete', @tasks[:month][:complete] ],
+              [ 'Incomplete', ( @tasks[:month][:total] - @tasks[:month][:complete]) ]
           ]
     }
     f.series(series)
-    f.options[:title][:text] = "Last Month's Todos"
+    f.options[:title][:text] = "Last Month's Tasks"
     f.legend(:layout=> 'vertical',:style=> {:left=> 'auto', :bottom=> 'auto',:right=> '50px',:top=> '100px'})
     f.plot_options(:pie=>{
       :allowPointSelect=>true,
@@ -97,8 +97,8 @@
 
 .uk-grid
   .uk-width-1-3
-    = high_chart("today_pie_chart", @todo_chart[:today])
+    = high_chart("today_pie_chart", @task_chart[:today])
   .uk-width-1-3
-    = high_chart("week_pie_chart", @todo_chart[:week])
+    = high_chart("week_pie_chart", @task_chart[:week])
   .uk-width-1-3
-    = high_chart("month_pie_chart", @todo_chart[:month])
+    = high_chart("month_pie_chart", @task_chart[:month])

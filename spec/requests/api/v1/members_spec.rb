@@ -87,7 +87,7 @@ describe 'Members API', type: :request do
     expect(response.status).to eq(200)
     json = JSON.parse(response.body)
     expect(json["member"]["id"]).to eq(member.id)
-    expect(json["member"].has_key?("todo_summary")).to be_truthy
+    expect(json["member"].has_key?("task_summary")).to be_truthy
   end
 
   it 'destroys member information' do

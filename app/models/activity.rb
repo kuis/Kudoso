@@ -4,7 +4,7 @@ require "#{::Rails.root}/lib/kudoso_auth"
 
 class Activity < ActiveRecord::Base
 
-  class TodosIncomplete < StandardError; end
+  class TasksIncomplete < StandardError; end
   class AlreadyStarted < StandardError; end
   class ScreenTimeExceeded < StandardError; end
   class DeviceScreenTimeExceeded < StandardError; end

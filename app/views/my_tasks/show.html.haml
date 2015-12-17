@@ -1,0 +1,30 @@
+%p#notice= notice
+
+%p
+  %b Task schedule:
+  = @my_task.task_schedule_id
+%p
+  %b Member:
+  = @my_task.member_id
+%p
+  %b Due date:
+  = @my_task.due_date
+%p
+  %b Due time:
+  = @my_task.due_time
+%p
+  %b Complete:
+  = @my_task.complete
+%p
+  %b Verify:
+  = @my_task.verify
+%p
+  %b Verified at:
+  = @my_task.verified_at
+%p
+  %b Verified by:
+  = @my_task.verified_by
+
+= link_to 'Edit', edit_my_task_path(@my_task)
+\|
+= link_to 'Back', my_tasks_path

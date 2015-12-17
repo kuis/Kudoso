@@ -75,15 +75,15 @@ class MembersController < ApplicationController
   end
 
 
-  def assign_todo_templates
+  def assign_task_templates
     assigned_templates = []
-    params[ "todo_template_ids"].each do |id|
+    params[ "task_template_ids"].each do |id|
       begin
-        @todo_template = TodoTemplate.find(id)
-        @family.assign_template(@todo_template, [ @member.id ])
-        assigned_templates << @todo_template
+        @task_template = TaskTemplate.find(id)
+        @family.assign_template(@task_template, [ @member.id ])
+        assigned_templates << @task_template
       rescue
-        logger.error "Unable find todo template: #{id}"
+        logger.error "Unable find task template: #{id}"
       end
 
     end

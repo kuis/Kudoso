@@ -5,6 +5,33 @@ class ApiController < ApplicationController
   protect_from_forgery with: :null_session
   respond_to :json
 
+  rescue_from ::Exception, with: :error_occurred
+  rescue_from ::ActiveRecord::RecordNotFound, with: :record_not_found
+
+  protected
+
+  def record_not_found(exception)
+    logger.info "NotFound Error: #{exception.message}"
+    logger.info exception.backtrace
+
+    messages = init_messages
+    #binding.pry
+    object = exception.message.match /Couldn't find ([\w]+) with 'id'=([\d]+)/
+    messages[:error] << "#{object[1]} #{object[2]} not found."
+    render json: { :messages => messages }, status: 404
+    return
+  end
+
+  def error_occurred(exception)
+    logger.info "System Error: #{exception.message}"
+    logger.info exception.backtrace
+
+    messages = init_messages
+    messages[:error] << 'A server error occurred.'
+    render json: { :messages => messages }, status: 500
+    return
+  end
+
   def restrict_api_access
     api_key = nil
     authenticate_or_request_with_http_token do |token, options|

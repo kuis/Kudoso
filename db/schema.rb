@@ -418,8 +418,8 @@ ActiveRecord::Schema.define(version: 20151124214752) do
   add_index "members", ["family_id"], name: "index_members_on_family_id", using: :btree
   add_index "members", ["username", "family_id"], name: "index_members_on_username_and_family_id", unique: true, using: :btree
 
-  create_table "my_todos", force: :cascade do |t|
-    t.integer  "todo_schedule_id"
+  create_table "my_tasks", force: :cascade do |t|
+    t.integer  "task_schedule_id"
     t.integer  "member_id"
     t.datetime "due_date"
     t.datetime "due_time"
@@ -431,8 +431,8 @@ ActiveRecord::Schema.define(version: 20151124214752) do
     t.datetime "updated_at"
   end
 
-  add_index "my_todos", ["member_id"], name: "index_my_todos_on_member_id", using: :btree
-  add_index "my_todos", ["todo_schedule_id"], name: "index_my_todos_on_todo_schedule_id", using: :btree
+  add_index "my_tasks", ["member_id"], name: "index_my_tasks_on_member_id", using: :btree
+  add_index "my_tasks", ["task_schedule_id"], name: "index_my_tasks_on_task_schedule_id", using: :btree
 
   create_table "note_attachments", force: :cascade do |t|
     t.integer  "note_id"
@@ -530,13 +530,13 @@ ActiveRecord::Schema.define(version: 20151124214752) do
   add_index "routers", ["mac_address"], name: "index_routers_on_mac_address", using: :btree
 
   create_table "schedule_rrules", force: :cascade do |t|
-    t.integer  "todo_schedule_id"
+    t.integer  "task_schedule_id"
     t.string   "rrule"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "schedule_rrules", ["todo_schedule_id"], name: "index_schedule_rrules_on_todo_schedule_id", using: :btree
+  add_index "schedule_rrules", ["task_schedule_id"], name: "index_schedule_rrules_on_task_schedule_id", using: :btree
 
   create_table "screen_time_schedules", force: :cascade do |t|
     t.integer  "family_id"
@@ -582,6 +582,59 @@ ActiveRecord::Schema.define(version: 20151124214752) do
 
   add_index "steps", ["stepable_type", "stepable_id"], name: "index_steps_on_stepable_type_and_stepable_id", using: :btree
 
+  create_table "task_groups_task_templates", id: false, force: :cascade do |t|
+    t.integer "task_group_id"
+    t.integer "task_template_id"
+  end
+
+  add_index "task_groups_task_templates", ["task_group_id", "task_template_id"], name: "task_group_template_habtm_idx", using: :btree
+  add_index "task_groups_task_templates", ["task_template_id"], name: "index_task_groups_task_templates_on_task_template_id", using: :btree
+
+  create_table "task_schedules", force: :cascade do |t|
+    t.integer  "task_id"
+    t.integer  "member_id"
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.boolean  "active"
+    t.text     "notes"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "task_schedules", ["member_id"], name: "index_task_schedules_on_member_id", using: :btree
+  add_index "task_schedules", ["task_id"], name: "index_task_schedules_on_task_id", using: :btree
+
+  create_table "task_templates", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.boolean  "required"
+    t.string   "schedule"
+    t.boolean  "disabled"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "kudos",       default: 0
+    t.integer  "rec_min_age"
+    t.integer  "rec_max_age"
+    t.integer  "def_min_age"
+    t.integer  "def_max_age"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.string   "name"
+    t.string   "description"
+    t.boolean  "required"
+    t.integer  "kudos"
+    t.integer  "task_template_id"
+    t.integer  "family_id"
+    t.boolean  "active"
+    t.text     "schedule"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tasks", ["family_id"], name: "index_tasks_on_family_id", using: :btree
+  add_index "tasks", ["task_template_id"], name: "index_tasks_on_task_template_id", using: :btree
+
   create_table "themes", force: :cascade do |t|
     t.string   "name"
     t.datetime "created_at", null: false
@@ -606,59 +659,6 @@ ActiveRecord::Schema.define(version: 20151124214752) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  create_table "todo_groups_todo_templates", id: false, force: :cascade do |t|
-    t.integer "todo_group_id"
-    t.integer "todo_template_id"
-  end
-
-  add_index "todo_groups_todo_templates", ["todo_group_id", "todo_template_id"], name: "todo_group_template_habtm_idx", using: :btree
-  add_index "todo_groups_todo_templates", ["todo_template_id"], name: "index_todo_groups_todo_templates_on_todo_template_id", using: :btree
-
-  create_table "todo_schedules", force: :cascade do |t|
-    t.integer  "todo_id"
-    t.integer  "member_id"
-    t.datetime "start_date"
-    t.datetime "end_date"
-    t.boolean  "active"
-    t.text     "notes"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "todo_schedules", ["member_id"], name: "index_todo_schedules_on_member_id", using: :btree
-  add_index "todo_schedules", ["todo_id"], name: "index_todo_schedules_on_todo_id", using: :btree
-
-  create_table "todo_templates", force: :cascade do |t|
-    t.string   "name"
-    t.string   "description"
-    t.boolean  "required"
-    t.string   "schedule"
-    t.boolean  "disabled"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "kudos",       default: 0
-    t.integer  "rec_min_age"
-    t.integer  "rec_max_age"
-    t.integer  "def_min_age"
-    t.integer  "def_max_age"
-  end
-
-  create_table "todos", force: :cascade do |t|
-    t.string   "name"
-    t.string   "description"
-    t.boolean  "required"
-    t.integer  "kudos"
-    t.integer  "todo_template_id"
-    t.integer  "family_id"
-    t.boolean  "active"
-    t.text     "schedule"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "todos", ["family_id"], name: "index_todos_on_family_id", using: :btree
-  add_index "todos", ["todo_template_id"], name: "index_todos_on_todo_template_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "",    null: false

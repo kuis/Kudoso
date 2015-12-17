@@ -19,17 +19,17 @@
           %small
             Assigned tasks:
             %div{id: "child_#{kid.id}_tasks"}
-              - kid.todo_schedules.each do |ts|
-                #{ts.todo_template.name}
+              - kid.task_schedules.each do |ts|
+                #{ts.task_template.name}
                 %br
         .col-md-8
           .manual_tasks{ id: "manual_tasks_#{kid.id}"}
             %h3 Select tasks:
-            - TodoTemplate.find_each do |todo|
-              - unless kid.todo_templates.include?(todo)
-                - checked = (todo.def_min_age .. todo.def_max_age).include?(kid.age)
-                %input{ name: "manual_tasks_#{kid.id}", value: todo.id, type: :checkbox, checked: checked }
-                #{todo.name}
+            - TaskTemplate.find_each do |task|
+              - unless kid.task_templates.include?(task)
+                - checked = (task.def_min_age .. task.def_max_age).include?(kid.age)
+                %input{ name: "manual_tasks_#{kid.id}", value: task.id, type: :checkbox, checked: checked }
+                #{task.name}
                 %br
             %button.btn.btn-default{ onclick: "assign_tasks(#{kid.id});"}
               Assign to #{kid.first_name}
@@ -38,12 +38,12 @@
   function assign_tasks(kidId) {
     $('#manual_tasks_' + kidId ).slideUp();
     var tasks_array = $('#manual_tasks_' + kidId + ' input').serializeArray();
-    var tasks_hash = { todo_template_ids : [] }
+    var tasks_hash = { task_template_ids : [] }
     jQuery.each( tasks_array, function( i, field) {
-       tasks_hash.todo_template_ids.push(field.value);
+       tasks_hash.task_template_ids.push(field.value);
     });
     $.ajax({
-      url: "/families/#{ current_user.family_id }/members/" + kidId + "/todo_templates/assign",
+      url: "/families/#{ current_user.family_id }/members/" + kidId + "/task_templates/assign",
       dataType: 'json',
       method: 'POST',
       data: tasks_hash,

@@ -1,0 +1,18 @@
+.task_wrap
+  .task_name
+    = task_template.name
+  .task_description
+    = task_template.description
+  .task_schedule
+    Schedule:
+    = IceCube::Rule.from_yaml(task_template.schedule)
+  .task_disabled
+    Disabled:
+    = task_template.disabled?
+  .task_actions
+    - if can?(:update, task_template)
+      = link_to 'Show', admin_task_template_path(task_template)
+      |
+      = link_to 'Edit', edit_admin_task_template_path(task_template)
+      |
+      = link_to 'Destroy', [:admin, task_template], :method => :delete, :data => { :confirm => 'Are you sure?' } if can?(:delete, task_template)

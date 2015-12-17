@@ -28,14 +28,14 @@ strip functionality, but we MUST present it in a way that is easy to use while b
     Family -> Name (Display friendly name for the family)
            -> Devices (All devices associated with the family)
            -> Family Activities (approved family activities and their costs/rewards)
-           -> Todos
-                -> Todo Schedules (assign todos to members on a specific schedule)
+           -> Tasks
+                -> Task Schedules (assign tasks to members on a specific schedule)
            -> Members
                 -> Username (for kid-friendly login)
                 -> Passowrd (for kid-friendly login)
                 -> Contact
                    -> First/Last Name/Email/etc
-                -> My_todos (the record of completed/incomplete todos)
+                -> My_tasks (the record of completed/incomplete tasks)
                 -> Screen_times (restrictions for screen time: global, per activity, per device)
                 -> Screen_time_schedules (calendar / TOD restrictions for when screen time can be used)
 
@@ -48,7 +48,7 @@ strip functionality, but we MUST present it in a way that is easy to use while b
     == Understanding Screen Time
         When a child (a family "member") wants to perform an activity, the system must check if its allowed.
         When is screen time allowed? (See member.can_do_activity?)  The system first checks to see if the activity
-        is restricted and if it is, ensures that all required todos are complete.  Once the activity/todo restriction
+        is restricted and if it is, ensures that all required tasks are complete.  Once the activity/task restriction
         is satisfied, the member's available screen time is queried.  This looks explicitly at the "global" screen time
         settings for the member, and then the specific screen time restrictions for the device (if applicable) and the
         activity (ex: a parent can say: "My child can have 3 hours of screen time per day, with no more that 2 hours on

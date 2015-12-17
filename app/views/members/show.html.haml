@@ -40,30 +40,30 @@
   %hr
   .uk-grid
     .uk-width-1-2
-      .todo_header
-        Todo Schedule (Today):
-      .todo_wrap
-        - @member.todos.each do |my_todo|
-          %div{ id: "todo_wrap_#{my_todo.todo_schedule_id}" }
-            = render my_todo
+      .task_header
+        Task Schedule (Today):
+      .task_wrap
+        - @member.tasks.each do |my_task|
+          %div{ id: "task_wrap_#{my_task.task_schedule_id}" }
+            = render my_task
 
     .uk-width-1-2
-      .todo_header
-        Todo Schedule (Tomorrow):
-      .todo_wrap
-        = render @member.todos(Date.tomorrow, Date.tomorrow)
+      .task_header
+        Task Schedule (Tomorrow):
+      .task_wrap
+        = render @member.tasks(Date.tomorrow, Date.tomorrow)
 
   %hr
   #charts_wrap
     = render 'charts'
 
   %hr
-  %dl.accordion{ "data-accordion" => 'TodoHistory' }
+  %dl.accordion{ "data-accordion" => 'TaskHistory' }
     %dd.accordion-navigation
-      %a{ href: '#todo_history'}
-        Todo Details
+      %a{ href: '#task_history'}
+        Task Details
         %span.fa.accordion-icon
-      #todo_history.content
+      #task_history.content
         = render 'details'
 
   %hr

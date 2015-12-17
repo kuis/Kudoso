@@ -1,0 +1,10 @@
+.task{class: (my_task.task.required? ? 'required' : 'optional') + ' ' + (my_task.complete? ? 'complete' : 'incomplete' ) }
+  .complete
+    = render partial: 'my_tasks/complete_form', locals: {my_task: my_task}
+  .name
+    = "#{my_task.task.name} (+#{my_task.task.kudos} Kudos)"
+    = 'Optional' unless  my_task.task.required?
+  - if can?(:edit, my_task.task_schedule)
+    .actions
+      = link_to 'Edit Schedule', edit_family_task_task_schedule_path(my_task.member.family, my_task.task, my_task.task_schedule)
+

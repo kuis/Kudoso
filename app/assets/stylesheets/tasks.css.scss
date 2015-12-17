@@ -1,0 +1,22 @@
+// Place all the styles related to the tasks controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.task {
+  padding: 2px 4px 2px 4px;
+
+  .complete {
+    display: inline-block;
+  }
+  .name {
+    display: inline-block;
+  }
+  .actions {
+    display: inline-block;
+    font-size: .7em;
+  }
+}
+.task_wrap > .task:nth-child(even) {
+  background-color: #e2e2e2;
+
+}
