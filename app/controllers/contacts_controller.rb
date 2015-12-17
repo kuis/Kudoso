@@ -126,20 +126,28 @@ class ContactsController < ApplicationController
            :last_name,
            :address1,
            :city, :state, :zip].each do |param|
-             valid = false if @fc_questionaire[param].blank?
+            if @fc_questionaire[param].blank?
+              logger.error "FC Questionaire field: #{param} blank!"
+             valid = false
+            end
+
           end
 
           [ :kids_2_6, :kids_7_12, :kids_13_18,
             :mobile_devices, :consumer_electronics, :computers,
             :favorite_feature, :prefer_buy ].each do |param|
 
-            valid = false if @fc_questionaire[param].blank?
+
+            if @fc_questionaire[param].blank?
+              logger.error "FC Questionaire field: #{param} blank!"
+              valid = false
+            end
 
           end
           if valid
 
             @contact.create_fc_questionaire(@fc_questionaire)
-            
+
             agile_contact.update(tags: ["founders circle applicant", "newsletter"]) unless agile_contact.nil?
             respond_to do |format|
               format.js { render partial: 'home/register' }
