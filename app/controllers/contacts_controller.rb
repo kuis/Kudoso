@@ -102,7 +102,7 @@ class ContactsController < ApplicationController
       end
     end
 
-    unless @contact.valid? && @contact.persisted
+    unless @contact.valid? && @contact.persisted?
       logger.error "Unable to create contact (#{@primary_email}): #{@contact.errors.full_messages.to_sentence}"
       respond_to do |format|
         format.js { render partial: 'home/register_error', locals: { error_msg: @contact.errors.full_messages.to_sentence}}
