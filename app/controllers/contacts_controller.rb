@@ -122,22 +122,15 @@ class ContactsController < ApplicationController
 
           valid = true
 
-          [:first_name,
-           :last_name,
-           :address1,
-           :city, :state, :zip].each do |param|
-            if @fc_questionaire[param].blank?
+          %w( first_name last_name address1 city state zip).each do |param|
+            if @contact[param].blank?
               logger.error "FC Questionaire field: #{param} blank!"
              valid = false
             end
 
           end
 
-          [ :kids_2_6, :kids_7_12, :kids_13_18,
-            :mobile_devices, :consumer_electronics, :computers,
-            :favorite_feature, :prefer_buy ].each do |param|
-
-
+          %w( kids_2_6 kids_7_12 kids_13_18 mobile_devices consumer_electronics computers favorite_feature prefer_buy ).each do |param|
             if @fc_questionaire[param].blank?
               logger.error "FC Questionaire field: #{param} blank!"
               valid = false
