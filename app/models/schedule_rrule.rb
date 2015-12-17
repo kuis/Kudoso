@@ -1,5 +1,5 @@
 class ScheduleRrule < ActiveRecord::Base
-  belongs_to :task_schedule
+  belongs_to :todo_schedule
 
   def rule
     if self.rrule.present?
@@ -23,7 +23,7 @@ class ScheduleRrule < ActiveRecord::Base
   def as_json(options={})
     {
         id: self.id,
-        task_schedule_id: self.task_schedule_id,
+        todo_schedule_id: self.todo_schedule_id,
         rule: rule.to_hash
     }
   end

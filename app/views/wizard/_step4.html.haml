@@ -1,11 +1,11 @@
 .row
   .col-md-4.col-md-offset-1
-    %h3 Assign Tasks:
+    %h3 Assign Todos:
 .row
   .col-md-8.col-md-offset-1
-    Tasks are parent directed daily activities that you assign to your kids.  We have currated this simple list of
-    age appropriate chores to get you started, you can assign them as Tasks to each child with a single click below.
-    You can customize your assigned Tasks for each child after the setup wizard is complete.
+    Todos are parent directed daily activities that you assign to your kids.  We have currated this simple list of
+    age appropriate chores to get you started, you can assign them as Todos to each child with a single click below.
+    You can customize your assigned Todos for each child after the setup wizard is complete.
 .row
   .col-md-10-col-md-offset-1
     - current_user.family.kids.each do |kid|
@@ -17,45 +17,45 @@
           = "#{kid.first_name} (age: #{kid.age})"
           %br
           %small
-            Assigned tasks:
-            %div{id: "child_#{kid.id}_tasks"}
-              - kid.task_schedules.each do |ts|
-                #{ts.task_template.name}
+            Assigned todos:
+            %div{id: "child_#{kid.id}_todos"}
+              - kid.todo_schedules.each do |ts|
+                #{ts.todo_template.name}
                 %br
         .col-md-8
-          .manual_tasks{ id: "manual_tasks_#{kid.id}"}
-            %h3 Select tasks:
-            - TaskTemplate.find_each do |task|
-              - unless kid.task_templates.include?(task)
-                - checked = (task.def_min_age .. task.def_max_age).include?(kid.age)
-                %input{ name: "manual_tasks_#{kid.id}", value: task.id, type: :checkbox, checked: checked }
-                #{task.name}
+          .manual_todos{ id: "manual_todos_#{kid.id}"}
+            %h3 Select todos:
+            - TodoTemplate.find_each do |todo|
+              - unless kid.todo_templates.include?(todo)
+                - checked = (todo.def_min_age .. todo.def_max_age).include?(kid.age)
+                %input{ name: "manual_todos_#{kid.id}", value: todo.id, type: :checkbox, checked: checked }
+                #{todo.name}
                 %br
-            %button.btn.btn-default{ onclick: "assign_tasks(#{kid.id});"}
+            %button.btn.btn-default{ onclick: "assign_todos(#{kid.id});"}
               Assign to #{kid.first_name}
 
 :javascript
-  function assign_tasks(kidId) {
-    $('#manual_tasks_' + kidId ).slideUp();
-    var tasks_array = $('#manual_tasks_' + kidId + ' input').serializeArray();
-    var tasks_hash = { task_template_ids : [] }
-    jQuery.each( tasks_array, function( i, field) {
-       tasks_hash.task_template_ids.push(field.value);
+  function assign_todos(kidId) {
+    $('#manual_todos_' + kidId ).slideUp();
+    var todos_array = $('#manual_todos_' + kidId + ' input').serializeArray();
+    var todos_hash = { todo_template_ids : [] }
+    jQuery.each( todos_array, function( i, field) {
+       todos_hash.todo_template_ids.push(field.value);
     });
     $.ajax({
-      url: "/families/#{ current_user.family_id }/members/" + kidId + "/task_templates/assign",
+      url: "/families/#{ current_user.family_id }/members/" + kidId + "/todo_templates/assign",
       dataType: 'json',
       method: 'POST',
-      data: tasks_hash,
+      data: todos_hash,
       success: function(e) {
         console.log(e);
-        jQuery.each(e, function(i, task){
-           $("#child_" + kidId + "_tasks").append(task.name + "<br/>");
+        jQuery.each(e, function(i, todo){
+           $("#child_" + kidId + "_todos").append(todo.name + "<br/>");
         });
       },
       error: function() {
         alert('error');
-        $('#manual_tasks_' + kidId ).slideDown();
+        $('#manual_todos_' + kidId ).slideDown();
       }
     });
   }

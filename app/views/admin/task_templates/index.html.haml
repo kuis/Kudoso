@@ -1,9 +1,0 @@
-%h1 Listing task_templates
-
-
-- @task_templates.each do |task_template|
-  = render partial: 'admin/task_templates/task_template', object: task_template
-
-%br
-
-= link_to 'New Task template', new_admin_task_template_path, class: 'button right'

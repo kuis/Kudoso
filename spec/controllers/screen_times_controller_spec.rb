@@ -71,8 +71,8 @@ RSpec.describe ScreenTimesController, :type => :controller do
 
     describe "GET new" do
       it "assigns a new screen_time as @screen_time" do
-        task_schedule = FactoryGirl.create(:task_schedule, member_id: @kid.id)
-        get :new, {family_id: @family.id, member_id: @kid.id, task_schedule_id: task_schedule.id}, valid_session
+        todo_schedule = FactoryGirl.create(:todo_schedule, member_id: @kid.id)
+        get :new, {family_id: @family.id, member_id: @kid.id, todo_schedule_id: todo_schedule.id}, valid_session
         expect(assigns(:screen_time)).to be_a_new(ScreenTime)
       end
     end
@@ -149,7 +149,7 @@ RSpec.describe ScreenTimesController, :type => :controller do
 
       describe "with invalid params" do
 
-        it "assigns a newly created but unsaved screen_time as @screen_time when missing task_schedule" do
+        it "assigns a newly created but unsaved screen_time as @screen_time when missing todo_schedule" do
           post :create, {family_id: @family.id, member_id: @kid.id, :screen_time => invalid_attributes}, valid_session
           expect(assigns(:screen_time)).to be_a_new(ScreenTime)
         end
@@ -286,8 +286,8 @@ RSpec.describe ScreenTimesController, :type => :controller do
 
     describe "GET new" do
       it "does not allow new" do
-        task_schedule = FactoryGirl.create(:task_schedule, member_id: @kid.id)
-        get :new, {family_id: @family.id, member_id: @kid.id, task_schedule_id: task_schedule.id}, valid_session
+        todo_schedule = FactoryGirl.create(:todo_schedule, member_id: @kid.id)
+        get :new, {family_id: @family.id, member_id: @kid.id, todo_schedule_id: todo_schedule.id}, valid_session
         expect(response.status).to eq(302)
         expect(flash[:error]).to be_present
       end

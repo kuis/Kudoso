@@ -8,9 +8,9 @@ describe 'Activities API', type: :request do
     #@member = FactoryGirl.create(:member, family_id: @user.member.family.id)
     @member = Member.create(username: 'thetest', password: 'password', password_confirmation: 'password', birth_date: 10.years.ago, family_id: @user.family_id)
     @api_device =  FactoryGirl.create(:api_device)
-    @task_templates = FactoryGirl.create_list(:task_template, 5)
-    @task_templates.each do |task|
-      res = @member.family.assign_template(task, [ @member.id ])
+    @todo_templates = FactoryGirl.create_list(:todo_template, 5)
+    @todo_templates.each do |todo|
+      res = @member.family.assign_template(todo, [ @member.id ])
     end
     @devices = FactoryGirl.create_list(:device, 8, family_id: @member.family_id)
     @activity_template = FactoryGirl.create(:activity_template)

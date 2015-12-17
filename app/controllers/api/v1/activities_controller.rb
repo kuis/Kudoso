@@ -65,7 +65,7 @@ module Api
           @family = Family.find(params[:family_id])
           @member = @family.members.find(params[:member_id])
           @activity = @member.activities.find(params[:id])
-          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @current_member.id == @my_task.member_id
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.try(:parent) ) || @current_member.id == @my_todo.member_id
             render :json => { :activity => @activity.as_json, :messages => messages }, :status => 200
           else
             messages[:error] << 'You are not authorized to do this.'
@@ -166,7 +166,7 @@ module Api
         rescue Activity::AlreadyStarted
           messages[:error] << 'Cannot start activity, it was previously started.'
           render :json => { :messages => messages }, :status => 400
-        rescue Activity::TasksIncomplete
+        rescue Activity::TodosIncomplete
           messages[:error] << 'Cannot start activity, required tasks are not yet complete.'
           render :json => { :messages => messages }, :status => 400
         rescue Activity::ScreenTimeRestricted

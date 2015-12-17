@@ -17,7 +17,7 @@ class ActivitiesController < ApplicationController
   def new
     if params[:activity_template_id]
       activity_template = ActivityTemplate.find(params[:activity_template_id])
-      if !activity_template.restricted? || (activity_template.restricted? && @member.tasks_complete?)
+      if !activity_template.restricted? || (activity_template.restricted? && @member.todos_complete?)
         @activity = @member.new_activity(activity_template, nil)
         if params[:start]
           @activity.start!
@@ -25,7 +25,7 @@ class ActivitiesController < ApplicationController
         end
         redirect_to [@family, @member]
       else
-        flash[:alert] = 'Sorry, you must complete your required Tasks before starting a restricted activity.'
+        flash[:alert] = 'Sorry, you must complete your required ToDos before starting a restricted activity.'
         redirect_to [@family, @member]
       end
     else

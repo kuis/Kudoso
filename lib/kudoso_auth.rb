@@ -16,7 +16,7 @@ class KudosoAuth
   end
 
   def self.send_to_router(msg)
-    #task put a timeout on this
+    #todo put a timeout on this
 
     result = false
     # join

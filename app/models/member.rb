@@ -4,9 +4,9 @@ class Member < ActiveRecord::Base
 
   belongs_to :family
   has_one :user, dependent: :nullify
-  has_many :task_schedules, dependent: :destroy
-  has_many :task_templates, through: :task_schedules
-  has_many :my_tasks, dependent: :destroy
+  has_many :todo_schedules, dependent: :destroy
+  has_many :todo_templates, through: :todo_schedules
+  has_many :my_todos, dependent: :destroy
   has_many :primary_devices, class_name: 'Device', foreign_key: 'primary_member_id', dependent: :nullify
   has_many :activities, dependent: :destroy, inverse_of: :member
   has_many :authorized_activities, class_name: 'Activity', foreign_key: :created_by_id, dependent: :nullify, inverse_of: :created_by
@@ -73,7 +73,7 @@ class Member < ActiveRecord::Base
 
 
   def as_json(options = nil)
-    options ||= {methods: [ :age, :avatar_urls, :screen_time, :used_screen_time, :max_screen_time, :available_screen_time, :task_summary], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at], include: [ {theme: {except: [:created_at, :updated_at] } }]}
+    options ||= {methods: [ :age, :avatar_urls, :screen_time, :used_screen_time, :max_screen_time, :available_screen_time, :todo_summary], except: [:avatar_file_name, :avatar_content_type, :avatar_file_size, :avatar_updated_at], include: [ {theme: {except: [:created_at, :updated_at] } }]}
     super(options)
   end
 
@@ -109,47 +109,47 @@ class Member < ActiveRecord::Base
   end
 
   def details
-    self.my_tasks.where('due_date >= ?', 1.month.ago).order(:due_date).reverse_order.group_by(&:due_date)
+    self.my_todos.where('due_date >= ?', 1.month.ago).order(:due_date).reverse_order.group_by(&:due_date)
   end
 
-  def tasks(start_date = Date.today, end_date = Date.today)
-    tasks = []
+  def todos(start_date = Date.today, end_date = Date.today)
+    todos = []
     (start_date .. end_date).each do |date|
-      local_tasks = self.my_tasks.includes(:task).where("due_date >= ? AND due_date <= ?", date.beginning_of_day, date.end_of_day).map.to_a
-      logger.info "Local tasks count: #{local_tasks.count}"
-      self.task_schedules.includes(:schedule_rrules).where('start_date <= ? AND (end_date IS NULL OR end_date >= ?)', start_date.beginning_of_day, end_date.end_of_day).find_each do |ts|
-        task = local_tasks.find{ |td| td.task_schedule_id == ts.id }
-        if task.nil?
+      local_todos = self.my_todos.includes(:todo).where("due_date >= ? AND due_date <= ?", date.beginning_of_day, date.end_of_day).map.to_a
+      logger.info "Local todos count: #{local_todos.count}"
+      self.todo_schedules.includes(:schedule_rrules).where('start_date <= ? AND (end_date IS NULL OR end_date >= ?)', start_date.beginning_of_day, end_date.end_of_day).find_each do |ts|
+        todo = local_todos.find{ |td| td.todo_schedule_id == ts.id }
+        if todo.nil?
           schedule = IceCube::Schedule.new
           schedule.start_time = ts.start_date
           ts.schedule_rrules.each do |rule|
             schedule.add_recurrence_rule(IceCube::Rule.from_yaml(rule.rrule))
           end
-          local_tasks << self.my_tasks.create(task_schedule_id: ts.id, due_date: date ) if schedule.occurs_on?(date)
+          local_todos << self.my_todos.create(todo_schedule_id: ts.id, due_date: date ) if schedule.occurs_on?(date)
         end
       end
-      tasks.concat(local_tasks)
+      todos.concat(local_todos)
     end
-    tasks
+    todos
   end
 
-  def tasks_complete?(start_date = Date.today, end_date = Date.today)
+  def todos_complete?(start_date = Date.today, end_date = Date.today)
     ret = true
-    tasks(start_date, end_date).each do |my_task|
-      ret = false if my_task.task.required? && !my_task.complete?
+    todos(start_date, end_date).each do |my_todo|
+      ret = false if my_todo.todo.required? && !my_todo.complete?
     end
     ret
   end
 
-  def task_summary(start_date = Date.today, end_date = Date.today)
-    task_summary = Hash.new
-    task_summary[:total] = 0
-    task_summary[:completed] = 0
-    tasks(start_date, end_date).each do |my_task|
-      task_summary[:completed] += 1 if my_task.complete?
-      task_summary[:total] += 1
+  def todo_summary(start_date = Date.today, end_date = Date.today)
+    todo_summary = Hash.new
+    todo_summary[:total] = 0
+    todo_summary[:completed] = 0
+    todos(start_date, end_date).each do |my_todo|
+      todo_summary[:completed] += 1 if my_todo.complete?
+      todo_summary[:total] += 1
     end
-    task_summary
+    todo_summary
   end
 
 
@@ -238,8 +238,8 @@ class Member < ActiveRecord::Base
   def can_do_activity?(activity_template, devices = nil)
     # Check if activity is restricted
     if activity_template.restricted?
-      unless tasks_complete?
-        raise Activity::TasksIncomplete, "Required tasks are not yet complete"
+      unless todos_complete?
+        raise Activity::TodosIncomplete, "Required todos are not yet complete"
       end
       unless !available_screen_time
         if available_screen_time <= 0

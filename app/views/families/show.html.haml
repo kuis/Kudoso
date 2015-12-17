@@ -11,35 +11,35 @@
           -else
             (child)
             %br
-            Task schedule:
-            .task_wrap
-              = render member.task_schedules
+            Todo schedule:
+            .todo_wrap
+              = render member.todo_schedules
       %li
         = link_to 'Add new family member', new_family_member_path(@family), class: 'btn btn-primary' if can?(:create, Member)
   .medium-6.columns
-    %h2 Family Task List
-    %ul#family_task_list
-      - @family.tasks.each do |task|
+    %h2 Family Todo List
+    %ul#family_todo_list
+      - @family.todos.each do |todo|
         %li
-          = render task
+          = render todo
       %li
-        %a.btn.btn-success{href: "#task_template_add", data: {toggle: "collapse" }, aria: { expanded: "false", controls: "task_template_add"} }
-          Add more Task's
-        #task_template_add.collapse
+        %a.btn.btn-success{href: "#todo_template_add", data: {toggle: "collapse" }, aria: { expanded: "false", controls: "todo_template_add"} }
+          Add more Todo's
+        #todo_template_add.collapse
           .panel
             .panel-heading
               .panel-title
-                %h2 Task Templates
+                %h2 Todo Templates
             .panel-body
               %ul
-                - @task_templates.each do |task|
-                  - if @family.tasks.where(task_template_id: task.id).count == 0
+                - @todo_templates.each do |todo|
+                  - if @family.todos.where(todo_template_id: todo.id).count == 0
                     %li
-                      = render task
-                      = link_to 'Add to Family Task List', family_tasks_path(@family, task_template_id: task.id ), method: :post, class: 'btn btn-primary'
-              .task_wrap
-                Create your own Task:
-                = simple_form_for [@family, Task.new], html: { class: 'uk-form' }, wrapper: :uikit_form do |f|
+                      = render todo
+                      = link_to 'Add to Family Todo List', family_todos_path(@family, todo_template_id: todo.id ), method: :post, class: 'btn btn-primary'
+              .todo_wrap
+                Create your own Todo:
+                = simple_form_for [@family, Todo.new], html: { class: 'uk-form' }, wrapper: :uikit_form do |f|
                   = f.input :name
                   = f.input :description
                   .row

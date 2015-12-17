@@ -15,7 +15,7 @@ class FamiliesController < ApplicationController
       redirect_to '/wizard', alert: 'Please complete the setup wizard to continue.'
       return
     end
-    @task_templates = TaskTemplate.all
+    @todo_templates = TodoTemplate.all
   end
 
   # GET /families/new

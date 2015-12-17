@@ -1,6 +1,6 @@
 - @member.details.each do |day, group|
   %h3="#{day.strftime('%A')}, #{day.strftime('%D')}"
-  - group.each do |task|
+  - group.each do |todo|
     %ul
-      %li{ class: task.complete? ? 'complete' : 'incomplete'}
-        = task.task_schedule.task.name
+      %li{ class: todo.complete? ? 'complete' : 'incomplete'}
+        = todo.todo_schedule.todo.name
