@@ -1,0 +1,16 @@
+.todo_wrap
+  .todo_name
+    = todo_template.name
+  .todo_description
+    = todo_template.description
+  .todo_schedule
+    Schedule:
+    = IceCube::Rule.from_yaml(todo_template.schedule)
+  .todo_active
+    Disabled:
+    = todo_template.disabled?
+  .todo_actions
+    - if can?(:update, todo_template)
+      = link_to 'Edit', edit_todo_template_path(todo_template)
+      |
+      = link_to 'Destroy', todo_template, :method => :delete, :data => { :confirm => 'Are you sure?' } if can?(:delete, todo_template)

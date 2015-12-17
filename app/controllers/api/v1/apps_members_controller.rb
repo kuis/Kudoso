@@ -19,19 +19,28 @@ module Api
 
       def index
         messages = init_messages
-        @family = Family.find(params[:family_id])
-        @member = @family.members.find(params[:member_id])
-        if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent )
-          if params[:device_id]
-            @device = @family.devices.find(params[:device_id])
-            @apps = @member.app_members.includes(:devices).where('app_devices.device_id' => @device.id)
+        begin
+          @family = Family.find(params[:family_id])
+          @member = @family.members.find(params[:member_id])
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent )
+            if params[:device_id]
+              @device = @family.devices.find(params[:device_id])
+              @apps = @member.app_members.includes(:devices).where('app_devices.device_id' => @device.id)
+            else
+              @apps = @member.app_members
+            end
+            render :json => { apps: @apps, :messages => messages }, :status => 200
           else
-            @apps = @member.app_members
+            messages[:error] << 'You are not authorized to do this.'
+            render :json => { :messages => messages }, :status => 403
           end
-          render :json => { apps: @apps, :messages => messages }, :status => 200
-        else
-          messages[:error] << 'You are not authorized to do this.'
-          render :json => { :messages => messages }, :status => 403
+
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Family or Member not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
         end
       end
 
@@ -40,25 +49,34 @@ module Api
       param :apps, Array, desc: "Array of app objects"
       def create
         messages = init_messages
-        @family = Family.find(params[:family_id])
-        @member = @family.members.find(params[:member_id])
-        if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent )
-          good = true
-          if params[:apps] && params[:apps].is_a?(Array)
-            params[:apps].each { |app| good = add_app(app, @member) && good }
+        begin
+          @family = Family.find(params[:family_id])
+          @member = @family.members.find(params[:member_id])
+          if @current_user.try(:admin) || (@current_member.try(:family) == @family && @current_member.parent )
+            good = true
+            if params[:apps] && params[:apps].is_a?(Array)
+              params[:apps].each { |app| good = add_app(app, @member) && good }
+            else
+              good = add_app(params[:app], @member) && good
+            end
+            if good
+              render :json => { apps: @member.app_members, :messages => messages }, :status => 200
+            else
+              messages[:error] << 'Unable to add application record'
+              render :json => { :messages => messages }, :status => 400
+            end
+
           else
-            good = add_app(params[:app], @member) && good
-          end
-          if good
-            render :json => { apps: @member.app_members, :messages => messages }, :status => 200
-          else
-            messages[:error] << 'Unable to add application record'
-            render :json => { :messages => messages }, :status => 400
+            messages[:error] << 'You are not authorized to do this.'
+            render :json => { :messages => messages }, :status => 403
           end
 
-        else
-          messages[:error] << 'You are not authorized to do this.'
-          render :json => { :messages => messages }, :status => 403
+        rescue ActiveRecord::RecordNotFound
+          messages[:error] << 'Family or Member not found.'
+          render :json => { :messages => messages }, :status => 404
+        rescue
+          messages[:error] << 'A server error occurred.'
+          render :json => { :messages => messages }, :status => 500
         end
       end
 

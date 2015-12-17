@@ -1,0 +1,30 @@
+%p#notice= notice
+
+%p
+  %b Todo schedule:
+  = @my_todo.todo_schedule_id
+%p
+  %b Member:
+  = @my_todo.member_id
+%p
+  %b Due date:
+  = @my_todo.due_date
+%p
+  %b Due time:
+  = @my_todo.due_time
+%p
+  %b Complete:
+  = @my_todo.complete
+%p
+  %b Verify:
+  = @my_todo.verify
+%p
+  %b Verified at:
+  = @my_todo.verified_at
+%p
+  %b Verified by:
+  = @my_todo.verified_by
+
+= link_to 'Edit', edit_my_todo_path(@my_todo)
+\|
+= link_to 'Back', my_todos_path

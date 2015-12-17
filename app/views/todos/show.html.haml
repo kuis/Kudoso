@@ -1,0 +1,16 @@
+%p#notice= notice
+
+
+= render @yaml
+
+%p
+  %b Todo template:
+  = @todo.todo_template_id
+%p
+  %b Family:
+  = @todo.family_id
+
+
+= link_to 'Edit', edit_todo_path(@todo)
+\|
+= link_to 'Back', todos_path

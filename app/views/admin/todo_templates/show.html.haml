@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @todo_template.name
+%p
+  %b Description:
+  = @todo_template.description
+%p
+  %b Default Schedule:
+  = IceCube::Rule.from_yaml(@todo_template.schedule)
+%p
+  %b Disabled:
+  = @todo_template.disabled?
+
+= link_to 'Edit', edit_admin_todo_template_path(@todo_template)
+\|
+= link_to 'Back', admin_todo_templates_path

@@ -110,6 +110,7 @@ class ContactsController < ApplicationController
       return nil
     end
 
+
     if params[:contact_us_message]
       # This is a Contact Us message
       ContactMailer.contactus_email(@contact, params[:contact_us_message]).deliver_later
@@ -174,7 +175,7 @@ class ContactsController < ApplicationController
               respond_to do |format|
                 format.js { render partial: 'home/register_error', locals: { error_msg: @contact.errors.full_messages.to_sentence}}
                 format.html { redirect_to pre_signup_path, alert: @contact.errors.full_messages.to_sentence }
-                format.json { render json:  {error: @contact.errors.full_messages }, :status => 400 }
+                format.json { render json:  {error: @contact.errors.full_messages }, :status => 500 }
               end
             end
           end

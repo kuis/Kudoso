@@ -1,0 +1,33 @@
+%h1 Listing my_todos
+
+%table
+  %tr
+    %th Todo schedule
+    %th Member
+    %th Due date
+    %th Due time
+    %th Complete
+    %th Verify
+    %th Verified at
+    %th Verified by
+    %th
+    %th
+    %th
+
+  - @my_todos.each do |my_todo|
+    %tr
+      %td= my_todo.todo_schedule_id
+      %td= my_todo.member_id
+      %td= my_todo.due_date
+      %td= my_todo.due_time
+      %td= my_todo.complete
+      %td= my_todo.verify
+      %td= my_todo.verified_at
+      %td= my_todo.verified_by
+      %td= link_to 'Show', my_todo
+      %td= link_to 'Edit', edit_my_todo_path(my_todo)
+      %td= link_to 'Destroy', my_todo, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New My todo', new_my_todo_path

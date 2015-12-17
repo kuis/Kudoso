@@ -1,0 +1,13 @@
+= simple_form_for [:admin, @todo_group] do |f|
+  = f.error_notification
+
+  .form-inputs
+    = f.input :name
+    = f.input :rec_min_age
+    = f.input :rec_max_age
+    = f.input :active
+    = field_set_tag  do
+      = f.association :todo_templates, as: :check_boxes, label: "Todo's in this group", label_method: :label
+      = link_to_add_association 'Add new todo template', f, :todo_templates, partial: 'admin/todo_templates/todo_template_fields'
+  .form-actions
+    = f.submit 'Save'

@@ -1,0 +1,20 @@
+// Place all the styles related to the todo_schedules controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+.todo_schedule {
+  font-size: .7em;
+
+  .name {
+    font-size: 1em;
+  }
+  .date {
+    margin-left: 10px;
+  }
+  .schedule {
+    margin-left: 10px;
+  }
+  .actions {
+    margin-left: 10px;
+  }
+}
